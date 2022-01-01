@@ -1,4 +1,4 @@
-module github.com/k8s-commerce/k8s-commerce/services/rpc/product
+module github.com/k8scommerce/k8scommerce/services/rpc/product
 
 go 1.17
 
@@ -7,7 +7,7 @@ require (
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/joho/godotenv v1.4.0
-	github.com/k8s-commerce/k8s-commerce/pkg v0.0.0-20211229215022-4a0bc78de1d9
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211229215022-4a0bc78de1d9
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4

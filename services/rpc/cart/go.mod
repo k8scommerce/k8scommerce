@@ -1,4 +1,4 @@
-module github.com/k8s-commerce/k8s-commerce/services/rpc/cart
+module github.com/k8scommerce/k8scommerce/services/rpc/cart
 
 go 1.17
 
@@ -6,11 +6,11 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/k8s-commerce/k8s-commerce/services/rpc/inventory v0.0.0-20211229223516-4ca73f118054
-	github.com/k8s-commerce/k8s-commerce/services/rpc/othersbought v0.0.0-20211229223516-4ca73f118054
-	github.com/k8s-commerce/k8s-commerce/services/rpc/product v0.0.0-20211230201555-247eec5a1497
-	github.com/k8s-commerce/k8s-commerce/services/rpc/similarproducts v0.0.0-20211229223516-4ca73f118054
-	github.com/k8s-commerce/k8s-commerce/pkg v0.0.0-20211229223516-4ca73f118054
+	github.com/k8scommerce/k8scommerce/services/rpc/inventory v0.0.0-20211229223516-4ca73f118054
+	github.com/k8scommerce/k8scommerce/services/rpc/othersbought v0.0.0-20211229223516-4ca73f118054
+	github.com/k8scommerce/k8scommerce/services/rpc/product v0.0.0-20211230201555-247eec5a1497
+	github.com/k8scommerce/k8scommerce/services/rpc/similarproducts v0.0.0-20211229223516-4ca73f118054
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211229223516-4ca73f118054
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4

@@ -8,7 +8,7 @@ package similarproducts
 
 import (
 	context "context"
-	product "github.com/k8s-commerce/k8s-commerce/services/rpc/product/pb/product"
+	product "github.com/k8scommerce/k8scommerce/services/rpc/product/pb/product"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"

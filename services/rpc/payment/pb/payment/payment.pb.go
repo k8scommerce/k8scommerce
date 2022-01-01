@@ -8,7 +8,7 @@ package payment
 
 import (
 	context "context"
-	customer "github.com/k8s-commerce/k8s-commerce/services/rpc/customer/pb/customer"
+	customer "github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
