@@ -90,8 +90,8 @@ type Customer struct {
 }
 
 type CustomerLoginRequest struct {
-	Customername string `json:"customername"`
-	Password     string `json:"password"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type CustomerLoginResponse struct {
