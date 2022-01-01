@@ -28,7 +28,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) LoginLogic {
 }
 
 func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLoginResponse, error) {
-	logx.Info("RECEIVED ", req.Email)
+	// logx.Info("RECEIVED ", req.Email)
 
 	res, err := l.svcCtx.UserRpc.Login(l.ctx, &userclient.LoginRequest{
 		Username: req.Email,
@@ -46,12 +46,12 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLogin
 		return nil, err
 	}
 
-	u := types.Customer{}
-	utils.TransformObj(res.User, &u)
+	customer := types.Customer{}
+	utils.TransformObj(res.User, &customer)
 
-	return &types.GetLoginResponse{
+	return &types.CustomerLoginResponse{
 		JwtToken:      *jwtToken,
-		User:          u,
+		Customer:      customer,
 		StatusCode:    res.StatusCode,
 		StatusMessage: res.StatusMessage,
 	}, nil
