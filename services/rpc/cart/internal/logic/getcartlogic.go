@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/k8s-commerce/k8s-commerce/pkg/models"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/cart/internal/svc"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/cart/pb/cart"
+	"github.com/k8scommerce/k8scommerce/pkg/models"
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"

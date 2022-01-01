@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/k8s-commerce/k8s-commerce/pkg/models"
+	"github.com/k8scommerce/k8scommerce/pkg/models"
 
 	"github.com/jmoiron/sqlx"
 )

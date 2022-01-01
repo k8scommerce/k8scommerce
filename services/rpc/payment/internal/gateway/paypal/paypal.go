@@ -4,8 +4,8 @@ import (
 	"context"
 	"os"
 
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/payment/internal/config"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/payment/internal/gateway"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/internal/gateway"
 	"github.com/plutov/paypal/v4"
 )
 

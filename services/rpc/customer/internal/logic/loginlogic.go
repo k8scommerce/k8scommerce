@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/customer/internal/svc"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/customer/pb/customer"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
