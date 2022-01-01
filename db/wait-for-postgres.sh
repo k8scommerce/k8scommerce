@@ -1,5 +1,6 @@
 #!/bin/sh
 # wait-for-postgres.sh
+# modification of https://gist.github.com/nicerobot/1136dcfba6ce3da67ce3ded5101a4078
 
 set -e
 set -x

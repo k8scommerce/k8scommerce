@@ -1,65 +1,52 @@
-# If you like docker-compose, and like having postgres and pgAdmin in containers vs installed locally,
-# then `docker pull postgres` and `docker pull dpage/pgadmin4`
-# and finally `docker-compose -f path/to/this/or/similar/file.yml up` and you're set for local dev!
-# If you've already composed and just need to start the containers, `docker-compose -f path/to/this/or/similar/file.yml start`
-
 version: "3"
 services:
   postgres:
-    container_name: localrivet-db
+    container_name: k8scommerce-db
     image: postgis/postgis:12-master
     hostname: postgres
     ports:
-      # host : container
-      - "54322:5432"
+      - "5432:5432"
     networks:
-      - ecomm
+      - k8scommerce
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: localrivet
+      POSTGRES_DB: k8scommerce
     volumes:
-      # Host env file for persistent data storage, change as desired
-      - $HOME/docker/volumes/localrivet:/var/lib/postgresql/data
+      - .data:/var/lib/postgresql/data
     restart: unless-stopped
-    #### 🐲 ONLY UNCOMMENT THE BELOW IF YOU WANT TO FORCE OOM TYPE SCENARIOS!!! 🐲 ####
-    # mem_limit: 32m        ## 32m is minimum allowable
-    # mem_swappiness: 0
-    # memswap_limit: 33m    ## Has to be higher than mem_limit
-    # cpus: 0.5
   migrations:
     build: .
     # image: comp-migrations:latest
     depends_on:
       - postgres
     environment:
-      PGUSER: postgres
-      PGPASSWORD: postgres
-      PGDATABASE: localrivet
-      PGHOST: postgres
-      PGSSLMODE: disable
+      PG_USER: postgres
+      PG_PASSWORD: postgres
+      PG_DATABASE: k8scommerce
+      PG_HOST: postgres
+      PG_SSL_MODE: disable
     volumes:
       - ./migrations:/migrations
     networks:
-      - ecomm
+      - k8scommerce
     command: [ "/wait-for-postgres.sh", "/run-migrations.sh" ]
 
-  # pgAdmin is a really nice system for working w/ postgres: https://www.pgadmin.org/
+  # https://www.pgadmin.org/
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:6.3
     depends_on:
       - postgres
     ports:
-      # host : container
-      - "5428:80"
+      - "5433:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: postgres@foo.com
+      PGADMIN_DEFAULT_EMAIL: k8scommerce@example.com
       PGADMIN_DEFAULT_PASSWORD: postgres
     networks:
-      - ecomm
+      - k8scommerce
     restart: unless-stopped
 
 networks:
-  ecomm:
+  k8scommerce:
     driver: bridge
