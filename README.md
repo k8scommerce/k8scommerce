@@ -9,11 +9,11 @@ Checkout our [kubernetes operator]().
 
 K8sCommerce can be run multipe ways:
 
-- **Local single-node kubernetes kind cluster:** Recommended for evaluating K8sCommerce [instructions]()
+- **Local single-node kubernetes kind cluster:** Recommended for evaluating K8sCommerce - [instructions]()
 
-- **Deployment to your existing cluster:** Recommended for testing & production [intructions]()
+- **Deployment to your existing cluster:** Recommended for testing & production - [intructions]()
 
-- **Running Clusterless:** [intructions]() Recommended for local development
+- **Running Clusterless:** Recommended for local development - [intructions]() 
 
 
 ### Quick Start

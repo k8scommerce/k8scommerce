@@ -1,8 +1,8 @@
 package stripe
 
 import (
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/payment/internal/config"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/payment/internal/gateway"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/internal/gateway"
 	"github.com/stripe/stripe-go/client"
 )
 
