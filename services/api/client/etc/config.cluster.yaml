@@ -1,0 +1,39 @@
+Name: client
+Host: 0.0.0.0
+Port: 8888
+Log:
+  Mode: console
+Timeout: 1500
+Auth:
+  AccessSecret: YhCRfmTatNG9c8mQkrkazYjd5B2QNQXB
+  AccessExpire: 1612867074
+CartRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: cart.rpc
+InventoryRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: inventory.rpc
+OthersBoughtRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: othersbought.rpc
+ProductRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: product.rpc
+SimilarProductsRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: similarproducts.rpc
+UserRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: user.rpc

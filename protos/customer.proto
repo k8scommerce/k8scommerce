@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package customer;
+option go_package = "pb/customer";
+
+// import "google/protobuf/wrappers.proto";
+// import "google/protobuf/timestamp.proto";
+
+message Customer {
+  int64 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  string password = 5;
+}
+
+message CustomerAccount {
+  int64 customerId = 1;
+  Address billingAddress = 2;
+  repeated Address shippingAddress = 3;
+}
+
+message Address {
+  string street = 1;
+  string city = 2;
+  string state = 3;
+  string country = 4;
+  string postalCode = 5;
+  bool isDefault = 6;
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// create Customer product
+message CreateCustomerRequest {
+  Customer Customer = 1;
+}
+
+message CreateCustomerResponse {
+  Customer Customer = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// login
+message LoginRequest {
+  string Customername = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  Customer Customer = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// service client
+service CustomerClient {
+  rpc CreateCustomer(CreateCustomerRequest) returns (CreateCustomerResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+}

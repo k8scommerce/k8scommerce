@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package warehouse;
+option go_package = "pb/warehouse";
+
+message Warehouse {
+  int64 id = 1;
+  string name = 2;
+  string street = 3;
+  string city = 4;
+  string state = 5;
+  string country = 6;
+  string postalCode = 7;
+  string lat = 8;
+  string lng = 9;
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// create Warehouse product
+message CreateWarehouseRequest {
+  int64 store_id = 1;
+  Warehouse warehouse = 2;
+}
+
+message CreateWarehouseResponse {
+  Warehouse warehouse = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get Get All Warehouses By Store Id
+message GetAllWarehousesByStoreIdRequest {
+  int64 storeId = 1;
+}
+
+message GetAllWarehousesByStoreIdResponse {
+  Warehouse warehouse = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get Warehouse by Id
+message GetWarehouseByIdRequest {
+  int64 id = 1;
+}
+
+message GetWarehouseByIdResponse {
+  Warehouse warehouse = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// service client
+service WarehouseClient {
+  rpc CreateWarehouse(CreateWarehouseRequest) returns (CreateWarehouseResponse);
+  rpc GetAllWarehousesByStoreId(GetAllWarehousesByStoreIdRequest)
+      returns (GetAllWarehousesByStoreIdResponse);
+  rpc GetWarehouseById(GetWarehouseByIdRequest)
+      returns (GetWarehouseByIdResponse);
+}

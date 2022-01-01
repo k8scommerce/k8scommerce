@@ -1,0 +1,45 @@
+ARG APP_NAME
+ARG APP_PATH
+
+FROM golang:alpine AS builder
+
+LABEL stage=gobuilder
+
+ARG APP_NAME
+ARG APP_PATH
+
+ENV ENV_APP_NAME $APP_NAME
+ENV ENV_APP_PATH $APP_PATH
+
+ENV CGO_ENABLED 0
+ENV GOOS linux
+
+WORKDIR /build/zero
+
+ADD go.mod .
+ADD go.sum .
+RUN go mod download
+COPY . .
+COPY ./env /app/env
+COPY ${ENV_APP_PATH}/${ENV_APP_NAME}/etc /app/etc
+RUN go build -ldflags="-s -w" -o /app/service ${ENV_APP_PATH}/${ENV_APP_NAME}/${ENV_APP_NAME}.go
+
+
+FROM alpine
+
+ARG APP_NAME
+ARG APP_PATH
+
+RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
+ENV TZ America/Denver
+
+ENV ECOMM_CONFIG /app/env/config.cluster.yaml
+
+WORKDIR /app
+COPY --from=builder /app/service /app/service
+COPY --from=builder /app/etc /app/etc
+COPY --from=builder /app/env /app/env
+
+EXPOSE 8080
+
+CMD ["./service", "-f", "etc/config.cluster.yaml"]
