@@ -1,0 +1,5 @@
+namespace: micro
+resources:
+# - ../../global/configmaps/micro-registry-env
+# - deployment.yaml
+- ingress.yaml

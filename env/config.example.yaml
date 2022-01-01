@@ -1,0 +1,4 @@
+postgres:
+  connection: postgres://postgres:postgres@localhost:54322/localrivet?connect_timeout=180&sslmode=disable
+  maxOpenConnections: 25
+  maxIdleConnections: 4

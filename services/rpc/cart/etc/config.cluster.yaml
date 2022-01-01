@@ -1,0 +1,23 @@
+Name: cart.rpc
+ListenOn: :8080
+Log:
+  Mode: console
+Etcd:
+  Hosts:
+    - etcd-client:2379
+  Key: cart.rpc
+InventoryRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: inventory.rpc
+OthersBoughtRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: othersbought.rpc
+SimilarProductsRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: similarproducts.rpc

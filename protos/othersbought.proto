@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package othersbought;
+option go_package = "pb/othersbought";
+
+import "product.proto";
+
+//
+//
+//
+// Requests & Responses
+//
+
+// get one by sku
+message GetOthersBoughtBySkuRequest {
+  string sku = 1;
+}
+
+message GetOthersBoughtBySkuResponse {
+  repeated product.Variant variants = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// service client
+service OthersBoughtClient {
+  rpc GetOthersBoughtBySku(GetOthersBoughtBySkuRequest) returns (GetOthersBoughtBySkuResponse);
+}

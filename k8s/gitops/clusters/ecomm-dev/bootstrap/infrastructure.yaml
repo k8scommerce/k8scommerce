@@ -1,0 +1,148 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: etcd
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  path: ./k8s/gitops/infrastructure/etcd/bootstrap/
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  validation: client
+
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+# kind: Kustomization
+# metadata:
+#   name: external-dns
+#   namespace: flux-system
+# spec:
+#   interval: 10m0s
+#   path: ./gitops/infrastructure/external-dns/bootstrap/
+#   prune: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   validation: client
+#   patchesJson6902:
+#     - target:
+#         version: v1
+#         kind: Deployment
+#         name: external-dns
+#       patch:
+#         - op: replace
+#           path: /spec/template/spec/containers/0/args
+#           value:
+#             - --source=service
+#             - --source=ingress
+#             - --domain-filter=localrivet.com
+#             - --provider=aws
+#             - --policy=upsert-only
+#             - --aws-zone-type=public
+#             - --registry=txt
+#             # https://github.com/kubernetes-sigs/external-dns/issues/685#issuecomment-414758339
+#             - --txt-owner-id=/hostedzone/Z10P47JMFSLNHH
+#             - --log-level=debug
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cluster-autoscaler
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./k8s/gitops/infrastructure/cluster-autoscaler/bootstrap/
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  validation: client
+  patchesJson6902:
+    - target:
+        version: v1
+        kind: Deployment
+        name: cluster-autoscaler
+      patch:
+        - op: replace
+          path: /spec/template/spec/containers/0/command
+          value:
+            - ./cluster-autoscaler
+            - --v=4
+            - --stderrthreshold=info
+            - --cloud-provider=digitalocean
+            - --skip-nodes-with-local-storage=false
+            - --expander=least-waste
+            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/local-dev
+            - --balance-similar-node-groups
+            - --skip-nodes-with-system-pods=false
+            # - --aws-use-static-instance-list=true # https://github.com/kubernetes/autoscaler/issues/3276
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: ecr-credentials-sync
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./k8s/gitops/infrastructure/ecr-credentials-sync/bootstrap/
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  validation: client
+  patchesJson6902:
+    - target:
+        version: batch/v1beta1
+        kind: CronJob
+        name: ecr-credentials-sync
+      patch:
+        - op: replace
+          path: /spec/jobTemplate/spec/template/spec/containers/0/env/ECR_REGISTRY
+          value: 260264107230.dkr.ecr.us-west-1.amazonaws.com
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: image-automation
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  path: ./k8s/gitops/infrastructure/image-automation/bootstrap/ecomm-dev/
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  validation: client
+  dependsOn:
+    - name: ecr-credentials-sync
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: prometheus
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./k8s/gitops/infrastructure/prometheus-orig/bootstrap/
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  validation: client
+---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+# kind: Kustomization
+# metadata:
+#   name: notification-controller
+#   namespace: flux-system
+# spec:
+#   interval: 10m0s
+#   path: ./k8s/gitops/infrastructure/notification-controller/bootstrap/
+#   prune: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   validation: client

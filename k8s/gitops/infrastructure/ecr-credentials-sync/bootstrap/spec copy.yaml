@@ -1,0 +1,103 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ecr-credentials-sync
+  namespace: flux-system
+rules:
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs:
+      - get
+      - create
+      - patch
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ecr-credentials-sync
+  namespace: flux-system
+subjects:
+  - kind: ServiceAccount
+    name: ecr-credentials-sync
+roleRef:
+  kind: Role
+  name: ecr-credentials-sync
+  apiGroup: ""
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ecr-credentials-sync
+  namespace: flux-system
+  # Uncomment and edit if using IRSA
+  # annotations:
+  #   eks.amazonaws.com/role-arn: <role arn>
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: ecr-credentials-sync
+  namespace: flux-system
+spec:
+  suspend: false
+  schedule: 0 */6 * * *
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: ecr-credentials-sync
+          restartPolicy: Never
+          volumes:
+            - name: token
+              emptyDir:
+                medium: Memory
+          initContainers:
+            - image: amazon/aws-cli
+              name: get-token
+              imagePullPolicy: IfNotPresent
+              # You will need to set the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables if not using
+              # IRSA. It is recommended to store the values in a Secret and load them in the container using envFrom.
+              envFrom:
+                - secretRef:
+                    name: aws-credentials
+              env:
+                - name: REGION
+                  value: us-west-1 # change this if ECR repo is in a different region
+              volumeMounts:
+                - mountPath: /token
+                  name: token
+              command:
+                - /bin/bash
+                - -ce
+                - aws ecr get-login-password --region ${REGION} > /token/ecr-token
+          # - |-
+          # yum update && \
+          # yum install -y jq && \
+          # aws ecr get-login-password --region ${REGION} --output json | base64 --decode | jq '.payload' | tr -d '"' > /token/ecr-token
+          containers:
+            - image: bitnami/kubectl
+              name: create-secret
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SECRET_NAME
+                  value: ecr-credentials
+                - name: ECR_REGISTRY
+                  value: https://260264107230.dkr.ecr.us-west-1.amazonaws.com # fill in the account id and region
+              volumeMounts:
+                - mountPath: /token
+                  name: token
+              command:
+                - /bin/bash
+                - -ce
+                - |-
+                  kubectl delete secrets ${SECRET_NAME} \
+                    --namespace=flux-system 2> /dev/null && \
+                  kubectl create secret docker-registry $SECRET_NAME \
+                    --docker-server="$ECR_REGISTRY" \
+                    --docker-username=AWS \
+                    --docker-password="$(</token/ecr-token)"\
+                    --namespace=flux-system \
+                    --docker-email="alma.tuck@gmail.com"

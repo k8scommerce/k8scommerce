@@ -1,0 +1,91 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations:
+    fluxcd.io/locked: "true"
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - image: grafana/grafana:8.0.0-beta3
+          name: grafana
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests: 
+              memory: "1Gi"
+              cpu: "500m"
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: data
+            - name: datasources-volume
+              mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
+              subPath: datasources.yaml
+            - name: dashboard-config
+              mountPath: /etc/grafana/provisioning/dashboards/dashboardConfig.yaml
+              subPath: dashboardConfig.yaml
+            - name: dashboard-templates
+              mountPath: /var/lib/grafana/dashboards/
+          env:
+            - name: GF_SERVER_HTTP_PORT
+              value: "3000"
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: "password"
+            - name: GF_PATHS_PROVISIONING
+              value: /etc/grafana/provisioning/
+            - name: GF_LOG_LOG_CONSOLE_LEVEL
+              value: debug
+            - name: GF_LOG_LOG_FILE_LEVEL
+              value: debug
+      restartPolicy: Always
+      volumes:
+        - emptyDir: {}
+          name: data
+        - name: datasources-volume
+          configMap:
+            name: grafana-datasources
+        - name: dashboard-templates
+          projected:
+            sources:
+            - configMap:
+                name: grafana-dashboards
+            - configMap:
+                name: grafana-dashboards-2
+        - name: dashboard-config
+          configMap:
+            name: dashboard-config
+            items:
+            - key: dashboardConfig.yaml
+              path: dashboardConfig.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-svc
+  labels:
+    app: grafana
+spec:
+  type: ClusterIP
+  selector:
+    app: grafana
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+---
