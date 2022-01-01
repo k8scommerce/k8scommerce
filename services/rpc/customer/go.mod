@@ -1,12 +1,12 @@
-module github.com/k8s-commerce/k8s-commerce/services/rpc/customer
+module github.com/k8scommerce/k8scommerce/services/rpc/customer
 
 go 1.17
 
 require (
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/k8s-commerce/k8s-commerce/services/rpc/cart v0.0.0-20211230202808-4e2f1142e99b
-	github.com/k8s-commerce/k8s-commerce/pkg v0.0.0-20211230210010-1a519e7d3071
+	github.com/k8scommerce/k8scommerce/services/rpc/cart v0.0.0-20211230202808-4e2f1142e99b
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211230210010-1a519e7d3071
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4
