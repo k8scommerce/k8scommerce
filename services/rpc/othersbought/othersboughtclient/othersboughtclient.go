@@ -6,7 +6,7 @@ package othersboughtclient
 import (
 	"context"
 
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/othersbought/pb/othersbought"
+	"github.com/k8scommerce/k8scommerce/services/rpc/othersbought/pb/othersbought"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"

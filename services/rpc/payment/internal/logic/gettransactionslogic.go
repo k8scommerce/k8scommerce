@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/payment/internal/svc"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/payment/pb/payment"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/pb/payment"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"

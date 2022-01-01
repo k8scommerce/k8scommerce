@@ -6,7 +6,7 @@ package similarproductsclient
 import (
 	"context"
 
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/similarproducts/pb/similarproducts"
+	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/pb/similarproducts"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"

@@ -8,7 +8,7 @@ package shipping
 
 import (
 	context "context"
-	customer "github.com/k8s-commerce/k8s-commerce/services/rpc/customer"
+	customer "github.com/k8scommerce/k8scommerce/services/rpc/customer"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"

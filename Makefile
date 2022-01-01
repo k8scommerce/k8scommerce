@@ -103,7 +103,7 @@ generate-xo:
 	-e *.deleted_at \
 	-k smart
 
-	@go get -v -u  github.com/k8s-commerce/k8s-commerce/pkg 
+	@go get -v -u  github.com/k8scommerce/k8scommerce/pkg 
 
 .PHONY: xo
 xo: generate-xo cleanup
