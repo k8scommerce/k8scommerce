@@ -5,12 +5,13 @@ go 1.17
 require (
 	github.com/bojanz/currency v0.0.0-20211125231711-7deaabae9019
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/k8scommerce/k8scommerce/services/rpc/cart v0.0.0-20220101210842-c02ffab780d4
-	github.com/k8scommerce/k8scommerce/services/rpc/inventory v0.0.0-20220101210842-c02ffab780d4
-	github.com/k8scommerce/k8scommerce/services/rpc/othersbought v0.0.0-20220101210842-c02ffab780d4
-	github.com/k8scommerce/k8scommerce/services/rpc/product v0.0.0-20220101210842-c02ffab780d4
-	github.com/k8scommerce/k8scommerce/services/rpc/similarproducts v0.0.0-20220101210842-c02ffab780d4
-	github.com/k8scommerce/k8scommerce/services/rpc/user v0.0.0-20220101210842-c02ffab780d4
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20220101211701-c078caabb623
+	github.com/k8scommerce/k8scommerce/services/rpc/cart v0.0.0-20220101211701-c078caabb623
+	github.com/k8scommerce/k8scommerce/services/rpc/inventory v0.0.0-20220101211701-c078caabb623
+	github.com/k8scommerce/k8scommerce/services/rpc/othersbought v0.0.0-20220101211701-c078caabb623
+	github.com/k8scommerce/k8scommerce/services/rpc/product v0.0.0-20220101211701-c078caabb623
+	github.com/k8scommerce/k8scommerce/services/rpc/similarproducts v0.0.0-20220101211701-c078caabb623
+	github.com/k8scommerce/k8scommerce/services/rpc/user v0.0.0-20220101211701-c078caabb623
 	github.com/tal-tech/go-zero v1.2.4
 )
 
