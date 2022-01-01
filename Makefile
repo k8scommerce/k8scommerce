@@ -1,11 +1,8 @@
 SHELL := bash
 
-# envfile=.env
-# include ${envfile}
-# export $(shell sed 's/=.*//' ${envfile})
-
-# DB_CONN_STR := postgres:postgres@localhost:5433/localrivet?connect_timeout=180&sslmode=disable
-DB_CONN_STR := postgres:postgres@localhost:54322/localrivet?connect_timeout=180&sslmode=disable
+envfile=.env
+include ${envfile}
+export $(shell sed 's/=.*//' ${envfile})
 
 check_defined = \
     $(strip $(foreach 1,$1, \
@@ -15,13 +12,8 @@ __check_defined = \
       $(error Undefined $1$(if $2, ($2))))
 
 GOPATH:=$(shell go env GOPATH)
-# Use sed here to remove the '/' char from branch names like feature/foobar or issue/foobar
 BRANCH = $(shell git branch --show-current | sed -e 's/\//-/g')
-# Use epoch secs in the tag so flux sorts tags
-# EPOCH_SECS := $$(date +%s)
-# Get a short hash of the git had for building images.
 HASH = $$(git rev-parse --short HEAD)
-# $(EPOCH_SECS)-
 TAG := $(shell echo $(BRANCH)-$(HASH))
 
 # TS = $$(date -u +'%Y-%m-%dT%H:%M:%SZ')
@@ -29,7 +21,6 @@ TAG := $(shell echo $(BRANCH)-$(HASH))
 $(call check_defined, BRANCH HASH TAG)
 
 IMAGE_REPO = 127.0.0.1:5000
-
 
 remove=sf_*.go\
 sf_*.go\
