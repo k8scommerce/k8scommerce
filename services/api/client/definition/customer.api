@@ -1,0 +1,42 @@
+syntax = "v2"
+
+// objects
+type Customer {
+	Id        int64  `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
+	Password  string `json:"password,omitempty"`
+}
+
+
+//
+// requests & responses
+//
+
+// login
+type CustomerLoginRequest {
+	Customername string `json:"customername"`
+	Password string `json:"password"`
+}
+
+type CustomerLoginResponse {
+	JwtToken      JwtToken `json:"jwt"`
+	Customer      Customer `json:"customer"`
+	StatusCode    int64    `json:"statusCode"`
+	StatusMessage string   `json:"statusMessage"`
+}
+
+//
+// endpoints
+//
+
+@server(
+	middleware: Locale
+)
+service client {
+	// customer
+    @doc "manages customer logins"
+	@handler login
+	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
+}

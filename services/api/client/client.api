@@ -1,0 +1,8 @@
+syntax = "v2"
+
+import(
+	"definition/jwt.api"
+	"definition/cart.api"
+	"definition/customer.api"
+	"definition/product.api"
+)

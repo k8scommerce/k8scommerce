@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package email;
+option go_package = "pb/email";
+
+import "cart.proto";
+
+message Empty {}
+
+message Order {
+  string orderId = 1;
+  repeated cart.Item item = 2;
+  int64 subTotal = 3;
+  int64 tax = 4;
+  int64 vat = 5;
+  int64 tax2 = 6;
+  int64 tax3 = 7;
+  int64 shippingAmount = 8;
+  int64 totalAmount = 9;
+  string currency = 10;
+  string shippingTrackingId = 11;
+  string shippingCarrier = 12;
+  string shippingAddressId = 13;
+}
+
+message SendOrderConfirmationRequest {
+  string email = 1;
+  Order order = 2;
+}
+
+service EmailClient {
+  rpc SendOrderConfirmation(SendOrderConfirmationRequest) returns (Empty) {}
+}

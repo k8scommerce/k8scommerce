@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user;
+option go_package = "pb/user";
+
+// import "google/protobuf/wrappers.proto";
+// import "google/protobuf/timestamp.proto";
+
+message User {
+  int64 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  string password = 5;
+}
+
+message Group {
+  int64 id = 1;
+  string groupName = 2;
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// create user product
+message CreateUserRequest {
+  User user = 1;
+}
+
+message CreateUserResponse {
+  User user = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// login
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  User user = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// service client
+service UserClient {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+}

@@ -1,0 +1,42 @@
+syntax = "v2"
+
+// objects
+type User {
+	Id        int64  `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
+	Password  string `json:"password,omitempty"`
+}
+
+
+//
+// requests & responses
+//
+
+// login
+type UserLoginRequest {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type UserLoginResponse {
+	JwtToken      JwtToken `json:"jwt"`
+	User          User     `json:"user"`
+	StatusCode    int64    `json:"statusCode"`
+	StatusMessage string   `json:"statusMessage"`
+}
+
+//
+// endpoints
+//
+
+@server(
+	middleware: Locale
+)
+service client {
+	// user
+    @doc "manages user logins"
+	@handler login
+	post /v1/user/login(UserLoginRequest) returns (UserLoginResponse)
+}

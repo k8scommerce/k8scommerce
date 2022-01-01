@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package shipping;
+option go_package = "pb/shipping";
+
+import "cart.proto";
+import "customer.proto";
+
+message GetQuoteRequest {
+  customer.Address from = 1;
+  customer.Address to = 2;
+  cart.Cart cart = 3;
+}
+
+message GetQuoteResponse {
+  int64 estCost = 1;
+  int32 estDays = 2;
+}
+
+message From {
+  customer.Address address = 1;
+}
+
+message To {
+  customer.Address address = 1;
+}
+
+service ShippingClient {
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse);
+}

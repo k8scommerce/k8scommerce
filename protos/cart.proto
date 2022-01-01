@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package cart;
+option go_package = "pb/cart";
+
+import "google/protobuf/timestamp.proto";
+import "product.proto";
+
+message Cart {
+  int64 userId = 1;
+  repeated Item items = 2;
+  int64 totalPrice = 3;
+}
+
+message Item {
+  int64 userId = 1;
+  string sku = 2;
+  int32 quantity = 3;
+  int64 price = 4;
+  google.protobuf.Timestamp expiresAt = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+}
+
+
+message Price {
+  int64 id = 1;
+  int64 variantId = 2;
+  double amount = 3;
+  double compareAtAmount = 4;
+  string currency = 5;
+  int64 userRoleId = 6;
+}
+
+message SimilarProducts {
+  repeated product.Variant variants = 1;
+}
+
+message OthersBought {
+  repeated product.Variant variants = 1;
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// get cart
+message GetCartRequest {
+  int64 userId = 1;
+}
+
+message GetCartResponse {
+  Cart cart = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// clear cart
+message ClearCartRequest {
+  int64 userId = 1;
+}
+
+message ClearCartResponse {
+  int64 statusCode = 1;
+  string statusMessage = 2;
+}
+
+// add item to cart
+message AddItemToCartRequest {
+  int64 userId = 1;
+  Item item = 2;
+}
+
+message AddItemToCartResponse {
+  Cart cart = 1;
+  SimilarProducts similarProducts = 2;
+  OthersBought othersBought = 3;
+  int64 statusCode = 4;
+  string statusMessage = 5;
+}
+
+// update item quantity in cart
+message UpdateItemQuantityInCartRequest {
+  int64 userId = 1;
+  Item item = 2;
+}
+
+message UpdateItemQuantityInCartResponse {
+  Cart cart = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// remove item in cart
+message RemoveItemInCartRequest {
+  int64 userId = 1;
+  string sku = 2;
+}
+
+message RemoveItemInCartResponse {
+  Cart cart = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// cart client
+service CartClient {
+  rpc GetCart(GetCartRequest) returns (GetCartResponse);
+  rpc ClearCart(ClearCartRequest) returns (ClearCartResponse);
+
+  rpc AddItemToCart(AddItemToCartRequest) returns (AddItemToCartResponse);
+  rpc UpdateItemQuantityInCart(UpdateItemQuantityInCartRequest)
+      returns (UpdateItemQuantityInCartResponse);
+  rpc RemoveItemInCart(RemoveItemInCartRequest)
+      returns (RemoveItemInCartResponse);
+}

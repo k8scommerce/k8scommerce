@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package store;
+option go_package = "pb/store";
+
+// import "google/protobuf/wrappers.proto";
+// import "google/protobuf/timestamp.proto";
+
+message Store {
+  int64 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  string password = 5;
+}
+
+message StoreAccount {
+  int64 storeId = 1;
+  Address billingAddress = 2;
+  repeated Address shippingAddress = 3;
+}
+
+message Address {
+  string street = 1;
+  string city = 2;
+  string state = 3;
+  string country = 4;
+  string postalCode = 5;
+  bool isDefault = 6;
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// create Store product
+message CreateStoreRequest {
+  Store store = 1;
+}
+
+message CreateStoreResponse {
+  Store store = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get store by id
+message GetStoreByIdRequest {
+  int64 id = 1;
+}
+
+message GetStoreByIdResponse {
+  Store store = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get all stores
+message GetAllStoresRequest {}
+
+message GetAllStoresResponse {
+  repeated Store stores = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// service client
+service StoreClient {
+  rpc CreateStore(CreateStoreRequest) returns (CreateStoreResponse);
+  rpc GetStoreById(GetStoreByIdRequest) returns (GetStoreByIdResponse);
+  rpc GetAllStores(GetAllStoresRequest) returns (GetAllStoresResponse);
+}

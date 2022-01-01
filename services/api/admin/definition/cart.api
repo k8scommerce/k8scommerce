@@ -1,0 +1,108 @@
+syntax = "v2"
+
+// objects
+
+type Cart {
+	Item       []Item  `json:"items"`
+	TotalPrice float64 `json:"totalPrice"`
+}
+
+type Item {
+	Sku       string  `json:"variantId"`
+	Quantity  int32   `json:"quantity"`
+	Price     float64 `json:"price"`
+	ExpiresAt string  `json:"expiresAt"`
+}
+
+//
+// requests & responses
+//
+
+// get cart
+type GetCartRequest {
+	UserId string `path:"userId"`
+}
+
+type GetCartResponse {
+	Cart          Cart   `json:"cart"`
+	StatusCode    int64  `json:"sessionId"`
+	StatusMessage string `json:"sessionId"`
+}
+
+// add to cart
+type CreateCartRequest {}
+
+type CreateCartResponse {
+	Cart          Cart   `json:"cart"`
+	StatusCode    int64  `json:"sessionId"`
+	StatusMessage string `json:"sessionId"`
+}
+
+// add to cart
+type AddItemToCartRequest {
+	UserId int64 `json:"userId"`
+	Item   Item  `json:"item"`
+}
+
+type AddItemToCartResponse {
+	Cart          Cart   `json:"cart"`
+	StatusCode    int64  `json:"sessionId"`
+	StatusMessage string `json:"sessionId"`
+}
+
+// upate cart item quantity
+type UpdateCartItemRequest {
+	ProductId int64 `json:"productId"`
+	VariantId int64 `json:"variantId"`
+	Quanity   int32 `json:"quanity"`
+}
+
+type UpdateCartItemResponse {
+	Cart          Cart   `json:"cart"`
+	StatusCode    int64  `json:"statusCode"`
+	StatusMessage string `json:"statusMessage"`
+}
+
+// remove item
+type RemoveCartItemRequest {
+	ProductId int64 `json:"productId"`
+	VariantId int64 `json:"variantId"`
+	Quanity   int32 `json:"quanity"`
+}
+
+type RemoveCartItemResponse {
+	Cart          Cart   `json:"cart"`
+	StatusCode    int64  `json:"statusCode"`
+	StatusMessage string `json:"statusMessage"`
+}
+
+// clear cart
+type ClearCartRequest {
+}
+
+type ClearCartResponse {
+	StatusCode    int64  `json:"statusCode"`
+	StatusMessage string `json:"statusMessage"`
+}
+
+//
+// endpoints
+//
+
+
+// with auth
+@server(
+	jwt: Auth
+	middleware: Locale
+)
+service client {
+	@doc "creates a shopping cart for the associated userId. Each user can only have 1 cart ever."
+	@handler createCart
+	post /v1/cart/:userId(CreateCartRequest) returns (CreateCartResponse)
+	
+	@handler getCart
+	get /v1/cart/:userId(GetCartRequest) returns (GetCartResponse)
+	
+	// @handler addItemToCart
+	// post /v1/cart/:userId/add(AddToCartRequest) returns (AddToCartResponse)
+}

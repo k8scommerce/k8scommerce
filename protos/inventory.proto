@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package inventory;
+option go_package = "pb/inventory";
+
+// import "google/protobuf/wrappers.proto";
+// import "google/protobuf/timestamp.proto";
+
+message InventoryItem {
+  int64 id = 1;
+  string sku = 2;
+  string name = 3;
+  int64 supplierId = 4;
+  int64 brandId = 5;
+}
+
+message Warehouse {
+  int64 id = 1;
+}
+
+message SockLevel {
+  int64 warehouseId = 1;
+  int64 inventoryItemId = 2;
+  int32 quantity = 3;
+}
+
+message Supplier {
+  int64 id = 1;
+  string name = 2;
+}
+
+message Brand {
+  int64 id = 1;
+  string name = 2;
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// get item quantity
+message GetItemQuantityRequest {
+  string sku = 1;
+  string region = 2;
+}
+
+message GetItemQuantityResponse {
+  string sku = 2;
+  int32 quanity = 1;
+  int64 statusCode = 3;
+  string statusMessage = 4;
+}
+
+// service client
+service InventoryClient {
+  rpc GetItemQuantity(GetItemQuantityRequest) returns (GetItemQuantityResponse);
+}

@@ -1,0 +1,5 @@
+FROM golang:1.17.5 as base
+FROM base as dev
+RUN go get github.com/cespare/reflex
+COPY reflex.conf /
+CMD ["reflex", "-c", "/reflex.conf"]

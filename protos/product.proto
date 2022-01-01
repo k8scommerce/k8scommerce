@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+package product;
+option go_package = "pb/product";
+
+// import "google/protobuf/wrappers.proto";
+// import "google/protobuf/timestamp.proto";
+
+message Product {
+  int64 id = 1;
+  string slug = 2;
+  string name = 3;
+  string shortDescription = 4;
+  string description = 5;
+  string metaTitle = 6;
+  string metaDescription = 7;
+  string metaKeywords = 8;
+  bool promotionable = 9;
+  string availableOn = 10;
+  string discontinueOn = 11;
+  repeated Variant variants = 12;
+}
+
+message Variant {
+  int64 id = 1;
+  int64 productId = 2;
+  bool isDefault = 3;
+  string sku = 4;
+  int32 sortOrder = 5;
+  int64 costAmount = 6;
+  string costCurrency = 7;
+  bool trackInventory = 8;
+  int64 taxCategoryId = 9;
+  int64 shippingCategoryId = 10;
+  string discontinueOn = 11;
+  double weight = 12;
+  double height = 13;
+  double width = 14;
+  double depth = 15;
+  Price price = 16;
+}
+
+message Price {
+  int64 id = 1;
+  int64 variantId = 2;
+  int64 amount = 3;
+  int64 compareAtAmount = 4;
+  string currency = 5;
+  int64 userRoleId = 6;
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// get one by sku
+message GetProductBySkuRequest {
+  string sku = 1;
+}
+
+message GetProductBySkuResponse {
+  Product product = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get one by slug
+message GetProductBySlugRequest {
+  string slug = 1;
+}
+
+message GetProductBySlugResponse {
+  Product product = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get one by id
+message GetProductByIdRequest {
+  int64 id = 1;
+}
+
+message GetProductByIdResponse {
+  Product product = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get all by category
+message GetProductsByCategoryIdRequest {
+  int64 categoryId = 1;
+  int64 currentPage = 2;
+  int64 pageSize = 3;
+  string sortOn = 4;
+}
+
+message GetProductsByCategoryIdResponse {
+  repeated Product products = 1;
+  int64 totalRecords = 2;
+  int64 totalPages = 3;
+  int64 statusCode = 4;
+  string statusMessage = 5;
+}
+
+// get all products
+message GetAllProductsRequest {
+  int64 currentPage = 1;
+  int64 pageSize = 2;
+  string sortOn = 3;
+}
+
+message GetAllProductsResponse {
+  repeated Product products = 1;
+  int64 totalRecords = 2;
+  int64 totalPages = 3;
+  int64 statusCode = 4;
+  string statusMessage = 5;
+}
+
+// create product
+message CreateProductRequest {
+  Product product = 1;
+}
+
+message CreateProductResponse {
+  Product product = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// update product
+message UpdateProductRequest {
+  int64 id = 1;
+  Product product = 2;
+}
+
+message UpdateProductResponse {
+  Product product = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// delete product
+message DeleteProductRequest {
+  int64 id = 1;
+}
+
+message DeleteProductResponse {
+  int64 statusCode = 1;
+  string statusMessage = 2;
+}
+
+// service client
+service ProductClient {
+  rpc GetProductBySku(GetProductBySkuRequest) returns (GetProductBySkuResponse);
+  rpc GetProductBySlug(GetProductBySlugRequest)
+      returns (GetProductBySlugResponse);
+  rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse);
+  rpc GetProductsByCategoryId(GetProductsByCategoryIdRequest)
+      returns (GetProductsByCategoryIdResponse);
+  rpc GetAllProducts(GetAllProductsRequest) returns (GetAllProductsResponse);
+
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+}

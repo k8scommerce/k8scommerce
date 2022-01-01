@@ -1,0 +1,8 @@
+Name: othersbought.rpc
+ListenOn: :8080
+Log:
+  Mode: console
+Etcd:
+  Hosts:
+    - etcd-client:2379
+  Key: othersbought.rpc
