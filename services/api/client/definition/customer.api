@@ -16,7 +16,7 @@ type Customer {
 
 // login
 type CustomerLoginRequest {
-	Customername string `json:"customername"`
+	Email string `json:"email"`
 	Password string `json:"password"`
 }
 
