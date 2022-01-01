@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/shipping/github.com/k8s-commerce/k8s-commerce/services/rpc/shipping"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/shipping/internal/logic"
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/shipping/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping/github.com/k8scommerce/k8scommerce/services/rpc/shipping"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping/internal/svc"
 
 	"github.com/localrivet/galaxycache"
 )

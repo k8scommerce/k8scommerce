@@ -1,12 +1,12 @@
-module github.com/k8s-commerce/k8s-commerce/services/rpc/payment
+module github.com/k8scommerce/k8scommerce/services/rpc/payment
 
 go 1.17
 
 require (
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/k8s-commerce/k8s-commerce/services/rpc/customer v0.0.0-20211230223157-c870ddb2c12a
-	github.com/k8s-commerce/k8s-commerce/pkg v0.0.0-20211231064155-7a166927556d
+	github.com/k8scommerce/k8scommerce/services/rpc/customer v0.0.0-20211230223157-c870ddb2c12a
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211231064155-7a166927556d
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4

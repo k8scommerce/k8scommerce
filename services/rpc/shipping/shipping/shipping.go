@@ -6,7 +6,7 @@ package shipping
 import (
 	"context"
 
-	"github.com/k8s-commerce/k8s-commerce/services/rpc/shipping"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"

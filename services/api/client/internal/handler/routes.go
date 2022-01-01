@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
 
 	"github.com/tal-tech/go-zero/rest"
 )
@@ -70,19 +70,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/v1/products/:currentPage/:pageSize",
 					Handler: getAllProductsRequestHandler(serverCtx),
-				},
-			}...,
-		),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/v1/user/login",
-					Handler: loginHandler(serverCtx),
 				},
 			}...,
 		),

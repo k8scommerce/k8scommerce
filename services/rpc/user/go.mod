@@ -1,4 +1,4 @@
-module github.com/k8s-commerce/k8s-commerce/services/rpc/user
+module github.com/k8scommerce/k8scommerce/services/rpc/user
 
 go 1.17
 
@@ -6,7 +6,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/k8s-commerce/k8s-commerce/pkg v0.0.0-20211229223516-4ca73f118054
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211229223516-4ca73f118054
 	github.com/lib/pq v1.10.3
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4

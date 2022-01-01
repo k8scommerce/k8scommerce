@@ -2,9 +2,10 @@ package middleware
 
 import (
 	"context"
-	"ecomm/services/api/client/internal/config"
-	"ecomm/services/api/client/internal/types"
 	"net/http"
+
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
 )
 
 type LocaleMiddleware struct {

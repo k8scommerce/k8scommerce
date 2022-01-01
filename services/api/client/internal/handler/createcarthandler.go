@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"client/internal/logic"
-	"client/internal/svc"
-	"client/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
