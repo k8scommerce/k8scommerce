@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"payment/internal/config"
-	"payment/internal/server"
-	"payment/internal/svc"
-	"payment/pb/payment"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/server"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/payment"
 
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/conf"
