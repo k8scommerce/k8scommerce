@@ -9,7 +9,7 @@ require (
 	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211231064155-7a166927556d
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
-	github.com/localrivet/gcache v0.0.4
+	github.com/k8scommerce/gcache v0.0.4
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
 	github.com/plutov/paypal/v4 v4.4.1
