@@ -11,7 +11,7 @@ import (
 	"github.com/k8scommerce/k8scommerce/pkg/models"
 	"github.com/k8scommerce/k8scommerce/services/rpc/product/internal/svc"
 	"github.com/k8scommerce/k8scommerce/services/rpc/product/internal/types"
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/product"
+	"github.com/k8scommerce/k8scommerce/services/rpc/product/pb/product"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
