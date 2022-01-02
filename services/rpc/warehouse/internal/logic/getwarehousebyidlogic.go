@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"sync"
-	"warehouse/internal/svc"
-	"warehouse/pb/warehouse"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/warehouse"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
@@ -79,7 +81,7 @@ func (l *GetWarehouseByIdLogic) GetWarehouseById(in *warehouse.GetWarehouseByIdR
 	res := &warehouse.GetWarehouseByIdResponse{}
 
 	codec := &galaxycache.ByteCodec{}
-	if err := entryGetWarehouseByIdLogic.galaxy.Get(l.ctx, in.Id, codec); err != nil {
+	if err := entryGetWarehouseByIdLogic.galaxy.Get(l.ctx, strconv.Itoa(int(in.Id)), codec); err != nil {
 		res.StatusCode = http.StatusNoContent
 		res.StatusMessage = err.Error()
 		return res, nil
