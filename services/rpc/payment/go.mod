@@ -1,21 +1,12 @@
-module github.com/k8scommerce/k8scommerce/services/rpc/payment
+module github.com/k8scommerce/k8scommerce/services/rpc/client
 
 go 1.17
 
 require (
-	github.com/jackc/pgx/v4 v4.14.1
-	github.com/jmoiron/sqlx v1.3.4
-	github.com/k8scommerce/k8scommerce/services/rpc/customer v0.0.0-20211230223157-c870ddb2c12a
-	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211231064155-7a166927556d
-	github.com/lib/pq v1.10.4
+	github.com/k8scommerce/k8scommerce/services/rpc/customer v0.0.0-20220102011424-bc9cb8f9f6aa
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
-	github.com/k8scommerce/gcache v0.0.4
-	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.17.0
-	github.com/plutov/paypal/v4 v4.4.1
-	github.com/stripe/stripe-go v70.15.0+incompatible
+	github.com/localrivet/gcache v0.0.4
 	github.com/tal-tech/go-zero v1.2.4
-	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
 )
@@ -26,7 +17,6 @@ require (
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-logr/logr v0.2.0 // indirect
 	github.com/go-redis/redis v6.15.9+incompatible // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -37,18 +27,10 @@ require (
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/googleapis/gnostic v0.4.1 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
-	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.10.1 // indirect
-	github.com/jackc/pgio v1.0.0 // indirect
-	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgproto3/v2 v2.2.0 // indirect
-	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
-	github.com/jackc/pgtype v1.9.1 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
-	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/openzipkin/zipkin-go v0.3.0 // indirect
 	github.com/prometheus/client_golang v1.11.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
@@ -68,6 +50,7 @@ require (
 	go.uber.org/automaxprocs v1.4.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
+	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/sys v0.0.0-20211106132015-ebca88c72f68 // indirect
@@ -77,7 +60,6 @@ require (
 	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/genproto v0.0.0-20210928142010-c7af6a1a74c9 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
-	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/api v0.20.12 // indirect
 	k8s.io/apimachinery v0.20.12 // indirect
