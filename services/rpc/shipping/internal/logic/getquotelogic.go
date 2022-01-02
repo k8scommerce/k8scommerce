@@ -2,35 +2,25 @@ package logic
 
 import (
 	"context"
-	"shipping/internal/svc"
-	"shipping/shipping"
-	"sync"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/shipping"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
-type galaxyGetQuoteLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
-
-var entryGetQuoteLogic *galaxyGetQuoteLogicHelper
-
 type GetQuoteLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
 func NewGetQuoteLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetQuoteLogic {
 	return &GetQuoteLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
