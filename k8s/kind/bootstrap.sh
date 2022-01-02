@@ -24,7 +24,7 @@ sleep 30
 
 # connect the database to the 
 echo "> Connecting db to kind network..."
-docker network connect "kind" "localrivet-db"
+docker network connect "kind" "k8scommerce-db"
 
 echo "> Adding ingress nginx..."
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml

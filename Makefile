@@ -43,13 +43,21 @@ option_item\
 archetype
 
 
-apiServices=client
-rpcServices=inventory\
+apiServices=client\
+admin
+
+rpcServices=cart\
+customer\
+email\
+inventory\
 othersbought\
+payment\
 product\
+shipping\
 similarproducts\
+store\
 user\
-cart
+warehouse
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
@@ -116,13 +124,19 @@ model-gen:
 		echo ""; \
 	done
 
-.PHONY: ts
-ts:
+.PHONY: client-ts
+client-ts:
 	@goctl api ts \
-		-dir="$(HOME)/workspaces/localrivet/shop/src/app/data/services" \
+		-dir="$(HOME)/workspaces/k8scommerce/shop/src/app/data/services" \
 	 	-api="./services/api/client/client.api" \
 		-caller="this.http"
-# import { HttpClient } from '@angular/common/http';
+
+.PHONY: admin-ts
+admin-ts:
+	@goctl api ts \
+		-dir="$(HOME)/workspaces/k8scommerce/shop/src/app/data/services" \
+	 	-api="./services/api/admin/admin.api" \
+		-caller="this.http"
 
 .PHONY: update
 update:
@@ -135,32 +149,43 @@ tidy:
 .PHONY: start
 start:
 	@etcd > /dev/null 2>&1 &
-	@for service in $(rpcServices); do \
-		printf "$(BLUE)Starting RPC Service: $(WHITE)$$service$(RESET)\n"; \
+	@port=8080; \
+	for service in $(rpcServices); do \
+		printf "$(BLUE)Starting RPC Service: $(WHITE)$$service::$$port$(RESET)\n"; \
 		cd ./services/rpc/$$service; \
+		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
+		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
 		(go run . -f etc/$$service.yaml &); \
 		cd ../../../; \
 		echo ""; \
+		port=$$((port+1)); \
 	done
 	@sleep 15
-	@for service in $(apiServices); do \
-		printf "$(BLUE)Starting RPC Service: $(WHITE)$$service$(RESET)\n"; \
+	@port=8888; \
+	for service in $(apiServices); do \
+		printf "$(BLUE)Starting API Service: $(WHITE)$$service::$$port$(RESET)\n"; \
 		cd ./services/api/$$service; \
-		open -a Terminal "`go run . -f etc/$$service.yaml`"; \
+		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
+		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
+		(go run . -f etc/$$service.yaml &); \
 		cd ../../../; \
 		echo ""; \
+		port=$$((port+1)); \
 	done
 # xterm -hold go run . -f etc/$$service.yaml; \
+# open -a Terminal "`go run . -f etc/$$service.yaml`"; \
 .PHONY: stop
 stop:
 	@for service in $(rpcServices); do \
 		printf "$(BLUE)Stopping RPC Service: $(WHITE)$$service$(RESET)\n"; \
 		pkill -9 -f $$service.yaml; \
+		rm ./services/rpc/$$service/etc/local-$$service.yaml; \
 		echo ""; \
 	done
 	@for service in $(apiServices); do \
 		printf "$(BLUE)Stopping RPC Service: $(WHITE)$$service$(RESET)\n"; \
 		pkill -9 -f $$service.yaml; \
+		rm ./services/api/$$service/etc/local-$$service.yaml; \
 		echo ""; \
 	done
 	@killall etcd
@@ -185,6 +210,25 @@ docker-push-client:
 	docker push $(IMAGE_REPO)/client:$(TAG)
 
 ##
+## Admin
+##
+.PHONY: docker-build-admin
+docker-build-admin:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/admin:latest \
+		-t $(IMAGE_REPO)/admin:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/admin:$(TAG) \
+		--build-arg APP_NAME=admin \
+		--build-arg APP_PATH=services/api \
+		--no-cache .
+
+.PHONY: docker-push-admin
+docker-push-admin:
+	docker push $(IMAGE_REPO)/admin:latest
+	docker push $(IMAGE_REPO)/admin:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/admin:$(TAG)
+
+##
 ## Cart
 ##
 .PHONY: docker-build-cart
@@ -202,6 +246,44 @@ docker-push-cart:
 	docker push $(IMAGE_REPO)/cart:latest
 	docker push $(IMAGE_REPO)/cart:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/cart:$(TAG)
+
+##
+## Customer
+##
+.PHONY: docker-build-customer
+docker-build-customer:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/customer:latest \
+		-t $(IMAGE_REPO)/customer:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/customer:$(TAG) \
+		--build-arg APP_NAME=customer \
+		--build-arg APP_PATH=services/rpc \
+		--no-cache .
+
+.PHONY: docker-push-customer
+docker-push-customer:
+	docker push $(IMAGE_REPO)/customer:latest
+	docker push $(IMAGE_REPO)/customer:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/customer:$(TAG)
+
+##
+## Email
+##
+.PHONY: docker-build-email
+docker-build-email:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/email:latest \
+		-t $(IMAGE_REPO)/email:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/email:$(TAG) \
+		--build-arg APP_NAME=email \
+		--build-arg APP_PATH=services/rpc \
+		--no-cache .
+
+.PHONY: docker-push-email
+docker-push-email:
+	docker push $(IMAGE_REPO)/email:latest
+	docker push $(IMAGE_REPO)/email:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/email:$(TAG)
 
 ##
 ## Inventory
@@ -241,6 +323,24 @@ docker-push-othersbought:
 	docker push $(IMAGE_REPO)/othersbought:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/othersbought:$(TAG)
 
+##
+## Payment
+##
+.PHONY: docker-build-payment
+docker-build-payment:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/payment:latest \
+		-t $(IMAGE_REPO)/payment:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/payment:$(TAG) \
+		--build-arg APP_NAME=payment \
+		--build-arg APP_PATH=services/rpc \
+		--no-cache .
+
+.PHONY: docker-push-payment
+docker-push-payment:
+	docker push $(IMAGE_REPO)/payment:latest
+	docker push $(IMAGE_REPO)/payment:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/payment:$(TAG)
 
 ##
 ## Product
@@ -262,6 +362,25 @@ docker-push-product:
 	docker push $(IMAGE_REPO)/product:$(TAG)
 
 ##
+## Shipping
+##
+.PHONY: docker-build-shipping
+docker-build-shipping:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/shipping:latest \
+		-t $(IMAGE_REPO)/shipping:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/shipping:$(TAG) \
+		--build-arg APP_NAME=shipping \
+		--build-arg APP_PATH=services/rpc \
+		--no-cache .
+
+.PHONY: docker-push-shipping
+docker-push-shipping:
+	docker push $(IMAGE_REPO)/shipping:latest
+	docker push $(IMAGE_REPO)/shipping:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/shipping:$(TAG)
+
+##
 ## similarproducts
 ##
 .PHONY: docker-build-similarproducts
@@ -281,6 +400,25 @@ docker-push-similarproducts:
 	docker push $(IMAGE_REPO)/similarproducts:$(TAG)
 
 ##
+## Store
+##
+.PHONY: docker-build-store
+docker-build-store:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/store:latest \
+		-t $(IMAGE_REPO)/store:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/store:$(TAG) \
+		--build-arg APP_NAME=store \
+		--build-arg APP_PATH=services/rpc \
+		--no-cache .
+
+.PHONY: docker-push-store
+docker-push-store:
+	docker push $(IMAGE_REPO)/store:latest
+	docker push $(IMAGE_REPO)/store:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/store:$(TAG)
+
+##
 ## user
 ##
 .PHONY: docker-build-user
@@ -298,6 +436,25 @@ docker-push-user:
 	docker push $(IMAGE_REPO)/user:latest
 	docker push $(IMAGE_REPO)/user:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/user:$(TAG)
+
+##
+## Warehouse
+##
+.PHONY: docker-build-warehouse
+docker-build-warehouse:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/warehouse:latest \
+		-t $(IMAGE_REPO)/warehouse:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/warehouse:$(TAG) \
+		--build-arg APP_NAME=warehouse \
+		--build-arg APP_PATH=services/rpc \
+		--no-cache .
+
+.PHONY: docker-push-warehouse
+docker-push-warehouse:
+	docker push $(IMAGE_REPO)/warehouse:latest
+	docker push $(IMAGE_REPO)/warehouse:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/warehouse:$(TAG)
 
 ##
 ##
