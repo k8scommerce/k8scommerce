@@ -5,15 +5,14 @@ go 1.17
 require (
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/k8scommerce/k8scommerce/services/rpc/cart v0.0.0-20211230202808-4e2f1142e99b
-	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20211230210010-1a519e7d3071
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20220102005415-c4ed80b12893
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
-	github.com/k8scommerce/gcache v0.0.4
+	github.com/localrivet/gcache v0.0.4
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
 	github.com/tal-tech/go-zero v1.2.4
-	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63
+	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
 )
@@ -66,7 +65,7 @@ require (
 	go.uber.org/automaxprocs v1.4.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
-	golang.org/x/net v0.0.0-20210928044308-7d9f5e0b762b // indirect
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/sys v0.0.0-20211106132015-ebca88c72f68 // indirect
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
