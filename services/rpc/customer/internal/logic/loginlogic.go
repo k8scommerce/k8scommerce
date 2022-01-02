@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"net/http"
 	"sync"
 
 	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/svc"
@@ -37,6 +38,25 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *ga
 
 func (l *LoginLogic) Login(in *customer.LoginRequest) (*customer.LoginResponse, error) {
 
-	res := &customer.LoginResponse{}
+	found, err := l.svcCtx.Repo.Customer().Login(in.Email, in.Password)
+	if err != nil {
+		return &customer.LoginResponse{
+			Customer:      nil,
+			StatusCode:    http.StatusExpectationFailed,
+			StatusMessage: err.Error(),
+		}, nil
+	}
+
+	res := &customer.LoginResponse{
+		Customer: &customer.Customer{
+			Id:        found.ID,
+			FirstName: found.FirstName,
+			LastName:  found.LastName,
+			Email:     found.Email,
+		},
+		StatusCode:    http.StatusOK,
+		StatusMessage: "",
+	}
 	return res, nil
+
 }
