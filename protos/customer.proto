@@ -48,7 +48,7 @@ message CreateCustomerResponse {
 
 // login
 message LoginRequest {
-  string Customername = 1;
+  string email = 1;
   string password = 2;
 }
 
