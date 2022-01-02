@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"shipping/internal/config"
-	"shipping/internal/server"
-	"shipping/internal/svc"
-	"shipping/shipping"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/server"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/shipping"
 
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/conf"
@@ -27,10 +27,10 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 	universe := gcache.NewUniverse(c.ListenOn)
-	srv := server.NewShippingServer(ctx, universe)
+	srv := server.NewShippingClientServer(ctx, universe)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		shipping.RegisterShippingServer(grpcServer, srv)
+		shipping.RegisterShippingClientServer(grpcServer, srv)
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
