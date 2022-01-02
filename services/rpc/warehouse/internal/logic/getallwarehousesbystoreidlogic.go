@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
-	"warehouse/internal/svc"
-	"warehouse/pb/warehouse"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/warehouse"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
@@ -79,7 +80,7 @@ func (l *GetAllWarehousesByStoreIdLogic) GetAllWarehousesByStoreId(in *warehouse
 	res := &warehouse.GetAllWarehousesByStoreIdResponse{}
 
 	codec := &galaxycache.ByteCodec{}
-	if err := entryGetAllWarehousesByStoreIdLogic.galaxy.Get(l.ctx, in.Id, codec); err != nil {
+	if err := entryGetAllWarehousesByStoreIdLogic.galaxy.Get(l.ctx, "all-records", codec); err != nil {
 		res.StatusCode = http.StatusNoContent
 		res.StatusMessage = err.Error()
 		return res, nil
