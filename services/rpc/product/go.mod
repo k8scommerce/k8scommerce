@@ -7,7 +7,7 @@ require (
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/joho/godotenv v1.4.0
-	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20220101213101-1be81ed6b11f
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20220102003734-4e28eb149115
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4
