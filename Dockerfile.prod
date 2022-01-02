@@ -1,7 +1,7 @@
 ARG APP_NAME
 ARG APP_PATH
 
-FROM golang:alpine AS builder
+FROM golang:latest AS builder
 
 LABEL stage=gobuilder
 
@@ -16,10 +16,10 @@ ENV GOOS linux
 
 WORKDIR /build/zero
 
-ADD go.mod .
-ADD go.sum .
+ADD ${ENV_APP_PATH}/${ENV_APP_NAME}/go.mod .
+ADD ${ENV_APP_PATH}/${ENV_APP_NAME}/go.sum .
 RUN go mod download
-COPY . .
+COPY ${ENV_APP_PATH}/${ENV_APP_NAME} .
 COPY ./env /app/env
 COPY ${ENV_APP_PATH}/${ENV_APP_NAME}/etc /app/etc
 RUN go build -ldflags="-s -w" -o /app/service ${ENV_APP_PATH}/${ENV_APP_NAME}/${ENV_APP_NAME}.go

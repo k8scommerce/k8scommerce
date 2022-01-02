@@ -461,7 +461,7 @@ docker-push-warehouse:
 ##
 
 .PHONY: docker-build
-docker-build: docker-build-client docker-build-cart docker-build-inventory docker-build-othersbought docker-build-product docker-build-similarproducts docker-build-user 
+docker-build: docker-build-cart docker-build-customer docker-build-email docker-build-inventory docker-build-othersbought docker-build-payment docker-build-product docker-build-shipping docker-build-similarproducts docker-build-store docker-build-user docker-build-warehouse 
 	
 .PHONY: docker-push
-docker-push: docker-push-client docker-push-cart docker-push-inventory docker-push-othersbought docker-push-product docker-push-similarproducts docker-push-user
+docker-push: docker-push-cart docker-push-customer docker-push-email docker-push-inventory docker-push-othersbought docker-push-payment docker-push-product docker-push-shipping docker-push-similarproducts docker-push-store docker-push-user docker-push-warehouse 
