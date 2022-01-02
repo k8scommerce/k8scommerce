@@ -6,7 +6,7 @@ package emailclient
 import (
 	"context"
 
-	"email/pb/email"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/email"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"
