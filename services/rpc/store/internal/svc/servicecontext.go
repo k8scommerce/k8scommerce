@@ -1,6 +1,6 @@
 package svc
 
-import "store/internal/config"
+import "github.com/k8scommerce/k8scommerce/services/rpc/client/internal/config"
 
 type ServiceContext struct {
 	Config config.Config

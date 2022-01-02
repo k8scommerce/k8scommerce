@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"store/internal/svc"
-	"store/pb/store"
 	"sync"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/store"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
@@ -79,7 +80,7 @@ func (l *GetAllStoresLogic) GetAllStores(in *store.GetAllStoresRequest) (*store.
 	res := &store.GetAllStoresResponse{}
 
 	codec := &galaxycache.ByteCodec{}
-	if err := entryGetAllStoresLogic.galaxy.Get(l.ctx, in.Id, codec); err != nil {
+	if err := entryGetAllStoresLogic.galaxy.Get(l.ctx, "all-stores", codec); err != nil {
 		res.StatusCode = http.StatusNoContent
 		res.StatusMessage = err.Error()
 		return res, nil
