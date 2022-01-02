@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"email/internal/logic"
-	"email/internal/svc"
-	"email/pb/email"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/email"
 
 	"github.com/localrivet/galaxycache"
 )

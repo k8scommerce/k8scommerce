@@ -2,12 +2,13 @@ package logic
 
 import (
 	"context"
-	"email/internal/svc"
-	"email/pb/email"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"sync"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/email"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
@@ -79,7 +80,7 @@ func (l *SendOrderConfirmationLogic) SendOrderConfirmation(in *email.SendOrderCo
 	res := &email.Empty{}
 
 	codec := &galaxycache.ByteCodec{}
-	if err := entrySendOrderConfirmationLogic.galaxy.Get(l.ctx, in.Id, codec); err != nil {
+	if err := entrySendOrderConfirmationLogic.galaxy.Get(l.ctx, in.Email, codec); err != nil {
 		res.StatusCode = http.StatusNoContent
 		res.StatusMessage = err.Error()
 		return res, nil

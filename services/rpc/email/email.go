@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"email/internal/config"
-	"email/internal/server"
-	"email/internal/svc"
-	"email/pb/email"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/server"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/email"
 
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/conf"
