@@ -11,7 +11,7 @@ spec:
     branch: master
   secretRef:
     name: flux-system
-  url: ssh://git@github.com/localrivet/services
+  url: ssh://git@github.com/k8scommerce/services
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
