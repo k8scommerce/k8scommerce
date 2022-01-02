@@ -3,7 +3,7 @@ module github.com/k8scommerce/k8scommerce/services/rpc/client
 go 1.17
 
 require (
-	github.com/k8scommerce/k8scommerce/services/rpc/cart v0.0.0-20220102010944-bb2ab8e28692
+	github.com/k8scommerce/k8scommerce/services/rpc/cart v0.0.0-20220102011209-6981209f9cd3
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4
 	github.com/tal-tech/go-zero v1.2.4
@@ -28,7 +28,7 @@ require (
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/k8scommerce/k8scommerce/services/rpc/product v0.0.0-20220102005021-05675deb478a // indirect
+	github.com/k8scommerce/k8scommerce/services/rpc/product v0.0.0-20220102010511-8777bd4a6317 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
