@@ -24,7 +24,7 @@ sleep 30
 
 # connect the database to the 
 echo "> Connecting db to dev-cluster network..."
-docker network connect "k3d-dev-cluster" "localrivet-db"
+docker network connect "k3d-dev-cluster" "k8scommerce-db"
 
 # # install argocd
 # echo "> Installing argocd"

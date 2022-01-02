@@ -38,7 +38,7 @@ spec:
 #           value:
 #             - --source=service
 #             - --source=ingress
-#             - --domain-filter=localrivet.com
+#             - --domain-filter=k8scommerce.com
 #             - --provider=aws
 #             - --policy=upsert-only
 #             - --aws-zone-type=public
