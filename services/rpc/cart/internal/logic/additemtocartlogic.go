@@ -13,8 +13,8 @@ import (
 	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/svc"
 	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
 	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/inventoryclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/othersbought/othersbought"
-	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/similarproducts"
+	"github.com/k8scommerce/k8scommerce/services/rpc/othersbought/othersboughtclient"
+	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/similarproductsclient"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
@@ -91,7 +91,7 @@ func (l *AddItemToCartLogic) AddItemToCart(in *cart.AddItemToCartRequest) (*cart
 		return nil
 	}, func() error {
 		// similar products
-		result, err := l.svcCtx.SimilarProductsRpc.GetSimilarProductsBySku(l.ctx, &similarproducts.GetSimilarProductsBySkuRequest{
+		result, err := l.svcCtx.SimilarProductsRpc.GetSimilarProductsBySku(l.ctx, &similarproductsclient.GetSimilarProductsBySkuRequest{
 			Sku: in.Item.Sku,
 		})
 		if err != nil {
@@ -109,7 +109,7 @@ func (l *AddItemToCartLogic) AddItemToCart(in *cart.AddItemToCartRequest) (*cart
 		return nil
 	}, func() (err error) {
 		// others bought
-		result, err := l.svcCtx.OtherBoughtRpc.GetOthersBoughtBySku(l.ctx, &othersbought.GetOthersBoughtBySkuRequest{
+		result, err := l.svcCtx.OtherBoughtRpc.GetOthersBoughtBySku(l.ctx, &othersboughtclient.GetOthersBoughtBySkuRequest{
 			Sku: in.Item.Sku,
 		})
 		if err != nil {
