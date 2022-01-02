@@ -149,9 +149,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: localrivet
+      POSTGRES_DB: k8scommerce
     volumes:
-      - $HOME/docker/volumes/localrivet:/var/lib/postgresql/data
+      - $HOME/docker/volumes/k8scommerce:/var/lib/postgresql/data
     restart: unless-stopped
 
   migrations:
@@ -163,7 +163,7 @@ services:
     environment:
       PGUSER: postgres
       PGPASSWORD: postgres
-      PGDATABASE: localrivet
+      PGDATABASE: k8scommerce
       PGHOST: postgres
       PGSSLMODE: disable
     command: [ "/wait-for-postgres.sh", "/run-migrations.sh" ]

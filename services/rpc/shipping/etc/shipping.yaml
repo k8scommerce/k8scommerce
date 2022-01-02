@@ -5,7 +5,7 @@ Etcd:
   - 127.0.0.1:2379
   Key: shipping.rpc
 Postgres:
-  Connection: postgres://postgres:postgres@localhost:54322/localrivet?connect_timeout=180&sslmode=disable
+  Connection: postgres://postgres:postgres@localhost:54322/k8scommerce?connect_timeout=180&sslmode=disable
   MaxOpenConnections: 10
   MaxIdleConnections: 2
   MaxConnectionLifetimeMinutes: 5
