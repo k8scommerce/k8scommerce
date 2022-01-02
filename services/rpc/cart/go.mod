@@ -6,11 +6,11 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20220102010511-8777bd4a6317
+	github.com/k8scommerce/k8scommerce/pkg v0.0.0-20220102010944-bb2ab8e28692
 	github.com/k8scommerce/k8scommerce/services/rpc/inventory v0.0.0-20220102010511-8777bd4a6317
 	github.com/k8scommerce/k8scommerce/services/rpc/othersbought v0.0.0-20220102005021-05675deb478a
-	github.com/k8scommerce/k8scommerce/services/rpc/product v0.0.0-20220102005021-05675deb478a
-	github.com/k8scommerce/k8scommerce/services/rpc/similarproducts v0.0.0-20220102010511-8777bd4a6317
+	github.com/k8scommerce/k8scommerce/services/rpc/product v0.0.0-20220102010511-8777bd4a6317
+	github.com/k8scommerce/k8scommerce/services/rpc/similarproducts v0.0.0-20220102010944-bb2ab8e28692
 	github.com/lib/pq v1.10.4
 	github.com/localrivet/galaxycache v0.0.0-20211211122255-60f325a24b5a
 	github.com/localrivet/gcache v0.0.4
