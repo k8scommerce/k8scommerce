@@ -8,7 +8,7 @@ spec:
   interval: 1m0s
   ref:
     branch: master
-  url: https://github.com/localrivet/services
+  url: https://github.com/k8scommerce/services
 
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1

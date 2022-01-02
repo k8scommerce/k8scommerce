@@ -1,4 +1,4 @@
 postgres:
-  connection: postgres://postgres:postgres@localrivet-db:5432/localrivet?connect_timeout=180&sslmode=disable
+  connection: postgres://postgres:postgres@k8scommerce-db:5432/k8scommerce?connect_timeout=180&sslmode=disable
   maxOpenConnections: 25
   maxIdleConnections: 4
