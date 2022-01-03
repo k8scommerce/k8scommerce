@@ -6,7 +6,7 @@ package productclient
 import (
 	"context"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/product/pb/product"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"

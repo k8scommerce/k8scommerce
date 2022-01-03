@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/api/client/internal/types"
 
 	"github.com/bojanz/currency"
 )

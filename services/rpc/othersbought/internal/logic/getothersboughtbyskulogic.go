@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/othersbought/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/othersbought/pb/othersbought"
+	"k8scommerce/services/rpc/othersbought/internal/svc"
+	"k8scommerce/services/rpc/othersbought/pb/othersbought"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"

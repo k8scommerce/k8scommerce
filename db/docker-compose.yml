@@ -17,15 +17,14 @@ services:
     restart: unless-stopped
   migrations:
     build: .
-    # image: comp-migrations:latest
     depends_on:
       - postgres
     environment:
-      PG_USER: postgres
-      PG_PASSWORD: postgres
-      PG_DATABASE: k8scommerce
-      PG_HOST: postgres
-      PG_SSL_MODE: disable
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: k8scommerce
+      PGHOST: postgres
+      PGSSLMODE: disable
     volumes:
       - ./migrations:/migrations
     networks:
