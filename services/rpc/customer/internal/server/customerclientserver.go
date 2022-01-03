@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/logic"
-	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+	"k8scommerce/services/rpc/customer/internal/logic"
+	"k8scommerce/services/rpc/customer/internal/svc"
+	"k8scommerce/services/rpc/customer/pb/customer"
 
 	"github.com/localrivet/galaxycache"
 )

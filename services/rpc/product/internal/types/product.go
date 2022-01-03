@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/k8scommerce/k8scommerce/pkg/models"
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/internal/models"
+	"k8scommerce/services/rpc/product/pb/product"
 )
 
 func ConvertModelProductToProtoProduct(
