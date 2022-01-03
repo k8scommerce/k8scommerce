@@ -16,10 +16,11 @@ ENV GOOS linux
 
 WORKDIR /build/zero
 
-ADD ${ENV_APP_PATH}/${ENV_APP_NAME}/go.mod .
-ADD ${ENV_APP_PATH}/${ENV_APP_NAME}/go.sum .
+COPY . .
+ADD go.mod .
+ADD go.sum .
 RUN go mod download
-COPY ${ENV_APP_PATH}/${ENV_APP_NAME} .
+
 COPY ./env /app/env
 COPY ${ENV_APP_PATH}/${ENV_APP_NAME}/etc /app/etc
 RUN go build -ldflags="-s -w" -o /app/service ${ENV_APP_PATH}/${ENV_APP_NAME}/${ENV_APP_NAME}.go
@@ -31,15 +32,15 @@ ARG APP_NAME
 ARG APP_PATH
 
 RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
-ENV TZ America/Denver
-
+ENV TZ Etc/UTC
 ENV ECOMM_CONFIG /app/env/config.cluster.yaml
 
 WORKDIR /app
-COPY --from=builder /app/service /app/service
+COPY --from=builder /app /app/
 COPY --from=builder /app/etc /app/etc
 COPY --from=builder /app/env /app/env
 
 EXPOSE 8080
 
-CMD ["./service", "-f", "etc/config.cluster.yaml"]
+CMD ["/app/service", "-f", "etc/config.cluster.yaml"]
+# CMD ["/app"]

@@ -4,14 +4,13 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/internal/config"
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/internal/server"
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/pb/inventory"
+	"k8scommerce/services/rpc/inventory/internal/config"
+	"k8scommerce/services/rpc/inventory/internal/server"
+	"k8scommerce/services/rpc/inventory/internal/svc"
+	"k8scommerce/services/rpc/inventory/pb/inventory"
 
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/conf"
-	"github.com/tal-tech/go-zero/core/discov"
 	"github.com/tal-tech/go-zero/core/service"
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"
@@ -36,17 +35,17 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 
-		sub, err := discov.NewSubscriber(c.Etcd.Hosts, c.Etcd.Key)
-		if err != nil {
-			fmt.Println("ERROR:", err)
-		}
+		// sub, err := discov.NewSubscriber(c.Etcd.Hosts, c.Etcd.Key)
+		// if err != nil {
+		// 	fmt.Println("ERROR:", err)
+		// }
 
-		update := func() {
-			universe.Set(sub.Values()...)
-			fmt.Printf("universe.Set: %#v\n", sub.Values())
-		}
-		sub.AddListener(update)
-		update()
+		// update := func() {
+		// 	universe.Set(sub.Values()...)
+		// 	fmt.Printf("universe.Set: %#v\n", sub.Values())
+		// }
+		// sub.AddListener(update)
+		// update()
 	})
 	defer s.Stop()
 	defer universe.Shutdown()

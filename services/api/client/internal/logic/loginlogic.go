@@ -4,11 +4,12 @@ import (
 	"context"
 	"time"
 
+	"k8scommerce/internal/utils"
+	"k8scommerce/services/api/client/internal/svc"
+	"k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/rpc/user/userclient"
+
 	"github.com/golang-jwt/jwt"
-	"github.com/k8scommerce/k8scommerce/pkg/utils"
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
-	"github.com/k8scommerce/k8scommerce/services/rpc/user/userclient"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )

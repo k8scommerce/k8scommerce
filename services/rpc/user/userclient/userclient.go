@@ -6,7 +6,7 @@ package userclient
 import (
 	"context"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/user/pb/user"
+	"k8scommerce/services/rpc/user/pb/user"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"

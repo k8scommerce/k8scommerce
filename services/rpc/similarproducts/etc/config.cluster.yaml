@@ -1,8 +1,10 @@
 Name: similarproducts.rpc
+Target: k8s://k8scommerce/similarproducts:8080
 ListenOn: :8080
 Log:
   Mode: console
-Etcd:
-  Hosts:
-    - etcd-client:2379
-  Key: similarproducts.rpc
+Postgres:
+  Connection: postgres://postgres:postgres@k8scommerce-db:5432/k8scommerce?connect_timeout=180&sslmode=disable
+  MaxOpenConnections: 10
+  MaxIdleConnections: 2
+  MaxConnectionLifetimeMinutes: 5

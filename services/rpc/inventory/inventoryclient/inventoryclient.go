@@ -6,7 +6,7 @@ package inventoryclient
 import (
 	"context"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/pb/inventory"
+	"k8scommerce/services/rpc/inventory/pb/inventory"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"
