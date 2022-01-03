@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/config"
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/api/client/internal/config"
+	"k8scommerce/services/api/client/internal/types"
 )
 
 type LocaleMiddleware struct {

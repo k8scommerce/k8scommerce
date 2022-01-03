@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/store"
+	"k8scommerce/services/rpc/store/internal/svc"
+	"k8scommerce/services/rpc/store/pb/store"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"

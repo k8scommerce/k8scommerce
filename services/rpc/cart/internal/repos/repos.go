@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/config"
+	"k8scommerce/services/rpc/cart/internal/config"
 
 	"github.com/lib/pq"
 	"github.com/tal-tech/go-zero/core/logx"
