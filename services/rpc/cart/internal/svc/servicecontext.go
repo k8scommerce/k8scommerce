@@ -1,11 +1,12 @@
 package svc
 
 import (
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/config"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/repos"
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/inventoryclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/othersbought/othersboughtclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/similarproductsclient"
+	"k8scommerce/services/rpc/cart/internal/config"
+	"k8scommerce/services/rpc/cart/internal/repos"
+	"k8scommerce/services/rpc/inventory/inventoryclient"
+	"k8scommerce/services/rpc/othersbought/othersboughtclient"
+	"k8scommerce/services/rpc/similarproducts/similarproductsclient"
+
 	"github.com/tal-tech/go-zero/zrpc"
 
 	rabbitmq "github.com/wagslane/go-rabbitmq"
