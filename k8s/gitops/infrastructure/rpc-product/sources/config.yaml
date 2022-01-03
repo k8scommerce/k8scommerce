@@ -1,8 +1,0 @@
-Name: product.rpc
-ListenOn: 127.0.0.1:8080
-Log:
-  Mode: console
-Etcd:
-  Hosts:
-  - etcd-client:2379
-  Key: product.rpc
