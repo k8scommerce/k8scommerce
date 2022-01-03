@@ -1,6 +1,5 @@
 Name: user.rpc
-Target: k8s://k8scommerce/user:8080
-ListenOn: :8080
+ListenOn: 0.0.0.0:8080
 Log:
   Mode: console
 Postgres:

@@ -1,4 +1,4 @@
-Name: inventory
+Name: inventory.rpc
 ListenOn: 0.0.0.0:8080
 Log:
   Mode: console
