@@ -1,6 +1,5 @@
 Name: product.rpc
-Target: k8s://k8scommerce/product:8080
-ListenOn: :8080
+ListenOn: 0.0.0.0:8080
 Log:
   Mode: console
 Postgres:

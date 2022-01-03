@@ -1,6 +1,5 @@
 Name: warehouse.rpc
-Target: k8s://k8scommerce/warehouse:8080
-ListenOn: :8080
+ListenOn: 0.0.0.0:8080
 Log:
   Mode: console
 Postgres:

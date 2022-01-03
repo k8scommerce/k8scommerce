@@ -1,5 +1,5 @@
 Name: payment.rpc
-Target: k8s://k8scommerce/payment:8080
+Target: k8s://k8scommerce/payment
 ListenOn: :8080
 Log:
   Mode: console
