@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/internal/config"
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/internal/repos"
+	"k8scommerce/services/rpc/product/internal/config"
+	"k8scommerce/services/rpc/product/internal/repos"
 )
 
 type ServiceContext struct {

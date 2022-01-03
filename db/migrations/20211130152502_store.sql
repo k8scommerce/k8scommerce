@@ -41,7 +41,7 @@ CREATE TABLE store_setting (
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
     deleted_at timestamp without time zone
 );
--- +goose StatementEnd--
+-- +goose StatementEnd
 --
 --
 -- +goose StatementBegin
@@ -65,4 +65,6 @@ CREATE TABLE store_address (
 --
 -- +goose StatementBegin
 DROP TABLE store;
+DROP TABLE store_setting;
+DROP TABLE store_address;
 -- +goose StatementEnd

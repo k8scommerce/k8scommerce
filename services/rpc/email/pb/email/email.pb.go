@@ -8,12 +8,12 @@ package email
 
 import (
 	context "context"
-	cart "github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	cart "k8scommerce/services/rpc/cart/pb/cart"
 	reflect "reflect"
 	sync "sync"
 )

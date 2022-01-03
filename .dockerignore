@@ -1,0 +1,9 @@
+.vscode
+.docs
+db
+*.etcd
+scripts
+protos
+docker-compose.yaml
+README.md
+.data

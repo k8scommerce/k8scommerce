@@ -6,7 +6,7 @@ package cartclient
 import (
 	"context"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+	"k8scommerce/services/rpc/cart/pb/cart"
 
 	"github.com/tal-tech/go-zero/zrpc"
 	"google.golang.org/grpc"

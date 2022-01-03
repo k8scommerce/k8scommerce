@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/user/pb/user"
+	"k8scommerce/services/rpc/user/internal/svc"
+	"k8scommerce/services/rpc/user/pb/user"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"

@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/k8scommerce/k8scommerce/pkg/models"
-	"github.com/k8scommerce/k8scommerce/pkg/utils"
-	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/user/pb/user"
+	"k8scommerce/internal/models"
+	"k8scommerce/internal/utils"
+	"k8scommerce/services/rpc/user/internal/svc"
+	"k8scommerce/services/rpc/user/pb/user"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"

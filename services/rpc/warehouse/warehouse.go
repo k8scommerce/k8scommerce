@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/config"
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/server"
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/warehouse"
+	"k8scommerce/services/rpc/warehouse/internal/config"
+	"k8scommerce/services/rpc/warehouse/internal/server"
+	"k8scommerce/services/rpc/warehouse/internal/svc"
+	"k8scommerce/services/rpc/warehouse/pb/warehouse"
 
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/conf"

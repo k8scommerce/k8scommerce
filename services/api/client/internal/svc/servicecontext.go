@@ -1,14 +1,14 @@
 package svc
 
 import (
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/config"
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/middleware"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/cartclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/inventoryclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/othersbought/othersboughtclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/productclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/similarproductsclient"
-	"github.com/k8scommerce/k8scommerce/services/rpc/user/userclient"
+	"k8scommerce/services/api/client/internal/config"
+	"k8scommerce/services/api/client/internal/middleware"
+	"k8scommerce/services/rpc/cart/cartclient"
+	"k8scommerce/services/rpc/inventory/inventoryclient"
+	"k8scommerce/services/rpc/othersbought/othersboughtclient"
+	"k8scommerce/services/rpc/product/productclient"
+	"k8scommerce/services/rpc/similarproducts/similarproductsclient"
+	"k8scommerce/services/rpc/user/userclient"
 
 	"github.com/tal-tech/go-zero/rest"
 	"github.com/tal-tech/go-zero/zrpc"

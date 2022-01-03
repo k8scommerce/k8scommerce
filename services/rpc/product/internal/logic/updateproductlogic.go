@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/k8scommerce/k8scommerce/pkg/models"
-	"github.com/k8scommerce/k8scommerce/pkg/utils"
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/internal/models"
+	"k8scommerce/internal/utils"
+	"k8scommerce/services/rpc/product/internal/svc"
+	"k8scommerce/services/rpc/product/pb/product"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
