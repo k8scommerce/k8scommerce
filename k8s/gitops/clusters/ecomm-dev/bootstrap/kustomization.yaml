@@ -1,7 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-- aws-credentials.yaml
-- infrastructure.yaml
-bases:
-  - ../../../infrastructure/kind-ingres-nginx/bootstrap

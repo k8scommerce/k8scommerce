@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/client/pb/warehouse"
+	"k8scommerce/services/rpc/warehouse/internal/svc"
+	"k8scommerce/services/rpc/warehouse/pb/warehouse"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"

@@ -201,7 +201,7 @@ docker-build-client:
 		-t $(IMAGE_REPO)/client:$(TAG) \
 		--build-arg APP_NAME=client \
 		--build-arg APP_PATH=services/api \
-		--no-cache .
+		.
 
 .PHONY: docker-push-client
 docker-push-client:
@@ -220,7 +220,7 @@ docker-build-admin:
 		-t $(IMAGE_REPO)/admin:$(TAG) \
 		--build-arg APP_NAME=admin \
 		--build-arg APP_PATH=services/api \
-		--no-cache .
+		.
 
 .PHONY: docker-push-admin
 docker-push-admin:
@@ -239,7 +239,7 @@ docker-build-cart:
 		-t $(IMAGE_REPO)/cart:$(TAG) \
 		--build-arg APP_NAME=cart \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-cart
 docker-push-cart:
@@ -258,7 +258,7 @@ docker-build-customer:
 		-t $(IMAGE_REPO)/customer:$(TAG) \
 		--build-arg APP_NAME=customer \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-customer
 docker-push-customer:
@@ -277,7 +277,7 @@ docker-build-email:
 		-t $(IMAGE_REPO)/email:$(TAG) \
 		--build-arg APP_NAME=email \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-email
 docker-push-email:
@@ -296,7 +296,7 @@ docker-build-inventory:
 		-t $(IMAGE_REPO)/inventory:$(TAG) \
 		--build-arg APP_NAME=inventory \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-inventory
 docker-push-inventory:
@@ -315,7 +315,7 @@ docker-build-othersbought:
 		-t $(IMAGE_REPO)/othersbought:$(TAG) \
 		--build-arg APP_NAME=othersbought \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-othersbought
 docker-push-othersbought:
@@ -334,7 +334,7 @@ docker-build-payment:
 		-t $(IMAGE_REPO)/payment:$(TAG) \
 		--build-arg APP_NAME=payment \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-payment
 docker-push-payment:
@@ -353,7 +353,7 @@ docker-build-product:
 		-t $(IMAGE_REPO)/product:$(TAG) \
 		--build-arg APP_NAME=product \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-product
 docker-push-product:
@@ -372,7 +372,7 @@ docker-build-shipping:
 		-t $(IMAGE_REPO)/shipping:$(TAG) \
 		--build-arg APP_NAME=shipping \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-shipping
 docker-push-shipping:
@@ -391,7 +391,7 @@ docker-build-similarproducts:
 		-t $(IMAGE_REPO)/similarproducts:$(TAG) \
 		--build-arg APP_NAME=similarproducts \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-similarproducts
 docker-push-similarproducts:
@@ -410,7 +410,7 @@ docker-build-store:
 		-t $(IMAGE_REPO)/store:$(TAG) \
 		--build-arg APP_NAME=store \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-store
 docker-push-store:
@@ -429,7 +429,7 @@ docker-build-user:
 		-t $(IMAGE_REPO)/user:$(TAG) \
 		--build-arg APP_NAME=user \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-user
 docker-push-user:
@@ -448,7 +448,7 @@ docker-build-warehouse:
 		-t $(IMAGE_REPO)/warehouse:$(TAG) \
 		--build-arg APP_NAME=warehouse \
 		--build-arg APP_PATH=services/rpc \
-		--no-cache .
+		.
 
 .PHONY: docker-push-warehouse
 docker-push-warehouse:
@@ -461,7 +461,7 @@ docker-push-warehouse:
 ##
 
 .PHONY: docker-build
-docker-build: docker-build-cart docker-build-customer docker-build-email docker-build-inventory docker-build-othersbought docker-build-payment docker-build-product docker-build-shipping docker-build-similarproducts docker-build-store docker-build-user docker-build-warehouse 
-	
+docker-build: docker-build-cart docker-build-inventory docker-build-othersbought docker-build-similarproducts
+#docker-build-cart docker-build-customer docker-build-email docker-build-inventory docker-build-othersbought docker-build-payment docker-build-product docker-build-shipping docker-build-similarproducts docker-build-store docker-build-user docker-build-warehouse
 .PHONY: docker-push
 docker-push: docker-push-cart docker-push-customer docker-push-email docker-push-inventory docker-push-othersbought docker-push-payment docker-push-product docker-push-shipping docker-push-similarproducts docker-push-store docker-push-user docker-push-warehouse 

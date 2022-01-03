@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
+	"k8scommerce/services/api/client/internal/svc"
 
 	"github.com/tal-tech/go-zero/rest"
 )

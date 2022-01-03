@@ -1,9 +1,10 @@
 package logic
 
 import (
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/repos"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+	"k8scommerce/services/rpc/cart/internal/repos"
+	"k8scommerce/services/rpc/cart/internal/svc"
+	"k8scommerce/services/rpc/cart/pb/cart"
+
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

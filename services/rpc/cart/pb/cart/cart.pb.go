@@ -8,13 +8,13 @@ package cart
 
 import (
 	context "context"
-	product "github.com/k8scommerce/k8scommerce/services/rpc/product/pb/product"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	product "k8scommerce/services/rpc/product/pb/product"
 	reflect "reflect"
 	sync "sync"
 )

@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/api/client/internal/svc"
+	"k8scommerce/services/api/client/internal/types"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )

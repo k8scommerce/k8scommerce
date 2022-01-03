@@ -1,7 +1,8 @@
 package repos_test
 
 import (
-	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/repos"
+	"k8scommerce/services/rpc/customer/internal/repos"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

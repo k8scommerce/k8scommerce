@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/pb/inventory"
+	"k8scommerce/services/rpc/inventory/internal/svc"
+	"k8scommerce/services/rpc/inventory/pb/inventory"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"

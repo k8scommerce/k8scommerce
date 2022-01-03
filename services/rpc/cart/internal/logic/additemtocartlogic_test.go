@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/k8scommerce/k8scommerce/pkg/models"
-	"github.com/k8scommerce/k8scommerce/pkg/utils"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/config"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/logic"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/svc"
-	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+	"k8scommerce/internal/models"
+	"k8scommerce/internal/utils"
+	"k8scommerce/services/rpc/cart/internal/config"
+	"k8scommerce/services/rpc/cart/internal/logic"
+	"k8scommerce/services/rpc/cart/internal/svc"
+	"k8scommerce/services/rpc/cart/pb/cart"
 
 	"github.com/localrivet/gcache"
 
