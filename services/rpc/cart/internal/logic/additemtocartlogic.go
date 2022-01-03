@@ -14,19 +14,11 @@ import (
 	"k8scommerce/services/rpc/cart/pb/cart"
 	"k8scommerce/services/rpc/inventory/inventoryclient"
 	"k8scommerce/services/rpc/othersbought/othersboughtclient"
-	"k8scommerce/services/rpc/similarproducts/similarproductsclient"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/mr"
 )
-
-type galaxyAddItemToCartLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
-
-var entryAddItemToCartLogic *galaxyAddItemToCartLogicHelper
 
 type AddItemToCartLogic struct {
 	ctx    context.Context
@@ -90,21 +82,21 @@ func (l *AddItemToCartLogic) AddItemToCart(in *cart.AddItemToCartRequest) (*cart
 
 		return nil
 	}, func() error {
-		// similar products
-		result, err := l.svcCtx.SimilarProductsRpc.GetSimilarProductsBySku(l.ctx, &similarproductsclient.GetSimilarProductsBySkuRequest{
-			Sku: in.Item.Sku,
-		})
-		if err != nil {
-			return err
-		}
+		// // similar products
+		// result, err := l.svcCtx.SimilarProductsRpc.GetSimilarProductsBySku(l.ctx, &similarproductsclient.GetSimilarProductsBySkuRequest{
+		// 	Sku: in.Item.Sku,
+		// })
+		// if err != nil {
+		// 	return err
+		// }
 
-		sp := &cart.SimilarProducts{}
-		err = utils.TransformObj(result.Variants, &sp.Variants)
-		if err != nil {
-			return fmt.Errorf("error: SimilarProducts error: %s", err.Error())
-			// return err
-		}
-		res.SimilarProducts.Variants = sp.Variants
+		// sp := &cart.SimilarProducts{}
+		// err = utils.TransformObj(result.Variants, &sp.Variants)
+		// if err != nil {
+		// 	return fmt.Errorf("error: SimilarProducts error: %s", err.Error())
+		// 	// return err
+		// }
+		// res.SimilarProducts.Variants = sp.Variants
 
 		return nil
 	}, func() (err error) {
@@ -157,6 +149,6 @@ func (l *AddItemToCartLogic) AddItemToCart(in *cart.AddItemToCartRequest) (*cart
 	return res, err
 }
 
-func (l *AddItemToCartLogic) notify() {
+// func (l *AddItemToCartLogic) notify() {
 
-}
+// }
