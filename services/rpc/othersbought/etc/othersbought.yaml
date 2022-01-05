@@ -1,5 +1,5 @@
 Name: othersbought.rpc
-ListenOn: :8082
+ListenOn: :8080
 Log:
   Mode: console
 Etcd:

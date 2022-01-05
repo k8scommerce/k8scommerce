@@ -1,8 +1,11 @@
 Name: payment.rpc
-Target: k8s://k8scommerce/payment
 ListenOn: :8080
 Log:
   Mode: console
+Etcd:
+  Hosts:
+    - etcd:2379
+  Key: payment.rpc
 Postgres:
   Connection: postgres://postgres:postgres@k8scommerce-db:5432/k8scommerce?connect_timeout=180&sslmode=disable
   MaxOpenConnections: 10

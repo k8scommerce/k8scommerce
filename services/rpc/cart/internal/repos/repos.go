@@ -2,7 +2,6 @@ package repos
 
 import (
 	"database/sql"
-	"fmt"
 	"sync"
 	"time"
 
@@ -22,11 +21,11 @@ var (
 
 func MustNewRepo(c *config.Config) Repo {
 	// catch any panics
-	defer func() {
-		if rec := recover(); rec != nil {
-			fmt.Println("Panic Recovered in MustNewRepo:", rec)
-		}
-	}()
+	// defer func() {
+	// 	if rec := recover(); rec != nil {
+	// 		fmt.Println("Panic Recovered in MustNewRepo:", rec)
+	// 	}
+	// }()
 
 	r := &repo{
 		cfg: c,
