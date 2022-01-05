@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"sync"
 
-	"k8scommerce/services/rpc/product/internal/svc"
-	"k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
@@ -31,10 +31,10 @@ func NewDeleteProductLogic(ctx context.Context, svcCtx *svc.ServiceContext, univ
 	}
 }
 
-func (l *DeleteProductLogic) DeleteProduct(in *product.DeleteProductRequest) (*product.DeleteProductResponse, error) {
+func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*catalog.DeleteProductResponse, error) {
 	prod, err := l.svcCtx.Repo.Product().GetProductById(in.Id)
 	if err != nil {
-		return &product.DeleteProductResponse{
+		return &catalog.DeleteProductResponse{
 			StatusCode:    http.StatusExpectationFailed,
 			StatusMessage: err.Error(),
 		}, nil
@@ -50,7 +50,7 @@ func (l *DeleteProductLogic) DeleteProduct(in *product.DeleteProductRequest) (*p
 
 	// delete the product
 	if err := l.svcCtx.Repo.Product().Delete(in.Id); err != nil {
-		return &product.DeleteProductResponse{
+		return &catalog.DeleteProductResponse{
 			StatusCode:    http.StatusExpectationFailed,
 			StatusMessage: err.Error(),
 		}, nil
@@ -71,7 +71,7 @@ func (l *DeleteProductLogic) DeleteProduct(in *product.DeleteProductRequest) (*p
 	}
 
 	// the response struct
-	return &product.DeleteProductResponse{
+	return &catalog.DeleteProductResponse{
 		StatusCode:    http.StatusOK,
 		StatusMessage: "",
 	}, nil

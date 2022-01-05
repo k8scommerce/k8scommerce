@@ -8,8 +8,8 @@ import (
 
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/utils"
-	"k8scommerce/services/rpc/product/internal/svc"
-	"k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
@@ -32,10 +32,10 @@ func NewUpdateProductLogic(ctx context.Context, svcCtx *svc.ServiceContext, univ
 	}
 }
 
-func (l *UpdateProductLogic) UpdateProduct(in *product.UpdateProductRequest) (*product.UpdateProductResponse, error) {
+func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*catalog.UpdateProductResponse, error) {
 	found, err := l.svcCtx.Repo.Product().GetProductById(in.Id)
 	if err != nil {
-		return &product.UpdateProductResponse{
+		return &catalog.UpdateProductResponse{
 			StatusCode:    http.StatusExpectationFailed,
 			StatusMessage: err.Error(),
 		}, nil
@@ -46,7 +46,7 @@ func (l *UpdateProductLogic) UpdateProduct(in *product.UpdateProductRequest) (*p
 	prod.ID = found.Product.ID // make sure we're updating the correct id
 	if err := l.svcCtx.Repo.Product().Update(&prod); err != nil {
 		logx.Infof("error: %s", err)
-		return &product.UpdateProductResponse{
+		return &catalog.UpdateProductResponse{
 			Product:       nil,
 			StatusCode:    http.StatusExpectationFailed,
 			StatusMessage: err.Error(),
@@ -76,11 +76,11 @@ func (l *UpdateProductLogic) UpdateProduct(in *product.UpdateProductRequest) (*p
 	}
 
 	// the output object
-	out := &product.Product{}
+	out := &catalog.Product{}
 	utils.TransformObj(prod, &out)
 
 	// the response struct
-	return &product.UpdateProductResponse{
+	return &catalog.UpdateProductResponse{
 		Product:       out,
 		StatusCode:    http.StatusOK,
 		StatusMessage: "",
