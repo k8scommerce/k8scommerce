@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"sync"
 
-	"k8scommerce/services/rpc/product/internal/svc"
-	"k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
@@ -43,7 +43,7 @@ func NewGetAllProductsLogic(ctx context.Context, svcCtx *svc.ServiceContext, uni
 	}
 }
 
-func (l *GetAllProductsLogic) GetAllProducts(in *product.GetAllProductsRequest) (*product.GetAllProductsResponse, error) {
+func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) (*catalog.GetAllProductsResponse, error) {
 
 	// caching goes logic here
 	if _, ok := entryGetAllProductsLogic["GetAllProducts"]; !ok {
@@ -71,7 +71,7 @@ func (l *GetAllProductsLogic) GetAllProducts(in *product.GetAllProductsRequest) 
 				// }
 
 				// the response struct
-				item := &product.GetAllProductsResponse{}
+				item := &catalog.GetAllProductsResponse{}
 
 				out, err := json.Marshal(item)
 				if err != nil {
@@ -87,7 +87,7 @@ func (l *GetAllProductsLogic) GetAllProducts(in *product.GetAllProductsRequest) 
 	if err != nil {
 		return nil, err
 	}
-	res := &product.GetAllProductsResponse{}
+	res := &catalog.GetAllProductsResponse{}
 	err = json.Unmarshal(b, res)
 	return res, err
 

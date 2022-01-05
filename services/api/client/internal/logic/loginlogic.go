@@ -32,7 +32,7 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLogin
 	// logx.Info("RECEIVED ", req.Email)
 
 	res, err := l.svcCtx.UserRpc.Login(l.ctx, &userclient.LoginRequest{
-		Username: req.Email,
+		Email:    req.Email,
 		Password: req.Password,
 	})
 	if err != nil {
