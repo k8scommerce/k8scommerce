@@ -1,5 +1,5 @@
 Name: similarproducts.rpc
-ListenOn: :8084
+ListenOn: :8080
 Log:
   Mode: console
 Etcd:
