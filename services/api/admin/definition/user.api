@@ -16,7 +16,7 @@ type User {
 
 // login
 type UserLoginRequest {
-	Username string `json:"username"`
+	Email string `json:"email"`
 	Password string `json:"password"`
 }
 
