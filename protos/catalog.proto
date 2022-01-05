@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package product;
-option go_package = "pb/product";
+package catalog;
+option go_package = "pb/catalog";
 
 // import "google/protobuf/wrappers.proto";
 // import "google/protobuf/timestamp.proto";
@@ -153,7 +153,7 @@ message DeleteProductResponse {
 }
 
 // service client
-service ProductClient {
+service CatalogClient {
   rpc GetProductBySku(GetProductBySkuRequest) returns (GetProductBySkuResponse);
   rpc GetProductBySlug(GetProductBySlugRequest)
       returns (GetProductBySlugResponse);
