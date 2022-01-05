@@ -7,5 +7,20 @@ import (
 
 type Config struct {
 	rest.RestConf
-	ProductRpc zrpc.RpcClientConf
+	Auth struct {
+		AccessSecret string
+		AccessExpire int64
+	}
+	CartRpc            zrpc.RpcClientConf
+	CustomerRpc        zrpc.RpcClientConf
+	EmailRpc           zrpc.RpcClientConf
+	InventoryRpc       zrpc.RpcClientConf
+	OthersBoughtRpc    zrpc.RpcClientConf
+	PaymentRpc         zrpc.RpcClientConf
+	ProductRpc         zrpc.RpcClientConf
+	ShippingRpc        zrpc.RpcClientConf
+	SimilarProductsRpc zrpc.RpcClientConf
+	StoreRpc           zrpc.RpcClientConf
+	UserRpc            zrpc.RpcClientConf
+	WarehouseRpc       zrpc.RpcClientConf
 }

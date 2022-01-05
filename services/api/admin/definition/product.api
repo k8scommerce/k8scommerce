@@ -88,7 +88,7 @@ type GetAllProductsResponse {
 @server(
 	middleware: Locale
 )
-service client {
+service admin {
 	@handler getProductBySkuRequest
 	get /v1/product/sku/:sku(GetProductBySkuRequest) returns (Product)
 	

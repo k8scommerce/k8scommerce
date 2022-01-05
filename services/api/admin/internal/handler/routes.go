@@ -4,39 +4,81 @@ package handler
 import (
 	"net/http"
 
-	"ecomm/services/api/admin/internal/svc"
+	"k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/tal-tech/go-zero/rest"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodGet,
-				Path:    "/api/v1/product/sku/:sku",
-				Handler: getProductBySkuRequestHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/api/v1/product/slug/:slug",
-				Handler: getProductBySlugRequestHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/api/v1/product/:id",
-				Handler: getProductByIdRequestHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/api/v1/products/category/:categoryId/:currentPage/:pageSize",
-				Handler: getProductsByCategoryIdRequestHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/api/v1/products/:currentPage/:pageSize",
-				Handler: getAllProductsRequestHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart/:userId",
+					Handler: createCartHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/cart/:userId",
+					Handler: getCartHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/product/sku/:sku",
+					Handler: getProductBySkuRequestHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/product/slug/:slug",
+					Handler: getProductBySlugRequestHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/product/:id",
+					Handler: getProductByIdRequestHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/products/category/:categoryId/:currentPage/:pageSize",
+					Handler: getProductsByCategoryIdRequestHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/products/:currentPage/:pageSize",
+					Handler: getAllProductsRequestHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/user/login",
+					Handler: loginHandler(serverCtx),
+				},
+			}...,
+		),
 	)
 }

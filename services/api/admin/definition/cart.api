@@ -95,7 +95,7 @@ type ClearCartResponse {
 	jwt: Auth
 	middleware: Locale
 )
-service client {
+service admin {
 	@doc "creates a shopping cart for the associated userId. Each user can only have 1 cart ever."
 	@handler createCart
 	post /v1/cart/:userId(CreateCartRequest) returns (CreateCartResponse)

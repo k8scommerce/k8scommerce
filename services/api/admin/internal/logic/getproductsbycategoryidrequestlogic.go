@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"ecomm/services/api/admin/internal/svc"
-	"ecomm/services/api/admin/internal/types"
-	"ecomm/services/rpc/product/productclient"
+	"k8scommerce/services/api/admin/internal/svc"
+	"k8scommerce/services/api/admin/internal/types"
+	"k8scommerce/services/rpc/product/productclient"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
