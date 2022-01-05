@@ -4,7 +4,7 @@ package cart;
 option go_package = "pb/cart";
 
 import "google/protobuf/timestamp.proto";
-import "product.proto";
+import "catalog.proto";
 
 message Cart {
   int64 userId = 1;
@@ -33,11 +33,11 @@ message Price {
 }
 
 message SimilarProducts {
-  repeated product.Variant variants = 1;
+  repeated catalog.Variant variants = 1;
 }
 
 message OthersBought {
-  repeated product.Variant variants = 1;
+  repeated catalog.Variant variants = 1;
 }
 
 //

@@ -9,9 +9,9 @@ import (
 	"sync"
 
 	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/product/internal/svc"
-	"k8scommerce/services/rpc/product/internal/types"
-	"k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/internal/types"
+	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
@@ -42,7 +42,7 @@ func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceCon
 	}
 }
 
-func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *product.GetProductsByCategoryIdRequest) (*product.GetProductsByCategoryIdResponse, error) {
+func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetProductsByCategoryIdRequest) (*catalog.GetProductsByCategoryIdResponse, error) {
 
 	// caching goes logic here
 	if entryGetProductsByCategoryIdLogic == nil {
@@ -76,7 +76,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *product.GetPr
 					return err
 				}
 
-				prods := []*product.Product{}
+				prods := []*catalog.Product{}
 
 				var totalRecords int64 = 0
 				var totalPages int64 = 0
@@ -86,7 +86,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *product.GetPr
 					totalPages = found.PagingStats.TotalPages
 
 					for _, f := range found.Results {
-						prod := product.Product{}
+						prod := catalog.Product{}
 
 						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
 							f.Variant,
@@ -98,7 +98,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *product.GetPr
 				}
 
 				// the response struct
-				item := &product.GetProductsByCategoryIdResponse{
+				item := &catalog.GetProductsByCategoryIdResponse{
 					Products:     prods,
 					TotalRecords: totalRecords,
 					TotalPages:   totalPages,
@@ -121,7 +121,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *product.GetPr
 	if err != nil {
 		return nil, err
 	}
-	res := &product.GetProductsByCategoryIdResponse{}
+	res := &catalog.GetProductsByCategoryIdResponse{}
 	err = json.Unmarshal(b, res)
 
 	// remove it for right now
