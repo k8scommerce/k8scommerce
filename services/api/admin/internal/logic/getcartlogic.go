@@ -23,8 +23,8 @@ func NewGetCartLogic(ctx context.Context, svcCtx *svc.ServiceContext) GetCartLog
 	}
 }
 
-func (l *GetCartLogic) GetCart(req types.GetCartRequest) (resp *types.GetCartResponse, err error) {
+func (l *GetCartLogic) GetCart(req types.GetCartRequest) (*types.GetCartResponse, error) {
 	// todo: add your logic here and delete this line
 
-	return
+	return &types.GetCartResponse{}, nil
 }
