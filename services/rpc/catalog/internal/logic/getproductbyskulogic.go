@@ -6,23 +6,23 @@ import (
 	"net/http"
 	"sync"
 
-	"k8scommerce/services/rpc/product/internal/svc"
-	"k8scommerce/services/rpc/product/internal/types"
-	"k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/internal/types"
+	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
-type galaxyGetProductBySlugLogicHelper struct {
+type galaxyGetProductBySkuLogicHelper struct {
 	once   *sync.Once
 	galaxy *galaxycache.Galaxy
 }
 
-var entryGetProductBySlugLogic *galaxyGetProductBySlugLogicHelper
+var entryGetProductBySkuLogic *galaxyGetProductBySkuLogicHelper
 
-type GetProductBySlugLogic struct {
+type GetProductBySkuLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
@@ -30,8 +30,8 @@ type GetProductBySlugLogic struct {
 	mu       sync.Mutex
 }
 
-func NewGetProductBySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetProductBySlugLogic {
-	return &GetProductBySlugLogic{
+func NewGetProductBySkuLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetProductBySkuLogic {
+	return &GetProductBySkuLogic{
 		ctx:      ctx,
 		svcCtx:   svcCtx,
 		Logger:   logx.WithContext(ctx),
@@ -39,35 +39,35 @@ func NewGetProductBySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext, u
 	}
 }
 
-func (l *GetProductBySlugLogic) GetProductBySlug(in *product.GetProductBySlugRequest) (*product.GetProductBySlugResponse, error) {
+func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuRequest) (*catalog.GetProductBySkuResponse, error) {
 
 	// caching goes logic here
-	if entryGetProductBySlugLogic == nil {
+	if entryGetProductBySkuLogic == nil {
 		l.mu.Lock()
-		entryGetProductBySlugLogic = &galaxyGetProductBySlugLogicHelper{
+		entryGetProductBySkuLogic = &galaxyGetProductBySkuLogicHelper{
 			once: &sync.Once{},
 		}
 		l.mu.Unlock()
 	}
 
-	entryGetProductBySlugLogic.once.Do(func() {
+	entryGetProductBySkuLogic.once.Do(func() {
 		// register the galaxy one time
-		entryGetProductBySlugLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductBySlug", l.universe, galaxycache.GetterFunc(
+		entryGetProductBySkuLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductBySku", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 				// fmt.Printf("Looking up GetProductBySku record by key: %s", key)
-				found, err := l.svcCtx.Repo.Product().GetProductBySlug(key)
+				found, err := l.svcCtx.Repo.Product().GetProductBySku(key)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
 				}
 
-				prod := product.Product{}
+				prod := catalog.Product{}
 				if found != nil {
 					types.ConvertModelProductToProtoProduct(&found.Product, &found.Variants, &found.Prices, &prod)
 				}
 
 				// the response struct
-				item := &product.GetProductBySlugResponse{
+				item := &catalog.GetProductBySkuResponse{
 					Product: &prod,
 				}
 
@@ -80,12 +80,12 @@ func (l *GetProductBySlugLogic) GetProductBySlug(in *product.GetProductBySlugReq
 	})
 
 	codec := &galaxycache.ByteCodec{}
-	entryGetProductBySlugLogic.galaxy.Get(l.ctx, in.Slug, codec)
+	entryGetProductBySkuLogic.galaxy.Get(l.ctx, in.Sku, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
 		return nil, err
 	}
-	res := &product.GetProductBySlugResponse{
+	res := &catalog.GetProductBySkuResponse{
 		StatusCode:    http.StatusOK,
 		StatusMessage: "",
 	}

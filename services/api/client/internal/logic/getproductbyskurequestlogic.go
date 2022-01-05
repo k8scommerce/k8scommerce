@@ -6,7 +6,7 @@ import (
 
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
-	"k8scommerce/services/rpc/product/productclient"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -26,7 +26,7 @@ func NewGetProductBySkuRequestLogic(ctx context.Context, svcCtx *svc.ServiceCont
 }
 
 func (l *GetProductBySkuRequestLogic) GetProductBySkuRequest(req types.GetProductBySkuRequest) (*types.Product, error) {
-	getOneBySkuResponse, err := l.svcCtx.ProductRpc.GetProductBySku(l.ctx, &productclient.GetProductBySkuRequest{
+	getOneBySkuResponse, err := l.svcCtx.CatalogRpc.GetProductBySku(l.ctx, &catalogclient.GetProductBySkuRequest{
 		Sku: req.Sku,
 	})
 	if err != nil {

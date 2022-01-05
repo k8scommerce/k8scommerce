@@ -2,14 +2,14 @@ package types
 
 import (
 	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/catalog/pb/catalog"
 )
 
 func ConvertModelProductToProtoProduct(
 	modelProduct *models.Product,
 	modelVariants *[]models.Variant,
 	modelPrices *[]models.Price,
-	protoProduct *product.Product,
+	protoProduct *catalog.Product,
 ) {
 	// convert the product
 	protoProduct.Id = modelProduct.ID
@@ -26,10 +26,10 @@ func ConvertModelProductToProtoProduct(
 
 	if modelVariants != nil {
 		// convert the variants
-		variants := []*product.Variant{}
+		variants := []*catalog.Variant{}
 
 		for _, v := range *modelVariants {
-			variant := &product.Variant{
+			variant := &catalog.Variant{
 				Id:                 v.ID,
 				ProductId:          v.ProductID,
 				IsDefault:          v.IsDefault,
@@ -50,7 +50,7 @@ func ConvertModelProductToProtoProduct(
 			if modelPrices != nil {
 				for _, modelPrice := range *modelPrices {
 					if modelPrice.VariantID == variant.Id {
-						variant.Price = &product.Price{
+						variant.Price = &catalog.Price{
 							Id:              modelPrice.ID,
 							VariantId:       modelPrice.VariantID,
 							Amount:          modelPrice.Amount,
