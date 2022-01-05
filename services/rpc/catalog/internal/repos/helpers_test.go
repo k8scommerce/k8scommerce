@@ -1,9 +1,10 @@
 package repos_test
 
 import (
+	"k8scommerce/services/rpc/catalog/internal/repos"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"k8scommerce/services/rpc/product/internal/repos"
 )
 
 var _ = Describe("Products", func() {

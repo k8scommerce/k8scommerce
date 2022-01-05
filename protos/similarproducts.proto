@@ -3,7 +3,7 @@ syntax = "proto3";
 package similarproducts;
 option go_package = "pb/similarproducts";
 
-import "product.proto";
+import "catalog.proto";
 
 //
 //
@@ -17,7 +17,7 @@ message GetSimilarProductsBySkuRequest {
 }
 
 message GetSimilarProductsBySkuResponse {
-  repeated product.Variant variants = 1;
+  repeated catalog.Variant variants = 1;
   int64 statusCode = 2;
   string statusMessage = 3;
 }

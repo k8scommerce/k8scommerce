@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"k8scommerce/services/rpc/product/internal/config"
-	"k8scommerce/services/rpc/product/internal/server"
-	"k8scommerce/services/rpc/product/internal/svc"
-	"k8scommerce/services/rpc/product/pb/product"
+	"k8scommerce/services/rpc/catalog/internal/config"
+	"k8scommerce/services/rpc/catalog/internal/server"
+	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/conf"
@@ -20,7 +20,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
-var configFile = flag.String("f", "etc/product.yaml", "the config file")
+var configFile = flag.String("f", "etc/catalog.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -29,10 +29,10 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 	universe := gcache.NewUniverse(c.ListenOn)
-	srv := server.NewProductClientServer(ctx, universe)
+	srv := server.NewCatalogClientServer(ctx, universe)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		product.RegisterProductClientServer(grpcServer, srv)
+		catalog.RegisterCatalogClientServer(grpcServer, srv)
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
