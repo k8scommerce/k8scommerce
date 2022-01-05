@@ -4,6 +4,8 @@ K8sCommerce is a microservice based ecommerce platform written in [Go](https://g
 
 Checkout our [kubernetes operator]().
 
+## Service Overview
+![K8sCommerce Overview](docs/K8sCommerceOverview.png)
 
 ## Getting Started
 
@@ -26,12 +28,6 @@ kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/latest/do
 # Install K8sCommerce Operator
 kubectl apply -f 
 ```
-
-
-
-## Service Overview
-![K8sCommerce Overview](docs/K8sCommerceOverview.png)
-
 
 ## Tools, tools, and tools
 
