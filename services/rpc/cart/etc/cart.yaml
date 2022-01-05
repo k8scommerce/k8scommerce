@@ -8,19 +8,16 @@ Etcd:
     - etcd1:2379
   Key: cart.rpc
 InventoryRpc:
-  Target: k8s://k8scommerce/inventory
   Etcd:
     Hosts:
       - etcd1:2379
     Key: inventory.rpc
 OthersBoughtRpc:
-  Target: k8s://k8scommerce/othersbought
   Etcd:
     Hosts:
       - etcd1:2379
     Key: othersbought.rpc
 SimilarProductsRpc:
-  Target: k8s://k8scommerce/similarproducts
   Etcd:
     Hosts:
       - etcd1:2379

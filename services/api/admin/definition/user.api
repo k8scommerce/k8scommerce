@@ -34,7 +34,7 @@ type UserLoginResponse {
 @server(
 	middleware: Locale
 )
-service client {
+service admin {
 	// user
     @doc "manages user logins"
 	@handler login

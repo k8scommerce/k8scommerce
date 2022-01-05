@@ -1,12 +1,21 @@
 Name: cart.rpc
-Target: k8s://k8scommerce/cart
-ListenOn: 0.0.0.0:8080
+ListenOn: :8080
 Log:
   Mode: console
+Etcd:
+  Hosts:
+    - etcd-client:2379
+  Key: cart.rpc
 InventoryRpc:
-  Target: k8s://k8scommerce/inventory
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: inventory.rpc
 OthersBoughtRpc:
-  Target: k8s://k8scommerce/othersbought
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: othersbought.rpc
 Postgres:
   Connection: postgres://postgres:postgres@k8scommerce-db:5432/k8scommerce?connect_timeout=180&sslmode=disable
   MaxOpenConnections: 10

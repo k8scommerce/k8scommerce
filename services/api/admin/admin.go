@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"ecomm/services/api/admin/internal/config"
-	"ecomm/services/api/admin/internal/handler"
-	"ecomm/services/api/admin/internal/svc"
+	"k8scommerce/services/api/admin/internal/config"
+	"k8scommerce/services/api/admin/internal/handler"
+	"k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/rest"
