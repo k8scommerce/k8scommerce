@@ -6,7 +6,7 @@ import (
 
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
-	"k8scommerce/services/rpc/product/productclient"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -26,7 +26,7 @@ func NewGetProductBySlugRequestLogic(ctx context.Context, svcCtx *svc.ServiceCon
 }
 
 func (l *GetProductBySlugRequestLogic) GetProductBySlugRequest(req types.GetProductBySlugRequest) (*types.Product, error) {
-	getOneBySlugResponse, err := l.svcCtx.ProductRpc.GetProductBySlug(l.ctx, &productclient.GetProductBySlugRequest{
+	getOneBySlugResponse, err := l.svcCtx.CatalogRpc.GetProductBySlug(l.ctx, &catalogclient.GetProductBySlugRequest{
 		Slug: req.Slug,
 	})
 	if err != nil {
@@ -41,5 +41,13 @@ func (l *GetProductBySlugRequestLogic) GetProductBySlugRequest(req types.GetProd
 		return nil, err
 	}
 	err = json.Unmarshal(b, res)
+
+	// format the currency to the locale and language
+	for x := 0; x < len(res.Variants); x++ {
+		if res.Variants[x].Price != (types.Price{}) {
+			convertOutgoingPrices(l.ctx, &res.Variants[x].Price)
+		}
+	}
+
 	return res, err
 }

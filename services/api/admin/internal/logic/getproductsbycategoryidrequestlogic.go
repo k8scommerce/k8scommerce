@@ -3,11 +3,10 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
-	"k8scommerce/services/rpc/product/productclient"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -27,7 +26,7 @@ func NewGetProductsByCategoryIdRequestLogic(ctx context.Context, svcCtx *svc.Ser
 }
 
 func (l *GetProductsByCategoryIdRequestLogic) GetProductsByCategoryIdRequest(req types.GetProductsByCategoryIdRequest) (*types.GetProductsByCategoryIdResponse, error) {
-	response, err := l.svcCtx.ProductRpc.GetProductsByCategoryId(l.ctx, &productclient.GetProductsByCategoryIdRequest{
+	response, err := l.svcCtx.CatalogRpc.GetProductsByCategoryId(l.ctx, &catalogclient.GetProductsByCategoryIdRequest{
 		CategoryId:  req.CategoryId,
 		CurrentPage: req.CurrentPage,
 		PageSize:    req.PageSize,
@@ -37,9 +36,6 @@ func (l *GetProductsByCategoryIdRequestLogic) GetProductsByCategoryIdRequest(req
 		return nil, err
 	}
 
-	fmt.Println("TotalRecords", response.TotalRecords)
-	fmt.Println("TotalPages", response.TotalPages)
-
 	// convert from one type to another
 	// the structs are identical
 	res := &types.GetProductsByCategoryIdResponse{}
@@ -48,5 +44,15 @@ func (l *GetProductsByCategoryIdRequestLogic) GetProductsByCategoryIdRequest(req
 		return nil, err
 	}
 	err = json.Unmarshal(b, res)
+
+	// format the currency to the locale and language
+	for i := 0; i < len(res.Products); i++ {
+		for x := 0; x < len(res.Products[i].Variants); x++ {
+			if res.Products[i].Variants[x].Price != (types.Price{}) {
+				convertOutgoingPrices(l.ctx, &res.Products[i].Variants[x].Price)
+			}
+		}
+	}
+
 	return res, err
 }
