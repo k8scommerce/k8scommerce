@@ -22,7 +22,7 @@ type Customer {
 @server(
 	middleware: Locale
 )
-service client {
+service admin {
 	// customer
     // @doc "manages customer logins"
 	// @handler login

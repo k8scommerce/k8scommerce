@@ -3,11 +3,10 @@ package handler
 import (
 	"net/http"
 
-	"ecomm/services/api/admin/internal/logic"
-	"ecomm/services/api/admin/internal/svc"
-	"ecomm/services/api/admin/internal/types"
-
 	"github.com/tal-tech/go-zero/rest/httpx"
+	"k8scommerce/services/api/admin/internal/logic"
+	"k8scommerce/services/api/admin/internal/svc"
+	"k8scommerce/services/api/admin/internal/types"
 )
 
 func getProductBySkuRequestHandler(ctx *svc.ServiceContext) http.HandlerFunc {
