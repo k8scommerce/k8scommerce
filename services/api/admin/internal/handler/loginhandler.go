@@ -9,16 +9,16 @@ import (
 	"k8scommerce/services/api/admin/internal/types"
 )
 
-func getProductByIdRequestHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func loginHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetProductByIdRequest
+		var req types.UserLoginRequest
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := logic.NewGetProductByIdRequestLogic(r.Context(), ctx)
-		resp, err := l.GetProductByIdRequest(req)
+		l := logic.NewLoginLogic(r.Context(), ctx)
+		resp, err := l.Login(req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
