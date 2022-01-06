@@ -32,6 +32,10 @@ type Product interface {
 		res *getByCategoryIDResponse,
 		err error,
 	)
+	GetAllProducts(currentPage, pageSize int64, sortOn string) (
+		res *getAllProductsResponse,
+		err error,
+	)
 }
 
 type productRepo struct {
@@ -55,9 +59,21 @@ type getByCategoryIDResults struct {
 	Price    models.Price
 }
 
+type getAllProductsResults struct {
+	Product  models.Product
+	Variant  models.Variant
+	Category models.Category
+	Price    models.Price
+}
+
 type getByCategoryIDResponse struct {
 	PagingStats PagingStats
 	Results     []getByCategoryIDResults
+}
+
+type getAllProductsResponse struct {
+	PagingStats PagingStats
+	Results     []getAllProductsResults
 }
 
 // products
@@ -426,8 +442,137 @@ func (m *productRepo) GetProductsByCategoryId(categoryID, currentPage, pageSize 
 	return nil, err
 }
 
-func (m *productRepo) GetAllProducts(currentPage, pageSize int64) ([]*productRepo, error) {
-	return nil, nil
+func (m *productRepo) GetAllProducts(currentPage, pageSize int64, sortOn string) (res *getAllProductsResponse, err error) {
+	fmt.Println("currentPage", currentPage)
+	fmt.Println("pageSize", pageSize)
+
+	orderBy, err := BuildOrderBy(sortOn, map[string]string{
+		"name":   "p",  // product alias
+		"amount": "pr", // price alias
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// set a default order by
+	if orderBy == "" {
+		orderBy = "ORDER BY p.name ASC"
+	}
+	offset := fmt.Sprintf("OFFSET %d", (currentPage-1)*pageSize)
+	limit := fmt.Sprintf("LIMIT %d", pageSize)
+
+	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
+		select 
+			-- product
+			p.id AS "product.id",
+			p.slug AS "product.slug",
+			p.name AS "product.name",
+			p.short_description AS "product.short_description",
+			p.description AS "product.description",
+			p.meta_title AS "product.meta_title",
+			p.meta_description AS "product.meta_description",
+			p.meta_keywords AS "product.meta_keywords",
+			p.promotionable AS "product.promotionable",
+			p.available_on AS "product.available_on",
+			p.discontinue_on AS "product.discontinue_on",
+
+			-- variant
+			v.id AS "variant.id",
+			v.product_id AS "variant.product_id",
+			v.is_default AS "variant.is_default",
+			v.sku AS "variant.sku",
+			v.sort_order AS "variant.sort_order",
+			v.cost_amount AS "variant.cost_amount",
+			v.cost_currency AS "variant.cost_currency",
+			v.track_inventory AS "variant.track_inventory",
+			v.tax_category_id AS "variant.tax_category_id",
+			v.shipping_category_id AS "variant.shipping_category_id",
+			v.discontinue_on AS "variant.discontinue_on",
+			v.weight AS "variant.weight",
+			v.height AS "variant.height",
+			v.width AS "variant.width",
+			v.depth AS "variant.depth",
+
+			-- price
+			pr.variant_id AS "price.variant_id",
+			pr.amount AS "price.amount",
+			pr.compare_at_amount AS "price.compare_at_amount",
+			pr.currency AS "price.currency",
+			pr.user_role_id AS "price.user_role_id",
+
+			-- catgory
+			c.id AS "category.id",
+			c.parent_id AS "category.parent_id",
+			c.store_id AS "category.store_id",
+			c.name AS "category.name",
+			c.description AS "category.description",
+			c.permalink AS "category.permalink",
+			c.meta_title AS "category.meta_title",
+			c.meta_description AS "category.meta_description",
+			c.meta_keywords AS "category.meta_keywords",
+			c.hide_from_nav AS "category.hide_from_nav",
+			c.lft AS "category.lft",
+			c.rgt AS "category.rgt",
+			c.depth AS "category.depth",
+			c.sort_order AS "category.sort_order",
+
+			-- stats
+			COUNT(p.*) OVER() AS "pagingstats.total_records"
+
+		from product p
+		inner join product_category pc on p.id = pc.product_id
+		inner join category c ON pc.category_id = c.id
+		inner join variant v on v.product_id = p.id AND v.is_default = true
+		inner join price pr on pr.variant_id = v.id AND pr.user_role_id is null
+		%s
+		%s
+		%s
+	`, orderBy, offset, limit))
+	if err != nil {
+		return nil, fmt.Errorf("error::GetAllProducts::%s", err.Error())
+	}
+
+	var result []*struct {
+		Product     models.Product
+		Variant     models.Variant
+		Category    models.Category
+		Price       models.Price
+		PagingStats PagingStats
+	}
+
+	err = nstmt.Select(&result,
+		map[string]interface{}{
+			"offset":   (currentPage - 1) * pageSize,
+			"limit":    pageSize,
+			"order_by": orderBy,
+		})
+
+	results := []getAllProductsResults{}
+
+	if len(result) > 0 {
+		var stats *PagingStats
+		for i, r := range result {
+			if i == 0 {
+				stats = r.PagingStats.Calc(pageSize)
+				// totalPages := float64(stats.TotalRecords) / float64(pageSize)
+				// stats.TotalPages = int64(math.Ceil(totalPages))
+			}
+			results = append(results, getAllProductsResults{
+				Product:  r.Product,
+				Variant:  r.Variant,
+				Price:    r.Price,
+				Category: r.Category,
+			})
+		}
+
+		out := &getAllProductsResponse{
+			Results:     results,
+			PagingStats: *stats,
+		}
+
+		return out, err
+	}
+	return nil, err
 }
 
 func (m *productRepo) Create(prod *models.Product) error {

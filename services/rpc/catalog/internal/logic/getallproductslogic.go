@@ -2,13 +2,16 @@ package logic
 
 import (
 	"context"
-
 	"encoding/json"
 	"fmt"
-	"sync"
-
+	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"net/http"
+	"strconv"
+	"strings"
+	"sync"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
@@ -20,11 +23,7 @@ type galaxyGetAllProductsLogicHelper struct {
 	galaxy *galaxycache.Galaxy
 }
 
-var entryGetAllProductsLogic map[string]*galaxyGetAllProductsLogicHelper
-
-func init() {
-	entryGetAllProductsLogic = make(map[string]*galaxyGetAllProductsLogicHelper)
-}
+var entryGetAllProductsLogic *galaxyGetAllProductsLogicHelper
 
 type GetAllProductsLogic struct {
 	ctx    context.Context
@@ -46,32 +45,61 @@ func NewGetAllProductsLogic(ctx context.Context, svcCtx *svc.ServiceContext, uni
 func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) (*catalog.GetAllProductsResponse, error) {
 
 	// caching goes logic here
-	if _, ok := entryGetAllProductsLogic["GetAllProducts"]; !ok {
+	if entryGetAllProductsLogic == nil {
 		l.mu.Lock()
-		entryGetAllProductsLogic["GetAllProducts"] = &galaxyGetAllProductsLogicHelper{
+		entryGetAllProductsLogic = &galaxyGetAllProductsLogicHelper{
 			once: &sync.Once{},
 		}
 		l.mu.Unlock()
 	}
 
-	entryGetAllProductsLogic["GetAllProducts"].once.Do(func() {
-		fmt.Println(`l.entry["GetAllProducts"].Do`)
+	entryGetAllProductsLogic.once.Do(func() {
+		fmt.Println(`l.entryGetAllProductsLogic.Do`)
 
 		// register the galaxy one time
-		entryGetAllProductsLogic["GetAllProducts"].galaxy = gcache.RegisterGalaxyFunc("GetAllProducts", l.universe, galaxycache.GetterFunc(
+		entryGetAllProductsLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllProducts", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// todo: add your logic here and delete this line
-				fmt.Printf("Looking up GetAllProducts record by key: %s", key)
+				// split the key and set the variables
+				v := strings.Split(key, "|")
+				currentPage, _ := strconv.ParseInt(v[1], 10, 64)
+				pageSize, _ := strconv.ParseInt(v[2], 10, 64)
+				sortOn := ""
+				if len(v) > 3 {
+					sortOn = v[3]
+				}
+				found, err := l.svcCtx.Repo.Product().GetAllProducts(currentPage, pageSize, sortOn)
+				if err != nil {
+					logx.Infof("error: %s", err)
+					return err
+				}
 
-				// uncomment below to get the item from the adapter
-				// found, err := l.ca.GetProductBySku(key)
-				// if err != nil {
-				//	logx.Infof("error: %s", err)
-				//	return err
-				// }
+				prods := []*catalog.Product{}
+
+				var totalRecords int64 = 0
+				var totalPages int64 = 0
+
+				if found != nil {
+					totalRecords = found.PagingStats.TotalRecords
+					totalPages = found.PagingStats.TotalPages
+
+					for _, f := range found.Results {
+						prod := catalog.Product{}
+
+						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
+							f.Variant,
+						}, &[]models.Price{
+							f.Price,
+						}, &prod)
+						prods = append(prods, &prod)
+					}
+				}
 
 				// the response struct
-				item := &catalog.GetAllProductsResponse{}
+				item := &catalog.GetAllProductsResponse{
+					Products:     prods,
+					TotalRecords: totalRecords,
+					TotalPages:   totalPages,
+				}
 
 				out, err := json.Marshal(item)
 				if err != nil {
@@ -81,13 +109,24 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 			}))
 	})
 
+	res := &catalog.GetAllProductsResponse{}
+
 	codec := &galaxycache.ByteCodec{}
-	// entryGetAllProductsLogic["GetAllProducts"].galaxy.Get(l.ctx, strconv.Itoa(int(in.Id)), codec)
+
+	key := fmt.Sprintf("%d|%d|%s", in.CurrentPage, in.PageSize, in.SortOn)
+	if err := entryGetAllProductsLogic.galaxy.Get(l.ctx, key, codec); err != nil {
+		res.StatusCode = http.StatusNoContent
+		res.StatusMessage = err.Error()
+		return res, nil
+	}
+
 	b, err := codec.MarshalBinary()
 	if err != nil {
-		return nil, err
+		res.StatusCode = http.StatusInternalServerError
+		res.StatusMessage = err.Error()
+		return res, nil
 	}
-	res := &catalog.GetAllProductsResponse{}
+
 	err = json.Unmarshal(b, res)
 	return res, err
 

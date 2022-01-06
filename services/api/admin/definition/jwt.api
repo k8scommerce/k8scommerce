@@ -1,5 +1,3 @@
-syntax = "v2"
-
 // objects
 
 type JwtToken {

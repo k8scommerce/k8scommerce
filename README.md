@@ -1,11 +1,12 @@
 # K8sCommerce - Golang, Kubernetes & Cloud Native Ecommerce
 
-K8sCommerce is a microservice based ecommerce platform written in [Go](https://go.dev/) and designed specifically for kubernetes deployments.
+K8sCommerce is a microservice based ecommerce platform written in [Go](https://go.dev/)—for kubernetes deployments.
 
 Checkout our [kubernetes operator](https://github.com/k8scommerce/cluster-operator).
 
 ## Service Overview
 ![K8sCommerce Overview](docs/K8sCommerceOverview.png)
+
 
 ## Getting Started
 
@@ -43,4 +44,3 @@ To eliminate human errors and speed up development we use tools to create common
 
 
 
-# Headless Commerce 
