@@ -19,11 +19,11 @@ func NewLocaleMiddleware() *LocaleMiddleware {
 func (m *LocaleMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		ctx = context.WithValue(ctx, types.ClientLocale, "en")
+		ctx = context.WithValue(ctx, types.Locale, "en")
 
 		if langs, ok := r.Header["Accept-Language"]; ok {
 			// m.Config.Locale = langs[0]
-			ctx = context.WithValue(ctx, types.ClientLocale, langs[0])
+			ctx = context.WithValue(ctx, types.Locale, langs[0])
 		}
 		next(w, r.WithContext(ctx))
 	}

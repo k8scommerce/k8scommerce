@@ -1,7 +1,9 @@
 package types
 
-type Locale string
+type LocaleString string
+type StoreKeyString string
 
 const (
-	ClientLocale Locale = "client-locale"
+	Locale   LocaleString   = "locale"
+	StoreKey StoreKeyString = "store-key"
 )

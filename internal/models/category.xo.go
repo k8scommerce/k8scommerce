@@ -12,9 +12,9 @@ type Category struct {
 	ID              int64          `json:"id" db:"id"`                             // id
 	ParentID        sql.NullInt64  `json:"parent_id" db:"parent_id"`               // parent_id
 	StoreID         int64          `json:"store_id" db:"store_id"`                 // store_id
+	Slug            string         `json:"slug" db:"slug"`                         // slug
 	Name            string         `json:"name" db:"name"`                         // name
 	Description     sql.NullString `json:"description" db:"description"`           // description
-	Permalink       sql.NullString `json:"permalink" db:"permalink"`               // permalink
 	MetaTitle       sql.NullString `json:"meta_title" db:"meta_title"`             // meta_title
 	MetaDescription sql.NullString `json:"meta_description" db:"meta_description"` // meta_description
 	MetaKeywords    sql.NullString `json:"meta_keywords" db:"meta_keywords"`       // meta_keywords
@@ -48,13 +48,13 @@ func (c *Category) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.category (` +
-		`parent_id, store_id, name, description, permalink, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order` +
+		`parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order` +
 		`) VALUES (` +
 		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, c.ParentID, c.StoreID, c.Name, c.Description, c.Permalink, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder)
-	if err := db.QueryRowContext(ctx, sqlstr, c.ParentID, c.StoreID, c.Name, c.Description, c.Permalink, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder).Scan(&c.ID); err != nil {
+	logf(sqlstr, c.ParentID, c.StoreID, c.Slug, c.Name, c.Description, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder)
+	if err := db.QueryRowContext(ctx, sqlstr, c.ParentID, c.StoreID, c.Slug, c.Name, c.Description, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder).Scan(&c.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -72,11 +72,11 @@ func (c *Category) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.category SET ` +
-		`parent_id = $1, store_id = $2, name = $3, description = $4, permalink = $5, meta_title = $6, meta_description = $7, meta_keywords = $8, hide_from_nav = $9, lft = $10, rgt = $11, depth = $12, sort_order = $13 ` +
+		`parent_id = $1, store_id = $2, slug = $3, name = $4, description = $5, meta_title = $6, meta_description = $7, meta_keywords = $8, hide_from_nav = $9, lft = $10, rgt = $11, depth = $12, sort_order = $13 ` +
 		`WHERE id = $14`
 	// run
-	logf(sqlstr, c.ParentID, c.StoreID, c.Name, c.Description, c.Permalink, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder, c.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, c.ParentID, c.StoreID, c.Name, c.Description, c.Permalink, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder, c.ID); err != nil {
+	logf(sqlstr, c.ParentID, c.StoreID, c.Slug, c.Name, c.Description, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder, c.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, c.ParentID, c.StoreID, c.Slug, c.Name, c.Description, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder, c.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -98,16 +98,16 @@ func (c *Category) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.category (` +
-		`id, parent_id, store_id, name, description, permalink, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order` +
 		`) VALUES (` +
 		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`parent_id = EXCLUDED.parent_id, store_id = EXCLUDED.store_id, name = EXCLUDED.name, description = EXCLUDED.description, permalink = EXCLUDED.permalink, meta_title = EXCLUDED.meta_title, meta_description = EXCLUDED.meta_description, meta_keywords = EXCLUDED.meta_keywords, hide_from_nav = EXCLUDED.hide_from_nav, lft = EXCLUDED.lft, rgt = EXCLUDED.rgt, depth = EXCLUDED.depth, sort_order = EXCLUDED.sort_order `
+		`parent_id = EXCLUDED.parent_id, store_id = EXCLUDED.store_id, slug = EXCLUDED.slug, name = EXCLUDED.name, description = EXCLUDED.description, meta_title = EXCLUDED.meta_title, meta_description = EXCLUDED.meta_description, meta_keywords = EXCLUDED.meta_keywords, hide_from_nav = EXCLUDED.hide_from_nav, lft = EXCLUDED.lft, rgt = EXCLUDED.rgt, depth = EXCLUDED.depth, sort_order = EXCLUDED.sort_order `
 	// run
-	logf(sqlstr, c.ID, c.ParentID, c.StoreID, c.Name, c.Description, c.Permalink, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder)
-	if _, err := db.ExecContext(ctx, sqlstr, c.ID, c.ParentID, c.StoreID, c.Name, c.Description, c.Permalink, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder); err != nil {
+	logf(sqlstr, c.ID, c.ParentID, c.StoreID, c.Slug, c.Name, c.Description, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder)
+	if _, err := db.ExecContext(ctx, sqlstr, c.ID, c.ParentID, c.StoreID, c.Slug, c.Name, c.Description, c.MetaTitle, c.MetaDescription, c.MetaKeywords, c.HideFromNav, c.Lft, c.Rgt, c.Depth, c.SortOrder); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -142,7 +142,7 @@ func (c *Category) Delete(ctx context.Context, db DB) error {
 func CategoryByID(ctx context.Context, db DB, id int64) (*Category, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, parent_id, store_id, name, description, permalink, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
 		`FROM public.category ` +
 		`WHERE id = $1`
 	// run
@@ -150,7 +150,7 @@ func CategoryByID(ctx context.Context, db DB, id int64) (*Category, error) {
 	c := Category{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Name, &c.Description, &c.Permalink, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Slug, &c.Name, &c.Description, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
 		return nil, logerror(err)
 	}
 	return &c, nil
@@ -162,7 +162,7 @@ func CategoryByID(ctx context.Context, db DB, id int64) (*Category, error) {
 func CategoryByDepth(ctx context.Context, db DB, depth sql.NullInt64) ([]*Category, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, parent_id, store_id, name, description, permalink, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
 		`FROM public.category ` +
 		`WHERE depth = $1`
 	// run
@@ -179,7 +179,7 @@ func CategoryByDepth(ctx context.Context, db DB, depth sql.NullInt64) ([]*Catego
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Name, &c.Description, &c.Permalink, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
+		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Slug, &c.Name, &c.Description, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &c)
@@ -196,7 +196,7 @@ func CategoryByDepth(ctx context.Context, db DB, depth sql.NullInt64) ([]*Catego
 func CategoryByLft(ctx context.Context, db DB, lft sql.NullInt64) ([]*Category, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, parent_id, store_id, name, description, permalink, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
 		`FROM public.category ` +
 		`WHERE lft = $1`
 	// run
@@ -213,7 +213,7 @@ func CategoryByLft(ctx context.Context, db DB, lft sql.NullInt64) ([]*Category, 
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Name, &c.Description, &c.Permalink, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
+		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Slug, &c.Name, &c.Description, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &c)
@@ -230,7 +230,7 @@ func CategoryByLft(ctx context.Context, db DB, lft sql.NullInt64) ([]*Category, 
 func CategoryByParentID(ctx context.Context, db DB, parentID sql.NullInt64) ([]*Category, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, parent_id, store_id, name, description, permalink, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
 		`FROM public.category ` +
 		`WHERE parent_id = $1`
 	// run
@@ -247,7 +247,7 @@ func CategoryByParentID(ctx context.Context, db DB, parentID sql.NullInt64) ([]*
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Name, &c.Description, &c.Permalink, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
+		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Slug, &c.Name, &c.Description, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &c)
@@ -264,7 +264,7 @@ func CategoryByParentID(ctx context.Context, db DB, parentID sql.NullInt64) ([]*
 func CategoryByRgt(ctx context.Context, db DB, rgt sql.NullInt64) ([]*Category, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, parent_id, store_id, name, description, permalink, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
 		`FROM public.category ` +
 		`WHERE rgt = $1`
 	// run
@@ -281,7 +281,7 @@ func CategoryByRgt(ctx context.Context, db DB, rgt sql.NullInt64) ([]*Category, 
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Name, &c.Description, &c.Permalink, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
+		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Slug, &c.Name, &c.Description, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &c)

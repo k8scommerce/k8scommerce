@@ -6,6 +6,18 @@ option go_package = "pb/catalog";
 // import "google/protobuf/wrappers.proto";
 // import "google/protobuf/timestamp.proto";
 
+message Category {
+  int64 id = 1;
+  int64 parentId = 2;
+  string slug = 3;
+  string name = 4;
+  string description = 5;
+  string metaTitle = 6;
+  string metaDescription = 7;
+  string metaKeywords = 8;
+  int32 sortOrder = 9;
+}
+
 message Product {
   int64 id = 1;
   string slug = 2;
@@ -53,6 +65,76 @@ message Price {
 //
 //
 // Requests & Responses
+//
+
+// get all categories
+message GetAllCategoriesRequest {}
+
+message GetAllCategoriesResponse {
+  repeated Category categories = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get category by slug
+message GetCategoryBySlugRequest {
+  string slug = 1;
+}
+
+message GetCategoryBySlugResponse {
+  Category category = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// get category by id
+message GetCategoryByIdRequest {
+  int64 id = 1;
+}
+
+message GetCategoryByIdResponse {
+  Category category = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// create category
+message CreateCategoryRequest {
+  Category category = 1;
+}
+
+message CreateCategoryResponse {
+  Category category = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// update category
+message UpdateCategoryRequest {
+  int64 id = 1;
+  Category category = 2;
+}
+
+message UpdateCategoryResponse {
+  Category category = 1;
+  int64 statusCode = 2;
+  string statusMessage = 3;
+}
+
+// delete category
+message DeleteCategoryRequest {
+  int64 id = 1;
+}
+
+message DeleteCategoryResponse {
+  int64 statusCode = 1;
+  string statusMessage = 2;
+}
+
+//
+//
+// Products
+//
 //
 
 // get one by sku
@@ -152,8 +234,19 @@ message DeleteProductResponse {
   string statusMessage = 2;
 }
 
-// service client
+// client
 service CatalogClient {
+  // categories
+  rpc GetAllCategories(GetAllCategoriesRequest)
+      returns (GetAllCategoriesResponse);
+  rpc GetCategoryBySlug(GetCategoryBySlugRequest)
+      returns (GetCategoryBySlugResponse);
+  rpc GetCategoryById(GetCategoryByIdRequest) returns (GetCategoryByIdResponse);
+  rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse);
+  rpc UpdateCategory(UpdateCategoryRequest) returns (UpdateCategoryResponse);
+  rpc DeleteCategory(DeleteCategoryRequest) returns (DeleteCategoryResponse);
+
+  // products
   rpc GetProductBySku(GetProductBySkuRequest) returns (GetProductBySkuResponse);
   rpc GetProductBySlug(GetProductBySlugRequest)
       returns (GetProductBySlugResponse);

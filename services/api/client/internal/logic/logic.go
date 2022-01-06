@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"k8scommerce/services/api/client/internal/types"
@@ -15,15 +14,16 @@ func convertOutgoingPrices(ctx context.Context, p *types.Price) {
 		p.Currency = "USD"
 	}
 
-	clientLocale := ctx.Value(types.ClientLocale).(string)
-	fmt.Println("INCOMING LOCALE:", clientLocale)
+	locale := ctx.Value(types.Locale).(string)
+	// fmt.Println("INCOMING LOCALE:", locale)
 
-	if clientLocale == "" {
-		clientLocale = "en"
+	if locale == "" {
+		locale = "en"
 	}
 
-	locale := currency.NewLocale(clientLocale)
-	formatter := currency.NewFormatter(locale)
+	formatter := currency.NewFormatter(
+		currency.NewLocale(locale),
+	)
 
 	if p.Amount != 0 {
 		amount, _ := currency.NewAmountFromInt64(int64(p.Amount), p.Currency)

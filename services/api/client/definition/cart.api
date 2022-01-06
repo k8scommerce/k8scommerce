@@ -1,5 +1,3 @@
-syntax = "v2"
-
 // objects
 
 type Cart {
@@ -20,7 +18,7 @@ type Item {
 
 // get cart
 type GetCartRequest {
-	UserId string `path:"userId"`
+	CustomerId string `path:"customerId"`
 }
 
 type GetCartResponse {
@@ -30,7 +28,9 @@ type GetCartResponse {
 }
 
 // add to cart
-type CreateCartRequest {}
+type CreateCartRequest {
+	CustomerId string `path:"customerId"`
+}
 
 type CreateCartResponse {
 	Cart          Cart   `json:"cart"`
@@ -40,8 +40,8 @@ type CreateCartResponse {
 
 // add to cart
 type AddItemToCartRequest {
-	UserId int64 `json:"userId"`
-	Item   Item  `json:"item"`
+	CustomerId int64 `json:"customerId"`
+	Item       Item  `json:"item"`
 }
 
 type AddItemToCartResponse {
@@ -89,20 +89,20 @@ type ClearCartResponse {
 // endpoints
 //
 
-
-// with auth
+// with middleware
 @server(
 	jwt: Auth
-	middleware: Locale
+	middleware: Locale, StoreKey
 )
 service client {
-	@doc "creates a shopping cart for the associated userId. Each user can only have 1 cart ever."
+	@doc "creates a shopping cart for the associated customerId"
 	@handler createCart
-	post /v1/cart/:userId(CreateCartRequest) returns (CreateCartResponse)
+	post /v1/cart/:customerId(CreateCartRequest) returns (CreateCartResponse)
 	
+	@doc "returns a shopping cart if one exists"
 	@handler getCart
-	get /v1/cart/:userId(GetCartRequest) returns (GetCartResponse)
+	get /v1/cart/:customerId(GetCartRequest) returns (GetCartResponse)
 	
 	// @handler addItemToCart
-	// post /v1/cart/:userId/add(AddToCartRequest) returns (AddToCartResponse)
+	// post /v1/cart/:customerId/add(AddToCartRequest) returns (AddToCartResponse)
 }
