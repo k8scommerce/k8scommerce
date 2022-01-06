@@ -7,7 +7,8 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Auth struct {
+	HashSalt string
+	Auth     struct {
 		AccessSecret string
 		AccessExpire int64
 	}

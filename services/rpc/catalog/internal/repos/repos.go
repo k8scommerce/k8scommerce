@@ -39,6 +39,7 @@ func MustNewRepo(c *config.Config) Repo {
 type Repo interface {
 	GetRawDB() *sqlx.DB
 	// Repos
+	Category() Category
 	Product() Product
 }
 
@@ -53,6 +54,10 @@ func (r *repo) GetRawDB() *sqlx.DB {
 }
 
 // Repos
+func (r *repo) Category() Category {
+	return newCategory(r)
+}
+
 func (r *repo) Product() Product {
 	return newProduct(r)
 }

@@ -4,6 +4,7 @@ Port: 8888
 Log:
   Mode: console
 Timeout: 1500
+HashSalt: MTF)kaA}.5x85SK~J{6gf88_jc;?RH<+
 Auth:
   AccessSecret: YhCRfmTatNG9c8mQkrkazYjd5B2QNQXB
   AccessExpire: 1612867074
