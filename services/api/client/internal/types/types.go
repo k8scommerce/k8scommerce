@@ -20,7 +20,7 @@ type Item struct {
 }
 
 type GetCartRequest struct {
-	UserId string `path:"userId"`
+	CustomerId string `path:"customerId"`
 }
 
 type GetCartResponse struct {
@@ -30,6 +30,7 @@ type GetCartResponse struct {
 }
 
 type CreateCartRequest struct {
+	CustomerId string `path:"customerId"`
 }
 
 type CreateCartResponse struct {
@@ -39,8 +40,8 @@ type CreateCartResponse struct {
 }
 
 type AddItemToCartRequest struct {
-	UserId int64 `json:"userId"`
-	Item   Item  `json:"item"`
+	CustomerId int64 `json:"customerId"`
+	Item       Item  `json:"item"`
 }
 
 type AddItemToCartResponse struct {
@@ -81,24 +82,16 @@ type ClearCartResponse struct {
 	StatusMessage string `json:"statusMessage"`
 }
 
-type Customer struct {
-	Id        int64  `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Email     string `json:"email"`
-	Password  string `json:"password,omitempty"`
-}
-
-type CustomerLoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type CustomerLoginResponse struct {
-	JwtToken      JwtToken `json:"jwt"`
-	Customer      Customer `json:"customer"`
-	StatusCode    int64    `json:"statusCode"`
-	StatusMessage string   `json:"statusMessage"`
+type Category struct {
+	Id              int64  `json:"id"`
+	ParentId        int64  `json:"parentId"`
+	Slug            string `json:"slug"`
+	Name            string `json:"name"`
+	Description     string `json:"description"`
+	MetaTitle       string `json:"metaTitle"`
+	MetaDescription string `json:"metaDescription"`
+	MetaKeywords    string `json:"metaKeywords"`
+	SortOrder       int32  `json:"sortOrder"`
 }
 
 type Product struct {
@@ -131,6 +124,65 @@ type Price struct {
 	CompareAtAmount        float64 `json:"compareAtAmount,omitempty"`
 	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,omitempty"`
 	Currency               string  `json:"currency,omitempty"`
+}
+
+type GetAllCategoriesRequest struct {
+}
+
+type GetAllCategoriesResponse struct {
+	Categories    []Category `json:"categories,omitempty"`
+	StatusCode    int64      `json:"statusCode,omitempty"`
+	StatusMessage string     `json:"statusMessage,omitempty"`
+}
+
+type GetCategoryBySlugRequest struct {
+	Slug string `json:"slug,omitempty"`
+}
+
+type GetCategoryBySlugResponse struct {
+	Category      Category `json:"category,omitempty"`
+	StatusCode    int64    `json:"statusCode,omitempty"`
+	StatusMessage string   `json:"statusMessage,omitempty"`
+}
+
+type GetCategoryByIdRequest struct {
+	Id int64 `json:"id,omitempty"`
+}
+
+type GetCategoryByIdResponse struct {
+	Category      Category `json:"category,omitempty"`
+	StatusCode    int64    `json:"statusCode,omitempty"`
+	StatusMessage string   `json:"statusMessage,omitempty"`
+}
+
+type CreateCategoryRequest struct {
+	Category Category `json:"category,omitempty"`
+}
+
+type CreateCategoryResponse struct {
+	Category      Category `json:"category,omitempty"`
+	StatusCode    int64    `json:"statusCode,omitempty"`
+	StatusMessage string   `json:"statusMessage,omitempty"`
+}
+
+type UpdateCategoryRequest struct {
+	Id       int64    `json:"id,omitempty"`
+	Category Category `json:"category,omitempty"`
+}
+
+type UpdateCategoryResponse struct {
+	Category      Category `json:"category,omitempty"`
+	StatusCode    int64    `json:"statusCode,omitempty"`
+	StatusMessage string   `json:"statusMessage,omitempty"`
+}
+
+type DeleteCategoryRequest struct {
+	Id int64 `json:"id,omitempty"`
+}
+
+type DeleteCategoryResponse struct {
+	StatusCode    int64  `json:"statusCode,omitempty"`
+	StatusMessage string `json:"statusMessage,omitempty"`
 }
 
 type GetProductBySkuRequest struct {
@@ -168,4 +220,54 @@ type GetAllProductsResponse struct {
 	Products     []Product `json:"products"`
 	TotalRecords int64     `json:"totalRecords"`
 	TotalPages   int64     `json:"totalPages"`
+}
+
+type CreateProductRequest struct {
+	Product Product `json:"product:omitempty"`
+}
+
+type CreateProductResponse struct {
+	Product       Product `json:"product:omitempty"`
+	StatusCode    int64   `json:"statusCode:omitempty"`
+	StatusMessage string  `json:"statusMessage:omitempty"`
+}
+
+type UpdateProductRequest struct {
+	Id      int64   `json:"path:omitempty"`
+	Product Product `json:"product:omitempty"`
+}
+
+type UpdateProductResponse struct {
+	Product       Product `json:"product:omitempty"`
+	StatusCode    int64   `json:"statusCode:omitempty"`
+	StatusMessage string  `json:"statusMessage:omitempty"`
+}
+
+type DeleteProductRequest struct {
+	Id int64 `json:"path:omitempty"`
+}
+
+type DeleteProductResponse struct {
+	StatusCode    int64  `json:"statusCode:omitempty"`
+	StatusMessage string `json:"statusMessage:omitempty"`
+}
+
+type Customer struct {
+	Id        int64  `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
+	Password  string `json:"password,omitempty"`
+}
+
+type CustomerLoginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type CustomerLoginResponse struct {
+	JwtToken      JwtToken `json:"jwt"`
+	Customer      Customer `json:"customer"`
+	StatusCode    int64    `json:"statusCode"`
+	StatusMessage string   `json:"statusMessage"`
 }

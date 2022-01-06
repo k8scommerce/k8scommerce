@@ -13,12 +13,23 @@ import (
 )
 
 type (
+	Category                        = catalog.Category
+	CreateCategoryRequest           = catalog.CreateCategoryRequest
+	CreateCategoryResponse          = catalog.CreateCategoryResponse
 	CreateProductRequest            = catalog.CreateProductRequest
 	CreateProductResponse           = catalog.CreateProductResponse
+	DeleteCategoryRequest           = catalog.DeleteCategoryRequest
+	DeleteCategoryResponse          = catalog.DeleteCategoryResponse
 	DeleteProductRequest            = catalog.DeleteProductRequest
 	DeleteProductResponse           = catalog.DeleteProductResponse
+	GetAllCategoriesRequest         = catalog.GetAllCategoriesRequest
+	GetAllCategoriesResponse        = catalog.GetAllCategoriesResponse
 	GetAllProductsRequest           = catalog.GetAllProductsRequest
 	GetAllProductsResponse          = catalog.GetAllProductsResponse
+	GetCategoryByIdRequest          = catalog.GetCategoryByIdRequest
+	GetCategoryByIdResponse         = catalog.GetCategoryByIdResponse
+	GetCategoryBySlugRequest        = catalog.GetCategoryBySlugRequest
+	GetCategoryBySlugResponse       = catalog.GetCategoryBySlugResponse
 	GetProductByIdRequest           = catalog.GetProductByIdRequest
 	GetProductByIdResponse          = catalog.GetProductByIdResponse
 	GetProductBySkuRequest          = catalog.GetProductBySkuRequest
@@ -29,11 +40,21 @@ type (
 	GetProductsByCategoryIdResponse = catalog.GetProductsByCategoryIdResponse
 	Price                           = catalog.Price
 	Product                         = catalog.Product
+	UpdateCategoryRequest           = catalog.UpdateCategoryRequest
+	UpdateCategoryResponse          = catalog.UpdateCategoryResponse
 	UpdateProductRequest            = catalog.UpdateProductRequest
 	UpdateProductResponse           = catalog.UpdateProductResponse
 	Variant                         = catalog.Variant
 
 	CatalogClient interface {
+		//  categories
+		GetAllCategories(ctx context.Context, in *GetAllCategoriesRequest, opts ...grpc.CallOption) (*GetAllCategoriesResponse, error)
+		GetCategoryBySlug(ctx context.Context, in *GetCategoryBySlugRequest, opts ...grpc.CallOption) (*GetCategoryBySlugResponse, error)
+		GetCategoryById(ctx context.Context, in *GetCategoryByIdRequest, opts ...grpc.CallOption) (*GetCategoryByIdResponse, error)
+		CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error)
+		UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*UpdateCategoryResponse, error)
+		DeleteCategory(ctx context.Context, in *DeleteCategoryRequest, opts ...grpc.CallOption) (*DeleteCategoryResponse, error)
+		//  products
 		GetProductBySku(ctx context.Context, in *GetProductBySkuRequest, opts ...grpc.CallOption) (*GetProductBySkuResponse, error)
 		GetProductBySlug(ctx context.Context, in *GetProductBySlugRequest, opts ...grpc.CallOption) (*GetProductBySlugResponse, error)
 		GetProductById(ctx context.Context, in *GetProductByIdRequest, opts ...grpc.CallOption) (*GetProductByIdResponse, error)
@@ -55,6 +76,38 @@ func NewCatalogClient(cli zrpc.Client) CatalogClient {
 	}
 }
 
+//  categories
+func (m *defaultCatalogClient) GetAllCategories(ctx context.Context, in *GetAllCategoriesRequest, opts ...grpc.CallOption) (*GetAllCategoriesResponse, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.GetAllCategories(ctx, in, opts...)
+}
+
+func (m *defaultCatalogClient) GetCategoryBySlug(ctx context.Context, in *GetCategoryBySlugRequest, opts ...grpc.CallOption) (*GetCategoryBySlugResponse, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.GetCategoryBySlug(ctx, in, opts...)
+}
+
+func (m *defaultCatalogClient) GetCategoryById(ctx context.Context, in *GetCategoryByIdRequest, opts ...grpc.CallOption) (*GetCategoryByIdResponse, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.GetCategoryById(ctx, in, opts...)
+}
+
+func (m *defaultCatalogClient) CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.CreateCategory(ctx, in, opts...)
+}
+
+func (m *defaultCatalogClient) UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*UpdateCategoryResponse, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.UpdateCategory(ctx, in, opts...)
+}
+
+func (m *defaultCatalogClient) DeleteCategory(ctx context.Context, in *DeleteCategoryRequest, opts ...grpc.CallOption) (*DeleteCategoryResponse, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.DeleteCategory(ctx, in, opts...)
+}
+
+//  products
 func (m *defaultCatalogClient) GetProductBySku(ctx context.Context, in *GetProductBySkuRequest, opts ...grpc.CallOption) (*GetProductBySkuResponse, error) {
 	client := catalog.NewCatalogClientClient(m.cli.Conn())
 	return client.GetProductBySku(ctx, in, opts...)

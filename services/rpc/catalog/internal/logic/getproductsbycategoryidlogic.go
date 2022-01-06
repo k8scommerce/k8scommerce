@@ -115,7 +115,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 	codec := &galaxycache.ByteCodec{}
 
 	key := fmt.Sprintf("%d|%d|%d|%s", in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
-	fmt.Println(key, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
+	// fmt.Println(key, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
 	entryGetProductsByCategoryIdLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {

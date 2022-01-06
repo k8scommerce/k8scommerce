@@ -25,6 +25,38 @@ func NewCatalogClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Un
 	}
 }
 
+//  categories
+func (s *CatalogClientServer) GetAllCategories(ctx context.Context, in *catalog.GetAllCategoriesRequest) (*catalog.GetAllCategoriesResponse, error) {
+	l := logic.NewGetAllCategoriesLogic(ctx, s.svcCtx, s.universe)
+	return l.GetAllCategories(in)
+}
+
+func (s *CatalogClientServer) GetCategoryBySlug(ctx context.Context, in *catalog.GetCategoryBySlugRequest) (*catalog.GetCategoryBySlugResponse, error) {
+	l := logic.NewGetCategoryBySlugLogic(ctx, s.svcCtx, s.universe)
+	return l.GetCategoryBySlug(in)
+}
+
+func (s *CatalogClientServer) GetCategoryById(ctx context.Context, in *catalog.GetCategoryByIdRequest) (*catalog.GetCategoryByIdResponse, error) {
+	l := logic.NewGetCategoryByIdLogic(ctx, s.svcCtx, s.universe)
+	return l.GetCategoryById(in)
+}
+
+func (s *CatalogClientServer) CreateCategory(ctx context.Context, in *catalog.CreateCategoryRequest) (*catalog.CreateCategoryResponse, error) {
+	l := logic.NewCreateCategoryLogic(ctx, s.svcCtx, s.universe)
+	return l.CreateCategory(in)
+}
+
+func (s *CatalogClientServer) UpdateCategory(ctx context.Context, in *catalog.UpdateCategoryRequest) (*catalog.UpdateCategoryResponse, error) {
+	l := logic.NewUpdateCategoryLogic(ctx, s.svcCtx, s.universe)
+	return l.UpdateCategory(in)
+}
+
+func (s *CatalogClientServer) DeleteCategory(ctx context.Context, in *catalog.DeleteCategoryRequest) (*catalog.DeleteCategoryResponse, error) {
+	l := logic.NewDeleteCategoryLogic(ctx, s.svcCtx, s.universe)
+	return l.DeleteCategory(in)
+}
+
+//  products
 func (s *CatalogClientServer) GetProductBySku(ctx context.Context, in *catalog.GetProductBySkuRequest) (*catalog.GetProductBySkuResponse, error) {
 	l := logic.NewGetProductBySkuLogic(ctx, s.svcCtx, s.universe)
 	return l.GetProductBySku(in)

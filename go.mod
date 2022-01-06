@@ -7,7 +7,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.1+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/iancoleman/strcase v0.2.0
-	github.com/icrowley/fake v0.0.0-20180203215853-4178557ae428
 	github.com/jackc/pgx/v4 v4.14.1
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/joho/godotenv v1.4.0
@@ -17,12 +16,12 @@ require (
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
 	github.com/rabbitmq/amqp091-go v1.2.0
+	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/tal-tech/go-zero v1.2.4
 	github.com/wagslane/go-rabbitmq v0.7.0
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
-	syreclabs.com/go/faker v1.2.3
 )
 
 require (
@@ -31,7 +30,6 @@ require (
 	github.com/cockroachdb/apd/v2 v2.0.2 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
-	github.com/corpix/uarand v0.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-logr/logr v1.2.2 // indirect

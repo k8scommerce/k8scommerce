@@ -96,13 +96,11 @@ cleanup:
 generate-xo:
 	@xo schema 'pgsql://${DB_CONN_STR}' \
 	--go-field-tag='`json:"{{ .SQLName }}" db:"{{ .SQLName }}"`' \
-	-o ./shared/models \
+	-o ./internal/models \
 	-e *.created_at \
 	-e *.updated_at \
 	-e *.deleted_at \
 	-k smart
-
-	@go get -v -u  github.com/k8scommerce/k8scommerce/pkg 
 
 .PHONY: xo
 xo: generate-xo cleanup
