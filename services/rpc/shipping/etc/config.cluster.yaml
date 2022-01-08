@@ -1,5 +1,5 @@
 Name: shipping.rpc
-ListenOn: :8080
+ListenOn: 0.0.0.0:8080
 Log:
   Mode: console
 Etcd:

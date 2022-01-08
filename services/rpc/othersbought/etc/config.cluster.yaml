@@ -1,10 +1,10 @@
 Name: othersbought.rpc
-ListenOn: :8080
+ListenOn: 0.0.0.0:8080
 Log:
   Mode: console
 Etcd:
   Hosts:
-    - etcd:2379
+    - etcd-client:2379
   Key: othersbought.rpc
 Postgres:
   Connection: postgres://postgres:postgres@k8scommerce-db:5432/k8scommerce?connect_timeout=180&sslmode=disable
