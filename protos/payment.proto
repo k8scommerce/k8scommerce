@@ -15,10 +15,11 @@ enum TransactionKind {
 }
 
 message CreditCard {
-  string cardNumber = 1;
-  int32 cvc = 2;
-  int32 creditCardExpirationYear = 3;
-  int32 creditCardExpirationMonth = 4;
+  int64 storeId = 1;
+  string cardNumber = 2;
+  int32 cvc = 3;
+  int32 creditCardExpirationYear = 4;
+  int32 creditCardExpirationMonth = 5;
 }
 
 message Transaction {
@@ -44,9 +45,10 @@ message Transaction {
 
 // process payment
 message ProcessPaymentRequest {
-  int64 amount = 1;
-  CreditCard creditCard = 2;
-  customer.Address billingAddress = 3;
+  int64 storeId = 1;
+  int64 amount = 2;
+  CreditCard creditCard = 3;
+  customer.Address billingAddress = 4;
 }
 
 message ProcessPaymentResponse {

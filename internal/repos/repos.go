@@ -6,8 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"k8scommerce/services/rpc/user/internal/config"
-
 	"github.com/lib/pq"
 	"github.com/tal-tech/go-zero/core/logx"
 
@@ -20,7 +18,7 @@ var (
 	ErrNotFound = sql.ErrNoRows
 )
 
-func MustNewRepo(c *config.Config) Repo {
+func MustNewRepo(c *Config) Repo {
 	// catch any panics
 	defer func() {
 		if rec := recover(); rec != nil {
@@ -39,13 +37,24 @@ func MustNewRepo(c *config.Config) Repo {
 type Repo interface {
 	GetRawDB() *sqlx.DB
 	// Repos
+	Cart() Cart
+	CartItem() CartItem
+	Category() Category
+	Customer() Customer
+	InventoryBrand() InventoryBrand
+	InventoryItem() InventoryItem
+	InventoryStock() InventoryStock
+	InventorySupplier() InventorySupplier
+	Product() Product
+	OthersBought() OthersBought
+	SimilarProducts() SimilarProducts
 	User() User
 }
 
 type repo struct {
 	db       *sqlx.DB
 	listener *pq.Listener
-	cfg      *config.Config
+	cfg      *Config
 }
 
 func (r *repo) GetRawDB() *sqlx.DB {
@@ -53,6 +62,50 @@ func (r *repo) GetRawDB() *sqlx.DB {
 }
 
 // Repos
+func (r *repo) Cart() Cart {
+	return newCart(r)
+}
+
+func (r *repo) CartItem() CartItem {
+	return newCartItem(r)
+}
+
+func (r *repo) Category() Category {
+	return newCategory(r)
+}
+
+func (r *repo) Customer() Customer {
+	return newCustomer(r)
+}
+
+func (r *repo) InventoryBrand() InventoryBrand {
+	return newInventoryBrand(r)
+}
+
+func (r *repo) InventoryItem() InventoryItem {
+	return newInventoryItem(r)
+}
+
+func (r *repo) InventoryStock() InventoryStock {
+	return newInventoryStock(r)
+}
+
+func (r *repo) InventorySupplier() InventorySupplier {
+	return newInventorySupplier(r)
+}
+
+func (r *repo) Product() Product {
+	return newProduct(r)
+}
+
+func (r *repo) OthersBought() OthersBought {
+	return newOthersBought(r)
+}
+
+func (r *repo) SimilarProducts() SimilarProducts {
+	return newSimilarProducts(r)
+}
+
 func (r *repo) User() User {
 	return newUser(r)
 }
@@ -61,18 +114,18 @@ func (r *repo) User() User {
 func (a *repo) mustConnect() (conn *sqlx.DB) {
 	// create the db client
 	once.Do(func() {
-		go a.setDBListener(a.cfg.Postgres.Connection)
-		logx.Info("DB Connecting", "conn", a.cfg.Postgres.Connection)
+		go a.setDBListener(a.cfg.Connection)
+		logx.Info("DB Connecting", "conn", a.cfg.Connection)
 
 		var conn *sqlx.DB
-		conn, err := sqlx.Connect("pgx", a.cfg.Postgres.Connection)
+		conn, err := sqlx.Connect("pgx", a.cfg.Connection)
 		if err != nil {
 			panic(err)
 		}
 		a.db = conn
-		a.db.SetMaxOpenConns(a.cfg.Postgres.MaxOpenConnections)
-		a.db.SetMaxIdleConns(a.cfg.Postgres.MaxIdleConnections)
-		a.db.SetConnMaxLifetime(time.Minute * time.Duration(a.cfg.Postgres.MaxConnectionLifetimeMinutes))
+		a.db.SetMaxOpenConns(a.cfg.MaxOpenConnections)
+		a.db.SetMaxIdleConns(a.cfg.MaxIdleConnections)
+		a.db.SetConnMaxLifetime(time.Minute * time.Duration(a.cfg.MaxConnectionLifetimeMinutes))
 		logx.Info("DB status:", "CONNECTED")
 
 		// "kick" the channel to ensure it checks for records on startup

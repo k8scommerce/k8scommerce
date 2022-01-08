@@ -43,7 +43,6 @@ func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceCon
 }
 
 func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetProductsByCategoryIdRequest) (*catalog.GetProductsByCategoryIdResponse, error) {
-
 	// caching goes logic here
 	if entryGetProductsByCategoryIdLogic == nil {
 		l.mu.Lock()
@@ -61,16 +60,17 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 
 				// split the key and set the variables
-				v := strings.Split(key, "|")
 
-				categoryId, _ := strconv.ParseInt(v[0], 10, 64)
-				currentPage, _ := strconv.ParseInt(v[1], 10, 64)
-				pageSize, _ := strconv.ParseInt(v[2], 10, 64)
+				v := strings.Split(key, "|")
+				storeId, _ := strconv.ParseInt(v[0], 10, 64)
+				categoryId, _ := strconv.ParseInt(v[1], 10, 64)
+				currentPage, _ := strconv.ParseInt(v[2], 10, 64)
+				pageSize, _ := strconv.ParseInt(v[3], 10, 64)
 				sortOn := ""
-				if len(v) > 3 {
-					sortOn = v[3]
+				if len(v) > 4 {
+					sortOn = v[4]
 				}
-				found, err := l.svcCtx.Repo.Product().GetProductsByCategoryId(categoryId, currentPage, pageSize, sortOn)
+				found, err := l.svcCtx.Repo.Product().GetProductsByCategoryId(storeId, categoryId, currentPage, pageSize, sortOn)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -114,8 +114,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 
 	codec := &galaxycache.ByteCodec{}
 
-	key := fmt.Sprintf("%d|%d|%d|%s", in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
-	// fmt.Println(key, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
+	key := fmt.Sprintf("%d|%d|%d|%d|%s", in.StoreId, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
 	entryGetProductsByCategoryIdLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
@@ -128,5 +127,4 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 	// entryGetProductsByCategoryIdLogic.galaxy.Remove(l.ctx, key)
 
 	return res, err
-
 }

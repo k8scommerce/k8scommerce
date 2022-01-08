@@ -3,7 +3,10 @@ package logic
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 	"sync"
 
 	"k8scommerce/services/rpc/catalog/internal/svc"
@@ -40,7 +43,6 @@ func NewGetProductBySkuLogic(ctx context.Context, svcCtx *svc.ServiceContext, un
 }
 
 func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuRequest) (*catalog.GetProductBySkuResponse, error) {
-
 	// caching goes logic here
 	if entryGetProductBySkuLogic == nil {
 		l.mu.Lock()
@@ -54,8 +56,12 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 		// register the galaxy one time
 		entryGetProductBySkuLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductBySku", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// fmt.Printf("Looking up GetProductBySku record by key: %s", key)
-				found, err := l.svcCtx.Repo.Product().GetProductBySku(key)
+
+				v := strings.Split(key, "|")
+				storeId, _ := strconv.ParseInt(v[1], 10, 64)
+				sku := v[1]
+
+				found, err := l.svcCtx.Repo.Product().GetProductBySku(storeId, sku)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -80,7 +86,8 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 	})
 
 	codec := &galaxycache.ByteCodec{}
-	entryGetProductBySkuLogic.galaxy.Get(l.ctx, in.Sku, codec)
+	key := fmt.Sprintf("%d|%s|%d|%s", in.StoreId, in.Sku)
+	entryGetProductBySkuLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
 		return nil, err
