@@ -1,8 +1,8 @@
 Name: customer.rpc
-ListenOn: 127.0.0.1:8080
+ListenOn: 0.0.0.0:8080
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
+    - localhost:2379
   Key: customer.rpc
 Postgres:
   Connection: postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable

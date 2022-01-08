@@ -46,18 +46,25 @@ archetype
 apiServices=client\
 admin
 
-rpcServices=cart\
-customer\
+# cart depends on inventory, othersbought
+
+rpcServices=customer\
 email\
 inventory\
 othersbought\
+cart\
 payment\
-product\
+catalog\
 shipping\
 similarproducts\
 store\
 user\
 warehouse
+
+# rpcServices=inventory\
+# othersbought\
+# cart
+
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
@@ -81,6 +88,10 @@ else
 	WHITE        := ""
 	RESET        := ""
 endif
+
+.PHONY: prereq
+prereq:
+	brew install etcd
 
 .PHONY: test
 test:
@@ -147,13 +158,13 @@ tidy:
 .PHONY: start
 start:
 	@etcd > /dev/null 2>&1 &
-	@port=8080; \
+	@port=65000; \
 	for service in $(rpcServices); do \
 		printf "$(BLUE)Starting RPC Service: $(WHITE)$$service::$$port$(RESET)\n"; \
 		cd ./services/rpc/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
-		(go run . -f etc/$$service.yaml &); \
+		(go run . -f etc/local-$$service.yaml &); \
 		cd ../../../; \
 		echo ""; \
 		port=$$((port+1)); \
@@ -165,7 +176,7 @@ start:
 		cd ./services/api/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
-		(go run . -f etc/$$service.yaml &); \
+		(go run . -f etc/local-$$service.yaml &); \
 		cd ../../../; \
 		echo ""; \
 		port=$$((port+1)); \
@@ -181,7 +192,7 @@ stop:
 		echo ""; \
 	done
 	@for service in $(apiServices); do \
-		printf "$(BLUE)Stopping RPC Service: $(WHITE)$$service$(RESET)\n"; \
+		printf "$(BLUE)Stopping API Service: $(WHITE)$$service$(RESET)\n"; \
 		pkill -9 -f $$service.yaml; \
 		rm ./services/api/$$service/etc/local-$$service.yaml; \
 		echo ""; \
@@ -244,6 +255,25 @@ docker-push-cart:
 	docker push $(IMAGE_REPO)/cart:latest
 	docker push $(IMAGE_REPO)/cart:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/cart:$(TAG)
+
+##
+## Catalog
+##
+.PHONY: docker-build-catalog
+docker-build-catalog:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/catalog:latest \
+		-t $(IMAGE_REPO)/catalog:$(BRANCH)-latest \
+		-t $(IMAGE_REPO)/catalog:$(TAG) \
+		--build-arg APP_NAME=catalog \
+		--build-arg APP_PATH=services/rpc \
+		.
+
+.PHONY: docker-push-catalog
+docker-push-catalog:
+	docker push $(IMAGE_REPO)/catalog:latest
+	docker push $(IMAGE_REPO)/catalog:$(BRANCH)-latest
+	docker push $(IMAGE_REPO)/catalog:$(TAG)
 
 ##
 ## Customer
@@ -339,25 +369,6 @@ docker-push-payment:
 	docker push $(IMAGE_REPO)/payment:latest
 	docker push $(IMAGE_REPO)/payment:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/payment:$(TAG)
-
-##
-## Product
-##
-.PHONY: docker-build-product
-docker-build-product:
-	docker build -f Dockerfile.prod \
-		-t $(IMAGE_REPO)/product:latest \
-		-t $(IMAGE_REPO)/product:$(BRANCH)-latest \
-		-t $(IMAGE_REPO)/product:$(TAG) \
-		--build-arg APP_NAME=product \
-		--build-arg APP_PATH=services/rpc \
-		.
-
-.PHONY: docker-push-product
-docker-push-product:
-	docker push $(IMAGE_REPO)/product:latest
-	docker push $(IMAGE_REPO)/product:$(BRANCH)-latest
-	docker push $(IMAGE_REPO)/product:$(TAG)
 
 ##
 ## Shipping
