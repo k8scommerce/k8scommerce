@@ -8,8 +8,9 @@ import (
 
 // PaymentGateway represents a row from 'public.payment_gateway'.
 type PaymentGateway struct {
-	ID   int64  `json:"id" db:"id"`     // id
-	Name string `json:"name" db:"name"` // name
+	ID      int64  `json:"id" db:"id"`             // id
+	StoreID int64  `json:"store_id" db:"store_id"` // store_id
+	Name    string `json:"name" db:"name"`         // name
 	// xo fields
 	_exists, _deleted bool
 }
@@ -35,13 +36,13 @@ func (pg *PaymentGateway) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.payment_gateway (` +
-		`name` +
+		`store_id, name` +
 		`) VALUES (` +
-		`$1` +
+		`$1, $2` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, pg.Name)
-	if err := db.QueryRowContext(ctx, sqlstr, pg.Name).Scan(&pg.ID); err != nil {
+	logf(sqlstr, pg.StoreID, pg.Name)
+	if err := db.QueryRowContext(ctx, sqlstr, pg.StoreID, pg.Name).Scan(&pg.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -59,11 +60,11 @@ func (pg *PaymentGateway) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.payment_gateway SET ` +
-		`name = $1 ` +
-		`WHERE id = $2`
+		`store_id = $1, name = $2 ` +
+		`WHERE id = $3`
 	// run
-	logf(sqlstr, pg.Name, pg.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, pg.Name, pg.ID); err != nil {
+	logf(sqlstr, pg.StoreID, pg.Name, pg.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, pg.StoreID, pg.Name, pg.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -85,16 +86,16 @@ func (pg *PaymentGateway) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.payment_gateway (` +
-		`id, name` +
+		`id, store_id, name` +
 		`) VALUES (` +
-		`$1, $2` +
+		`$1, $2, $3` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`name = EXCLUDED.name `
+		`store_id = EXCLUDED.store_id, name = EXCLUDED.name `
 	// run
-	logf(sqlstr, pg.ID, pg.Name)
-	if _, err := db.ExecContext(ctx, sqlstr, pg.ID, pg.Name); err != nil {
+	logf(sqlstr, pg.ID, pg.StoreID, pg.Name)
+	if _, err := db.ExecContext(ctx, sqlstr, pg.ID, pg.StoreID, pg.Name); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -129,7 +130,7 @@ func (pg *PaymentGateway) Delete(ctx context.Context, db DB) error {
 func PaymentGatewayByID(ctx context.Context, db DB, id int64) (*PaymentGateway, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name ` +
+		`id, store_id, name ` +
 		`FROM public.payment_gateway ` +
 		`WHERE id = $1`
 	// run
@@ -137,7 +138,7 @@ func PaymentGatewayByID(ctx context.Context, db DB, id int64) (*PaymentGateway, 
 	pg := PaymentGateway{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&pg.ID, &pg.Name); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&pg.ID, &pg.StoreID, &pg.Name); err != nil {
 		return nil, logerror(err)
 	}
 	return &pg, nil

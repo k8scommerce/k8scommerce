@@ -4,6 +4,7 @@
 -- +goose StatementBegin
 CREATE TABLE customer (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     email character varying NOT NULL UNIQUE,
@@ -16,6 +17,8 @@ CREATE TABLE customer (
 -- +goose StatementBegin
 CREATE TABLE customer_address (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
+    customer_id bigint NOT NULL,
     kind address_kind NOT NULL,
     is_default boolean DEFAULT FALSE NOT NULL,
     street character varying NOT NULL,

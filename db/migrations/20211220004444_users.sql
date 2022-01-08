@@ -4,6 +4,7 @@
 -- +goose StatementBegin
 CREATE TABLE users (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     email character varying NOT NULL UNIQUE,
@@ -17,6 +18,7 @@ CREATE TABLE users (
 -- +goose StatementBegin
 CREATE TABLE permission_group (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     group_name character varying NOT NULL UNIQUE,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL

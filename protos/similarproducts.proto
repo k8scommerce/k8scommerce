@@ -13,7 +13,8 @@ import "catalog.proto";
 
 // get one by sku
 message GetSimilarProductsBySkuRequest {
-  string sku = 1;
+  int64 storeId = 1;
+  string sku = 2;
 }
 
 message GetSimilarProductsBySkuResponse {
