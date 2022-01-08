@@ -4,15 +4,16 @@ package warehouse;
 option go_package = "pb/warehouse";
 
 message Warehouse {
-  int64 id = 1;
-  string name = 2;
-  string street = 3;
-  string city = 4;
-  string state = 5;
-  string country = 6;
-  string postalCode = 7;
-  string lat = 8;
-  string lng = 9;
+  int64 storeId = 1;
+  int64 id = 2;
+  string name = 3;
+  string street = 4;
+  string city = 5;
+  string state = 6;
+  string country = 7;
+  string postalCode = 8;
+  string lat = 9;
+  string lng = 10;
 }
 
 //
@@ -23,7 +24,7 @@ message Warehouse {
 
 // create Warehouse product
 message CreateWarehouseRequest {
-  int64 store_id = 1;
+  int64 storeId = 1;
   Warehouse warehouse = 2;
 }
 

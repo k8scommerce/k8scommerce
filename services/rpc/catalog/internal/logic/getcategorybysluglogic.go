@@ -5,8 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"k8scommerce/services/rpc/catalog/internal/svc"
+	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 	"net/http"
+	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/localrivet/galaxycache"
@@ -50,23 +53,30 @@ func (l *GetCategoryBySlugLogic) GetCategoryBySlug(in *catalog.GetCategoryBySlug
 	}
 
 	entryGetCategoryBySlugLogic.once.Do(func() {
-		fmt.Println(`l.entryGetCategoryBySlugLogic.Do`)
-
 		// register the galaxy one time
 		entryGetCategoryBySlugLogic.galaxy = gcache.RegisterGalaxyFunc("GetCategoryBySlug", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// todo: add your logic here and delete this line
 				fmt.Printf("Looking up GetCategoryBySlug record by key: %s", key)
 
-				// uncomment below to get the item from the adapter
-				// found, err := l.ca.GetProductBySku(key)
-				// if err != nil {
-				//	logx.Infof("error: %s", err)
-				//	return err
-				// }
+				v := strings.Split(key, "|")
+				storeId, _ := strconv.ParseInt(v[1], 10, 64)
+				slug := v[1]
+
+				found, err := l.svcCtx.Repo.Category().GetCategoryBySlug(storeId, slug)
+				if err != nil {
+					logx.Infof("error: %s", err)
+					return err
+				}
+
+				cat := catalog.Category{}
+				if found != nil {
+					types.ConvertModelCategoryToProtoCategory(found, &cat)
+				}
 
 				// the response struct
-				item := &catalog.GetCategoryBySlugResponse{}
+				item := &catalog.GetCategoryBySlugResponse{
+					Category: &cat,
+				}
 
 				out, err := json.Marshal(item)
 				if err != nil {
@@ -76,23 +86,21 @@ func (l *GetCategoryBySlugLogic) GetCategoryBySlug(in *catalog.GetCategoryBySlug
 			}))
 	})
 
-	res := &catalog.GetCategoryBySlugResponse{}
-
 	codec := &galaxycache.ByteCodec{}
-	if err := entryGetCategoryBySlugLogic.galaxy.Get(l.ctx, in.Slug, codec); err != nil {
-		res.StatusCode = http.StatusNoContent
-		res.StatusMessage = err.Error()
-		return res, nil
-	}
-
+	key := fmt.Sprintf("%d|%s|%d|%s", in.StoreId, in.Slug)
+	entryGetCategoryBySlugLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
-		res.StatusCode = http.StatusInternalServerError
-		res.StatusMessage = err.Error()
-		return res, nil
+		return nil, err
 	}
-
+	res := &catalog.GetCategoryBySlugResponse{
+		StatusCode:    http.StatusOK,
+		StatusMessage: "",
+	}
 	err = json.Unmarshal(b, res)
-	return res, err
-
+	if err != nil {
+		res.StatusCode = http.StatusExpectationFailed
+		res.StatusMessage = err.Error()
+	}
+	return res, nil
 }

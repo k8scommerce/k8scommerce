@@ -9,6 +9,7 @@ import (
 // Property represents a row from 'public.property'.
 type Property struct {
 	ID          int64  `json:"id" db:"id"`                     // id
+	StoreID     int64  `json:"store_id" db:"store_id"`         // store_id
 	Name        string `json:"name" db:"name"`                 // name
 	DisplayName string `json:"display_name" db:"display_name"` // display_name
 	Fiterable   bool   `json:"fiterable" db:"fiterable"`       // fiterable
@@ -38,13 +39,13 @@ func (p *Property) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.property (` +
-		`name, display_name, fiterable, filter_param` +
+		`store_id, name, display_name, fiterable, filter_param` +
 		`) VALUES (` +
-		`$1, $2, $3, $4` +
+		`$1, $2, $3, $4, $5` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, p.Name, p.DisplayName, p.Fiterable, p.FilterParam)
-	if err := db.QueryRowContext(ctx, sqlstr, p.Name, p.DisplayName, p.Fiterable, p.FilterParam).Scan(&p.ID); err != nil {
+	logf(sqlstr, p.StoreID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam)
+	if err := db.QueryRowContext(ctx, sqlstr, p.StoreID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam).Scan(&p.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -62,11 +63,11 @@ func (p *Property) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.property SET ` +
-		`name = $1, display_name = $2, fiterable = $3, filter_param = $4 ` +
-		`WHERE id = $5`
+		`store_id = $1, name = $2, display_name = $3, fiterable = $4, filter_param = $5 ` +
+		`WHERE id = $6`
 	// run
-	logf(sqlstr, p.Name, p.DisplayName, p.Fiterable, p.FilterParam, p.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, p.Name, p.DisplayName, p.Fiterable, p.FilterParam, p.ID); err != nil {
+	logf(sqlstr, p.StoreID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam, p.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, p.StoreID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam, p.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -88,16 +89,16 @@ func (p *Property) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.property (` +
-		`id, name, display_name, fiterable, filter_param` +
+		`id, store_id, name, display_name, fiterable, filter_param` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5` +
+		`$1, $2, $3, $4, $5, $6` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`name = EXCLUDED.name, display_name = EXCLUDED.display_name, fiterable = EXCLUDED.fiterable, filter_param = EXCLUDED.filter_param `
+		`store_id = EXCLUDED.store_id, name = EXCLUDED.name, display_name = EXCLUDED.display_name, fiterable = EXCLUDED.fiterable, filter_param = EXCLUDED.filter_param `
 	// run
-	logf(sqlstr, p.ID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam)
-	if _, err := db.ExecContext(ctx, sqlstr, p.ID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam); err != nil {
+	logf(sqlstr, p.ID, p.StoreID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam)
+	if _, err := db.ExecContext(ctx, sqlstr, p.ID, p.StoreID, p.Name, p.DisplayName, p.Fiterable, p.FilterParam); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -132,7 +133,7 @@ func (p *Property) Delete(ctx context.Context, db DB) error {
 func PropertyByName(ctx context.Context, db DB, name string) (*Property, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name, display_name, fiterable, filter_param ` +
+		`id, store_id, name, display_name, fiterable, filter_param ` +
 		`FROM public.property ` +
 		`WHERE name = $1`
 	// run
@@ -140,7 +141,7 @@ func PropertyByName(ctx context.Context, db DB, name string) (*Property, error) 
 	p := Property{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, name).Scan(&p.ID, &p.Name, &p.DisplayName, &p.Fiterable, &p.FilterParam); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, name).Scan(&p.ID, &p.StoreID, &p.Name, &p.DisplayName, &p.Fiterable, &p.FilterParam); err != nil {
 		return nil, logerror(err)
 	}
 	return &p, nil
@@ -152,7 +153,7 @@ func PropertyByName(ctx context.Context, db DB, name string) (*Property, error) 
 func PropertyByID(ctx context.Context, db DB, id int64) (*Property, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name, display_name, fiterable, filter_param ` +
+		`id, store_id, name, display_name, fiterable, filter_param ` +
 		`FROM public.property ` +
 		`WHERE id = $1`
 	// run
@@ -160,7 +161,7 @@ func PropertyByID(ctx context.Context, db DB, id int64) (*Property, error) {
 	p := Property{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&p.ID, &p.Name, &p.DisplayName, &p.Fiterable, &p.FilterParam); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&p.ID, &p.StoreID, &p.Name, &p.DisplayName, &p.Fiterable, &p.FilterParam); err != nil {
 		return nil, logerror(err)
 	}
 	return &p, nil

@@ -9,6 +9,7 @@ import (
 // Customer represents a row from 'public.customer'.
 type Customer struct {
 	ID        int64  `json:"id" db:"id"`                 // id
+	StoreID   int64  `json:"store_id" db:"store_id"`     // store_id
 	FirstName string `json:"first_name" db:"first_name"` // first_name
 	LastName  string `json:"last_name" db:"last_name"`   // last_name
 	Email     string `json:"email" db:"email"`           // email
@@ -38,13 +39,13 @@ func (c *Customer) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.customer (` +
-		`first_name, last_name, email, password` +
+		`store_id, first_name, last_name, email, password` +
 		`) VALUES (` +
-		`$1, $2, $3, $4` +
+		`$1, $2, $3, $4, $5` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, c.FirstName, c.LastName, c.Email, c.Password)
-	if err := db.QueryRowContext(ctx, sqlstr, c.FirstName, c.LastName, c.Email, c.Password).Scan(&c.ID); err != nil {
+	logf(sqlstr, c.StoreID, c.FirstName, c.LastName, c.Email, c.Password)
+	if err := db.QueryRowContext(ctx, sqlstr, c.StoreID, c.FirstName, c.LastName, c.Email, c.Password).Scan(&c.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -62,11 +63,11 @@ func (c *Customer) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.customer SET ` +
-		`first_name = $1, last_name = $2, email = $3, password = $4 ` +
-		`WHERE id = $5`
+		`store_id = $1, first_name = $2, last_name = $3, email = $4, password = $5 ` +
+		`WHERE id = $6`
 	// run
-	logf(sqlstr, c.FirstName, c.LastName, c.Email, c.Password, c.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, c.FirstName, c.LastName, c.Email, c.Password, c.ID); err != nil {
+	logf(sqlstr, c.StoreID, c.FirstName, c.LastName, c.Email, c.Password, c.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, c.StoreID, c.FirstName, c.LastName, c.Email, c.Password, c.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -88,16 +89,16 @@ func (c *Customer) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.customer (` +
-		`id, first_name, last_name, email, password` +
+		`id, store_id, first_name, last_name, email, password` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5` +
+		`$1, $2, $3, $4, $5, $6` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, password = EXCLUDED.password `
+		`store_id = EXCLUDED.store_id, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, password = EXCLUDED.password `
 	// run
-	logf(sqlstr, c.ID, c.FirstName, c.LastName, c.Email, c.Password)
-	if _, err := db.ExecContext(ctx, sqlstr, c.ID, c.FirstName, c.LastName, c.Email, c.Password); err != nil {
+	logf(sqlstr, c.ID, c.StoreID, c.FirstName, c.LastName, c.Email, c.Password)
+	if _, err := db.ExecContext(ctx, sqlstr, c.ID, c.StoreID, c.FirstName, c.LastName, c.Email, c.Password); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -132,7 +133,7 @@ func (c *Customer) Delete(ctx context.Context, db DB) error {
 func CustomerByEmail(ctx context.Context, db DB, email string) (*Customer, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, first_name, last_name, email, password ` +
+		`id, store_id, first_name, last_name, email, password ` +
 		`FROM public.customer ` +
 		`WHERE email = $1`
 	// run
@@ -140,7 +141,7 @@ func CustomerByEmail(ctx context.Context, db DB, email string) (*Customer, error
 	c := Customer{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, email).Scan(&c.ID, &c.FirstName, &c.LastName, &c.Email, &c.Password); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, email).Scan(&c.ID, &c.StoreID, &c.FirstName, &c.LastName, &c.Email, &c.Password); err != nil {
 		return nil, logerror(err)
 	}
 	return &c, nil
@@ -152,7 +153,7 @@ func CustomerByEmail(ctx context.Context, db DB, email string) (*Customer, error
 func CustomerByID(ctx context.Context, db DB, id int64) (*Customer, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, first_name, last_name, email, password ` +
+		`id, store_id, first_name, last_name, email, password ` +
 		`FROM public.customer ` +
 		`WHERE id = $1`
 	// run
@@ -160,7 +161,7 @@ func CustomerByID(ctx context.Context, db DB, id int64) (*Customer, error) {
 	c := Customer{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&c.ID, &c.FirstName, &c.LastName, &c.Email, &c.Password); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&c.ID, &c.StoreID, &c.FirstName, &c.LastName, &c.Email, &c.Password); err != nil {
 		return nil, logerror(err)
 	}
 	return &c, nil

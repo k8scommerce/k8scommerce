@@ -57,21 +57,21 @@ func (l *GetCategoryByIdLogic) GetCategoryById(in *catalog.GetCategoryByIdReques
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 				fmt.Printf("Looking up GetCategoryById record by key: %s", key)
 
-				id, _ := strconv.Atoi(key)
-				found, err := l.svcCtx.Repo.Category().GetCategoryById(int64(id))
+				categoryId, _ := strconv.ParseInt(key, 10, 64)
+				found, err := l.svcCtx.Repo.Category().GetCategoryById(categoryId)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
 				}
 
-				prod := catalog.Category{}
+				cat := catalog.Category{}
 				if found != nil {
-					types.ConvertModelCategoryToProtoCategory(&found.Category, &prod)
+					types.ConvertModelCategoryToProtoCategory(found, &cat)
 				}
 
 				// the response struct
 				item := &catalog.GetCategoryByIdResponse{
-					Category: &prod,
+					Category: &cat,
 				}
 
 				out, err := json.Marshal(item)

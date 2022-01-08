@@ -2,6 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE inventory_brand (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
@@ -12,6 +13,7 @@ CREATE TABLE inventory_brand (
 -- +goose StatementBegin
 CREATE TABLE inventory_supplier (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
@@ -22,6 +24,7 @@ CREATE TABLE inventory_supplier (
 -- +goose StatementBegin
 CREATE TABLE inventory_stock (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     warehouse_id bigint NOT NULL,
     inventory_item_id bigint NOT NULL,
     quantity int NOT NULL,
@@ -34,6 +37,7 @@ CREATE TABLE inventory_stock (
 -- +goose StatementBegin
 CREATE TABLE inventory_item (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     sku character varying NOT NULL,
     name character varying NOT NULL,
     supplier_id bigint NOT NULL,

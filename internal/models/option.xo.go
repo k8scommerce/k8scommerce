@@ -9,6 +9,7 @@ import (
 // Option represents a row from 'public.option'.
 type Option struct {
 	ID          int64  `json:"id" db:"id"`                     // id
+	StoreID     int64  `json:"store_id" db:"store_id"`         // store_id
 	Name        string `json:"name" db:"name"`                 // name
 	DisplayName string `json:"display_name" db:"display_name"` // display_name
 	// xo fields
@@ -36,13 +37,13 @@ func (o *Option) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.option (` +
-		`name, display_name` +
+		`store_id, name, display_name` +
 		`) VALUES (` +
-		`$1, $2` +
+		`$1, $2, $3` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, o.Name, o.DisplayName)
-	if err := db.QueryRowContext(ctx, sqlstr, o.Name, o.DisplayName).Scan(&o.ID); err != nil {
+	logf(sqlstr, o.StoreID, o.Name, o.DisplayName)
+	if err := db.QueryRowContext(ctx, sqlstr, o.StoreID, o.Name, o.DisplayName).Scan(&o.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -60,11 +61,11 @@ func (o *Option) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.option SET ` +
-		`name = $1, display_name = $2 ` +
-		`WHERE id = $3`
+		`store_id = $1, name = $2, display_name = $3 ` +
+		`WHERE id = $4`
 	// run
-	logf(sqlstr, o.Name, o.DisplayName, o.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, o.Name, o.DisplayName, o.ID); err != nil {
+	logf(sqlstr, o.StoreID, o.Name, o.DisplayName, o.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, o.StoreID, o.Name, o.DisplayName, o.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -86,16 +87,16 @@ func (o *Option) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.option (` +
-		`id, name, display_name` +
+		`id, store_id, name, display_name` +
 		`) VALUES (` +
-		`$1, $2, $3` +
+		`$1, $2, $3, $4` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`name = EXCLUDED.name, display_name = EXCLUDED.display_name `
+		`store_id = EXCLUDED.store_id, name = EXCLUDED.name, display_name = EXCLUDED.display_name `
 	// run
-	logf(sqlstr, o.ID, o.Name, o.DisplayName)
-	if _, err := db.ExecContext(ctx, sqlstr, o.ID, o.Name, o.DisplayName); err != nil {
+	logf(sqlstr, o.ID, o.StoreID, o.Name, o.DisplayName)
+	if _, err := db.ExecContext(ctx, sqlstr, o.ID, o.StoreID, o.Name, o.DisplayName); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -130,7 +131,7 @@ func (o *Option) Delete(ctx context.Context, db DB) error {
 func OptionByName(ctx context.Context, db DB, name string) (*Option, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name, display_name ` +
+		`id, store_id, name, display_name ` +
 		`FROM public.option ` +
 		`WHERE name = $1`
 	// run
@@ -138,7 +139,7 @@ func OptionByName(ctx context.Context, db DB, name string) (*Option, error) {
 	o := Option{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, name).Scan(&o.ID, &o.Name, &o.DisplayName); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, name).Scan(&o.ID, &o.StoreID, &o.Name, &o.DisplayName); err != nil {
 		return nil, logerror(err)
 	}
 	return &o, nil
@@ -150,7 +151,7 @@ func OptionByName(ctx context.Context, db DB, name string) (*Option, error) {
 func OptionByID(ctx context.Context, db DB, id int64) (*Option, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name, display_name ` +
+		`id, store_id, name, display_name ` +
 		`FROM public.option ` +
 		`WHERE id = $1`
 	// run
@@ -158,7 +159,7 @@ func OptionByID(ctx context.Context, db DB, id int64) (*Option, error) {
 	o := Option{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&o.ID, &o.Name, &o.DisplayName); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&o.ID, &o.StoreID, &o.Name, &o.DisplayName); err != nil {
 		return nil, logerror(err)
 	}
 	return &o, nil

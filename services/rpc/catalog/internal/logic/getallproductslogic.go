@@ -61,13 +61,14 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 				// split the key and set the variables
 				v := strings.Split(key, "|")
+				storeId, _ := strconv.ParseInt(v[0], 10, 64)
 				currentPage, _ := strconv.ParseInt(v[1], 10, 64)
 				pageSize, _ := strconv.ParseInt(v[2], 10, 64)
 				sortOn := ""
 				if len(v) > 3 {
 					sortOn = v[3]
 				}
-				found, err := l.svcCtx.Repo.Product().GetAllProducts(currentPage, pageSize, sortOn)
+				found, err := l.svcCtx.Repo.Product().GetAllProducts(storeId, currentPage, pageSize, sortOn)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -113,7 +114,7 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 
 	codec := &galaxycache.ByteCodec{}
 
-	key := fmt.Sprintf("%d|%d|%s", in.CurrentPage, in.PageSize, in.SortOn)
+	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
 	if err := entryGetAllProductsLogic.galaxy.Get(l.ctx, key, codec); err != nil {
 		res.StatusCode = http.StatusNoContent
 		res.StatusMessage = err.Error()
