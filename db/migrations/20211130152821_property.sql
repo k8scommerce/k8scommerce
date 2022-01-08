@@ -2,6 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE property (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     name character varying NOT NULL,
     display_name character varying NOT NULL,
     fiterable boolean DEFAULT TRUE NOT NULL,

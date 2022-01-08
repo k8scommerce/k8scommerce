@@ -8,57 +8,61 @@ option go_package = "pb/catalog";
 
 message Category {
   int64 id = 1;
-  int64 parentId = 2;
-  string slug = 3;
-  string name = 4;
-  string description = 5;
-  string metaTitle = 6;
-  string metaDescription = 7;
-  string metaKeywords = 8;
-  int32 sortOrder = 9;
+  int64 storeId = 2;
+  int64 parentId = 3;
+  string slug = 4;
+  string name = 5;
+  string description = 6;
+  string metaTitle = 7;
+  string metaDescription = 8;
+  string metaKeywords = 9;
+  int32 sortOrder = 10;
 }
 
 message Product {
   int64 id = 1;
-  string slug = 2;
-  string name = 3;
-  string shortDescription = 4;
-  string description = 5;
-  string metaTitle = 6;
-  string metaDescription = 7;
-  string metaKeywords = 8;
-  bool promotionable = 9;
-  string availableOn = 10;
-  string discontinueOn = 11;
-  repeated Variant variants = 12;
+  int64 storeId = 2;
+  string slug = 3;
+  string name = 4;
+  string shortDescription = 5;
+  string description = 6;
+  string metaTitle = 7;
+  string metaDescription = 8;
+  string metaKeywords = 9;
+  bool promotionable = 10;
+  string availableOn = 11;
+  string discontinueOn = 12;
+  repeated Variant variants = 13;
 }
 
 message Variant {
   int64 id = 1;
-  int64 productId = 2;
-  bool isDefault = 3;
-  string sku = 4;
-  int32 sortOrder = 5;
-  int64 costAmount = 6;
-  string costCurrency = 7;
-  bool trackInventory = 8;
-  int64 taxCategoryId = 9;
-  int64 shippingCategoryId = 10;
-  string discontinueOn = 11;
-  double weight = 12;
-  double height = 13;
-  double width = 14;
-  double depth = 15;
-  Price price = 16;
+  int64 storeId = 2;
+  int64 productId = 3;
+  bool isDefault = 4;
+  string sku = 5;
+  int32 sortOrder = 6;
+  int64 costAmount = 7;
+  string costCurrency = 8;
+  bool trackInventory = 9;
+  int64 taxCategoryId = 10;
+  int64 shippingCategoryId = 11;
+  string discontinueOn = 12;
+  double weight = 13;
+  double height = 14;
+  double width = 15;
+  double depth = 16;
+  Price price = 17;
 }
 
 message Price {
   int64 id = 1;
-  int64 variantId = 2;
-  int64 amount = 3;
-  int64 compareAtAmount = 4;
-  string currency = 5;
-  int64 userRoleId = 6;
+  int64 storeId = 2;
+  int64 variantId = 3;
+  int64 amount = 4;
+  int64 compareAtAmount = 5;
+  string currency = 6;
+  int64 userRoleId = 7;
 }
 
 //
@@ -68,17 +72,25 @@ message Price {
 //
 
 // get all categories
-message GetAllCategoriesRequest {}
+message GetAllCategoriesRequest {
+  int64 storeId = 1;
+  int64 currentPage = 2;
+  int64 pageSize = 3;
+  string sortOn = 4;
+}
 
 message GetAllCategoriesResponse {
   repeated Category categories = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
+  int64 totalRecords = 2;
+  int64 totalPages = 3;
+  int64 statusCode = 4;
+  string statusMessage = 5;
 }
 
 // get category by slug
 message GetCategoryBySlugRequest {
   string slug = 1;
+  int64 storeId = 2;
 }
 
 message GetCategoryBySlugResponse {
@@ -90,6 +102,7 @@ message GetCategoryBySlugResponse {
 // get category by id
 message GetCategoryByIdRequest {
   int64 id = 1;
+  int64 storeId = 2;
 }
 
 message GetCategoryByIdResponse {
@@ -101,6 +114,7 @@ message GetCategoryByIdResponse {
 // create category
 message CreateCategoryRequest {
   Category category = 1;
+  int64 storeId = 2;
 }
 
 message CreateCategoryResponse {
@@ -112,7 +126,8 @@ message CreateCategoryResponse {
 // update category
 message UpdateCategoryRequest {
   int64 id = 1;
-  Category category = 2;
+  int64 storeId = 2;
+  Category category = 3;
 }
 
 message UpdateCategoryResponse {
@@ -124,6 +139,7 @@ message UpdateCategoryResponse {
 // delete category
 message DeleteCategoryRequest {
   int64 id = 1;
+  int64 storeId = 2;
 }
 
 message DeleteCategoryResponse {
@@ -140,6 +156,7 @@ message DeleteCategoryResponse {
 // get one by sku
 message GetProductBySkuRequest {
   string sku = 1;
+  int64 storeId = 2;
 }
 
 message GetProductBySkuResponse {
@@ -151,6 +168,7 @@ message GetProductBySkuResponse {
 // get one by slug
 message GetProductBySlugRequest {
   string slug = 1;
+  int64 storeId = 2;
 }
 
 message GetProductBySlugResponse {
@@ -162,6 +180,7 @@ message GetProductBySlugResponse {
 // get one by id
 message GetProductByIdRequest {
   int64 id = 1;
+  int64 storeId = 2;
 }
 
 message GetProductByIdResponse {
@@ -172,10 +191,11 @@ message GetProductByIdResponse {
 
 // get all by category
 message GetProductsByCategoryIdRequest {
-  int64 categoryId = 1;
-  int64 currentPage = 2;
-  int64 pageSize = 3;
-  string sortOn = 4;
+  int64 storeId = 1;
+  int64 categoryId = 2;
+  int64 currentPage = 3;
+  int64 pageSize = 4;
+  string sortOn = 5;
 }
 
 message GetProductsByCategoryIdResponse {
@@ -188,9 +208,10 @@ message GetProductsByCategoryIdResponse {
 
 // get all products
 message GetAllProductsRequest {
-  int64 currentPage = 1;
-  int64 pageSize = 2;
-  string sortOn = 3;
+  int64 storeId = 1;
+  int64 currentPage = 2;
+  int64 pageSize = 3;
+  string sortOn = 4;
 }
 
 message GetAllProductsResponse {
@@ -203,7 +224,8 @@ message GetAllProductsResponse {
 
 // create product
 message CreateProductRequest {
-  Product product = 1;
+  int64 storeId = 1;
+  Product product = 2;
 }
 
 message CreateProductResponse {
@@ -215,7 +237,8 @@ message CreateProductResponse {
 // update product
 message UpdateProductRequest {
   int64 id = 1;
-  Product product = 2;
+  int64 storeId = 2;
+  Product product = 3;
 }
 
 message UpdateProductResponse {
@@ -227,6 +250,7 @@ message UpdateProductResponse {
 // delete product
 message DeleteProductRequest {
   int64 id = 1;
+  int64 storeId = 2;
 }
 
 message DeleteProductResponse {

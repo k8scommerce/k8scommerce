@@ -2,6 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE product (
     id bigserial PRIMARY KEY,
+    store_id bigint NOT NULL,
     slug character varying NOT NULL,
     name character varying NOT NULL,
     short_description text,

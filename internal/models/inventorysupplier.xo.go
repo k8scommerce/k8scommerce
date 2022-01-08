@@ -8,8 +8,9 @@ import (
 
 // InventorySupplier represents a row from 'public.inventory_supplier'.
 type InventorySupplier struct {
-	ID   int64  `json:"id" db:"id"`     // id
-	Name string `json:"name" db:"name"` // name
+	ID      int64  `json:"id" db:"id"`             // id
+	StoreID int64  `json:"store_id" db:"store_id"` // store_id
+	Name    string `json:"name" db:"name"`         // name
 	// xo fields
 	_exists, _deleted bool
 }
@@ -35,13 +36,13 @@ func (is *InventorySupplier) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.inventory_supplier (` +
-		`name` +
+		`store_id, name` +
 		`) VALUES (` +
-		`$1` +
+		`$1, $2` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, is.Name)
-	if err := db.QueryRowContext(ctx, sqlstr, is.Name).Scan(&is.ID); err != nil {
+	logf(sqlstr, is.StoreID, is.Name)
+	if err := db.QueryRowContext(ctx, sqlstr, is.StoreID, is.Name).Scan(&is.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -59,11 +60,11 @@ func (is *InventorySupplier) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.inventory_supplier SET ` +
-		`name = $1 ` +
-		`WHERE id = $2`
+		`store_id = $1, name = $2 ` +
+		`WHERE id = $3`
 	// run
-	logf(sqlstr, is.Name, is.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, is.Name, is.ID); err != nil {
+	logf(sqlstr, is.StoreID, is.Name, is.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, is.StoreID, is.Name, is.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -85,16 +86,16 @@ func (is *InventorySupplier) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.inventory_supplier (` +
-		`id, name` +
+		`id, store_id, name` +
 		`) VALUES (` +
-		`$1, $2` +
+		`$1, $2, $3` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`name = EXCLUDED.name `
+		`store_id = EXCLUDED.store_id, name = EXCLUDED.name `
 	// run
-	logf(sqlstr, is.ID, is.Name)
-	if _, err := db.ExecContext(ctx, sqlstr, is.ID, is.Name); err != nil {
+	logf(sqlstr, is.ID, is.StoreID, is.Name)
+	if _, err := db.ExecContext(ctx, sqlstr, is.ID, is.StoreID, is.Name); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -129,7 +130,7 @@ func (is *InventorySupplier) Delete(ctx context.Context, db DB) error {
 func InventorySupplierByID(ctx context.Context, db DB, id int64) (*InventorySupplier, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name ` +
+		`id, store_id, name ` +
 		`FROM public.inventory_supplier ` +
 		`WHERE id = $1`
 	// run
@@ -137,7 +138,7 @@ func InventorySupplierByID(ctx context.Context, db DB, id int64) (*InventorySupp
 	is := InventorySupplier{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&is.ID, &is.Name); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&is.ID, &is.StoreID, &is.Name); err != nil {
 		return nil, logerror(err)
 	}
 	return &is, nil

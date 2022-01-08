@@ -9,6 +9,7 @@ import (
 // PermissionGroup represents a row from 'public.permission_group'.
 type PermissionGroup struct {
 	ID        int64  `json:"id" db:"id"`                 // id
+	StoreID   int64  `json:"store_id" db:"store_id"`     // store_id
 	GroupName string `json:"group_name" db:"group_name"` // group_name
 	// xo fields
 	_exists, _deleted bool
@@ -35,13 +36,13 @@ func (pg *PermissionGroup) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.permission_group (` +
-		`group_name` +
+		`store_id, group_name` +
 		`) VALUES (` +
-		`$1` +
+		`$1, $2` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, pg.GroupName)
-	if err := db.QueryRowContext(ctx, sqlstr, pg.GroupName).Scan(&pg.ID); err != nil {
+	logf(sqlstr, pg.StoreID, pg.GroupName)
+	if err := db.QueryRowContext(ctx, sqlstr, pg.StoreID, pg.GroupName).Scan(&pg.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -59,11 +60,11 @@ func (pg *PermissionGroup) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.permission_group SET ` +
-		`group_name = $1 ` +
-		`WHERE id = $2`
+		`store_id = $1, group_name = $2 ` +
+		`WHERE id = $3`
 	// run
-	logf(sqlstr, pg.GroupName, pg.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, pg.GroupName, pg.ID); err != nil {
+	logf(sqlstr, pg.StoreID, pg.GroupName, pg.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, pg.StoreID, pg.GroupName, pg.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -85,16 +86,16 @@ func (pg *PermissionGroup) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.permission_group (` +
-		`id, group_name` +
+		`id, store_id, group_name` +
 		`) VALUES (` +
-		`$1, $2` +
+		`$1, $2, $3` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`group_name = EXCLUDED.group_name `
+		`store_id = EXCLUDED.store_id, group_name = EXCLUDED.group_name `
 	// run
-	logf(sqlstr, pg.ID, pg.GroupName)
-	if _, err := db.ExecContext(ctx, sqlstr, pg.ID, pg.GroupName); err != nil {
+	logf(sqlstr, pg.ID, pg.StoreID, pg.GroupName)
+	if _, err := db.ExecContext(ctx, sqlstr, pg.ID, pg.StoreID, pg.GroupName); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -129,7 +130,7 @@ func (pg *PermissionGroup) Delete(ctx context.Context, db DB) error {
 func PermissionGroupByGroupName(ctx context.Context, db DB, groupName string) (*PermissionGroup, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, group_name ` +
+		`id, store_id, group_name ` +
 		`FROM public.permission_group ` +
 		`WHERE group_name = $1`
 	// run
@@ -137,7 +138,7 @@ func PermissionGroupByGroupName(ctx context.Context, db DB, groupName string) (*
 	pg := PermissionGroup{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, groupName).Scan(&pg.ID, &pg.GroupName); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, groupName).Scan(&pg.ID, &pg.StoreID, &pg.GroupName); err != nil {
 		return nil, logerror(err)
 	}
 	return &pg, nil
@@ -149,7 +150,7 @@ func PermissionGroupByGroupName(ctx context.Context, db DB, groupName string) (*
 func PermissionGroupByID(ctx context.Context, db DB, id int64) (*PermissionGroup, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, group_name ` +
+		`id, store_id, group_name ` +
 		`FROM public.permission_group ` +
 		`WHERE id = $1`
 	// run
@@ -157,7 +158,7 @@ func PermissionGroupByID(ctx context.Context, db DB, id int64) (*PermissionGroup
 	pg := PermissionGroup{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&pg.ID, &pg.GroupName); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&pg.ID, &pg.StoreID, &pg.GroupName); err != nil {
 		return nil, logerror(err)
 	}
 	return &pg, nil
