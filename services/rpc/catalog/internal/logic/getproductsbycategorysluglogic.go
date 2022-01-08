@@ -4,28 +4,27 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
-	"sync"
-
 	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"strconv"
+	"strings"
+	"sync"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
-type galaxyGetProductsByCategoryIdLogicHelper struct {
+type galaxyGetProductsByCategorySlugLogicHelper struct {
 	once   *sync.Once
 	galaxy *galaxycache.Galaxy
 }
 
-var entryGetProductsByCategoryIdLogic *galaxyGetProductsByCategoryIdLogicHelper
+var entryGetProductsByCategorySlugLogic *galaxyGetProductsByCategorySlugLogicHelper
 
-type GetProductsByCategoryIdLogic struct {
+type GetProductsByCategorySlugLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
@@ -33,8 +32,8 @@ type GetProductsByCategoryIdLogic struct {
 	mu       sync.Mutex
 }
 
-func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetProductsByCategoryIdLogic {
-	return &GetProductsByCategoryIdLogic{
+func NewGetProductsByCategorySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetProductsByCategorySlugLogic {
+	return &GetProductsByCategorySlugLogic{
 		ctx:      ctx,
 		svcCtx:   svcCtx,
 		Logger:   logx.WithContext(ctx),
@@ -42,35 +41,36 @@ func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceCon
 	}
 }
 
-func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetProductsByCategoryIdRequest) (*catalog.GetProductsByCategoryIdResponse, error) {
+func (l *GetProductsByCategorySlugLogic) GetProductsByCategorySlug(in *catalog.GetProductsByCategorySlugRequest) (*catalog.GetProductsByCategorySlugResponse, error) {
+
 	// caching goes logic here
-	if entryGetProductsByCategoryIdLogic == nil {
+	if entryGetProductsByCategorySlugLogic == nil {
 		l.mu.Lock()
-		entryGetProductsByCategoryIdLogic = &galaxyGetProductsByCategoryIdLogicHelper{
+		entryGetProductsByCategorySlugLogic = &galaxyGetProductsByCategorySlugLogicHelper{
 			once: &sync.Once{},
 		}
 		l.mu.Unlock()
 	}
 
-	entryGetProductsByCategoryIdLogic.once.Do(func() {
+	entryGetProductsByCategorySlugLogic.once.Do(func() {
 		// fmt.Println(`l.entry.Do`)
 
 		// register the galaxy one time
-		entryGetProductsByCategoryIdLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductsByCategoryId", l.universe, galaxycache.GetterFunc(
+		entryGetProductsByCategorySlugLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductsByCategorySlug", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 
 				// split the key and set the variables
 
 				v := strings.Split(key, "|")
 				storeId, _ := strconv.ParseInt(v[0], 10, 64)
-				categoryId, _ := strconv.ParseInt(v[1], 10, 64)
+				categorySlug := v[1]
 				currentPage, _ := strconv.ParseInt(v[2], 10, 64)
 				pageSize, _ := strconv.ParseInt(v[3], 10, 64)
 				sortOn := ""
 				if len(v) > 4 {
 					sortOn = v[4]
 				}
-				found, err := l.svcCtx.Repo.Product().GetProductsByCategoryId(storeId, categoryId, currentPage, pageSize, sortOn)
+				found, err := l.svcCtx.Repo.Product().GetProductsByCategorySlug(storeId, categorySlug, currentPage, pageSize, sortOn)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -98,7 +98,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 				}
 
 				// the response struct
-				item := &catalog.GetProductsByCategoryIdResponse{
+				item := &catalog.GetProductsByCategorySlugResponse{
 					Products:     prods,
 					TotalRecords: totalRecords,
 					TotalPages:   totalPages,
@@ -114,17 +114,14 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 
 	codec := &galaxycache.ByteCodec{}
 
-	key := fmt.Sprintf("%d|%d|%d|%d|%s", in.StoreId, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
-	entryGetProductsByCategoryIdLogic.galaxy.Get(l.ctx, key, codec)
+	key := fmt.Sprintf("%d|%s|%d|%d|%s", in.StoreId, in.CategorySlug, in.CurrentPage, in.PageSize, in.SortOn)
+	entryGetProductsByCategorySlugLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
 		return nil, err
 	}
-	res := &catalog.GetProductsByCategoryIdResponse{}
+	res := &catalog.GetProductsByCategorySlugResponse{}
 	err = json.Unmarshal(b, res)
-
-	// remove it for right now
-	// entryGetProductsByCategoryIdLogic.galaxy.Remove(l.ctx, key)
 
 	return res, err
 }

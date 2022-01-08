@@ -28,7 +28,7 @@ func NewRemoveItemInCartLogic(ctx context.Context, svcCtx *svc.ServiceContext, u
 
 func (l *RemoveItemInCartLogic) RemoveItemInCart(in *cart.RemoveItemInCartRequest) (*cart.RemoveItemInCartResponse, error) {
 	err := l.svcCtx.Repo.CartItem().Delete(
-		in.UserId,
+		in.CustomerId,
 		in.Sku,
 		false,
 	)
@@ -37,13 +37,13 @@ func (l *RemoveItemInCartLogic) RemoveItemInCart(in *cart.RemoveItemInCartReques
 	}
 
 	res := &cart.RemoveItemInCartResponse{}
-	cartResponse, cartItems, totalPrice, err := getUpdatedCart(l.svcCtx, in.UserId, res)
+	cartResponse, cartItems, totalPrice, err := getUpdatedCart(l.svcCtx, in.CustomerId, res)
 	if err != nil {
 		return nil, err
 	}
 
 	res.Cart = &cart.Cart{
-		UserId:     cartResponse.Cart.UserID,
+		CustomerId: cartResponse.Cart.CustomerID,
 		TotalPrice: totalPrice,
 		Items:      cartItems,
 	}

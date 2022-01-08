@@ -29,7 +29,8 @@ var _ = Describe("CartLogic", func() {
 	var testVariant *models.Variant
 	var testPrice *models.Price
 	var c config.Config
-	var userId int64 = 1
+	var storeId int64 = 1
+	var customerId int64 = 1
 
 	conf.MustLoad("../../etc/cart.yaml", &c)
 	svcCtx := svc.NewServiceContext(c)
@@ -41,10 +42,10 @@ var _ = Describe("CartLogic", func() {
 	}
 
 	productName := "Test Product"
-	productResponse, err := svcCtx.Repo.Product().GetProductBySlug(strcase.ToKebab(productName))
+	productResponse, err := svcCtx.Repo.Product().GetProductBySlug(storeId, strcase.ToKebab(productName))
 	expectNilErr(err)
 	if productResponse != nil {
-		svcCtx.Repo.CartItem().Delete(userId, strcase.ToKebab(productName), true)
+		svcCtx.Repo.CartItem().Delete(customerId, strcase.ToKebab(productName), true)
 		err = svcCtx.Repo.Product().Delete(productResponse.Product.ID)
 		expectNilErr(err)
 	}
@@ -90,7 +91,7 @@ var _ = Describe("CartLogic", func() {
 	} else {
 		expectNilErr(err)
 	}
-	productResponse, err = svcCtx.Repo.Product().GetProductBySlug(strcase.ToKebab(productName))
+	productResponse, err = svcCtx.Repo.Product().GetProductBySlug(storeId, strcase.ToKebab(productName))
 	expectNilErr(err)
 
 	for _, v := range productResponse.Variants {
@@ -106,7 +107,7 @@ var _ = Describe("CartLogic", func() {
 
 	// create a cart
 	cartResponse, err := svcCtx.Repo.Cart().Upsert(&models.Cart{
-		UserID: userId,
+		CustomerID: customerId,
 	})
 	expectNilErr(err)
 	Expect(cartResponse).ToNot(BeNil())
@@ -119,7 +120,7 @@ var _ = Describe("CartLogic", func() {
 			// removeItemToCartLogic = logic.NewRemoveItemInCartLogic(ctx, svcCtx, universe)
 
 			// out, err := removeItemToCartLogic.RemoveItemInCart(&cart.RemoveItemInCartRequest{
-			// 	UserId: int64(userId),
+			// 	CustomerId: int64(customerId),
 			// 	CartId: int64(cartId),
 			// 	Sku:    testVariant.Sku,
 			// })
@@ -138,13 +139,13 @@ var _ = Describe("CartLogic", func() {
 			It("should add an item to cart", func() {
 				// AddItemToCart(in *cart.AddItemToCartRequest) (*cart.AddItemToCartResponse, error)
 				request := &cart.AddItemToCartRequest{
-					UserId: int64(userId),
+					CustomerId: int64(customerId),
 					Item: &cart.Item{
-						UserId:    int64(userId),
-						Sku:       testVariant.Sku,
-						Quantity:  1,
-						Price:     testPrice.Amount,
-						ExpiresAt: timestamppb.New(expires),
+						CustomerId: int64(customerId),
+						Sku:        testVariant.Sku,
+						Quantity:   1,
+						Price:      testPrice.Amount,
+						ExpiresAt:  timestamppb.New(expires),
 					},
 				}
 
