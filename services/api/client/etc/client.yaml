@@ -11,30 +11,60 @@ Auth:
 CartRpc:
   Etcd:
     Hosts:
-      - etcd:2379
+      - localhost:2379
     Key: cart.rpc
+CatalogRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: catalog.rpc
+CustomerRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: customer.rpc
+EmailRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: email.rpc
 InventoryRpc:
   Etcd:
     Hosts:
-      - etcd:2379
+      - localhost:2379
     Key: inventory.rpc
 OthersBoughtRpc:
   Etcd:
     Hosts:
-      - etcd:2379
+      - localhost:2379
     Key: othersbought.rpc
-ProductRpc:
+PaymentRpc:
   Etcd:
     Hosts:
-      - etcd:2379
-    Key: product.rpc
+      - localhost:2379
+    Key: payment.rpc
+ShippingRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: shipping.rpc
 SimilarProductsRpc:
   Etcd:
     Hosts:
-      - etcd:2379
+      - localhost:2379
     Key: similarproducts.rpc
+StoreRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: store.rpc
 UserRpc:
   Etcd:
     Hosts:
-      - etcd:2379
+      - localhost:2379
     Key: user.rpc
+WarehouseRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: warehouse.rpc
