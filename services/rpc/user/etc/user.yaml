@@ -1,10 +1,10 @@
 Name: user.rpc
-ListenOn: :8085
+ListenOn: 0.0.0.0:8080
 Log:
   Mode: console
 Etcd:
   Hosts:
-    - etcd1:2379
+    - localhost:2379
   Key: user.rpc
 Postgres:
   Connection: postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable

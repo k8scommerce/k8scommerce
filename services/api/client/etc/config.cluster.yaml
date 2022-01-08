@@ -13,6 +13,21 @@ CartRpc:
     Hosts:
       - etcd-client:2379
     Key: cart.rpc
+CatalogRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: catalog.rpc
+CustomerRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: customer.rpc
+EmailRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: email.rpc
 InventoryRpc:
   Etcd:
     Hosts:
@@ -23,18 +38,33 @@ OthersBoughtRpc:
     Hosts:
       - etcd-client:2379
     Key: othersbought.rpc
-ProductRpc:
+PaymentRpc:
   Etcd:
     Hosts:
       - etcd-client:2379
-    Key: product.rpc
+    Key: payment.rpc
+ShippingRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: shipping.rpc
 SimilarProductsRpc:
   Etcd:
     Hosts:
       - etcd-client:2379
     Key: similarproducts.rpc
+StoreRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: store.rpc
 UserRpc:
   Etcd:
     Hosts:
       - etcd-client:2379
     Key: user.rpc
+WarehouseRpc:
+  Etcd:
+    Hosts:
+      - etcd-client:2379
+    Key: warehouse.rpc
