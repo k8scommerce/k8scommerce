@@ -9,6 +9,7 @@ import (
 // InventoryStock represents a row from 'public.inventory_stock'.
 type InventoryStock struct {
 	ID              int64 `json:"id" db:"id"`                               // id
+	StoreID         int64 `json:"store_id" db:"store_id"`                   // store_id
 	WarehouseID     int64 `json:"warehouse_id" db:"warehouse_id"`           // warehouse_id
 	InventoryItemID int64 `json:"inventory_item_id" db:"inventory_item_id"` // inventory_item_id
 	Quantity        int   `json:"quantity" db:"quantity"`                   // quantity
@@ -37,13 +38,13 @@ func (is *InventoryStock) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.inventory_stock (` +
-		`warehouse_id, inventory_item_id, quantity` +
+		`store_id, warehouse_id, inventory_item_id, quantity` +
 		`) VALUES (` +
-		`$1, $2, $3` +
+		`$1, $2, $3, $4` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, is.WarehouseID, is.InventoryItemID, is.Quantity)
-	if err := db.QueryRowContext(ctx, sqlstr, is.WarehouseID, is.InventoryItemID, is.Quantity).Scan(&is.ID); err != nil {
+	logf(sqlstr, is.StoreID, is.WarehouseID, is.InventoryItemID, is.Quantity)
+	if err := db.QueryRowContext(ctx, sqlstr, is.StoreID, is.WarehouseID, is.InventoryItemID, is.Quantity).Scan(&is.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -61,11 +62,11 @@ func (is *InventoryStock) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.inventory_stock SET ` +
-		`warehouse_id = $1, inventory_item_id = $2, quantity = $3 ` +
-		`WHERE id = $4`
+		`store_id = $1, warehouse_id = $2, inventory_item_id = $3, quantity = $4 ` +
+		`WHERE id = $5`
 	// run
-	logf(sqlstr, is.WarehouseID, is.InventoryItemID, is.Quantity, is.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, is.WarehouseID, is.InventoryItemID, is.Quantity, is.ID); err != nil {
+	logf(sqlstr, is.StoreID, is.WarehouseID, is.InventoryItemID, is.Quantity, is.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, is.StoreID, is.WarehouseID, is.InventoryItemID, is.Quantity, is.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -87,16 +88,16 @@ func (is *InventoryStock) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.inventory_stock (` +
-		`id, warehouse_id, inventory_item_id, quantity` +
+		`id, store_id, warehouse_id, inventory_item_id, quantity` +
 		`) VALUES (` +
-		`$1, $2, $3, $4` +
+		`$1, $2, $3, $4, $5` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`warehouse_id = EXCLUDED.warehouse_id, inventory_item_id = EXCLUDED.inventory_item_id, quantity = EXCLUDED.quantity `
+		`store_id = EXCLUDED.store_id, warehouse_id = EXCLUDED.warehouse_id, inventory_item_id = EXCLUDED.inventory_item_id, quantity = EXCLUDED.quantity `
 	// run
-	logf(sqlstr, is.ID, is.WarehouseID, is.InventoryItemID, is.Quantity)
-	if _, err := db.ExecContext(ctx, sqlstr, is.ID, is.WarehouseID, is.InventoryItemID, is.Quantity); err != nil {
+	logf(sqlstr, is.ID, is.StoreID, is.WarehouseID, is.InventoryItemID, is.Quantity)
+	if _, err := db.ExecContext(ctx, sqlstr, is.ID, is.StoreID, is.WarehouseID, is.InventoryItemID, is.Quantity); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -131,7 +132,7 @@ func (is *InventoryStock) Delete(ctx context.Context, db DB) error {
 func InventoryStockByID(ctx context.Context, db DB, id int64) (*InventoryStock, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, warehouse_id, inventory_item_id, quantity ` +
+		`id, store_id, warehouse_id, inventory_item_id, quantity ` +
 		`FROM public.inventory_stock ` +
 		`WHERE id = $1`
 	// run
@@ -139,7 +140,7 @@ func InventoryStockByID(ctx context.Context, db DB, id int64) (*InventoryStock, 
 	is := InventoryStock{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&is.ID, &is.WarehouseID, &is.InventoryItemID, &is.Quantity); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&is.ID, &is.StoreID, &is.WarehouseID, &is.InventoryItemID, &is.Quantity); err != nil {
 		return nil, logerror(err)
 	}
 	return &is, nil

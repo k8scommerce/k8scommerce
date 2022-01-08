@@ -8,10 +8,11 @@ option go_package = "pb/customer";
 
 message Customer {
   int64 id = 1;
-  string firstName = 2;
-  string lastName = 3;
-  string email = 4;
-  string password = 5;
+  int64 storeId = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string email = 5;
+  string password = 6;
 }
 
 message CustomerAccount {
@@ -37,7 +38,8 @@ message Address {
 
 // create Customer product
 message CreateCustomerRequest {
-  Customer Customer = 1;
+  int64 storeId = 1;
+  Customer Customer = 2;
 }
 
 message CreateCustomerResponse {
@@ -48,8 +50,9 @@ message CreateCustomerResponse {
 
 // login
 message LoginRequest {
-  string email = 1;
-  string password = 2;
+  int64 storeId = 1;
+  string email = 2;
+  string password = 3;
 }
 
 message LoginResponse {

@@ -156,6 +156,26 @@ func CategoryByID(ctx context.Context, db DB, id int64) (*Category, error) {
 	return &c, nil
 }
 
+// CategoryByStoreIDSlug retrieves a row from 'public.category' as a Category.
+//
+// Generated from index 'category_store_id_slug_key'.
+func CategoryByStoreIDSlug(ctx context.Context, db DB, storeID int64, slug string) (*Category, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
+		`FROM public.category ` +
+		`WHERE store_id = $1 AND slug = $2`
+	// run
+	logf(sqlstr, storeID, slug)
+	c := Category{
+		_exists: true,
+	}
+	if err := db.QueryRowContext(ctx, sqlstr, storeID, slug).Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Slug, &c.Name, &c.Description, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
+		return nil, logerror(err)
+	}
+	return &c, nil
+}
+
 // CategoryByDepth retrieves a row from 'public.category' as a Category.
 //
 // Generated from index 'idx_category_depth'.
