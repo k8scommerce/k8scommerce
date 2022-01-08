@@ -50,6 +50,6 @@ func main() {
 	defer s.Stop()
 	defer universe.Shutdown()
 
-	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
+	fmt.Printf("Starting %s.rpc server at %s...\n", "inventory", c.ListenOn)
 	s.Start()
 }
