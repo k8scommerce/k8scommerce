@@ -47,6 +47,8 @@ type Repo interface {
 	InventorySupplier() InventorySupplier
 	Product() Product
 	OthersBought() OthersBought
+	SimilarProducts() SimilarProducts
+	User() User
 }
 
 type repo struct {
@@ -98,6 +100,14 @@ func (r *repo) Product() Product {
 
 func (r *repo) OthersBought() OthersBought {
 	return newOthersBought(r)
+}
+
+func (r *repo) SimilarProducts() SimilarProducts {
+	return newSimilarProducts(r)
+}
+
+func (r *repo) User() User {
+	return newUser(r)
 }
 
 // connection
