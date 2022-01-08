@@ -45,7 +45,7 @@ func (l *ClearCartLogic) ClearCart(in *cart.ClearCartRequest) (*cart.ClearCartRe
 		// clear the existing cart
 		if entryCartLogic != nil {
 			l.mu.Lock()
-			err := entryCartLogic.galaxy.Remove(l.ctx, strconv.FormatInt(in.UserId, 10))
+			err := entryCartLogic.galaxy.Remove(l.ctx, strconv.FormatInt(in.CustomerId, 10))
 			l.mu.Unlock()
 			return fmt.Errorf("error: deleting cart cache: %s", err.Error())
 		}

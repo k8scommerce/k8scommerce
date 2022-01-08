@@ -36,7 +36,7 @@ func NewHashCoder(hashSalt string, modelKind ModelKind) HashCoder {
 	data.MinLength = 8
 	hashID, _ := hashids.NewWithData(data)
 
-	return hashCoder{
+	return &hashCoder{
 		data:   hashids.NewData(),
 		hashID: hashID,
 	}

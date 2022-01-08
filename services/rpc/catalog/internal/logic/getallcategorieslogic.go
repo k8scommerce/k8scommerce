@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
@@ -66,19 +65,20 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 				// split the key and set the variables
 				v := strings.Split(key, "|")
+				storeId, _ := strconv.ParseInt(v[0], 10, 64)
 				currentPage, _ := strconv.ParseInt(v[1], 10, 64)
 				pageSize, _ := strconv.ParseInt(v[2], 10, 64)
 				sortOn := ""
 				if len(v) > 3 {
 					sortOn = v[3]
 				}
-				found, err := l.svcCtx.Repo.Category().GetAllCategories(currentPage, pageSize, sortOn)
+				found, err := l.svcCtx.Repo.Category().GetAllCategories(storeId, currentPage, pageSize, sortOn)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
 				}
 
-				prods := []*catalog.Product{}
+				cats := []*catalog.Category{}
 
 				var totalRecords int64 = 0
 				var totalPages int64 = 0
@@ -87,21 +87,16 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 					totalRecords = found.PagingStats.TotalRecords
 					totalPages = found.PagingStats.TotalPages
 
-					for _, f := range found.Results {
-						prod := catalog.Product{}
-
-						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
-							f.Variant,
-						}, &[]models.Price{
-							f.Price,
-						}, &prod)
-						prods = append(prods, &prod)
+					for _, f := range found.Categories {
+						cat := catalog.Category{}
+						types.ConvertModelCategoryToProtoCategory(&f, &cat)
+						cats = append(cats, &cat)
 					}
 				}
 
 				// the response struct
-				item := &catalog.GetAllProductsResponse{
-					Products:     prods,
+				item := &catalog.GetAllCategoriesResponse{
+					Categories:   cats,
 					TotalRecords: totalRecords,
 					TotalPages:   totalPages,
 				}
@@ -117,7 +112,8 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 	res := &catalog.GetAllCategoriesResponse{}
 
 	codec := &galaxycache.ByteCodec{}
-	if err := entryGetAllCategoriesLogic.galaxy.Get(l.ctx, AllCatgoriesKey, codec); err != nil {
+	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
+	if err := entryGetAllCategoriesLogic.galaxy.Get(l.ctx, key, codec); err != nil {
 		res.StatusCode = http.StatusNoContent
 		res.StatusMessage = err.Error()
 		return res, nil
