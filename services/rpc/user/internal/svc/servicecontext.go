@@ -1,8 +1,8 @@
 package svc
 
 import (
+	"k8scommerce/internal/repos"
 	"k8scommerce/services/rpc/user/internal/config"
-	"k8scommerce/services/rpc/user/internal/repos"
 )
 
 type ServiceContext struct {
@@ -13,6 +13,11 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
-		Repo:   repos.MustNewRepo(&c),
+		Repo: repos.MustNewRepo(&repos.Config{
+			Connection:                   c.Postgres.Connection,
+			MaxOpenConnections:           c.Postgres.MaxOpenConnections,
+			MaxIdleConnections:           c.Postgres.MaxIdleConnections,
+			MaxConnectionLifetimeMinutes: c.Postgres.MaxConnectionLifetimeMinutes,
+		}),
 	}
 }
