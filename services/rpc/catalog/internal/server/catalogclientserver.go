@@ -77,6 +77,11 @@ func (s *CatalogClientServer) GetProductsByCategoryId(ctx context.Context, in *c
 	return l.GetProductsByCategoryId(in)
 }
 
+func (s *CatalogClientServer) GetProductsByCategorySlug(ctx context.Context, in *catalog.GetProductsByCategorySlugRequest) (*catalog.GetProductsByCategorySlugResponse, error) {
+	l := logic.NewGetProductsByCategorySlugLogic(ctx, s.svcCtx, s.universe)
+	return l.GetProductsByCategorySlug(in)
+}
+
 func (s *CatalogClientServer) GetAllProducts(ctx context.Context, in *catalog.GetAllProductsRequest) (*catalog.GetAllProductsResponse, error) {
 	l := logic.NewGetAllProductsLogic(ctx, s.svcCtx, s.universe)
 	return l.GetAllProducts(in)
