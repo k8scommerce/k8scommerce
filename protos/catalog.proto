@@ -189,7 +189,7 @@ message GetProductByIdResponse {
   string statusMessage = 3;
 }
 
-// get all by category
+// get all by category id
 message GetProductsByCategoryIdRequest {
   int64 storeId = 1;
   int64 categoryId = 2;
@@ -199,6 +199,23 @@ message GetProductsByCategoryIdRequest {
 }
 
 message GetProductsByCategoryIdResponse {
+  repeated Product products = 1;
+  int64 totalRecords = 2;
+  int64 totalPages = 3;
+  int64 statusCode = 4;
+  string statusMessage = 5;
+}
+
+// get all by category slug
+message GetProductsByCategorySlugRequest {
+  int64 storeId = 1;
+  int64 categorySlug = 2;
+  int64 currentPage = 3;
+  int64 pageSize = 4;
+  string sortOn = 5;
+}
+
+message GetProductsByCategorySlugResponse {
   repeated Product products = 1;
   int64 totalRecords = 2;
   int64 totalPages = 3;
@@ -277,6 +294,8 @@ service CatalogClient {
   rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse);
   rpc GetProductsByCategoryId(GetProductsByCategoryIdRequest)
       returns (GetProductsByCategoryIdResponse);
+  rpc GetProductsByCategorySlug(GetProductsByCategorySlugRequest)
+      returns (GetProductsByCategorySlugResponse);
   rpc GetAllProducts(GetAllProductsRequest) returns (GetAllProductsResponse);
 
   rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);

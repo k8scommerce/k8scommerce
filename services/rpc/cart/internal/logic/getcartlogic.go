@@ -61,15 +61,15 @@ func (l *GetCartLogic) GetCart(in *cart.GetCartRequest) (*cart.GetCartResponse, 
 		entryCartLogic.galaxy = gcache.RegisterGalaxyFunc("Cart", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 				// get the cart from the database
-				userId, _ := strconv.ParseInt(key, 10, 64)
-				c, err := l.svcCtx.Repo.Cart().GetCartByUserId(int64(userId))
+				customerId, _ := strconv.ParseInt(key, 10, 64)
+				c, err := l.svcCtx.Repo.Cart().GetCartByCustomerId(int64(customerId))
 				if err != nil {
 					return err
 				}
 
 				if c == nil {
 					modelCart := &models.Cart{
-						UserID: userId,
+						CustomerID: customerId,
 					}
 					response, err := l.svcCtx.Repo.Cart().Create(modelCart)
 					if err != nil {
@@ -80,16 +80,16 @@ func (l *GetCartLogic) GetCart(in *cart.GetCartRequest) (*cart.GetCartResponse, 
 				}
 
 				res := &cart.Cart{
-					UserId: c.Cart.UserID,
+					CustomerId: c.Cart.CustomerID,
 				}
 				var totalPrice int64 = 0
 				for _, item := range c.Items {
 					res.Items = append(res.Items, &cart.Item{
-						UserId:    item.UserID,
-						Sku:       item.Sku,
-						Quantity:  int32(item.Quantity),
-						Price:     item.Price,
-						ExpiresAt: timestamppb.New(item.ExpiresAt),
+						CustomerId: item.CustomerID,
+						Sku:        item.Sku,
+						Quantity:   int32(item.Quantity),
+						Price:      item.Price,
+						ExpiresAt:  timestamppb.New(item.ExpiresAt),
 					})
 
 					totalPrice += item.Price
@@ -108,7 +108,7 @@ func (l *GetCartLogic) GetCart(in *cart.GetCartRequest) (*cart.GetCartResponse, 
 	res := &cart.GetCartResponse{}
 
 	codec := &galaxycache.ByteCodec{}
-	if err := entryCartLogic.galaxy.Get(l.ctx, strconv.Itoa(int(in.UserId)), codec); err != nil {
+	if err := entryCartLogic.galaxy.Get(l.ctx, strconv.Itoa(int(in.CustomerId)), codec); err != nil {
 		res.StatusCode = http.StatusNoContent
 		res.StatusMessage = err.Error()
 		return res, nil

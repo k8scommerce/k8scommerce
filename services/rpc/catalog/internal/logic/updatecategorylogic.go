@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"k8scommerce/internal/models"
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
@@ -40,10 +39,7 @@ func (l *UpdateCategoryLogic) UpdateCategory(in *catalog.UpdateCategoryRequest) 
 		}, nil
 	}
 
-	prod := models.Category{}
-	utils.TransformObj(in.Category, prod)
-	prod.ID = found.Category.ID // make sure we're updating the correct id
-	if err := l.svcCtx.Repo.Category().Update(&prod); err != nil {
+	if err := l.svcCtx.Repo.Category().Update(found); err != nil {
 		logx.Infof("error: %s", err)
 		return &catalog.UpdateCategoryResponse{
 			Category:      nil,
@@ -59,16 +55,28 @@ func (l *UpdateCategoryLogic) UpdateCategory(in *catalog.UpdateCategoryRequest) 
 			entryGetCategoryByIdLogic.galaxy.Remove(l.ctx, strconv.Itoa(int(in.Id)))
 			l.mu.Unlock()
 		}
+
+		// TODO change the removal strategy
+		// the issue is we have dynamic key names
+		// we can only remove "A" key if we know its name
+		// and we don't know all key names
 		if entryGetAllCategoriesLogic != nil {
 			l.mu.Lock()
 			entryGetAllCategoriesLogic.galaxy.Remove(l.ctx, AllCatgoriesKey)
+			l.mu.Unlock()
+		}
+
+		// same here
+		if entryGetProductsByCategoryIdLogic != nil {
+			l.mu.Lock()
+			entryGetProductsByCategoryIdLogic.galaxy.Remove(l.ctx, AllCatgoriesKey)
 			l.mu.Unlock()
 		}
 	}
 
 	// the output object
 	out := &catalog.Category{}
-	utils.TransformObj(prod, &out)
+	utils.TransformObj(found, &out)
 
 	// the response struct
 	return &catalog.UpdateCategoryResponse{

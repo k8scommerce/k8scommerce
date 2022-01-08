@@ -13,7 +13,6 @@ import (
 )
 
 type (
-	Address              = store.Address
 	CreateStoreRequest   = store.CreateStoreRequest
 	CreateStoreResponse  = store.CreateStoreResponse
 	GetAllStoresRequest  = store.GetAllStoresRequest
@@ -21,7 +20,8 @@ type (
 	GetStoreByIdRequest  = store.GetStoreByIdRequest
 	GetStoreByIdResponse = store.GetStoreByIdResponse
 	Store                = store.Store
-	StoreAccount         = store.StoreAccount
+	StoreAddress         = store.StoreAddress
+	StoreSetting         = store.StoreSetting
 
 	StoreClient interface {
 		CreateStore(ctx context.Context, in *CreateStoreRequest, opts ...grpc.CallOption) (*CreateStoreResponse, error)

@@ -43,7 +43,6 @@ func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceCon
 }
 
 func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetProductsByCategoryIdRequest) (*catalog.GetProductsByCategoryIdResponse, error) {
-
 	// caching goes logic here
 	if entryGetProductsByCategoryIdLogic == nil {
 		l.mu.Lock()
@@ -115,8 +114,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 
 	codec := &galaxycache.ByteCodec{}
 
-	key := fmt.Sprintf("%d|%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
-	// fmt.Println(key, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
+	key := fmt.Sprintf("%d|%d|%d|%d|%s", in.StoreId, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
 	entryGetProductsByCategoryIdLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
@@ -129,5 +127,4 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 	// entryGetProductsByCategoryIdLogic.galaxy.Remove(l.ctx, key)
 
 	return res, err
-
 }

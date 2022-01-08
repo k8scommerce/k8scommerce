@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"k8scommerce/services/rpc/cart/internal/repos"
+	"k8scommerce/internal/repos"
 	"k8scommerce/services/rpc/cart/internal/svc"
 	"k8scommerce/services/rpc/cart/pb/cart"
 
@@ -15,17 +15,17 @@ func getUpdatedCart(svcCtx *svc.ServiceContext, userId int64, res interface{}) (
 	err error,
 ) {
 	// get the whole cart
-	cartResponse, err = svcCtx.Repo.Cart().GetCartByUserId(userId)
+	cartResponse, err = svcCtx.Repo.Cart().GetCartByCustomerId(userId)
 	if err != nil {
 		return nil, nil, totalPrice, err
 	}
 
 	for _, item := range cartResponse.Items {
 		cartItems = append(cartItems, &cart.Item{
-			UserId:    item.UserID,
-			Sku:       item.Sku,
-			Quantity:  int32(item.Quantity),
-			ExpiresAt: timestamppb.New(item.ExpiresAt),
+			CustomerId: item.CustomerID,
+			Sku:        item.Sku,
+			Quantity:   int32(item.Quantity),
+			ExpiresAt:  timestamppb.New(item.ExpiresAt),
 		})
 	}
 

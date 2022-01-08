@@ -46,19 +46,19 @@ func (l *AddItemToCartLogic) AddItemToCart(in *cart.AddItemToCartRequest) (*cart
 
 	err := mr.Finish(func() error {
 		// check that the cart exists
-		result, err := l.svcCtx.Repo.Cart().GetCartByUserId(in.UserId)
+		result, err := l.svcCtx.Repo.Cart().GetCartByCustomerId(in.CustomerId)
 		if err != nil {
 			return err
 		}
 		if result == nil {
-			return fmt.Errorf("error: no cart exists for user with id: %d", in.UserId)
+			return fmt.Errorf("error: no cart exists for user with id: %d", in.CustomerId)
 		}
 		return nil
 	}, func() error {
 		// clear the existing cart
 		if entryCartLogic != nil {
 			l.mu.Lock()
-			err := entryCartLogic.galaxy.Remove(l.ctx, strconv.FormatInt(in.UserId, 10))
+			err := entryCartLogic.galaxy.Remove(l.ctx, strconv.FormatInt(in.CustomerId, 10))
 			l.mu.Unlock()
 			return fmt.Errorf("error: deleting cart cache: %s", err.Error())
 		}
@@ -124,7 +124,7 @@ func (l *AddItemToCartLogic) AddItemToCart(in *cart.AddItemToCartRequest) (*cart
 
 	// add the item to the cart
 	_, err = l.svcCtx.Repo.CartItem().AddItem(
-		in.UserId,
+		in.CustomerId,
 		&models.CartItem{
 			Sku:       in.Item.Sku,
 			Quantity:  int(in.Item.Quantity),
@@ -135,13 +135,13 @@ func (l *AddItemToCartLogic) AddItemToCart(in *cart.AddItemToCartRequest) (*cart
 		return nil, err
 	}
 
-	cartResponse, cartItems, totalPrice, err := getUpdatedCart(l.svcCtx, in.UserId, res)
+	cartResponse, cartItems, totalPrice, err := getUpdatedCart(l.svcCtx, in.CustomerId, res)
 	if err != nil {
 		return nil, err
 	}
 
 	res.Cart = &cart.Cart{
-		UserId:     cartResponse.Cart.UserID,
+		CustomerId: cartResponse.Cart.CustomerID,
 		TotalPrice: totalPrice,
 		Items:      cartItems,
 	}

@@ -37,8 +37,16 @@ func MustNewRepo(c *Config) Repo {
 type Repo interface {
 	GetRawDB() *sqlx.DB
 	// Repos
+	Cart() Cart
+	CartItem() CartItem
 	Category() Category
+	Customer() Customer
+	InventoryBrand() InventoryBrand
+	InventoryItem() InventoryItem
+	InventoryStock() InventoryStock
+	InventorySupplier() InventorySupplier
 	Product() Product
+	OthersBought() OthersBought
 }
 
 type repo struct {
@@ -52,12 +60,44 @@ func (r *repo) GetRawDB() *sqlx.DB {
 }
 
 // Repos
+func (r *repo) Cart() Cart {
+	return newCart(r)
+}
+
+func (r *repo) CartItem() CartItem {
+	return newCartItem(r)
+}
+
 func (r *repo) Category() Category {
 	return newCategory(r)
 }
 
+func (r *repo) Customer() Customer {
+	return newCustomer(r)
+}
+
+func (r *repo) InventoryBrand() InventoryBrand {
+	return newInventoryBrand(r)
+}
+
+func (r *repo) InventoryItem() InventoryItem {
+	return newInventoryItem(r)
+}
+
+func (r *repo) InventoryStock() InventoryStock {
+	return newInventoryStock(r)
+}
+
+func (r *repo) InventorySupplier() InventorySupplier {
+	return newInventorySupplier(r)
+}
+
 func (r *repo) Product() Product {
 	return newProduct(r)
+}
+
+func (r *repo) OthersBought() OthersBought {
+	return newOthersBought(r)
 }
 
 // connection

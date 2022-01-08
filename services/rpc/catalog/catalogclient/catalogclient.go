@@ -13,38 +13,40 @@ import (
 )
 
 type (
-	Category                        = catalog.Category
-	CreateCategoryRequest           = catalog.CreateCategoryRequest
-	CreateCategoryResponse          = catalog.CreateCategoryResponse
-	CreateProductRequest            = catalog.CreateProductRequest
-	CreateProductResponse           = catalog.CreateProductResponse
-	DeleteCategoryRequest           = catalog.DeleteCategoryRequest
-	DeleteCategoryResponse          = catalog.DeleteCategoryResponse
-	DeleteProductRequest            = catalog.DeleteProductRequest
-	DeleteProductResponse           = catalog.DeleteProductResponse
-	GetAllCategoriesRequest         = catalog.GetAllCategoriesRequest
-	GetAllCategoriesResponse        = catalog.GetAllCategoriesResponse
-	GetAllProductsRequest           = catalog.GetAllProductsRequest
-	GetAllProductsResponse          = catalog.GetAllProductsResponse
-	GetCategoryByIdRequest          = catalog.GetCategoryByIdRequest
-	GetCategoryByIdResponse         = catalog.GetCategoryByIdResponse
-	GetCategoryBySlugRequest        = catalog.GetCategoryBySlugRequest
-	GetCategoryBySlugResponse       = catalog.GetCategoryBySlugResponse
-	GetProductByIdRequest           = catalog.GetProductByIdRequest
-	GetProductByIdResponse          = catalog.GetProductByIdResponse
-	GetProductBySkuRequest          = catalog.GetProductBySkuRequest
-	GetProductBySkuResponse         = catalog.GetProductBySkuResponse
-	GetProductBySlugRequest         = catalog.GetProductBySlugRequest
-	GetProductBySlugResponse        = catalog.GetProductBySlugResponse
-	GetProductsByCategoryIdRequest  = catalog.GetProductsByCategoryIdRequest
-	GetProductsByCategoryIdResponse = catalog.GetProductsByCategoryIdResponse
-	Price                           = catalog.Price
-	Product                         = catalog.Product
-	UpdateCategoryRequest           = catalog.UpdateCategoryRequest
-	UpdateCategoryResponse          = catalog.UpdateCategoryResponse
-	UpdateProductRequest            = catalog.UpdateProductRequest
-	UpdateProductResponse           = catalog.UpdateProductResponse
-	Variant                         = catalog.Variant
+	Category                          = catalog.Category
+	CreateCategoryRequest             = catalog.CreateCategoryRequest
+	CreateCategoryResponse            = catalog.CreateCategoryResponse
+	CreateProductRequest              = catalog.CreateProductRequest
+	CreateProductResponse             = catalog.CreateProductResponse
+	DeleteCategoryRequest             = catalog.DeleteCategoryRequest
+	DeleteCategoryResponse            = catalog.DeleteCategoryResponse
+	DeleteProductRequest              = catalog.DeleteProductRequest
+	DeleteProductResponse             = catalog.DeleteProductResponse
+	GetAllCategoriesRequest           = catalog.GetAllCategoriesRequest
+	GetAllCategoriesResponse          = catalog.GetAllCategoriesResponse
+	GetAllProductsRequest             = catalog.GetAllProductsRequest
+	GetAllProductsResponse            = catalog.GetAllProductsResponse
+	GetCategoryByIdRequest            = catalog.GetCategoryByIdRequest
+	GetCategoryByIdResponse           = catalog.GetCategoryByIdResponse
+	GetCategoryBySlugRequest          = catalog.GetCategoryBySlugRequest
+	GetCategoryBySlugResponse         = catalog.GetCategoryBySlugResponse
+	GetProductByIdRequest             = catalog.GetProductByIdRequest
+	GetProductByIdResponse            = catalog.GetProductByIdResponse
+	GetProductBySkuRequest            = catalog.GetProductBySkuRequest
+	GetProductBySkuResponse           = catalog.GetProductBySkuResponse
+	GetProductBySlugRequest           = catalog.GetProductBySlugRequest
+	GetProductBySlugResponse          = catalog.GetProductBySlugResponse
+	GetProductsByCategoryIdRequest    = catalog.GetProductsByCategoryIdRequest
+	GetProductsByCategoryIdResponse   = catalog.GetProductsByCategoryIdResponse
+	GetProductsByCategorySlugRequest  = catalog.GetProductsByCategorySlugRequest
+	GetProductsByCategorySlugResponse = catalog.GetProductsByCategorySlugResponse
+	Price                             = catalog.Price
+	Product                           = catalog.Product
+	UpdateCategoryRequest             = catalog.UpdateCategoryRequest
+	UpdateCategoryResponse            = catalog.UpdateCategoryResponse
+	UpdateProductRequest              = catalog.UpdateProductRequest
+	UpdateProductResponse             = catalog.UpdateProductResponse
+	Variant                           = catalog.Variant
 
 	CatalogClient interface {
 		//  categories
@@ -59,6 +61,7 @@ type (
 		GetProductBySlug(ctx context.Context, in *GetProductBySlugRequest, opts ...grpc.CallOption) (*GetProductBySlugResponse, error)
 		GetProductById(ctx context.Context, in *GetProductByIdRequest, opts ...grpc.CallOption) (*GetProductByIdResponse, error)
 		GetProductsByCategoryId(ctx context.Context, in *GetProductsByCategoryIdRequest, opts ...grpc.CallOption) (*GetProductsByCategoryIdResponse, error)
+		GetProductsByCategorySlug(ctx context.Context, in *GetProductsByCategorySlugRequest, opts ...grpc.CallOption) (*GetProductsByCategorySlugResponse, error)
 		GetAllProducts(ctx context.Context, in *GetAllProductsRequest, opts ...grpc.CallOption) (*GetAllProductsResponse, error)
 		CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
 		UpdateProduct(ctx context.Context, in *UpdateProductRequest, opts ...grpc.CallOption) (*UpdateProductResponse, error)
@@ -126,6 +129,11 @@ func (m *defaultCatalogClient) GetProductById(ctx context.Context, in *GetProduc
 func (m *defaultCatalogClient) GetProductsByCategoryId(ctx context.Context, in *GetProductsByCategoryIdRequest, opts ...grpc.CallOption) (*GetProductsByCategoryIdResponse, error) {
 	client := catalog.NewCatalogClientClient(m.cli.Conn())
 	return client.GetProductsByCategoryId(ctx, in, opts...)
+}
+
+func (m *defaultCatalogClient) GetProductsByCategorySlug(ctx context.Context, in *GetProductsByCategorySlugRequest, opts ...grpc.CallOption) (*GetProductsByCategorySlugResponse, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.GetProductsByCategorySlug(ctx, in, opts...)
 }
 
 func (m *defaultCatalogClient) GetAllProducts(ctx context.Context, in *GetAllProductsRequest, opts ...grpc.CallOption) (*GetAllProductsResponse, error) {
