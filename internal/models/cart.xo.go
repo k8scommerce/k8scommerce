@@ -8,7 +8,7 @@ import (
 
 // Cart represents a row from 'public.cart'.
 type Cart struct {
-	UserID int64 `json:"user_id" db:"user_id"` // user_id
+	CustomerID int64 `json:"customer_id" db:"customer_id"` // customer_id
 	// xo fields
 	_exists, _deleted bool
 }
@@ -34,13 +34,13 @@ func (c *Cart) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (manual)
 	const sqlstr = `INSERT INTO public.cart (` +
-		`user_id` +
+		`customer_id` +
 		`) VALUES (` +
 		`$1` +
 		`)`
 	// run
-	logf(sqlstr, c.UserID)
-	if _, err := db.ExecContext(ctx, sqlstr, c.UserID); err != nil {
+	logf(sqlstr, c.CustomerID)
+	if _, err := db.ExecContext(ctx, sqlstr, c.CustomerID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -60,10 +60,10 @@ func (c *Cart) Delete(ctx context.Context, db DB) error {
 	}
 	// delete with single primary key
 	const sqlstr = `DELETE FROM public.cart ` +
-		`WHERE user_id = $1`
+		`WHERE customer_id = $1`
 	// run
-	logf(sqlstr, c.UserID)
-	if _, err := db.ExecContext(ctx, sqlstr, c.UserID); err != nil {
+	logf(sqlstr, c.CustomerID)
+	if _, err := db.ExecContext(ctx, sqlstr, c.CustomerID); err != nil {
 		return logerror(err)
 	}
 	// set deleted
@@ -71,21 +71,21 @@ func (c *Cart) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
-// CartByUserID retrieves a row from 'public.cart' as a Cart.
+// CartByCustomerID retrieves a row from 'public.cart' as a Cart.
 //
 // Generated from index 'cart_pkey'.
-func CartByUserID(ctx context.Context, db DB, userID int64) (*Cart, error) {
+func CartByCustomerID(ctx context.Context, db DB, customerID int64) (*Cart, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`user_id ` +
+		`customer_id ` +
 		`FROM public.cart ` +
-		`WHERE user_id = $1`
+		`WHERE customer_id = $1`
 	// run
-	logf(sqlstr, userID)
+	logf(sqlstr, customerID)
 	c := Cart{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, userID).Scan(&c.UserID); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, customerID).Scan(&c.CustomerID); err != nil {
 		return nil, logerror(err)
 	}
 	return &c, nil

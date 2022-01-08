@@ -6,8 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"k8scommerce/services/rpc/catalog/internal/config"
-
 	"github.com/lib/pq"
 	"github.com/tal-tech/go-zero/core/logx"
 
@@ -20,7 +18,7 @@ var (
 	ErrNotFound = sql.ErrNoRows
 )
 
-func MustNewRepo(c *config.Config) Repo {
+func MustNewRepo(c *Config) Repo {
 	// catch any panics
 	defer func() {
 		if rec := recover(); rec != nil {
@@ -46,7 +44,7 @@ type Repo interface {
 type repo struct {
 	db       *sqlx.DB
 	listener *pq.Listener
-	cfg      *config.Config
+	cfg      *Config
 }
 
 func (r *repo) GetRawDB() *sqlx.DB {
@@ -66,18 +64,18 @@ func (r *repo) Product() Product {
 func (a *repo) mustConnect() (conn *sqlx.DB) {
 	// create the db client
 	once.Do(func() {
-		go a.setDBListener(a.cfg.Postgres.Connection)
-		logx.Info("DB Connecting", "conn", a.cfg.Postgres.Connection)
+		go a.setDBListener(a.cfg.Connection)
+		logx.Info("DB Connecting", "conn", a.cfg.Connection)
 
 		var conn *sqlx.DB
-		conn, err := sqlx.Connect("pgx", a.cfg.Postgres.Connection)
+		conn, err := sqlx.Connect("pgx", a.cfg.Connection)
 		if err != nil {
 			panic(err)
 		}
 		a.db = conn
-		a.db.SetMaxOpenConns(a.cfg.Postgres.MaxOpenConnections)
-		a.db.SetMaxIdleConns(a.cfg.Postgres.MaxIdleConnections)
-		a.db.SetConnMaxLifetime(time.Minute * time.Duration(a.cfg.Postgres.MaxConnectionLifetimeMinutes))
+		a.db.SetMaxOpenConns(a.cfg.MaxOpenConnections)
+		a.db.SetMaxIdleConns(a.cfg.MaxIdleConnections)
+		a.db.SetConnMaxLifetime(time.Minute * time.Duration(a.cfg.MaxConnectionLifetimeMinutes))
 		logx.Info("DB status:", "CONNECTED")
 
 		// "kick" the channel to ensure it checks for records on startup

@@ -17,7 +17,7 @@ require (
 	github.com/onsi/gomega v1.17.0
 	github.com/rabbitmq/amqp091-go v1.2.0
 	github.com/speps/go-hashids v2.0.0+incompatible
-	github.com/tal-tech/go-zero v1.2.4
+	github.com/tal-tech/go-zero v1.2.5
 	github.com/wagslane/go-rabbitmq v0.7.0
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	google.golang.org/grpc v1.43.0

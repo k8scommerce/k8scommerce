@@ -9,6 +9,8 @@ import (
 // CustomerAddress represents a row from 'public.customer_address'.
 type CustomerAddress struct {
 	ID            int64       `json:"id" db:"id"`                         // id
+	StoreID       int64       `json:"store_id" db:"store_id"`             // store_id
+	CustomerID    int64       `json:"customer_id" db:"customer_id"`       // customer_id
 	Kind          AddressKind `json:"kind" db:"kind"`                     // kind
 	IsDefault     bool        `json:"is_default" db:"is_default"`         // is_default
 	Street        string      `json:"street" db:"street"`                 // street
@@ -41,13 +43,13 @@ func (ca *CustomerAddress) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.customer_address (` +
-		`kind, is_default, street, city, state_province, country, postal_code` +
+		`store_id, customer_id, kind, is_default, street, city, state_province, country, postal_code` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
-	if err := db.QueryRowContext(ctx, sqlstr, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode).Scan(&ca.ID); err != nil {
+	logf(sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
+	if err := db.QueryRowContext(ctx, sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode).Scan(&ca.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -65,11 +67,11 @@ func (ca *CustomerAddress) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.customer_address SET ` +
-		`kind = $1, is_default = $2, street = $3, city = $4, state_province = $5, country = $6, postal_code = $7 ` +
-		`WHERE id = $8`
+		`store_id = $1, customer_id = $2, kind = $3, is_default = $4, street = $5, city = $6, state_province = $7, country = $8, postal_code = $9 ` +
+		`WHERE id = $10`
 	// run
-	logf(sqlstr, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID); err != nil {
+	logf(sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -91,16 +93,16 @@ func (ca *CustomerAddress) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.customer_address (` +
-		`id, kind, is_default, street, city, state_province, country, postal_code` +
+		`id, store_id, customer_id, kind, is_default, street, city, state_province, country, postal_code` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`kind = EXCLUDED.kind, is_default = EXCLUDED.is_default, street = EXCLUDED.street, city = EXCLUDED.city, state_province = EXCLUDED.state_province, country = EXCLUDED.country, postal_code = EXCLUDED.postal_code `
+		`store_id = EXCLUDED.store_id, customer_id = EXCLUDED.customer_id, kind = EXCLUDED.kind, is_default = EXCLUDED.is_default, street = EXCLUDED.street, city = EXCLUDED.city, state_province = EXCLUDED.state_province, country = EXCLUDED.country, postal_code = EXCLUDED.postal_code `
 	// run
-	logf(sqlstr, ca.ID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
-	if _, err := db.ExecContext(ctx, sqlstr, ca.ID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode); err != nil {
+	logf(sqlstr, ca.ID, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
+	if _, err := db.ExecContext(ctx, sqlstr, ca.ID, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -135,7 +137,7 @@ func (ca *CustomerAddress) Delete(ctx context.Context, db DB) error {
 func CustomerAddressByID(ctx context.Context, db DB, id int64) (*CustomerAddress, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, kind, is_default, street, city, state_province, country, postal_code ` +
+		`id, store_id, customer_id, kind, is_default, street, city, state_province, country, postal_code ` +
 		`FROM public.customer_address ` +
 		`WHERE id = $1`
 	// run
@@ -143,7 +145,7 @@ func CustomerAddressByID(ctx context.Context, db DB, id int64) (*CustomerAddress
 	ca := CustomerAddress{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&ca.ID, &ca.Kind, &ca.IsDefault, &ca.Street, &ca.City, &ca.StateProvince, &ca.Country, &ca.PostalCode); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&ca.ID, &ca.StoreID, &ca.CustomerID, &ca.Kind, &ca.IsDefault, &ca.Street, &ca.City, &ca.StateProvince, &ca.Country, &ca.PostalCode); err != nil {
 		return nil, logerror(err)
 	}
 	return &ca, nil
