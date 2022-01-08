@@ -27,8 +27,8 @@ type CartItem interface {
 	Update(cartItem *models.CartItem) error
 	Save(cartItem *models.CartItem) error
 	Upsert(cartItem *models.CartItem) error
-	Delete(userId int64, sku string, force bool) error
-	GetCartItemsByUserId(userId int64) (res *cartItemResponse, err error)
+	Delete(customerId int64, sku string, force bool) error
+	GetCartItemsByCustomerId(customerId int64) (res *cartItemResponse, err error)
 	AddItem(cartId int64, item *models.CartItem) (res *cartItemResponse, err error)
 }
 
@@ -50,7 +50,7 @@ type cartItemResponse struct {
 }
 
 // cart items
-func (m *cartItemRepo) GetCartItemsByUserId(userId int64) (res *cartItemResponse, err error) {
+func (m *cartItemRepo) GetCartItemsByCustomerId(customerId int64) (res *cartItemResponse, err error) {
 	nstmt, err := m.db.PrepareNamed(`
 		SELECT 
 			user_id,
@@ -59,18 +59,18 @@ func (m *cartItemRepo) GetCartItemsByUserId(userId int64) (res *cartItemResponse
 			price,
 			expires_at
 		FROM cart_item
-		WHERE user_id = :userId
+		WHERE user_id = :customerId
 		AND abandoned_at IS NULL
 	`)
 	if err != nil {
-		return nil, fmt.Errorf("error::GetCartItemsByUserId::%s", err.Error())
+		return nil, fmt.Errorf("error::GetCartItemsByCustomerId::%s", err.Error())
 	}
 
 	var items []models.CartItem
 
 	err = nstmt.Select(&items,
 		map[string]interface{}{
-			"userId": userId,
+			"customerId": customerId,
 		})
 
 	out := &cartItemResponse{
@@ -79,7 +79,7 @@ func (m *cartItemRepo) GetCartItemsByUserId(userId int64) (res *cartItemResponse
 	return out, err
 }
 
-func (m *cartItemRepo) AddItem(userId int64, item *models.CartItem) (res *cartItemResponse, err error) {
+func (m *cartItemRepo) AddItem(customerId int64, item *models.CartItem) (res *cartItemResponse, err error) {
 	nstmt, err := m.db.PrepareNamed(`
 		INSERT INTO cart_item (
 			user_id,
@@ -112,7 +112,7 @@ func (m *cartItemRepo) AddItem(userId int64, item *models.CartItem) (res *cartIt
 
 	err = nstmt.Select(&items,
 		map[string]interface{}{
-			"user_id":    userId,
+			"user_id":    customerId,
 			"sku":        item.Sku,
 			"quantity":   item.Quantity,
 			"price":      item.Price,
@@ -133,8 +133,8 @@ func (m *cartItemRepo) Create(cartItem *models.CartItem) error {
 }
 
 func (m *cartItemRepo) Update(cartItem *models.CartItem) error {
-	if cartItem.UserID == 0 {
-		return fmt.Errorf("error: can't update cart item, missing userId")
+	if cartItem.CustomerID == 0 {
+		return fmt.Errorf("error: can't update cart item, missing customerId")
 	}
 
 	if cartItem.Sku == "" {
@@ -161,8 +161,8 @@ func (m *cartItemRepo) Upsert(cartItem *models.CartItem) error {
 	return nil
 }
 
-func (m *cartItemRepo) Delete(userId int64, sku string, force bool) error {
-	cart, err := models.CartItemByUserIDSku(m.ctx, m.db, userId, sku)
+func (m *cartItemRepo) Delete(customerId int64, sku string, force bool) error {
+	cart, err := models.CartItemByCustomerIDSku(m.ctx, m.db, customerId, sku)
 	if err != nil {
 		return err
 	}

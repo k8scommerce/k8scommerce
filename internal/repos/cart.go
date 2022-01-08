@@ -24,8 +24,8 @@ type Cart interface {
 	Create(cart *models.Cart) (res *CartResponse, err error)
 	Update(cart *models.Cart) (res *CartResponse, err error)
 	Upsert(cart *models.Cart) (res *CartResponse, err error)
-	Delete(userId int64) error
-	GetCartByUserId(userId int64) (res *CartResponse, err error)
+	Delete(customerId int64) error
+	GetCartByCustomerId(customerId int64) (res *CartResponse, err error)
 }
 
 type cartRepo struct {
@@ -47,12 +47,12 @@ type CartResponse struct {
 }
 
 // products
-func (m *cartRepo) GetCartByUserId(userId int64) (res *CartResponse, err error) {
-	cart, _ := models.CartByUserID(m.ctx, m.db.DB, userId)
+func (m *cartRepo) GetCartByCustomerId(customerId int64) (res *CartResponse, err error) {
+	cart, _ := models.CartByCustomerID(m.ctx, m.db.DB, customerId)
 	if cart != nil {
 		// get the items if there are any
 		var items []models.CartItem
-		response, _ := m.repo.CartItem().GetCartItemsByUserId(cart.UserID)
+		response, _ := m.repo.CartItem().GetCartItemsByCustomerId(cart.CustomerID)
 		if response != nil {
 			items = append(items, response.Items...)
 		}
@@ -70,12 +70,12 @@ func (m *cartRepo) Create(cart *models.Cart) (res *CartResponse, err error) {
 	if err := cart.Insert(m.ctx, m.db); err != nil {
 		return out, err
 	}
-	out.Cart.UserID = cart.UserID
+	out.Cart.CustomerID = cart.CustomerID
 	return out, nil
 }
 
 func (m *cartRepo) Update(cart *models.Cart) (res *CartResponse, err error) {
-	if cart.UserID == 0 {
+	if cart.CustomerID == 0 {
 		return nil, fmt.Errorf("error: can't update cart, missing user ID")
 	}
 	return m.Upsert(cart)
@@ -87,11 +87,11 @@ func (m *cartRepo) Upsert(cart *models.Cart) (res *CartResponse, err error) {
 			user_id
 		) 
 		VALUES (
-			:userId
+			:customerId
 		)
 		ON CONFLICT (user_id) DO NOTHING
 	`, map[string]interface{}{
-		"userId": cart.UserID,
+		"customerId": cart.CustomerID,
 	})
 
 	fmt.Println("ERROR!!!!!!!", err)
@@ -102,14 +102,14 @@ func (m *cartRepo) Upsert(cart *models.Cart) (res *CartResponse, err error) {
 
 	out := &CartResponse{
 		Cart: &models.Cart{
-			UserID: cart.UserID,
+			CustomerID: cart.CustomerID,
 		},
 	}
 	return out, nil
 }
 
 func (m *cartRepo) Delete(userID int64) error {
-	cart, err := models.CartByUserID(m.ctx, m.db, userID)
+	cart, err := models.CartByCustomerID(m.ctx, m.db, userID)
 	if err != nil {
 		return err
 	}
