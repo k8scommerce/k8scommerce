@@ -59,8 +59,8 @@ Employing code-generation tools as often as possible reduces repetitively writin
 
 Incorporating the following code-generation tools in our projects has helped speed up development, integrations, and logic refinements, creating a desirable, streamlined, high-velocity development approach.
 
-[Google's protocol buffers (protoc)](https://developers.google.com/protocol-buffers/): RPC client/server generation from .proto files with almost every language supported
-[go-zero's goctl](https://github.com/zeromicro/go-zero): microservice framework generation from .proto files
-[xo's xo](https://github.com/xo/xo): Database CRUD object generation for relational databases, with primary key, foreign key, enum, and advanced composite primary key support.
+- [Google's protocol buffers (protoc)](https://developers.google.com/protocol-buffers/): RPC client/server generation from .proto files with almost every language supported
+- [go-zero's goctl](https://github.com/zeromicro/go-zero): microservice framework generation from .proto files
+- [xo's xo](https://github.com/xo/xo): Database CRUD object generation for relational databases, with primary key, foreign key, enum, and advanced composite primary key support.
 
 Preferring tools over conventions, combined with ever-growing documentation, empowers businesses to successfully integrate K8sCommerce's projects into their existing coding ecosystem in condensed timeframes. 
