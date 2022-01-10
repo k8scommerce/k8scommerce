@@ -136,16 +136,19 @@ model-gen:
 .PHONY: client-ts
 client-ts:
 	@goctl api ts \
-		-dir="$(HOME)/workspaces/k8scommerce/shop/src/app/data/services" \
+		-dir="./tscode/client" \
 	 	-api="./services/api/client/client.api" \
 		-caller="this.http"
 
 .PHONY: admin-ts
 admin-ts:
 	@goctl api ts \
-		-dir="$(HOME)/workspaces/k8scommerce/shop/src/app/data/services" \
+		-dir="./tscode/admin" \
 	 	-api="./services/api/admin/admin.api" \
 		-caller="this.http"
+
+.PHONY: ts
+ts: admin-ts client-ts
 
 .PHONY: update
 update:
@@ -181,8 +184,7 @@ start:
 		echo ""; \
 		port=$$((port+1)); \
 	done
-# xterm -hold go run . -f etc/$$service.yaml; \
-# open -a Terminal "`go run . -f etc/$$service.yaml`"; \
+
 .PHONY: stop
 stop:
 	@for service in $(rpcServices); do \
@@ -471,7 +473,6 @@ docker-push-warehouse:
 
 .PHONY: docker-build
 docker-build: docker-build-cart docker-build-customer docker-build-email docker-build-inventory docker-build-othersbought docker-build-payment docker-build-product docker-build-shipping docker-build-similarproducts docker-build-store docker-build-user docker-build-warehouse
-# docker-build-cart docker-build-inventory docker-build-othersbought 
+
 .PHONY: docker-push
 docker-push: docker-push-cart docker-push-customer docker-push-email docker-push-inventory docker-push-othersbought docker-push-payment docker-push-product docker-push-shipping docker-push-similarproducts docker-push-store docker-push-user docker-push-warehouse 
-# docker-push-cart docker-push-inventory docker-push-othersbought

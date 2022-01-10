@@ -198,7 +198,7 @@ type DeleteProductResponse {
 @server(
 	middleware: Locale, StoreKey
 )
-service client {
+service admin {
 	// categories
 	@handler getAllCategories
 	get /v1/categories(GetAllCategoriesRequest) returns (GetAllCategoriesResponse)
@@ -230,7 +230,7 @@ service client {
 	jwt: Auth
 	middleware: Locale, StoreKey
 )
-service client {
+service admin {
 	
 	@handler createCategory
 	post /v1/category(CreateCategoryRequest) returns (CreateCategoryResponse)
