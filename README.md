@@ -16,16 +16,16 @@ The following shows what has been completed and what is yet to be done:
 | ---------------- |:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:
 | Cart             |:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|                  | alpha           |
 | Catalog          |:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|                  | alpha           |
-| Customer         |:white_check_mark:|:white_check_mark:|:white_check_mark:|                  |                  | pre-alpha       |
-| Email            |-                 |:white_check_mark:|                  |                  |                  | pre-alpha       |
-| Inventory        |:white_check_mark:|:white_check_mark:|                  |                  |                  | pre-alpha       |
-| Others Bought    | -                |:white_check_mark:|                  |                  |                  | pre-alpha       |
-| Payment          |:white_check_mark:|:white_check_mark:|                  |                  |                  | pre-alpha       |
-| Shipping         | -                |:white_check_mark:|                  |                  |                  | pre-alpha       |
-| Similar Products |:white_check_mark:|:white_check_mark:|                  |                  |                  | pre-alpha       |
-| Store            |:white_check_mark:|:white_check_mark:|                  |                  |                  | pre-alpha       |
+| Customer         |:white_check_mark:|:white_check_mark:|:white_check_mark:|                  |                  | -               |
+| Email            |-                 |:white_check_mark:|                  |                  |                  | -               |
+| Inventory        |:white_check_mark:|:white_check_mark:|                  |                  |                  | -               |
+| Others Bought    | -                |:white_check_mark:|                  |                  |                  | -               |
+| Payment          |:white_check_mark:|:white_check_mark:|                  |                  |                  | -               |
+| Shipping         | -                |:white_check_mark:|                  |                  |                  | -               |
+| Similar Products |:white_check_mark:|:white_check_mark:|                  |                  |                  | -               |
+| Store            |:white_check_mark:|:white_check_mark:|                  |                  |                  | -               |
 | User             |:white_check_mark:|:white_check_mark:|:white_check_mark:|                  |                  | alpha           |
-| Warehouse        |-                 |:white_check_mark:|                  |                  |                  | pre-alpha       |
+| Warehouse        |-                 |:white_check_mark:|                  |                  |                  | -               |
 
 
 
