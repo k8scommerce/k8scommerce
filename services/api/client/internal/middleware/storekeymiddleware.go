@@ -37,6 +37,6 @@ func (m *StoreKeyMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			next(w, r.WithContext(ctx))
 		}
 
-		http.Error(w, "error: missing Store-Key header", http.StatusUnauthorized)
+		// http.Error(w, "error: missing Store-Key header", http.StatusUnauthorized)
 	}
 }
