@@ -7,7 +7,7 @@ import (
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
-	"k8scommerce/services/rpc/user/userclient"
+	"k8scommerce/services/rpc/customer/customerclient"
 
 	"github.com/golang-jwt/jwt"
 
@@ -31,9 +31,10 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) LoginLogic {
 func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLoginResponse, error) {
 	// logx.Info("RECEIVED ", req.Email)
 
-	res, err := l.svcCtx.UserRpc.Login(l.ctx, &userclient.LoginRequest{
+	res, err := l.svcCtx.CustomerRpc.Login(l.ctx, &customerclient.LoginRequest{
 		Email:    req.Email,
 		Password: req.Password,
+		StoreId:  l.ctx.Value(types.StoreKey).(int64),
 	})
 	if err != nil {
 		return nil, err
@@ -41,14 +42,14 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLogin
 
 	// create the token
 	jwtToken, err := l.getJwt(map[string]interface{}{
-		"userId": res.User.Id,
+		"customerId": res.Customer.Id,
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	customer := types.Customer{}
-	utils.TransformObj(res.User, &customer)
+	utils.TransformObj(res.Customer, &customer)
 
 	return &types.CustomerLoginResponse{
 		JwtToken:      *jwtToken,
