@@ -213,6 +213,10 @@ service client {
 	get /v1/category/:id(GetCategoryByIdRequest) returns (GetCategoryByIdResponse)
 	
 	// products
+	@doc "returns a product by id"
+	@handler getProductById
+	get /v1/product/:id(GetProductByIdRequest) returns (Product)
+
 	@doc "returns a product by sku"
 	@handler getProductBySku
 	get /v1/product/sku/:sku(GetProductBySkuRequest) returns (Product)
@@ -220,10 +224,6 @@ service client {
 	@doc "returns a product by url slug"
 	@handler getProductBySlug
 	get /v1/product/slug/:slug(GetProductBySlugRequest) returns (Product)
-	
-	@doc "returns a product by id"
-	@handler getProductById
-	get /v1/product/:id(GetProductByIdRequest) returns (Product)
 	
 	@doc "returns all products belonging to a category id"
 	@handler getProductsByCategoryId

@@ -7,8 +7,7 @@ api_dir='../protos'
 services='admin client'
 
 for service in $services; do
-  goctl api go -api admin.api 
-    -dir .
+  goctl api go -api admin.api  -dir .
 
 
 

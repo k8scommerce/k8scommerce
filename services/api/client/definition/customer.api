@@ -7,6 +7,11 @@ type Customer {
 	Password  string `json:"password,omitempty"`
 }
 
+type JwtToken {
+	AccessToken  string `json:"access_token"`
+	AccessExpire int64  `json:"access_expire"`
+	RefreshAfter int64  `json:"refresh_after"`
+}
 
 //
 // requests & responses
@@ -34,7 +39,7 @@ type CustomerLoginResponse {
 )
 service client {
 	// customer
-    @doc "manages customer logins"
+    @doc "customer logic"
 	@handler login
 	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
 }

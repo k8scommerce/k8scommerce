@@ -51,6 +51,7 @@ func (a *prod) newProduct() *models.Product {
 	// Every product has to have a minimum of 1 variant
 	// variants are created
 	product := &models.Product{
+		StoreID:          storeID,
 		Slug:             strcase.ToKebab(productName),
 		Name:             productName,
 		ShortDescription: shortDescription,

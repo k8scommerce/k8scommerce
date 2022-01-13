@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"sync"
@@ -56,12 +55,10 @@ func (l *GetProductByIdLogic) GetProductById(in *catalog.GetProductByIdRequest) 
 		// register the galaxy one time
 		entryGetProductByIdLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductById", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				fmt.Printf("Looking up GetProductById record by key: %s", key)
-
 				id, _ := strconv.Atoi(key)
 				found, err := l.svcCtx.Repo.Product().GetProductById(int64(id))
 				if err != nil {
-					logx.Infof("error: %s", err)
+					logx.Infof("GetProductById error: %s", err)
 					return err
 				}
 
