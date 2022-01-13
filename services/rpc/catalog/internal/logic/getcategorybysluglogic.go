@@ -87,7 +87,7 @@ func (l *GetCategoryBySlugLogic) GetCategoryBySlug(in *catalog.GetCategoryBySlug
 	})
 
 	codec := &galaxycache.ByteCodec{}
-	key := fmt.Sprintf("%d|%s|%d|%s", in.StoreId, in.Slug)
+	key := fmt.Sprintf("%d|%s", in.StoreId, in.Slug)
 	entryGetCategoryBySlugLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
