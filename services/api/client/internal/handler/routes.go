@@ -50,6 +50,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
+					Path:    "/v1/product/:id",
+					Handler: getProductByIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
 					Path:    "/v1/product/sku/:sku",
 					Handler: getProductBySkuHandler(serverCtx),
 				},
@@ -57,11 +62,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/v1/product/slug/:slug",
 					Handler: getProductBySlugHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/v1/product/:id",
-					Handler: getProductByIdHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,

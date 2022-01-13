@@ -295,7 +295,7 @@ func (m *productRepo) GetProductById(productID int64) (res *productResponse, err
 		Variant models.Variant `db:"variant"`
 		Price   models.Price   `db:"price"`
 	}
-	err = nstmt.Select(&res,
+	err = nstmt.Select(&result,
 		map[string]interface{}{
 			"product_id": productID,
 		})

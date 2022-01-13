@@ -2,9 +2,11 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -24,7 +26,28 @@ func NewGetProductByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) Get
 }
 
 func (l *GetProductByIdLogic) GetProductById(req types.GetProductByIdRequest) (resp *types.Product, err error) {
-	// todo: add your logic here and delete this line
+	getOneByIdResponse, err := l.svcCtx.CatalogRpc.GetProductById(l.ctx, &catalogclient.GetProductByIdRequest{
+		Id:      req.Id,
+		StoreId: l.ctx.Value(types.StoreKey).(int64),
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	// convert from one type to another
+	// the structs are identical
+	res := &types.Product{}
+	b, err := json.Marshal(getOneByIdResponse.Product)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, res)
+
+	// format the currency to the locale and language
+	for x := 0; x < len(res.Variants); x++ {
+		if res.Variants[x].Price != (types.Price{}) {
+			convertOutgoingPrices(l.ctx, &res.Variants[x].Price)
+		}
+	}
+	return res, err
 }
