@@ -35,16 +35,16 @@ func createCategory() {
 	categories["root"] = createOne(nil, "Root Category", 1)
 
 	categories["women"] = createOne(categories["root"], "Women", 1)
-	categories["womens pants"] = createOne(categories["women"], "Pants", 1)
-	categories["womens shirts"] = createOne(categories["women"], "Shirts", 2)
+	categories["womens pants"] = createOne(categories["women"], "Womens Pants", 1)
+	categories["womens shirts"] = createOne(categories["women"], "Womans Shirts", 2)
 
 	categories["men"] = createOne(categories["root"], "Men", 2)
-	categories["mens pants"] = createOne(categories["men"], "Pants", 1)
-	categories["mens shirts"] = createOne(categories["men"], "Shirts", 2)
+	categories["mens pants"] = createOne(categories["men"], "Mens Pants", 1)
+	categories["mens shirts"] = createOne(categories["men"], "Mens Shirts", 2)
 
 	categories["kids"] = createOne(categories["root"], "Kids", 3)
-	categories["kids pants"] = createOne(categories["kids"], "Pants", 1)
-	categories["kids shirts"] = createOne(categories["kids"], "Shirts", 2)
+	categories["kids pants"] = createOne(categories["kids"], "Kids Pants", 1)
+	categories["kids shirts"] = createOne(categories["kids"], "Kids Shirts", 2)
 
 	db.MustExec(fmt.Sprintf("CALL rebuild_category_nested_set(%d);", storeID))
 }

@@ -28,15 +28,17 @@ func (m *StoreKeyMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			}
 
 			ctx := r.Context()
-			ctx = context.WithValue(ctx, types.StoreKey, 0)
+			ctx = context.WithValue(ctx, types.StoreKey, int64(1))
 
 			// decode the hashed ID
 			id := m.hashCoder.Decode(result[0])
-			ctx = context.WithValue(ctx, types.StoreKey, id)
-
-			next(w, r.WithContext(ctx))
+			if id != 0 {
+				ctx = context.WithValue(ctx, types.StoreKey, id)
+				next(w, r.WithContext(ctx))
+				return
+			}
 		}
 
-		// http.Error(w, "error: missing Store-Key header", http.StatusUnauthorized)
+		http.Error(w, "error: missing Store-Key header :: "+m.hashCoder.Encode(1), http.StatusUnauthorized)
 	}
 }

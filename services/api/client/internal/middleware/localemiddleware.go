@@ -22,7 +22,6 @@ func (m *LocaleMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		ctx = context.WithValue(ctx, types.Locale, "en")
 
 		if langs, ok := r.Header["Accept-Language"]; ok {
-			// m.Config.Locale = langs[0]
 			ctx = context.WithValue(ctx, types.Locale, langs[0])
 		}
 		next(w, r.WithContext(ctx))

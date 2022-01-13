@@ -43,8 +43,7 @@ option_item\
 archetype
 
 
-apiServices=client\
-admin
+apiServices=admin
 
 # cart depends on inventory, othersbought
 
@@ -54,12 +53,13 @@ inventory\
 othersbought\
 cart\
 payment\
-catalog\
 shipping\
 similarproducts\
 store\
 user\
 warehouse
+
+# catalog\
 
 # rpcServices=inventory\
 # othersbought\
@@ -166,6 +166,7 @@ start:
 		printf "$(BLUE)Starting RPC Service: $(WHITE)$$service::$$port$(RESET)\n"; \
 		cd ./services/rpc/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
+		(sleep 0.1); \
 		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
 		(go run . -f etc/local-$$service.yaml &); \
 		cd ../../../; \
@@ -178,7 +179,8 @@ start:
 		printf "$(BLUE)Starting API Service: $(WHITE)$$service::$$port$(RESET)\n"; \
 		cd ./services/api/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
-		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
+		(sleep 0.1); \
+		(sed -i '' -e "s/: 8888/: $$port/g" etc/local-$$service.yaml &); \
 		(go run . -f etc/local-$$service.yaml &); \
 		cd ../../../; \
 		echo ""; \

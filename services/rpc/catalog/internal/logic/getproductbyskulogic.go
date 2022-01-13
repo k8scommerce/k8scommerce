@@ -58,7 +58,7 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 
 				v := strings.Split(key, "|")
-				storeId, _ := strconv.ParseInt(v[1], 10, 64)
+				storeId, _ := strconv.ParseInt(v[0], 10, 64)
 				sku := v[1]
 
 				found, err := l.svcCtx.Repo.Product().GetProductBySku(storeId, sku)
@@ -86,7 +86,7 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 	})
 
 	codec := &galaxycache.ByteCodec{}
-	key := fmt.Sprintf("%d|%s|%d|%s", in.StoreId, in.Sku)
+	key := fmt.Sprintf("%d|%s", in.StoreId, in.Sku)
 	entryGetProductBySkuLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
