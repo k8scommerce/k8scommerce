@@ -1,0 +1,347 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Client Gateway API",
+    "description": "client gateway api",
+    "version": "1.0.0"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/cart/{customerId}": {
+      "get": {
+        "summary": "returns a shopping cart if one exists",
+        "operationId": "getCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      },
+      "post": {
+        "summary": "creates a shopping cart for the associated customerId. Each customer can only have 1 cart ever.",
+        "operationId": "createCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateCartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCartRequest"
+            }
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AddItemToCartRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "item": {
+          "$ref": "#/definitions/Item"
+        }
+      },
+      "title": "AddItemToCartRequest",
+      "required": [
+        "customerId",
+        "item"
+      ]
+    },
+    "AddItemToCartResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart"
+        },
+        "sessionId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sessionId": {
+          "type": "string"
+        }
+      },
+      "title": "AddItemToCartResponse",
+      "required": [
+        "cart",
+        "sessionId"
+      ]
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "totalPrice": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "Cart",
+      "required": [
+        "items",
+        "totalPrice"
+      ]
+    },
+    "ClearCartRequest": {
+      "type": "object",
+      "title": "ClearCartRequest"
+    },
+    "ClearCartResponse": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "ClearCartResponse",
+      "required": [
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "CreateCartRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string"
+        }
+      },
+      "title": "CreateCartRequest",
+      "required": [
+        "customerId"
+      ]
+    },
+    "CreateCartResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart"
+        },
+        "sessionId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sessionId": {
+          "type": "string"
+        }
+      },
+      "title": "CreateCartResponse",
+      "required": [
+        "cart",
+        "sessionId"
+      ]
+    },
+    "GetCartRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string"
+        }
+      },
+      "title": "GetCartRequest",
+      "required": [
+        "customerId"
+      ]
+    },
+    "GetCartResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart"
+        },
+        "sessionId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sessionId": {
+          "type": "string"
+        }
+      },
+      "title": "GetCartResponse",
+      "required": [
+        "cart",
+        "sessionId"
+      ]
+    },
+    "Item": {
+      "type": "object",
+      "properties": {
+        "variantId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "expiresAt": {
+          "type": "string"
+        }
+      },
+      "title": "Item",
+      "required": [
+        "variantId",
+        "quantity",
+        "price",
+        "expiresAt"
+      ]
+    },
+    "RemoveCartItemRequest": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "variantId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "quanity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "RemoveCartItemRequest",
+      "required": [
+        "productId",
+        "variantId",
+        "quanity"
+      ]
+    },
+    "RemoveCartItemResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "RemoveCartItemResponse",
+      "required": [
+        "cart",
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "UpdateCartItemRequest": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "variantId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "quanity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "UpdateCartItemRequest",
+      "required": [
+        "productId",
+        "variantId",
+        "quanity"
+      ]
+    },
+    "UpdateCartItemResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateCartItemResponse",
+      "required": [
+        "cart",
+        "statusCode",
+        "statusMessage"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

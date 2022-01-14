@@ -1,3 +1,11 @@
+info(
+	title: "Client Gateway API"
+	desc: "client gateway api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1.0.0"
+)
+
 // objects
 
 type Cart {
@@ -94,12 +102,16 @@ type ClearCartResponse {
 	jwt: Auth
 	middleware: Locale, StoreKey
 )
-service client {
-	@doc "creates a shopping cart for the associated customerId"
+service gateway {
+	@doc(
+		summary: "creates a shopping cart for the associated customerId. Each customer can only have 1 cart ever."
+	)
 	@handler createCart
 	post /v1/cart/:customerId(CreateCartRequest) returns (CreateCartResponse)
-	
-	@doc "returns a shopping cart if one exists"
+
+	@doc(
+		summary: "returns a shopping cart if one exists"
+	)
 	@handler getCart
 	get /v1/cart/:customerId(GetCartRequest) returns (GetCartResponse)
 	
