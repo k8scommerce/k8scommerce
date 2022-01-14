@@ -1,3 +1,5 @@
+#!/bin/bash
+
 exit 1
 
 out_dir='../services/rpc'
@@ -8,9 +10,6 @@ services='admin client'
 
 for service in $services; do
   goctl api go -api admin.api  -dir .
-
-
-
 
   goctl api go \
     -api=$api_dir \

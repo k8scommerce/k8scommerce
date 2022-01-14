@@ -1,3 +1,11 @@
+info(
+	title: "Client Gateway API"
+	desc: "client gateway api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1.0.0"
+)
+
 // objects
 type Customer {
 	Id        int64  `json:"id"`
@@ -37,7 +45,7 @@ type CustomerLoginResponse {
 @server(
 	middleware: Locale, StoreKey
 )
-service client {
+service gateway {
 	// customer
     @doc "customer logic"
 	@handler login

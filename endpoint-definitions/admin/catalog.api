@@ -1,3 +1,11 @@
+info(
+	title: "Admin Gateway API"
+	desc: "admin gateway api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1.0.0"
+)
+
 // objects
 type Category {
 	Id              int64  `json:"id"`
@@ -198,7 +206,7 @@ type DeleteProductResponse {
 @server(
 	middleware: Locale, StoreKey
 )
-service admin {
+service gateway {
 	// categories
 	@handler getAllCategories
 	get /v1/categories(GetAllCategoriesRequest) returns (GetAllCategoriesResponse)
@@ -230,7 +238,7 @@ service admin {
 	jwt: Auth
 	middleware: Locale, StoreKey
 )
-service admin {
+service gateway {
 	
 	@handler createCategory
 	post /v1/category(CreateCategoryRequest) returns (CreateCategoryResponse)

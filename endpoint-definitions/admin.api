@@ -1,0 +1,12 @@
+import(
+	// import all client endpoint descriptions
+	"client/cart.api"
+	"client/catalog.api"
+	"client/customer.api"
+
+	// import all admin endpoint descriptions
+	"admin/cart.api"
+	"admin/catalog.api"
+	"admin/customer.api"
+	"admin/user.api"
+)

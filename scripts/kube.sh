@@ -1,3 +1,5 @@
+#!/bin/bash
+
 goctl kube deploy \
     -name cart \
     -namespace k8scommerce \
