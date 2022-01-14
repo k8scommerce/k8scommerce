@@ -1,0 +1,154 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Admin Gateway API",
+    "description": "admin gateway api",
+    "version": "1.0.0"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/user/login": {
+      "post": {
+        "summary": "manages user logins",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UserLoginResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "access_expire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refresh_after": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "access_token",
+        "access_expire",
+        "refresh_after"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "User",
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ]
+    },
+    "UserLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "UserLoginRequest",
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "UserLoginResponse": {
+      "type": "object",
+      "properties": {
+        "jwt": {
+          "$ref": "#/definitions/JwtToken"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "UserLoginResponse",
+      "required": [
+        "jwt",
+        "user",
+        "statusCode",
+        "statusMessage"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

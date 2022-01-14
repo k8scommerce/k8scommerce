@@ -1,3 +1,17 @@
+info(
+	title: "Admin Gateway API"
+	desc: "admin gateway api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1.0.0"
+)
+
+type JwtToken {
+	AccessToken  string `json:"access_token"`
+	AccessExpire int64  `json:"access_expire"`
+	RefreshAfter int64  `json:"refresh_after"`
+}
+
 // objects
 type User {
 	Id        int64  `json:"id"`
@@ -32,7 +46,7 @@ type UserLoginResponse {
 @server(
 	middleware: Locale
 )
-service admin {
+service gateway {
 	// user
     @doc "manages user logins"
 	@handler login

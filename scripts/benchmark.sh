@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # brew install httpie
 # http -vvv GET http://api.local.k8sly.com:8889/v1/product/slug/ergonomic-steel-hat \

@@ -1,3 +1,11 @@
+info(
+	title: "Admin Gateway API"
+	desc: "admin gateway api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1.0.0"
+)
+
 // objects
 type Customer {
 	Id        int64  `json:"id"`
@@ -18,7 +26,7 @@ type Customer {
 @server(
 	middleware: Locale
 )
-service admin {
+service gateway {
 	// customer
 	// @doc "manages customer logins"
 	// @handler login
