@@ -1,5 +1,18 @@
-// objects
+info(
+	title: "Admin Gateway API"
+	desc: "admin gateway api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1.0.0"
+)
 
+type JwtToken {
+	AccessToken  string `json:"access_token"`
+	AccessExpire int64  `json:"access_expire"`
+	RefreshAfter int64  `json:"refresh_after"`
+}
+
+// objects
 type Cart {
 	Item       []Item  `json:"items"`
 	TotalPrice float64 `json:"totalPrice"`
@@ -18,7 +31,7 @@ type Item {
 
 // get cart
 type GetCartRequest {
-	UserId string `path:"userId"`
+	CustomerId string `path:"customerId"`
 }
 
 type GetCartResponse {
@@ -38,8 +51,8 @@ type CreateCartResponse {
 
 // add to cart
 type AddItemToCartRequest {
-	UserId int64 `json:"userId"`
-	Item   Item  `json:"item"`
+	CustomerId int64 `json:"customerId"`
+	Item       Item  `json:"item"`
 }
 
 type AddItemToCartResponse {
@@ -92,14 +105,19 @@ type ClearCartResponse {
 	jwt: Auth
 	middleware: Locale
 )
-service admin {
-	@doc "creates a shopping cart for the associated userId. Each user can only have 1 cart ever."
+service gateway {
+	@doc(
+		summary: "creates a shopping cart for the associated customerId. Each customer can only have 1 cart ever."
+	)
 	@handler createCart
-	post /v1/cart/:userId(CreateCartRequest) returns (CreateCartResponse)
+	post /v1/cart/:customerId(CreateCartRequest) returns (CreateCartResponse)
 	
+	@doc(
+		summary: "returns a shopping cart if one exists"
+	)
 	@handler getCart
-	get /v1/cart/:userId(GetCartRequest) returns (GetCartResponse)
+	get /v1/cart/:customerId(GetCartRequest) returns (GetCartResponse)
 	
 	// @handler addItemToCart
-	// post /v1/cart/:userId/add(AddToCartRequest) returns (AddToCartResponse)
+	// post /v1/cart/:customerId/add(AddToCartRequest) returns (AddToCartResponse)
 }

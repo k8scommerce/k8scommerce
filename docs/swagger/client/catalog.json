@@ -1,0 +1,878 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Client Gateway API",
+    "description": "client gateway api",
+    "version": "1.0.0"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/categories": {
+      "get": {
+        "summary": "getAllCategories\n\treturns all categories by storeId",
+        "operationId": "getAllCategories",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAllCategoriesResponse"
+            }
+          }
+        },
+        "tags": [
+          "gateway"
+        ]
+      }
+    },
+    "/v1/category/slug/{slug}": {
+      "get": {
+        "summary": "getCategoryBySlug\n\treturns a category by url slug and storeId",
+        "operationId": "getCategoryBySlug",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCategoryBySlugResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "slug",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    },
+    "/v1/category/{id}": {
+      "get": {
+        "summary": "getCategoryById\n\treturns a category by id",
+        "operationId": "getCategoryById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCategoryByIdResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    },
+    "/v1/product/sku/{sku}": {
+      "get": {
+        "summary": "getProductBySku\n\treturns a product by sku",
+        "operationId": "getProductBySku",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    },
+    "/v1/product/slug/{slug}": {
+      "get": {
+        "summary": "getProductBySlug\n\treturns a product by url slug",
+        "operationId": "getProductBySlug",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    },
+    "/v1/product/{id}": {
+      "get": {
+        "summary": "getProductById\n\treturns a product by id",
+        "operationId": "getProductById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    },
+    "/v1/products/category/{categoryId}/{currentPage}/{pageSize}": {
+      "get": {
+        "summary": "getProductsByCategoryId\n\treturns all products belonging to a category id",
+        "operationId": "getProductsByCategoryId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetProductsByCategoryIdResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "currentPage",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sortOn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    },
+    "/v1/products/{currentPage}/{pageSize}": {
+      "get": {
+        "summary": "getAllProducts\n\treturns all products",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAllProductsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "currentPage",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sortOn",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "gateway"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "parentId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "metaTitle": {
+          "type": "string"
+        },
+        "metaDescription": {
+          "type": "string"
+        },
+        "metaKeywords": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "Category",
+      "required": [
+        "id",
+        "parentId",
+        "slug",
+        "name",
+        "description",
+        "metaTitle",
+        "metaDescription",
+        "metaKeywords",
+        "sortOrder"
+      ]
+    },
+    "CreateCategoryRequest": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        }
+      },
+      "title": "CreateCategoryRequest",
+      "required": [
+        "category"
+      ]
+    },
+    "CreateCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "CreateCategoryResponse",
+      "required": [
+        "category",
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "CreateProductRequest": {
+      "type": "object",
+      "properties": {
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        }
+      },
+      "title": "CreateProductRequest",
+      "required": [
+        "product:omitempty"
+      ]
+    },
+    "CreateProductResponse": {
+      "type": "object",
+      "properties": {
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        },
+        "statusCode:omitempty": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage:omitempty": {
+          "type": "string"
+        }
+      },
+      "title": "CreateProductResponse",
+      "required": [
+        "product:omitempty",
+        "statusCode:omitempty",
+        "statusMessage:omitempty"
+      ]
+    },
+    "DeleteCategoryRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DeleteCategoryRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteCategoryResponse",
+      "required": [
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "DeleteProductRequest": {
+      "type": "object",
+      "properties": {
+        "path:omitempty": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DeleteProductRequest",
+      "required": [
+        "path:omitempty"
+      ]
+    },
+    "DeleteProductResponse": {
+      "type": "object",
+      "properties": {
+        "statusCode:omitempty": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage:omitempty": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteProductResponse",
+      "required": [
+        "statusCode:omitempty",
+        "statusMessage:omitempty"
+      ]
+    },
+    "GetAllCategoriesRequest": {
+      "type": "object",
+      "title": "GetAllCategoriesRequest"
+    },
+    "GetAllCategoriesResponse": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "GetAllCategoriesResponse",
+      "required": [
+        "categories",
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "GetAllProductsRequest": {
+      "type": "object",
+      "properties": {
+        "currentPage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sortOn": {
+          "type": "string"
+        }
+      },
+      "title": "GetAllProductsRequest",
+      "required": [
+        "currentPage",
+        "pageSize",
+        "sortOn"
+      ]
+    },
+    "GetAllProductsResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          }
+        },
+        "totalRecords": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetAllProductsResponse",
+      "required": [
+        "products",
+        "totalRecords",
+        "totalPages"
+      ]
+    },
+    "GetCategoryByIdRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetCategoryByIdRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "GetCategoryByIdResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "GetCategoryByIdResponse",
+      "required": [
+        "category",
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "GetCategoryBySlugRequest": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string"
+        }
+      },
+      "title": "GetCategoryBySlugRequest",
+      "required": [
+        "slug"
+      ]
+    },
+    "GetCategoryBySlugResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "GetCategoryBySlugResponse",
+      "required": [
+        "category",
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "GetProductByIdRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetProductByIdRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "GetProductBySkuRequest": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        }
+      },
+      "title": "GetProductBySkuRequest",
+      "required": [
+        "sku"
+      ]
+    },
+    "GetProductBySlugRequest": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string"
+        }
+      },
+      "title": "GetProductBySlugRequest",
+      "required": [
+        "slug"
+      ]
+    },
+    "GetProductsByCategoryIdRequest": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "currentPage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sortOn": {
+          "type": "string"
+        }
+      },
+      "title": "GetProductsByCategoryIdRequest",
+      "required": [
+        "categoryId",
+        "currentPage",
+        "pageSize"
+      ]
+    },
+    "GetProductsByCategoryIdResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          }
+        },
+        "totalRecords": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetProductsByCategoryIdResponse",
+      "required": [
+        "products",
+        "totalRecords",
+        "totalPages"
+      ]
+    },
+    "Price": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "displayAmount": {
+          "type": "string"
+        },
+        "compareAtAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "displayCompareAtAmount": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        }
+      },
+      "title": "Price",
+      "required": [
+        "id",
+        "amount",
+        "displayAmount",
+        "compareAtAmount",
+        "displayCompareAtAmount",
+        "currency"
+      ]
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "metaTitle": {
+          "type": "string"
+        },
+        "metaDescription": {
+          "type": "string"
+        },
+        "metaKeywords": {
+          "type": "string"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Variant"
+          }
+        }
+      },
+      "title": "Product",
+      "required": [
+        "id",
+        "slug",
+        "name",
+        "shortDescription",
+        "description",
+        "metaTitle",
+        "metaDescription",
+        "metaKeywords",
+        "variants"
+      ]
+    },
+    "UpdateCategoryRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        }
+      },
+      "title": "UpdateCategoryRequest",
+      "required": [
+        "id",
+        "category"
+      ]
+    },
+    "UpdateCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateCategoryResponse",
+      "required": [
+        "category",
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "UpdateProductRequest": {
+      "type": "object",
+      "properties": {
+        "path:omitempty": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        }
+      },
+      "title": "UpdateProductRequest",
+      "required": [
+        "path:omitempty",
+        "product:omitempty"
+      ]
+    },
+    "UpdateProductResponse": {
+      "type": "object",
+      "properties": {
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        },
+        "statusCode:omitempty": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage:omitempty": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateProductResponse",
+      "required": [
+        "product:omitempty",
+        "statusCode:omitempty",
+        "statusMessage:omitempty"
+      ]
+    },
+    "Variant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "format": "double"
+        },
+        "height": {
+          "type": "number",
+          "format": "double"
+        },
+        "width": {
+          "type": "number",
+          "format": "double"
+        },
+        "depth": {
+          "type": "number",
+          "format": "double"
+        },
+        "price": {
+          "$ref": "#/definitions/Price"
+        }
+      },
+      "title": "Variant",
+      "required": [
+        "id",
+        "isDefault",
+        "sku",
+        "weight",
+        "height",
+        "width",
+        "depth",
+        "price"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}
