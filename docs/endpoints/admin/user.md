@@ -1,68 +1,152 @@
-# Admin Gateway API
-admin gateway api
 
-## Version: 1.0.0
 
-### Security
-**apiKey**  
 
-|apiKey|*API Key*|
-|---|---|
-|Description|Enter JWT Bearer token **_only_**|
-|Name|Authorization|
-|In|header|
+# User API Endpoints
+admin gateway user api endpoints
+  
 
-### /v1/user/login
+## Informations
 
-#### POST
-##### Summary
+### Version
 
-manages user logins
+1
 
-##### Parameters
+## Content negotiation
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| body | body |  | Yes | [UserLoginRequest](#userloginrequest) |
+### URI Schemes
+  * http
+  * https
 
-##### Responses
+### Consumes
+  * application/json
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [UserLoginResponse](#userloginresponse) |
+### Produces
+  * application/json
 
-### Models
+## Access control
 
-#### JwtToken
+### Security Schemes
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| access_token | string |  | Yes |
-| access_expire | long |  | Yes |
-| refresh_after | long |  | Yes |
+#### apiKey (header: Authorization)
 
-#### User
+Enter JWT Bearer token **_only_**
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| firstName | string |  | Yes |
-| lastName | string |  | Yes |
-| email | string |  | Yes |
-| password | string |  | Yes |
+> **Type**: apikey
 
-#### UserLoginRequest
+### Security Requirements
+  * apiKey
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| email | string |  | Yes |
-| password | string |  | Yes |
+## All endpoints
 
-#### UserLoginResponse
+###  admin
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| jwt | [JwtToken](#jwttoken) |  | Yes |
-| user | [User](#user) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| Method  | URI     | Name   | Summary |
+|---------|---------|--------|---------|
+| POST | /v1/user/login | [login](#login) | Login |
+  
+
+
+## Paths
+
+### <span id="login"></span> Login (*login*)
+
+```
+POST /v1/user/login
+```
+
+login for administration users
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| body | `body` | [UserLoginRequest](#user-login-request) | `models.UserLoginRequest` | | ✓ | |  |
+
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#login-200) | OK | A successful response. |  | [schema](#login-200-schema) |
+
+#### Responses
+
+
+##### <span id="login-200"></span> 200 - A successful response.
+Status: OK
+
+###### <span id="login-200-schema"></span> Schema
+   
+  
+
+[UserLoginResponse](#user-login-response)
+
+## Models
+
+### <span id="jwt-token"></span> JwtToken
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| access_expire | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| access_token | string| `string` | ✓ | |  |  |
+| refresh_after | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="user"></span> User
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| email | string| `string` | ✓ | |  |  |
+| firstName | string| `string` | ✓ | |  |  |
+| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| lastName | string| `string` | ✓ | |  |  |
+| password | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="user-login-request"></span> UserLoginRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| email | string| `string` | ✓ | |  |  |
+| password | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="user-login-response"></span> UserLoginResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| jwt | [JwtToken](#jwt-token)| `JwtToken` | ✓ | |  |  |
+| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage | string| `string` | ✓ | |  |  |
+| user | [User](#user)| `User` | ✓ | |  |  |
+
+

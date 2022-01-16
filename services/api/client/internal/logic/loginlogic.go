@@ -52,10 +52,12 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLogin
 	utils.TransformObj(res.Customer, &customer)
 
 	return &types.CustomerLoginResponse{
-		JwtToken:      *jwtToken,
-		Customer:      customer,
-		StatusCode:    res.StatusCode,
-		StatusMessage: res.StatusMessage,
+		JwtToken: *jwtToken,
+		Customer: customer,
+		ResponseStatus: types.ResponseStatus{
+			StatusCode:    res.StatusCode,
+			StatusMessage: res.StatusMessage,
+		},
 	}, nil
 }
 

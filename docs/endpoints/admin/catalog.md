@@ -1,451 +1,950 @@
-# Admin Gateway API
-admin gateway api
 
-## Version: 1.0.0
 
-### Security
-**apiKey**  
 
-|apiKey|*API Key*|
-|---|---|
-|Description|Enter JWT Bearer token **_only_**|
-|Name|Authorization|
-|In|header|
+# Catalog API Endpoints
+admin gateway catalog api endpoints
+  
 
-### /v1/categories
+## Informations
 
-#### GET
-##### Responses
+### Version
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [GetAllCategoriesResponse](#getallcategoriesresponse) |
+1
 
-### /v1/category
+## Content negotiation
 
-#### POST
-##### Parameters
+### URI Schemes
+  * http
+  * https
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| body | body |  | Yes | [CreateCategoryRequest](#createcategoryrequest) |
+### Consumes
+  * application/json
 
-##### Responses
+### Produces
+  * application/json
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [CreateCategoryResponse](#createcategoryresponse) |
+## Access control
 
-### /v1/category/slug/{slug}
+### Security Schemes
 
-#### GET
-##### Parameters
+#### apiKey (header: Authorization)
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| slug | path |  | Yes | string |
-| slug | query |  | Yes | string |
+Enter JWT Bearer token **_only_**
 
-##### Responses
+> **Type**: apikey
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [GetCategoryBySlugResponse](#getcategorybyslugresponse) |
+### Security Requirements
+  * apiKey
 
-### /v1/category/{id}
+## All endpoints
 
-#### GET
-##### Parameters
+###  admin
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
-| id | query |  | Yes | long |
+| Method  | URI     | Name   | Summary |
+|---------|---------|--------|---------|
+| POST | /v1/category | [create category](#create-category) |  |
+| POST | /v1/product | [create product](#create-product) |  |
+| DELETE | /v1/category/{id} | [delete category](#delete-category) |  |
+| DELETE | /v1/product/{id} | [delete product](#delete-product) |  |
+| GET | /v1/categories | [get all categories](#get-all-categories) |  |
+| GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) |  |
+| GET | /v1/category/{id} | [get category by Id](#get-category-by-id) |  |
+| GET | /v1/category/slug/{slug} | [get category by slug](#get-category-by-slug) |  |
+| GET | /v1/product/{id} | [get product by Id](#get-product-by-id) |  |
+| GET | /v1/product/sku/{sku} | [get product by sku](#get-product-by-sku) |  |
+| GET | /v1/product/slug/{slug} | [get product by slug](#get-product-by-slug) |  |
+| GET | /v1/products/category/{categoryId}/{currentPage}/{pageSize} | [get products by category Id](#get-products-by-category-id) |  |
+| PUT | /v1/category/{id} | [update category](#update-category) |  |
+| PUT | /v1/product/{id} | [update product](#update-product) |  |
+  
 
-##### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [GetCategoryByIdResponse](#getcategorybyidresponse) |
+## Paths
 
-#### DELETE
-##### Parameters
+### <span id="create-category"></span> create category (*createCategory*)
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
-| body | body |  | Yes | [DeleteCategoryRequest](#deletecategoryrequest) |
+```
+POST /v1/category
+```
 
-##### Responses
+#### Parameters
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [DeleteCategoryResponse](#deletecategoryresponse) |
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| body | `body` | [CreateCategoryRequest](#create-category-request) | `models.CreateCategoryRequest` | | ✓ | |  |
 
-#### PUT
-##### Parameters
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#create-category-200) | OK | A successful response. |  | [schema](#create-category-200-schema) |
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
-| body | body |  | Yes | [UpdateCategoryRequest](#updatecategoryrequest) |
+#### Responses
 
-##### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [UpdateCategoryResponse](#updatecategoryresponse) |
+##### <span id="create-category-200"></span> 200 - A successful response.
+Status: OK
 
-### /v1/product
+###### <span id="create-category-200-schema"></span> Schema
+   
+  
 
-#### POST
-##### Parameters
+[CreateCategoryResponse](#create-category-response)
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| body | body |  | Yes | [CreateProductRequest](#createproductrequest) |
+### <span id="create-product"></span> create product (*createProduct*)
 
-##### Responses
+```
+POST /v1/product
+```
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [CreateProductResponse](#createproductresponse) |
+#### Parameters
 
-### /v1/product/sku/{sku}
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| body | `body` | [CreateProductRequest](#create-product-request) | `models.CreateProductRequest` | | ✓ | |  |
 
-#### GET
-##### Parameters
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#create-product-200) | OK | A successful response. |  | [schema](#create-product-200-schema) |
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| sku | path |  | Yes | string |
+#### Responses
 
-##### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+##### <span id="create-product-200"></span> 200 - A successful response.
+Status: OK
 
-### /v1/product/slug/{slug}
+###### <span id="create-product-200-schema"></span> Schema
+   
+  
 
-#### GET
-##### Parameters
+[CreateProductResponse](#create-product-response)
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| slug | path |  | Yes | string |
+### <span id="delete-category"></span> delete category (*deleteCategory*)
 
-##### Responses
+```
+DELETE /v1/category/{id}
+```
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+#### Parameters
 
-### /v1/product/{id}
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| id | `path` | string | `string` |  | ✓ |  |  |
+| body | `body` | [DeleteCategoryRequest](#delete-category-request) | `models.DeleteCategoryRequest` | | ✓ | |  |
 
-#### GET
-##### Parameters
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#delete-category-200) | OK | A successful response. |  | [schema](#delete-category-200-schema) |
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+#### Responses
 
-##### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+##### <span id="delete-category-200"></span> 200 - A successful response.
+Status: OK
 
-#### DELETE
-##### Parameters
+###### <span id="delete-category-200-schema"></span> Schema
+   
+  
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
-| body | body |  | Yes | [DeleteProductRequest](#deleteproductrequest) |
+[DeleteCategoryResponse](#delete-category-response)
 
-##### Responses
+### <span id="delete-product"></span> delete product (*deleteProduct*)
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [DeleteProductResponse](#deleteproductresponse) |
+```
+DELETE /v1/product/{id}
+```
 
-#### PUT
-##### Parameters
+#### Parameters
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
-| body | body |  | Yes | [UpdateProductRequest](#updateproductrequest) |
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| id | `path` | string | `string` |  | ✓ |  |  |
+| body | `body` | [DeleteProductRequest](#delete-product-request) | `models.DeleteProductRequest` | | ✓ | |  |
 
-##### Responses
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#delete-product-200) | OK | A successful response. |  | [schema](#delete-product-200-schema) |
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [UpdateProductResponse](#updateproductresponse) |
+#### Responses
 
-### /v1/products/category/{categoryId}/{currentPage}/{pageSize}
 
-#### GET
-##### Parameters
+##### <span id="delete-product-200"></span> 200 - A successful response.
+Status: OK
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| categoryId | path |  | Yes | string |
-| currentPage | path |  | Yes | string |
-| pageSize | path |  | Yes | string |
-| sortOn | query |  | No | string |
+###### <span id="delete-product-200-schema"></span> Schema
+   
+  
 
-##### Responses
+[DeleteProductResponse](#delete-product-response)
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [GetProductsByCategoryIdResponse](#getproductsbycategoryidresponse) |
+### <span id="get-all-categories"></span> get all categories (*getAllCategories*)
 
-### /v1/products/{currentPage}/{pageSize}
+```
+GET /v1/categories
+```
 
-#### GET
-##### Parameters
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-all-categories-200) | OK | A successful response. |  | [schema](#get-all-categories-200-schema) |
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| currentPage | path |  | Yes | string |
-| pageSize | path |  | Yes | string |
-| sortOn | query |  | Yes | string |
+#### Responses
 
-##### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [GetAllProductsResponse](#getallproductsresponse) |
+##### <span id="get-all-categories-200"></span> 200 - A successful response.
+Status: OK
 
-### Models
+###### <span id="get-all-categories-200-schema"></span> Schema
+   
+  
 
-#### Category
+[GetAllCategoriesResponse](#get-all-categories-response)
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| parentId | long |  | Yes |
-| slug | string |  | Yes |
-| name | string |  | Yes |
-| description | string |  | Yes |
-| metaTitle | string |  | Yes |
-| metaDescription | string |  | Yes |
-| metaKeywords | string |  | Yes |
-| sortOrder | integer |  | Yes |
+### <span id="get-all-products"></span> get all products (*getAllProducts*)
 
-#### CreateCategoryRequest
+```
+GET /v1/products/{currentPage}/{pageSize}
+```
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| category | [Category](#category) |  | Yes |
+#### Parameters
 
-#### CreateCategoryResponse
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| currentPage | `path` | string | `string` |  | ✓ |  |  |
+| pageSize | `path` | string | `string` |  | ✓ |  |  |
+| sortOn | `query` | string | `string` |  | ✓ |  |  |
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-all-products-200) | OK | A successful response. |  | [schema](#get-all-products-200-schema) |
 
-#### CreateProductRequest
+#### Responses
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| product:omitempty | [Product](#product) |  | Yes |
 
-#### CreateProductResponse
+##### <span id="get-all-products-200"></span> 200 - A successful response.
+Status: OK
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| product:omitempty | [Product](#product) |  | Yes |
-| statusCode:omitempty | long |  | Yes |
-| statusMessage:omitempty | string |  | Yes |
+###### <span id="get-all-products-200-schema"></span> Schema
+   
+  
 
-#### DeleteCategoryRequest
+[GetAllProductsResponse](#get-all-products-response)
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
+### <span id="get-category-by-id"></span> get category by Id (*getCategoryById*)
 
-#### DeleteCategoryResponse
+```
+GET /v1/category/{id}
+```
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+#### Parameters
 
-#### DeleteProductRequest
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| id | `path` | string | `string` |  | ✓ |  |  |
+| id | `query` | int64 (formatted integer) | `int64` |  | ✓ |  |  |
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| path:omitempty | long |  | Yes |
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-category-by-id-200) | OK | A successful response. |  | [schema](#get-category-by-id-200-schema) |
 
-#### DeleteProductResponse
+#### Responses
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| statusCode:omitempty | long |  | Yes |
-| statusMessage:omitempty | string |  | Yes |
 
-#### GetAllCategoriesRequest
+##### <span id="get-category-by-id-200"></span> 200 - A successful response.
+Status: OK
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| GetAllCategoriesRequest | object |  |  |
+###### <span id="get-category-by-id-200-schema"></span> Schema
+   
+  
 
-#### GetAllCategoriesResponse
+[GetCategoryByIDResponse](#get-category-by-id-response)
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| categories | [ [Category](#category) ] |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+### <span id="get-category-by-slug"></span> get category by slug (*getCategoryBySlug*)
 
-#### GetAllProductsRequest
+```
+GET /v1/category/slug/{slug}
+```
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| currentPage | long |  | Yes |
-| pageSize | long |  | Yes |
-| sortOn | string |  | Yes |
+#### Parameters
 
-#### GetAllProductsResponse
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| slug | `path` | string | `string` |  | ✓ |  |  |
+| slug | `query` | string | `string` |  | ✓ |  |  |
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| products | [ [Product](#product) ] |  | Yes |
-| totalRecords | long |  | Yes |
-| totalPages | long |  | Yes |
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-category-by-slug-200) | OK | A successful response. |  | [schema](#get-category-by-slug-200-schema) |
 
-#### GetCategoryByIdRequest
+#### Responses
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
 
-#### GetCategoryByIdResponse
+##### <span id="get-category-by-slug-200"></span> 200 - A successful response.
+Status: OK
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+###### <span id="get-category-by-slug-200-schema"></span> Schema
+   
+  
 
-#### GetCategoryBySlugRequest
+[GetCategoryBySlugResponse](#get-category-by-slug-response)
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| slug | string |  | Yes |
+### <span id="get-product-by-id"></span> get product by Id (*getProductById*)
 
-#### GetCategoryBySlugResponse
+```
+GET /v1/product/{id}
+```
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+#### Parameters
 
-#### GetProductByIdRequest
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| id | `path` | string | `string` |  | ✓ |  |  |
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-product-by-id-200) | OK | A successful response. |  | [schema](#get-product-by-id-200-schema) |
 
-#### GetProductBySkuRequest
+#### Responses
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| sku | string |  | Yes |
 
-#### GetProductBySlugRequest
+##### <span id="get-product-by-id-200"></span> 200 - A successful response.
+Status: OK
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| slug | string |  | Yes |
+###### <span id="get-product-by-id-200-schema"></span> Schema
+   
+  
 
-#### GetProductsByCategoryIdRequest
+[Product](#product)
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| categoryId | long |  | Yes |
-| currentPage | long |  | Yes |
-| pageSize | long |  | Yes |
-| sortOn | string |  | No |
+### <span id="get-product-by-sku"></span> get product by sku (*getProductBySku*)
 
-#### GetProductsByCategoryIdResponse
+```
+GET /v1/product/sku/{sku}
+```
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| products | [ [Product](#product) ] |  | Yes |
-| totalRecords | long |  | Yes |
-| totalPages | long |  | Yes |
+#### Parameters
 
-#### Price
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| sku | `path` | string | `string` |  | ✓ |  |  |
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| amount | double |  | Yes |
-| displayAmount | string |  | Yes |
-| compareAtAmount | double |  | Yes |
-| displayCompareAtAmount | string |  | Yes |
-| currency | string |  | Yes |
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-product-by-sku-200) | OK | A successful response. |  | [schema](#get-product-by-sku-200-schema) |
 
-#### Product
+#### Responses
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| slug | string |  | Yes |
-| name | string |  | Yes |
-| shortDescription | string |  | Yes |
-| description | string |  | Yes |
-| metaTitle | string |  | Yes |
-| metaDescription | string |  | Yes |
-| metaKeywords | string |  | Yes |
-| variants | [ [Variant](#variant) ] |  | Yes |
 
-#### UpdateCategoryRequest
+##### <span id="get-product-by-sku-200"></span> 200 - A successful response.
+Status: OK
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| category | [Category](#category) |  | Yes |
+###### <span id="get-product-by-sku-200-schema"></span> Schema
+   
+  
 
-#### UpdateCategoryResponse
+[Product](#product)
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+### <span id="get-product-by-slug"></span> get product by slug (*getProductBySlug*)
 
-#### UpdateProductRequest
+```
+GET /v1/product/slug/{slug}
+```
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| path:omitempty | long |  | Yes |
-| product:omitempty | [Product](#product) |  | Yes |
+#### Parameters
 
-#### UpdateProductResponse
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| slug | `path` | string | `string` |  | ✓ |  |  |
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| product:omitempty | [Product](#product) |  | Yes |
-| statusCode:omitempty | long |  | Yes |
-| statusMessage:omitempty | string |  | Yes |
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-product-by-slug-200) | OK | A successful response. |  | [schema](#get-product-by-slug-200-schema) |
 
-#### Variant
+#### Responses
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| isDefault | boolean (boolean) |  | Yes |
-| sku | string |  | Yes |
-| weight | double |  | Yes |
-| height | double |  | Yes |
-| width | double |  | Yes |
-| depth | double |  | Yes |
-| price | [Price](#price) |  | Yes |
+
+##### <span id="get-product-by-slug-200"></span> 200 - A successful response.
+Status: OK
+
+###### <span id="get-product-by-slug-200-schema"></span> Schema
+   
+  
+
+[Product](#product)
+
+### <span id="get-products-by-category-id"></span> get products by category Id (*getProductsByCategoryId*)
+
+```
+GET /v1/products/category/{categoryId}/{currentPage}/{pageSize}
+```
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| categoryId | `path` | string | `string` |  | ✓ |  |  |
+| currentPage | `path` | string | `string` |  | ✓ |  |  |
+| pageSize | `path` | string | `string` |  | ✓ |  |  |
+| sortOn | `query` | string | `string` |  |  |  |  |
+
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-products-by-category-id-200) | OK | A successful response. |  | [schema](#get-products-by-category-id-200-schema) |
+
+#### Responses
+
+
+##### <span id="get-products-by-category-id-200"></span> 200 - A successful response.
+Status: OK
+
+###### <span id="get-products-by-category-id-200-schema"></span> Schema
+   
+  
+
+[GetProductsByCategoryIDResponse](#get-products-by-category-id-response)
+
+### <span id="update-category"></span> update category (*updateCategory*)
+
+```
+PUT /v1/category/{id}
+```
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| id | `path` | string | `string` |  | ✓ |  |  |
+| body | `body` | [UpdateCategoryRequest](#update-category-request) | `models.UpdateCategoryRequest` | | ✓ | |  |
+
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#update-category-200) | OK | A successful response. |  | [schema](#update-category-200-schema) |
+
+#### Responses
+
+
+##### <span id="update-category-200"></span> 200 - A successful response.
+Status: OK
+
+###### <span id="update-category-200-schema"></span> Schema
+   
+  
+
+[UpdateCategoryResponse](#update-category-response)
+
+### <span id="update-product"></span> update product (*updateProduct*)
+
+```
+PUT /v1/product/{id}
+```
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| id | `path` | string | `string` |  | ✓ |  |  |
+| body | `body` | [UpdateProductRequest](#update-product-request) | `models.UpdateProductRequest` | | ✓ | |  |
+
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#update-product-200) | OK | A successful response. |  | [schema](#update-product-200-schema) |
+
+#### Responses
+
+
+##### <span id="update-product-200"></span> 200 - A successful response.
+Status: OK
+
+###### <span id="update-product-200-schema"></span> Schema
+   
+  
+
+[UpdateProductResponse](#update-product-response)
+
+## Models
+
+### <span id="category"></span> Category
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| description | string| `string` | ✓ | | description of category |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | category id |  |
+| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
+| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
+| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
+| name | string| `string` | ✓ | | name of category |  |
+| parentId | int64 (formatted integer)| `int64` | ✓ | | parent category id. references Category.Id |  |
+| slug | string| `string` | ✓ | | slug name of the category |  |
+| sortOrder | int32 (formatted integer)| `int32` | ✓ | | sort order of menu items on the same level and same parent id |  |
+
+
+
+### <span id="create-category-request"></span> CreateCategoryRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| category | [Category](#category)| `Category` | ✓ | |  |  |
+
+
+
+### <span id="create-category-response"></span> CreateCategoryResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| category | [Category](#category)| `Category` | ✓ | |  |  |
+| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="create-product-request"></span> CreateProductRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+
+
+
+### <span id="create-product-response"></span> CreateProductResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+| statusCode:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage:omitempty | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="delete-category-request"></span> DeleteCategoryRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="delete-category-response"></span> DeleteCategoryResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="delete-product-request"></span> DeleteProductRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="delete-product-response"></span> DeleteProductResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| statusCode:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage:omitempty | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-all-categories-response"></span> GetAllCategoriesResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| categories | [][Category](#category)| `[]*Category` | ✓ | |  |  |
+| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-all-products-request"></span> GetAllProductsRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| sortOn | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-all-products-response"></span> GetAllProductsResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| products | [][Product](#product)| `[]*Product` | ✓ | |  |  |
+| totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="get-category-by-id-request"></span> GetCategoryByIdRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="get-category-by-id-response"></span> GetCategoryByIdResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| category | [Category](#category)| `Category` | ✓ | |  |  |
+| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-category-by-slug-request"></span> GetCategoryBySlugRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| slug | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-category-by-slug-response"></span> GetCategoryBySlugResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| category | [Category](#category)| `Category` | ✓ | |  |  |
+| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-product-by-id-request"></span> GetProductByIdRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="get-product-by-sku-request"></span> GetProductBySkuRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| sku | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-product-by-slug-request"></span> GetProductBySlugRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| slug | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="get-products-by-category-id-request"></span> GetProductsByCategoryIdRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| categoryId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| sortOn | string| `string` |  | |  |  |
+
+
+
+### <span id="get-products-by-category-id-response"></span> GetProductsByCategoryIdResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| products | [][Product](#product)| `[]*Product` | ✓ | |  |  |
+| totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="price"></span> Price
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| amount | double (formatted number)| `float64` | ✓ | | price amount |  |
+| compareAtAmount | double (formatted number)| `float64` | ✓ | | price compare amount |  |
+| currency | string| `string` | ✓ | | price currency. example: USD, CAN, etc. |  |
+| displayAmount | string| `string` | ✓ | | price display amount |  |
+| displayCompareAtAmount | string| `string` | ✓ | | price display compare amount |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | price id |  |
+
+
+
+### <span id="product"></span> Product
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| description | string| `string` | ✓ | | category description |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | product id |  |
+| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
+| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
+| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
+| name | string| `string` | ✓ | | product name |  |
+| shortDescription | string| `string` | ✓ | | product short description. used in category pages |  |
+| slug | string| `string` | ✓ | | product slug |  |
+| variants | [][Variant](#variant)| `[]*Variant` | ✓ | | collection of Variant objects |  |
+
+
+
+### <span id="update-category-request"></span> UpdateCategoryRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| category | [Category](#category)| `Category` | ✓ | |  |  |
+| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="update-category-response"></span> UpdateCategoryResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| category | [Category](#category)| `Category` | ✓ | |  |  |
+| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="update-product-request"></span> UpdateProductRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+
+
+
+### <span id="update-product-response"></span> UpdateProductResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+| statusCode:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| statusMessage:omitempty | string| `string` | ✓ | |  |  |
+
+
+
+### <span id="variant"></span> Variant
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| depth | double (formatted number)| `float64` | ✓ | | variant depth. used in calculating shipping |  |
+| height | double (formatted number)| `float64` | ✓ | | variant height. used in calculating shipping |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | variant id |  |
+| isDefault | boolean (formatted boolean)| `bool` | ✓ | | is default variant. each product must have exactly 1 default variant |  |
+| price | [Price](#price)| `Price` | ✓ | | variant Price object |  |
+| sku | string| `string` | ✓ | | variant sku. usually the product sku with appended identification tags |  |
+| weight | double (formatted number)| `float64` | ✓ | | variant weight. used in calculating shipping |  |
+| width | double (formatted number)| `float64` | ✓ | | variant width. used in calculating shipping |  |
+
+

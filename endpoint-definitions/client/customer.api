@@ -3,7 +3,7 @@ info(
 	desc: "client gateway api"
 	author: "localrivet"
 	email: "localrivet"
-	version: "1.0.0"
+	version: "1"
 )
 
 // objects
@@ -15,27 +15,20 @@ type Customer {
 	Password  string `json:"password,omitempty"`
 }
 
-type JwtToken {
-	AccessToken  string `json:"access_token"`
-	AccessExpire int64  `json:"access_expire"`
-	RefreshAfter int64  `json:"refresh_after"`
-}
-
 //
 // requests & responses
 //
 
 // login
 type CustomerLoginRequest {
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 type CustomerLoginResponse {
 	JwtToken      JwtToken `json:"jwt"`
 	Customer      Customer `json:"customer"`
-	StatusCode    int64    `json:"statusCode"`
-	StatusMessage string   `json:"statusMessage"`
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 //
@@ -45,9 +38,12 @@ type CustomerLoginResponse {
 @server(
 	middleware: Locale, StoreKey
 )
-service gateway {
-	// customer
-    @doc "customer logic"
+service client {
+	// login
+	@doc(
+		summary: "Login"
+		description: "login for customers"
+	)
 	@handler login
 	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
 }

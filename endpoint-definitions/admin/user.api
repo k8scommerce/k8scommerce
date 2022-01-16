@@ -1,16 +1,10 @@
 info(
-	title: "Admin Gateway API"
-	desc: "admin gateway api"
+	title: "User API Endpoints"
+	desc: "admin gateway user api endpoints"
 	author: "localrivet"
 	email: "localrivet"
-	version: "1.0.0"
+	version: "1"
 )
-
-type JwtToken {
-	AccessToken  string `json:"access_token"`
-	AccessExpire int64  `json:"access_expire"`
-	RefreshAfter int64  `json:"refresh_after"`
-}
 
 // objects
 type User {
@@ -21,14 +15,13 @@ type User {
 	Password  string `json:"password,omitempty"`
 }
 
-
 //
 // requests & responses
 //
 
 // login
 type UserLoginRequest {
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -46,9 +39,12 @@ type UserLoginResponse {
 @server(
 	middleware: Locale
 )
-service gateway {
-	// user
-    @doc "manages user logins"
+service admin {
+	// login
+	@doc(
+		summary: "Login"
+		description: "login for administration users"
+	)
 	@handler login
 	post /v1/user/login(UserLoginRequest) returns (UserLoginResponse)
 }

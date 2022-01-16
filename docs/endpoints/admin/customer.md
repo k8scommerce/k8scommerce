@@ -1,7 +1,7 @@
-# Admin Gateway API
-admin gateway api
+# Customer API Endpoints
+admin gateway customer api endpoints
 
-## Version: 1.0.0
+## Version: 1
 
 ### Security
 **apiKey**  

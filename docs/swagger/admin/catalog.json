@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Admin Gateway API",
-    "description": "admin gateway api",
-    "version": "1.0.0"
+    "title": "Catalog API Endpoints",
+    "description": "admin gateway catalog api endpoints",
+    "version": "1"
   },
   "schemes": [
     "http",
@@ -28,7 +28,7 @@
           }
         },
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -54,7 +54,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -84,7 +84,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -115,7 +115,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       },
       "delete": {
@@ -145,7 +145,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       },
       "put": {
@@ -175,7 +175,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -201,7 +201,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -225,7 +225,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -249,7 +249,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -273,7 +273,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       },
       "delete": {
@@ -303,7 +303,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       },
       "put": {
@@ -333,7 +333,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -375,7 +375,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     },
@@ -411,7 +411,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     }
@@ -422,33 +422,42 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " category id"
         },
         "parentId": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " parent category id. references Category.Id"
         },
         "slug": {
-          "type": "string"
+          "type": "string",
+          "description": " slug name of the category"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": " name of category"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "description": " description of category"
         },
         "metaTitle": {
-          "type": "string"
+          "type": "string",
+          "description": " metatag title for SEO"
         },
         "metaDescription": {
-          "type": "string"
+          "type": "string",
+          "description": " metatag description for SEO"
         },
         "metaKeywords": {
-          "type": "string"
+          "type": "string",
+          "description": " metatag keywords for SEO"
         },
         "sortOrder": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": " sort order of menu items on the same level and same parent id"
         }
       },
       "title": "Category",
@@ -589,10 +598,6 @@
         "statusCode:omitempty",
         "statusMessage:omitempty"
       ]
-    },
-    "GetAllCategoriesRequest": {
-      "type": "object",
-      "title": "GetAllCategoriesRequest"
     },
     "GetAllCategoriesResponse": {
       "type": "object",
@@ -825,24 +830,30 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " price id"
         },
         "amount": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": " price amount"
         },
         "displayAmount": {
-          "type": "string"
+          "type": "string",
+          "description": " price display amount"
         },
         "compareAtAmount": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": " price compare amount"
         },
         "displayCompareAtAmount": {
-          "type": "string"
+          "type": "string",
+          "description": " price display compare amount"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": " price currency. example: USD, CAN, etc."
         }
       },
       "title": "Price",
@@ -860,34 +871,43 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " product id"
         },
         "slug": {
-          "type": "string"
+          "type": "string",
+          "description": " product slug"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": " product name"
         },
         "shortDescription": {
-          "type": "string"
+          "type": "string",
+          "description": " product short description. used in category pages"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "description": " category description"
         },
         "metaTitle": {
-          "type": "string"
+          "type": "string",
+          "description": " metatag title for SEO"
         },
         "metaDescription": {
-          "type": "string"
+          "type": "string",
+          "description": " metatag description for SEO"
         },
         "metaKeywords": {
-          "type": "string"
+          "type": "string",
+          "description": " metatag keywords for SEO"
         },
         "variants": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Variant"
-          }
+          },
+          "description": " collection of Variant objects"
         }
       },
       "title": "Product",
@@ -984,33 +1004,41 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " variant id"
         },
         "isDefault": {
           "type": "boolean",
-          "format": "boolean"
+          "format": "boolean",
+          "description": " is default variant. each product must have exactly 1 default variant"
         },
         "sku": {
-          "type": "string"
+          "type": "string",
+          "description": " variant sku. usually the product sku with appended identification tags"
         },
         "weight": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": " variant weight. used in calculating shipping"
         },
         "height": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": " variant height. used in calculating shipping"
         },
         "width": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": " variant width. used in calculating shipping"
         },
         "depth": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": " variant depth. used in calculating shipping"
         },
         "price": {
-          "$ref": "#/definitions/Price"
+          "$ref": "#/definitions/Price",
+          "description": " variant Price object"
         }
       },
       "title": "Variant",
