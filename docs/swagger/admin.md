@@ -1,5 +1,7 @@
-#
-## Version
+# Admin Gateway API
+admin gateway api
+
+## Version: 1
 
 ### Security
 **apiKey**  
@@ -10,46 +12,17 @@
 |Name|Authorization|
 |In|header|
 
-### /v1/cart/{customerId}
-
-#### GET
-##### Summary
-
-returns a shopping cart if one exists
-
-##### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| customerId | path |  | Yes | string |
-
-##### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [GetCartResponse](#getcartresponse) |
-
-#### POST
-##### Summary
-
-creates a shopping cart for the associated customerId. Each customer can only have 1 cart ever.
-
-##### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| customerId | path |  | Yes | string |
-| body | body |  | Yes | [CreateCartRequest](#createcartrequest) |
-
-##### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [CreateCartResponse](#createcartresponse) |
-
 ### /v1/categories
 
 #### GET
+##### Summary
+
+Get All Categories
+
+##### Description
+
+returns all categories belonging to a store
+
 ##### Responses
 
 | Code | Description | Schema |
@@ -59,6 +32,14 @@ creates a shopping cart for the associated customerId. Each customer can only ha
 ### /v1/category
 
 #### POST
+##### Summary
+
+Create Category
+
+##### Description
+
+creates a category
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
@@ -74,12 +55,20 @@ creates a shopping cart for the associated customerId. Each customer can only ha
 ### /v1/category/slug/{slug}
 
 #### GET
+##### Summary
+
+Get Category By Slug
+
+##### Description
+
+returns all categories by slug belonging to a store
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| slug | path |  | Yes | string |
-| slug | query |  | Yes | string |
+| slug | path | category slug | Yes | string |
+| slug | query |  slug name of the category | Yes | string |
 
 ##### Responses
 
@@ -90,11 +79,19 @@ creates a shopping cart for the associated customerId. Each customer can only ha
 ### /v1/category/{id}
 
 #### GET
+##### Summary
+
+Get Category By Id
+
+##### Description
+
+returns all categories by id belonging to a store
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | category id | Yes | string |
 | id | query |  | Yes | long |
 
 ##### Responses
@@ -104,11 +101,19 @@ creates a shopping cart for the associated customerId. Each customer can only ha
 | 200 | A successful response. | [GetCategoryByIdResponse](#getcategorybyidresponse) |
 
 #### DELETE
+##### Summary
+
+Delete Category
+
+##### Description
+
+deletes a category
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | category id | Yes | string |
 | body | body |  | Yes | [DeleteCategoryRequest](#deletecategoryrequest) |
 
 ##### Responses
@@ -118,11 +123,19 @@ creates a shopping cart for the associated customerId. Each customer can only ha
 | 200 | A successful response. | [DeleteCategoryResponse](#deletecategoryresponse) |
 
 #### PUT
+##### Summary
+
+Update Category
+
+##### Description
+
+updates a category
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | category id | Yes | string |
 | body | body |  | Yes | [UpdateCategoryRequest](#updatecategoryrequest) |
 
 ##### Responses
@@ -131,28 +144,17 @@ creates a shopping cart for the associated customerId. Each customer can only ha
 | ---- | ----------- | ------ |
 | 200 | A successful response. | [UpdateCategoryResponse](#updatecategoryresponse) |
 
-### /v1/customer/login
+### /v1/product
 
 #### POST
 ##### Summary
 
-customer logic
+Create Product
 
-##### Parameters
+##### Description
 
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ---- |
-| body | body |  | Yes | [CustomerLoginRequest](#customerloginrequest) |
+creates a product
 
-##### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | A successful response. | [CustomerLoginResponse](#customerloginresponse) |
-
-### /v1/product
-
-#### POST
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
@@ -168,11 +170,19 @@ customer logic
 ### /v1/product/sku/{sku}
 
 #### GET
+##### Summary
+
+Get Product By Sku
+
+##### Description
+
+returns all products by sku belonging to a store
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| sku | path |  | Yes | string |
+| sku | path | product sku | Yes | string |
 
 ##### Responses
 
@@ -183,11 +193,20 @@ customer logic
 ### /v1/product/slug/{slug}
 
 #### GET
+##### Summary
+
+Get Product By Slug
+
+##### Description
+
+returns matching product by slug
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| slug | path |  | Yes | string |
+| slug | path | product slug | Yes | string |
+| status | query |  a ResponseStatus object | Yes | invalid (UNKNOWN) |
 
 ##### Responses
 
@@ -198,11 +217,19 @@ customer logic
 ### /v1/product/{id}
 
 #### GET
+##### Summary
+
+Get Product By Id
+
+##### Description
+
+returns matching product by id
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | product id | Yes | string |
 
 ##### Responses
 
@@ -211,11 +238,19 @@ customer logic
 | 200 | A successful response. | [Product](#product) |
 
 #### DELETE
+##### Summary
+
+Delete Product
+
+##### Description
+
+delete a product
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | product id | Yes | string |
 | body | body |  | Yes | [DeleteProductRequest](#deleteproductrequest) |
 
 ##### Responses
@@ -225,11 +260,19 @@ customer logic
 | 200 | A successful response. | [DeleteProductResponse](#deleteproductresponse) |
 
 #### PUT
+##### Summary
+
+Update Product
+
+##### Description
+
+updates a product
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | product id | Yes | string |
 | body | body |  | Yes | [UpdateProductRequest](#updateproductrequest) |
 
 ##### Responses
@@ -241,13 +284,21 @@ customer logic
 ### /v1/products/category/{categoryId}/{currentPage}/{pageSize}
 
 #### GET
+##### Summary
+
+Get Products By Category Id
+
+##### Description
+
+returns all products by category id belonging to a store
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| categoryId | path |  | Yes | string |
-| currentPage | path |  | Yes | string |
-| pageSize | path |  | Yes | string |
+| categoryId | path | category id | Yes | string |
+| currentPage | path | current page number | Yes | string |
+| pageSize | path | number of records per page | Yes | string |
 | sortOn | query |  | No | string |
 
 ##### Responses
@@ -259,12 +310,20 @@ customer logic
 ### /v1/products/{currentPage}/{pageSize}
 
 #### GET
+##### Summary
+
+Get All Products
+
+##### Description
+
+returns all products belonging to a store
+
 ##### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| currentPage | path |  | Yes | string |
-| pageSize | path |  | Yes | string |
+| currentPage | path | current page number | Yes | string |
+| pageSize | path | number of records per page | Yes | string |
 | sortOn | query |  | Yes | string |
 
 ##### Responses
@@ -278,7 +337,11 @@ customer logic
 #### POST
 ##### Summary
 
-manages user logins
+Login
+
+##### Description
+
+login for administration users
 
 ##### Parameters
 
@@ -294,66 +357,19 @@ manages user logins
 
 ### Models
 
-#### AddItemToCartRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| customerId | long |  | Yes |
-| item | [Item](#item) |  | Yes |
-
-#### AddItemToCartResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| cart | [Cart](#cart) |  | Yes |
-| sessionId | string |  | Yes |
-
-#### Cart
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| items | [ [Item](#item) ] |  | Yes |
-| totalPrice | double |  | Yes |
-
 #### Category
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| parentId | long |  | Yes |
-| slug | string |  | Yes |
-| name | string |  | Yes |
-| description | string |  | Yes |
-| metaTitle | string |  | Yes |
-| metaDescription | string |  | Yes |
-| metaKeywords | string |  | Yes |
-| sortOrder | integer |  | Yes |
-
-#### ClearCartRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| ClearCartRequest | object |  |  |
-
-#### ClearCartResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
-
-#### CreateCartRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| CreateCartRequest | object |  |  |
-
-#### CreateCartResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| cart | [Cart](#cart) |  | Yes |
-| sessionId | string |  | Yes |
+| id | long |  category id | Yes |
+| parentId | long |  parent category id. references Category.Id | Yes |
+| slug | string |  slug name of the category | Yes |
+| name | string |  name of category | Yes |
+| description | string |  description of category | Yes |
+| metaTitle | string |  metatag title for SEO | Yes |
+| metaDescription | string |  metatag description for SEO | Yes |
+| metaKeywords | string |  metatag keywords for SEO | Yes |
+| sortOrder | integer |  sort order of menu items on the same level and same parent id | Yes |
 
 #### CreateCategoryRequest
 
@@ -366,8 +382,7 @@ manages user logins
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### CreateProductRequest
 
@@ -380,8 +395,7 @@ manages user logins
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | product:omitempty | [Product](#product) |  | Yes |
-| statusCode:omitempty | long |  | Yes |
-| statusMessage:omitempty | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### Customer
 
@@ -393,22 +407,6 @@ manages user logins
 | email | string |  | Yes |
 | password | string |  | Yes |
 
-#### CustomerLoginRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| email | string |  | Yes |
-| password | string |  | Yes |
-
-#### CustomerLoginResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| jwt | [JwtToken](#jwttoken) |  | Yes |
-| customer | [Customer](#customer) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
-
 #### DeleteCategoryRequest
 
 | Name | Type | Description | Required |
@@ -419,8 +417,7 @@ manages user logins
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### DeleteProductRequest
 
@@ -432,22 +429,14 @@ manages user logins
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| statusCode:omitempty | long |  | Yes |
-| statusMessage:omitempty | string |  | Yes |
-
-#### GetAllCategoriesRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| GetAllCategoriesRequest | object |  |  |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetAllCategoriesResponse
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| categories | [ [Category](#category) ] |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| categories | [ [Category](#category) ] |  a collection of Category | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetAllProductsRequest
 
@@ -464,19 +453,7 @@ manages user logins
 | products | [ [Product](#product) ] |  | Yes |
 | totalRecords | long |  | Yes |
 | totalPages | long |  | Yes |
-
-#### GetCartRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| customerId | string |  | Yes |
-
-#### GetCartResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| cart | [Cart](#cart) |  | Yes |
-| sessionId | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetCategoryByIdRequest
 
@@ -489,22 +466,20 @@ manages user logins
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetCategoryBySlugRequest
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| slug | string |  | Yes |
+| slug | string |  slug name of the category | Yes |
 
 #### GetCategoryBySlugResponse
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetProductByIdRequest
 
@@ -522,7 +497,8 @@ manages user logins
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| slug | string |  | Yes |
+| slug | string |  slug name of the category | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetProductsByCategoryIdRequest
 
@@ -540,15 +516,7 @@ manages user logins
 | products | [ [Product](#product) ] |  | Yes |
 | totalRecords | long |  | Yes |
 | totalPages | long |  | Yes |
-
-#### Item
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| variantId | string |  | Yes |
-| quantity | integer |  | Yes |
-| price | double |  | Yes |
-| expiresAt | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### JwtToken
 
@@ -562,58 +530,33 @@ manages user logins
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| amount | double |  | Yes |
-| displayAmount | string |  | Yes |
-| compareAtAmount | double |  | Yes |
-| displayCompareAtAmount | string |  | Yes |
-| currency | string |  | Yes |
+| id | long |  price id | Yes |
+| amount | double |  price amount | Yes |
+| displayAmount | string |  price display amount | Yes |
+| compareAtAmount | double |  price compare amount | Yes |
+| displayCompareAtAmount | string |  price display compare amount | Yes |
+| currency | string |  price currency. example: USD, CAN, etc. | Yes |
 
 #### Product
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| slug | string |  | Yes |
-| name | string |  | Yes |
-| shortDescription | string |  | Yes |
-| description | string |  | Yes |
-| metaTitle | string |  | Yes |
-| metaDescription | string |  | Yes |
-| metaKeywords | string |  | Yes |
-| variants | [ [Variant](#variant) ] |  | Yes |
+| id | long |  product id | Yes |
+| slug | string |  product slug | Yes |
+| name | string |  product name | Yes |
+| shortDescription | string |  product short description. used in category pages | Yes |
+| description | string |  category description | Yes |
+| metaTitle | string |  metatag title for SEO | Yes |
+| metaDescription | string |  metatag description for SEO | Yes |
+| metaKeywords | string |  metatag keywords for SEO | Yes |
+| variants | [ [Variant](#variant) ] |  collection of Variant objects | Yes |
 
-#### RemoveCartItemRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| productId | long |  | Yes |
-| variantId | long |  | Yes |
-| quanity | integer |  | Yes |
-
-#### RemoveCartItemResponse
+#### ResponseStatus
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| cart | [Cart](#cart) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
-
-#### UpdateCartItemRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| productId | long |  | Yes |
-| variantId | long |  | Yes |
-| quanity | integer |  | Yes |
-
-#### UpdateCartItemResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| cart | [Cart](#cart) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| statusCode | long |  RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go | Yes |
+| statusMessage | string |  status message | Yes |
 
 #### UpdateCategoryRequest
 
@@ -627,8 +570,7 @@ manages user logins
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | category | [Category](#category) |  | Yes |
-| statusCode | long |  | Yes |
-| statusMessage | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### UpdateProductRequest
 
@@ -642,8 +584,7 @@ manages user logins
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | product:omitempty | [Product](#product) |  | Yes |
-| statusCode:omitempty | long |  | Yes |
-| statusMessage:omitempty | string |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### User
 
@@ -675,11 +616,11 @@ manages user logins
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| isDefault | boolean (boolean) |  | Yes |
-| sku | string |  | Yes |
-| weight | double |  | Yes |
-| height | double |  | Yes |
-| width | double |  | Yes |
-| depth | double |  | Yes |
-| price | [Price](#price) |  | Yes |
+| id | long |  variant id | Yes |
+| isDefault | boolean (boolean) |  is default variant. each product must have exactly 1 default variant | Yes |
+| sku | string |  variant sku. usually the product sku with appended identification tags | Yes |
+| weight | double |  variant weight. used in calculating shipping | Yes |
+| height | double |  variant height. used in calculating shipping | Yes |
+| width | double |  variant width. used in calculating shipping | Yes |
+| depth | double |  variant depth. used in calculating shipping | Yes |
+| price | [Price](#price) |  variant Price object | Yes |

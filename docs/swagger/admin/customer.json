@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Admin Gateway API",
-    "description": "admin gateway api",
-    "version": "1.0.0"
+    "title": "Customer API Endpoints",
+    "description": "admin gateway customer api endpoints",
+    "version": "1"
   },
   "schemes": [
     "http",

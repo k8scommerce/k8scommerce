@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Admin Gateway API",
-    "description": "admin gateway api",
-    "version": "1.0.0"
+    "title": "User API Endpoints",
+    "description": "admin gateway user api endpoints",
+    "version": "1"
   },
   "schemes": [
     "http",
@@ -18,7 +18,8 @@
   "paths": {
     "/v1/user/login": {
       "post": {
-        "summary": "manages user logins",
+        "summary": "Login",
+        "description": "login for administration users",
         "operationId": "login",
         "responses": {
           "200": {
@@ -39,7 +40,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "admin"
         ]
       }
     }
