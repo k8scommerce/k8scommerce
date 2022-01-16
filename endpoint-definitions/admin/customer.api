@@ -1,9 +1,9 @@
 info(
-	title: "Admin Gateway API"
-	desc: "admin gateway api"
+	title: "Customer API Endpoints"
+	desc: "admin gateway customer api endpoints"
 	author: "localrivet"
 	email: "localrivet"
-	version: "1.0.0"
+	version: "1"
 )
 
 // objects
@@ -26,9 +26,6 @@ type Customer {
 @server(
 	middleware: Locale
 )
-service gateway {
-	// customer
-	// @doc "manages customer logins"
-	// @handler login
-	// post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
+service admin {
+
 }

@@ -3,26 +3,21 @@ info(
 	desc: "admin gateway api"
 	author: "localrivet"
 	email: "localrivet"
-	version: "1.0.0"
+	version: "1"
 )
 
-type JwtToken {
-	AccessToken  string `json:"access_token"`
-	AccessExpire int64  `json:"access_expire"`
-	RefreshAfter int64  `json:"refresh_after"`
-}
-
 // objects
+
 type Cart {
-	Item       []Item  `json:"items"`
-	TotalPrice float64 `json:"totalPrice"`
+	Item       []Item  `json:"items"`      // a collection of Item
+	TotalPrice float64 `json:"totalPrice"` // the sum total of the cart
 }
 
 type Item {
-	Sku       string  `json:"variantId"`
-	Quantity  int32   `json:"quantity"`
-	Price     float64 `json:"price"`
-	ExpiresAt string  `json:"expiresAt"`
+	Sku       string  `json:"sku"`       // an item's variant sku number
+	Quantity  int32   `json:"quantity"`  // how many of identical items
+	Price     float64 `json:"price"`     // the item's price
+	ExpiresAt string  `json:"expiresAt"` // when this item expires in the cart
 }
 
 //
@@ -31,93 +26,113 @@ type Item {
 
 // get cart
 type GetCartRequest {
-	CustomerId string `path:"customerId"`
+	CustomerId int64 `path:"customerId"` // a customer's id
 }
 
 type GetCartResponse {
-	Cart          Cart   `json:"cart"`
-	StatusCode    int64  `json:"sessionId"`
-	StatusMessage string `json:"sessionId"`
+	Cart           Cart           `json:"cart"`   // a Cart object
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
-// add to cart
-type CreateCartRequest {}
-
-type CreateCartResponse {
-	Cart          Cart   `json:"cart"`
-	StatusCode    int64  `json:"sessionId"`
-	StatusMessage string `json:"sessionId"`
-}
-
-// add to cart
+// add item to cart
 type AddItemToCartRequest {
-	CustomerId int64 `json:"customerId"`
-	Item       Item  `json:"item"`
+	CustomerId int64 `path:"customerId"` // a customer's id
+	Item       Item  `json:"item"`       // an Item object
 }
 
 type AddItemToCartResponse {
-	Cart          Cart   `json:"cart"`
-	StatusCode    int64  `json:"sessionId"`
-	StatusMessage string `json:"sessionId"`
+	Cart           Cart           `json:"cart"`   // a Cart object
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
-// upate cart item quantity
-type UpdateCartItemRequest {
-	ProductId int64 `json:"productId"`
-	VariantId int64 `json:"variantId"`
-	Quanity   int32 `json:"quanity"`
+// update cart item quantity
+type UpdateCartItemQuantityRequest {
+	CustomerId int64  `path:"customerId"` // a customer's id
+	Sku        string `path:"sku"`        // an item's variant sku number
+	Quanity    int32  `json:"quanity"`    // a new quantity
 }
 
-type UpdateCartItemResponse {
-	Cart          Cart   `json:"cart"`
-	StatusCode    int64  `json:"statusCode"`
-	StatusMessage string `json:"statusMessage"`
+type UpdateCartItemQuantityResponse {
+	Cart           Cart           `json:"cart"`   // a Cart object
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // remove item
 type RemoveCartItemRequest {
-	ProductId int64 `json:"productId"`
-	VariantId int64 `json:"variantId"`
-	Quanity   int32 `json:"quanity"`
+	CustomerId int64  `path:"customerId"` // a customer's id
+	Sku        string `path:"sku"`        // an item's variant sku number
+	Quanity    int32  `json:"quanity"`    // a new quantity
 }
 
 type RemoveCartItemResponse {
-	Cart          Cart   `json:"cart"`
-	StatusCode    int64  `json:"statusCode"`
-	StatusMessage string `json:"statusMessage"`
+	Cart           Cart           `json:"cart"`   // a Cart object
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // clear cart
 type ClearCartRequest {
+	CustomerId     int64          `path:"customerId"` // a customer's id
+	ResponseStatus ResponseStatus `json:"status"`     // a ResponseStatus object
 }
 
 type ClearCartResponse {
-	StatusCode    int64  `json:"statusCode"`
-	StatusMessage string `json:"statusMessage"`
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 //
 // endpoints
 //
 
-// with auth
+// with middleware
 @server(
 	jwt: Auth
-	middleware: Locale
+	middleware: Locale, StoreKey
 )
-service gateway {
+service admin {
+	// get cart
 	@doc(
-		summary: "creates a shopping cart for the associated customerId. Each customer can only have 1 cart ever."
-	)
-	@handler createCart
-	post /v1/cart/:customerId(CreateCartRequest) returns (CreateCartResponse)
-	
-	@doc(
-		summary: "returns a shopping cart if one exists"
+		summary: "Get Cart"
+		description: "returns a shopping cart if one exists"
+		customerId: "a customer's id"
 	)
 	@handler getCart
 	get /v1/cart/:customerId(GetCartRequest) returns (GetCartResponse)
 	
-	// @handler addItemToCart
-	// post /v1/cart/:customerId/add(AddToCartRequest) returns (AddToCartResponse)
+	// add item to cart
+	@doc(
+		summary: "Add Item to Cart"
+		description: "adds an item to an existing cart"
+		customerId: "a customer's id"
+	)
+	@handler addItemToCart
+	post /v1/cart/:customerId(AddItemToCartRequest) returns (AddItemToCartResponse)
+	
+	// update cart item quantity
+	@doc(
+		summary: "Update Item Quantity"
+		description: "updates a cart item's quantity"
+		customerId: "a customer's id"
+		sku: "an item's sku"
+	)
+	@handler updateCartItemQuantity
+	put /v1/cart/:customerId/:sku(UpdateCartItemQuantityRequest) returns (UpdateCartItemQuantityResponse)
+	
+	// remove item
+	@doc(
+		summary: "Remove Item"
+		description: "removes an item from a customer's cart"
+		customerId: "a customer's id"
+		sku: "an Item's sku"
+	)
+	@handler removeCartItem
+	delete /v1/cart/:customerId/:sku(RemoveCartItemRequest) returns (RemoveCartItemResponse)
+	
+	// clear cart
+	@doc(
+		summary: "Clear Cart"
+		description: "clear a customer's cart"
+		customerId: "a customer's id"
+	)
+	@handler clearCart
+	delete /v1/cart/:customerId(ClearCartRequest) returns (ClearCartResponse)
 }

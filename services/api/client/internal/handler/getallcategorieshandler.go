@@ -6,19 +6,12 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 	"k8scommerce/services/api/client/internal/logic"
 	"k8scommerce/services/api/client/internal/svc"
-	"k8scommerce/services/api/client/internal/types"
 )
 
-func getAllCategoriesHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func getAllCategoriesHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetAllCategoriesRequest
-		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
-			return
-		}
-
-		l := logic.NewGetAllCategoriesLogic(r.Context(), ctx)
-		resp, err := l.GetAllCategories(req)
+		l := logic.NewGetAllCategoriesLogic(r.Context(), svcCtx)
+		resp, err := l.GetAllCategories()
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

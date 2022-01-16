@@ -9,7 +9,7 @@ import (
 	"k8scommerce/services/api/admin/internal/types"
 )
 
-func loginHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func loginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.UserLoginRequest
 		if err := httpx.Parse(r, &req); err != nil {
@@ -17,7 +17,7 @@ func loginHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewLoginLogic(r.Context(), ctx)
+		l := logic.NewLoginLogic(r.Context(), svcCtx)
 		resp, err := l.Login(req)
 		if err != nil {
 			httpx.Error(w, err)

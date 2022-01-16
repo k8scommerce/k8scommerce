@@ -3,7 +3,7 @@
   "info": {
     "title": "Client Gateway API",
     "description": "client gateway api",
-    "version": "1.0.0"
+    "version": "1"
   },
   "schemes": [
     "http",
@@ -18,7 +18,8 @@
   "paths": {
     "/v1/customer/login": {
       "post": {
-        "summary": "customer logic",
+        "summary": "Login",
+        "description": "login for customers",
         "operationId": "login",
         "responses": {
           "200": {
@@ -39,7 +40,7 @@
           }
         ],
         "tags": [
-          "gateway"
+          "client"
         ]
       }
     }
