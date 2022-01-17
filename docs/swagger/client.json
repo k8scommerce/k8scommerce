@@ -302,7 +302,7 @@
       "post": {
         "summary": "Login",
         "description": "login for customers",
-        "operationId": "login",
+        "operationId": "customerLogin",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -537,30 +537,36 @@
       "type": "object",
       "properties": {
         "street": {
-          "type": "string"
+          "type": "string",
+          "description": " street name, ie: 1723 NW 23rd Ave."
         },
         "city": {
-          "type": "string"
+          "type": "string",
+          "description": " city name"
         },
-        "state": {
-          "type": "string"
+        "stateProvince": {
+          "type": "string",
+          "description": " state or province name"
         },
         "country": {
-          "type": "string"
+          "type": "string",
+          "description": " IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
         },
         "postalCode": {
-          "type": "string"
+          "type": "string",
+          "description": " postal or zip code"
         },
         "isDefault": {
           "type": "boolean",
-          "format": "boolean"
+          "format": "boolean",
+          "description": " indicates if this is a default address"
         }
       },
       "title": "Address",
       "required": [
         "street",
         "city",
-        "state",
+        "stateProvince",
         "country",
         "postalCode",
         "isDefault"
@@ -680,7 +686,8 @@
       "type": "object",
       "properties": {
         "customer": {
-          "$ref": "#/definitions/NewCustomer"
+          "$ref": "#/definitions/NewCustomer",
+          "description": " NewCustomer object"
         }
       },
       "title": "CreateCustomerRequest",
@@ -692,7 +699,8 @@
       "type": "object",
       "properties": {
         "customer": {
-          "$ref": "#/definitions/Customer"
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
         },
         "status": {
           "$ref": "#/definitions/ResponseStatus",
@@ -710,19 +718,24 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " customer id"
         },
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "description": " first name"
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "description": " last or given name"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": " email address"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": " password"
         }
       },
       "title": "Customer",
@@ -739,16 +752,19 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " customer id"
         },
         "billingAddress": {
-          "$ref": "#/definitions/Address"
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
         },
         "shippingAddresses": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Address"
-          }
+          },
+          "description": " collection of Address objects"
         }
       },
       "title": "CustomerAccount",
@@ -762,10 +778,12 @@
       "type": "object",
       "properties": {
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": " email address, unique to each store id"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": " password"
         }
       },
       "title": "CustomerLoginRequest",
@@ -778,10 +796,12 @@
       "type": "object",
       "properties": {
         "jwt": {
-          "$ref": "#/definitions/JwtToken"
+          "$ref": "#/definitions/JwtToken",
+          "description": " jwt token"
         },
         "customer": {
-          "$ref": "#/definitions/Customer"
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
         },
         "status": {
           "$ref": "#/definitions/ResponseStatus",
@@ -1128,22 +1148,28 @@
       "type": "object",
       "properties": {
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "description": " first name"
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "description": " last or given name"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": " email address, unique per store id"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": " password"
         },
         "billingAddress": {
-          "$ref": "#/definitions/Address"
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
         },
         "shippingAddresses": {
-          "$ref": "#/definitions/Address"
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
         }
       },
       "title": "NewCustomer",

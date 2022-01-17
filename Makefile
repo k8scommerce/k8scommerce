@@ -28,7 +28,9 @@ sp_*.go\
 *column.go\
 goose*.go\
 spatialrefsy*.go\
-htally*.go
+htally*.go\
+geographycolumn*.go\
+geometrycolumn*.go
 
 $(value variable)
 
@@ -43,7 +45,7 @@ option_item\
 archetype
 
 
-apiServices=admin
+apiServices=client
 
 # cart depends on inventory, othersbought
 
