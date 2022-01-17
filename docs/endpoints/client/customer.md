@@ -35,7 +35,7 @@ Enter JWT Bearer token **_only_**
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
 | POST | /v1/customer | [create customer](#create-customer) | Create Customer |
-| POST | /v1/customer/login | [login](#login) | Login |
+| POST | /v1/customer/login | [customer login](#customer-login) | Login |
   
 
 
@@ -72,7 +72,7 @@ Status: OK
 
 [CreateCustomerResponse](#create-customer-response)
 
-### <span id="login"></span> Login (*login*)
+### <span id="customer-login"></span> Login (*customerLogin*)
 
 ```
 POST /v1/customer/login
@@ -89,15 +89,15 @@ login for customers
 #### All responses
 | Code | Status | Description | Has headers | Schema |
 |------|--------|-------------|:-----------:|--------|
-| [200](#login-200) | OK | A successful response. |  | [schema](#login-200-schema) |
+| [200](#customer-login-200) | OK | A successful response. |  | [schema](#customer-login-200-schema) |
 
 #### Responses
 
 
-##### <span id="login-200"></span> 200 - A successful response.
+##### <span id="customer-login-200"></span> 200 - A successful response.
 Status: OK
 
-###### <span id="login-200-schema"></span> Schema
+###### <span id="customer-login-200-schema"></span> Schema
    
   
 
@@ -116,12 +116,12 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| city | string| `string` | ✓ | |  |  |
-| country | string| `string` | ✓ | |  |  |
-| isDefault | boolean (formatted boolean)| `bool` | ✓ | |  |  |
-| postalCode | string| `string` | ✓ | |  |  |
-| state | string| `string` | ✓ | |  |  |
-| street | string| `string` | ✓ | |  |  |
+| city | string| `string` | ✓ | | city name |  |
+| country | string| `string` | ✓ | | IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes |  |
+| isDefault | boolean (formatted boolean)| `bool` | ✓ | | indicates if this is a default address |  |
+| postalCode | string| `string` | ✓ | | postal or zip code |  |
+| stateProvince | string| `string` | ✓ | | state or province name |  |
+| street | string| `string` | ✓ | | street name, ie: 1723 NW 23rd Ave. |  |
 
 
 
@@ -136,7 +136,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| customer | [NewCustomer](#new-customer)| `NewCustomer` | ✓ | |  |  |
+| customer | [NewCustomer](#new-customer)| `NewCustomer` | ✓ | | NewCustomer object |  |
 
 
 
@@ -151,7 +151,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| customer | [Customer](#customer)| `Customer` | ✓ | |  |  |
+| customer | [Customer](#customer)| `Customer` | ✓ | | Customer object |  |
 | status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
@@ -167,11 +167,11 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| email | string| `string` | ✓ | |  |  |
-| firstName | string| `string` | ✓ | |  |  |
-| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| lastName | string| `string` | ✓ | |  |  |
-| password | string| `string` | ✓ | |  |  |
+| email | string| `string` | ✓ | | email address |  |
+| firstName | string| `string` | ✓ | | first name |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | customer id |  |
+| lastName | string| `string` | ✓ | | last or given name |  |
+| password | string| `string` | ✓ | | password |  |
 
 
 
@@ -186,9 +186,9 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| billingAddress | [Address](#address)| `Address` | ✓ | |  |  |
-| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| shippingAddresses | [][Address](#address)| `[]*Address` | ✓ | |  |  |
+| billingAddress | [Address](#address)| `Address` | ✓ | | Address object |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | customer id |  |
+| shippingAddresses | [][Address](#address)| `[]*Address` | ✓ | | collection of Address objects |  |
 
 
 
@@ -203,8 +203,8 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| email | string| `string` | ✓ | |  |  |
-| password | string| `string` | ✓ | |  |  |
+| email | string| `string` | ✓ | | email address, unique to each store id |  |
+| password | string| `string` | ✓ | | password |  |
 
 
 
@@ -219,8 +219,8 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| customer | [Customer](#customer)| `Customer` | ✓ | |  |  |
-| jwt | [JwtToken](#jwt-token)| `JwtToken` | ✓ | |  |  |
+| customer | [Customer](#customer)| `Customer` | ✓ | | Customer object |  |
+| jwt | [JwtToken](#jwt-token)| `JwtToken` | ✓ | | jwt token |  |
 | status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
@@ -253,12 +253,12 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| billingAddress | [Address](#address)| `Address` |  | |  |  |
-| email | string| `string` | ✓ | |  |  |
-| firstName | string| `string` | ✓ | |  |  |
-| lastName | string| `string` | ✓ | |  |  |
-| password | string| `string` | ✓ | |  |  |
-| shippingAddresses | [Address](#address)| `Address` |  | |  |  |
+| billingAddress | [Address](#address)| `Address` |  | | Address object |  |
+| email | string| `string` | ✓ | | email address, unique per store id |  |
+| firstName | string| `string` | ✓ | | first name |  |
+| lastName | string| `string` | ✓ | | last or given name |  |
+| password | string| `string` | ✓ | | password |  |
+| shippingAddresses | [Address](#address)| `Address` |  | | Address object |  |
 
 
 
