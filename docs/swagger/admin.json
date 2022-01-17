@@ -82,13 +82,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "slug",
-            "description": " slug name of the category",
-            "in": "query",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
@@ -196,6 +189,62 @@
         ]
       }
     },
+    "/v1/customer": {
+      "post": {
+        "summary": "Create Customer",
+        "description": "creates a new customer",
+        "operationId": "createCustomer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/customer/login": {
+      "post": {
+        "summary": "Login",
+        "description": "login for customers",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CustomerLoginResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomerLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
     "/v1/product": {
       "post": {
         "summary": "Create Product",
@@ -233,7 +282,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/GetProductResponse"
             }
           }
         },
@@ -260,7 +309,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/GetProductResponse"
             }
           }
         },
@@ -271,14 +320,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "status",
-            "description": " a ResponseStatus object",
-            "in": "query",
-            "required": true,
-            "type": "invalid",
-            "format": "UNKNOWN"
           }
         ],
         "tags": [
@@ -295,7 +336,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/GetProductResponse"
             }
           }
         },
@@ -379,7 +420,7 @@
         ]
       }
     },
-    "/v1/products/category/{categoryId}/{currentPage}/{pageSize}": {
+    "/v1/products/{categoryId}/{currentPage}/{pageSize}": {
       "get": {
         "summary": "Get Products By Category Id",
         "description": "returns all products by category id belonging to a store",
@@ -496,6 +537,45 @@
     }
   },
   "definitions": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": " street name, ie: 1723 NW 23rd Ave."
+        },
+        "city": {
+          "type": "string",
+          "description": " city name"
+        },
+        "stateProvince": {
+          "type": "string",
+          "description": " state or province name"
+        },
+        "country": {
+          "type": "string",
+          "description": " IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": " postal or zip code"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " indicates if this is a default address"
+        }
+      },
+      "title": "Address",
+      "required": [
+        "street",
+        "city",
+        "stateProvince",
+        "country",
+        "postalCode",
+        "isDefault"
+      ]
+    },
     "Category": {
       "type": "object",
       "properties": {
@@ -581,6 +661,37 @@
         "status"
       ]
     },
+    "CreateCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/NewCustomer",
+          "description": " NewCustomer object"
+        }
+      },
+      "title": "CreateCustomerRequest",
+      "required": [
+        "customer"
+      ]
+    },
+    "CreateCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "CreateCustomerResponse",
+      "required": [
+        "customer",
+        "status"
+      ]
+    },
     "CreateProductRequest": {
       "type": "object",
       "properties": {
@@ -615,19 +726,24 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " customer id"
         },
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "description": " first name"
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "description": " last or given name"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": " email address"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": " password"
         }
       },
       "title": "Customer",
@@ -637,6 +753,74 @@
         "lastName",
         "email",
         "password"
+      ]
+    },
+    "CustomerAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " customer id"
+        },
+        "billingAddress": {
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
+        },
+        "shippingAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          },
+          "description": " collection of Address objects"
+        }
+      },
+      "title": "CustomerAccount",
+      "required": [
+        "id",
+        "billingAddress",
+        "shippingAddresses"
+      ]
+    },
+    "CustomerLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " email address, unique to each store id"
+        },
+        "password": {
+          "type": "string",
+          "description": " password"
+        }
+      },
+      "title": "CustomerLoginRequest",
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "CustomerLoginResponse": {
+      "type": "object",
+      "properties": {
+        "jwt": {
+          "$ref": "#/definitions/JwtToken",
+          "description": " jwt token"
+        },
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "CustomerLoginResponse",
+      "required": [
+        "jwt",
+        "customer",
+        "status"
       ]
     },
     "DeleteCategoryRequest": {
@@ -855,15 +1039,28 @@
         "slug": {
           "type": "string",
           "description": " slug name of the category"
+        }
+      },
+      "title": "GetProductBySlugRequest",
+      "required": [
+        "slug"
+      ]
+    },
+    "GetProductResponse": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "$ref": "#/definitions/Product",
+          "description": " slug name of the category"
         },
         "status": {
           "$ref": "#/definitions/ResponseStatus",
           "description": " a ResponseStatus object"
         }
       },
-      "title": "GetProductBySlugRequest",
+      "title": "GetProductResponse",
       "required": [
-        "slug",
+        "product",
         "status"
       ]
     },
@@ -943,6 +1140,42 @@
         "access_token",
         "access_expire",
         "refresh_after"
+      ]
+    },
+    "NewCustomer": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "description": " first name"
+        },
+        "lastName": {
+          "type": "string",
+          "description": " last or given name"
+        },
+        "email": {
+          "type": "string",
+          "description": " email address, unique per store id"
+        },
+        "password": {
+          "type": "string",
+          "description": " password"
+        },
+        "billingAddress": {
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
+        },
+        "shippingAddresses": {
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
+        }
+      },
+      "title": "NewCustomer",
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "password"
       ]
     },
     "Price": {

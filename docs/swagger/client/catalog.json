@@ -1,9 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Catalog API Endpoints",
-    "description": "admin gateway catalog api endpoints",
-    "version": "1"
+    "title": "",
+    "version": ""
   },
   "schemes": [
     "http",
@@ -19,7 +18,7 @@
     "/v1/categories": {
       "get": {
         "summary": "Get All Categories",
-        "description": "returns all categories by belonging to a store",
+        "description": "returns all categories belonging to a store",
         "operationId": "getAllCategories",
         "responses": {
           "200": {
@@ -36,7 +35,8 @@
     },
     "/v1/category/slug/{slug}": {
       "get": {
-        "summary": "getCategoryBySlug\n\treturns a category by url slug and storeId",
+        "summary": "Get Category By Slug",
+        "description": "returns all categories by slug belonging to a store",
         "operationId": "getCategoryBySlug",
         "responses": {
           "200": {
@@ -49,6 +49,7 @@
         "parameters": [
           {
             "name": "slug",
+            "description": "category slug",
             "in": "path",
             "required": true,
             "type": "string"
@@ -61,7 +62,8 @@
     },
     "/v1/category/{id}": {
       "get": {
-        "summary": "getCategoryById\n\treturns a category by id",
+        "summary": "Get Category By Id",
+        "description": "returns all categories by id belonging to a store",
         "operationId": "getCategoryById",
         "responses": {
           "200": {
@@ -74,9 +76,17 @@
         "parameters": [
           {
             "name": "id",
+            "description": "category id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -86,19 +96,21 @@
     },
     "/v1/product/sku/{sku}": {
       "get": {
-        "summary": "getProductBySku\n\treturns a product by sku",
+        "summary": "Get Product By Sku",
+        "description": "returns all products by sku belonging to a store",
         "operationId": "getProductBySku",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/GetProductResponse"
             }
           }
         },
         "parameters": [
           {
             "name": "sku",
+            "description": "product sku",
             "in": "path",
             "required": true,
             "type": "string"
@@ -111,19 +123,21 @@
     },
     "/v1/product/slug/{slug}": {
       "get": {
-        "summary": "getProductBySlug\n\treturns a product by url slug",
+        "summary": "Get Product By Slug",
+        "description": "returns matching product by slug",
         "operationId": "getProductBySlug",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/GetProductResponse"
             }
           }
         },
         "parameters": [
           {
             "name": "slug",
+            "description": "product slug",
             "in": "path",
             "required": true,
             "type": "string"
@@ -136,19 +150,21 @@
     },
     "/v1/product/{id}": {
       "get": {
-        "summary": "getProductById\n\treturns a product by id",
+        "summary": "Get Product By Id",
+        "description": "returns matching product by id",
         "operationId": "getProductById",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/GetProductResponse"
             }
           }
         },
         "parameters": [
           {
             "name": "id",
+            "description": "product id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -159,9 +175,10 @@
         ]
       }
     },
-    "/v1/products/category/{categoryId}/{currentPage}/{pageSize}": {
+    "/v1/products/{categoryId}/{currentPage}/{pageSize}": {
       "get": {
-        "summary": "getProductsByCategoryId\n\treturns all products belonging to a category id",
+        "summary": "Get Products By Category Id",
+        "description": "returns all products by category id belonging to a store",
         "operationId": "getProductsByCategoryId",
         "responses": {
           "200": {
@@ -174,18 +191,21 @@
         "parameters": [
           {
             "name": "categoryId",
+            "description": "category id",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "currentPage",
+            "description": "current page number",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "pageSize",
+            "description": "number of records per page",
             "in": "path",
             "required": true,
             "type": "string"
@@ -204,7 +224,8 @@
     },
     "/v1/products/{currentPage}/{pageSize}": {
       "get": {
-        "summary": "getAllProducts\n\treturns all products",
+        "summary": "Get All Products",
+        "description": "returns all products belonging to a store",
         "operationId": "getAllProducts",
         "responses": {
           "200": {
@@ -217,12 +238,14 @@
         "parameters": [
           {
             "name": "currentPage",
+            "description": "current page number",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "pageSize",
+            "description": "number of records per page",
             "in": "path",
             "required": true,
             "type": "string"
@@ -230,7 +253,7 @@
           {
             "name": "sortOn",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           }
         ],
@@ -297,136 +320,6 @@
         "sortOrder"
       ]
     },
-    "CreateCategoryRequest": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
-        }
-      },
-      "title": "CreateCategoryRequest",
-      "required": [
-        "category"
-      ]
-    },
-    "CreateCategoryResponse": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
-        },
-        "statusCode": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage": {
-          "type": "string"
-        }
-      },
-      "title": "CreateCategoryResponse",
-      "required": [
-        "category",
-        "statusCode",
-        "statusMessage"
-      ]
-    },
-    "CreateProductRequest": {
-      "type": "object",
-      "properties": {
-        "product:omitempty": {
-          "$ref": "#/definitions/Product"
-        }
-      },
-      "title": "CreateProductRequest",
-      "required": [
-        "product:omitempty"
-      ]
-    },
-    "CreateProductResponse": {
-      "type": "object",
-      "properties": {
-        "product:omitempty": {
-          "$ref": "#/definitions/Product"
-        },
-        "statusCode:omitempty": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage:omitempty": {
-          "type": "string"
-        }
-      },
-      "title": "CreateProductResponse",
-      "required": [
-        "product:omitempty",
-        "statusCode:omitempty",
-        "statusMessage:omitempty"
-      ]
-    },
-    "DeleteCategoryRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "DeleteCategoryRequest",
-      "required": [
-        "id"
-      ]
-    },
-    "DeleteCategoryResponse": {
-      "type": "object",
-      "properties": {
-        "statusCode": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage": {
-          "type": "string"
-        }
-      },
-      "title": "DeleteCategoryResponse",
-      "required": [
-        "statusCode",
-        "statusMessage"
-      ]
-    },
-    "DeleteProductRequest": {
-      "type": "object",
-      "properties": {
-        "path:omitempty": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "DeleteProductRequest",
-      "required": [
-        "path:omitempty"
-      ]
-    },
-    "DeleteProductResponse": {
-      "type": "object",
-      "properties": {
-        "statusCode:omitempty": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage:omitempty": {
-          "type": "string"
-        }
-      },
-      "title": "DeleteProductResponse",
-      "required": [
-        "statusCode:omitempty",
-        "statusMessage:omitempty"
-      ]
-    },
-    "GetAllCategoriesRequest": {
-      "type": "object",
-      "title": "GetAllCategoriesRequest"
-    },
     "GetAllCategoriesResponse": {
       "type": "object",
       "properties": {
@@ -434,21 +327,18 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/Category"
-          }
+          },
+          "description": " a collection of Category"
         },
-        "statusCode": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage": {
-          "type": "string"
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
         }
       },
       "title": "GetAllCategoriesResponse",
       "required": [
         "categories",
-        "statusCode",
-        "statusMessage"
+        "status"
       ]
     },
     "GetAllProductsRequest": {
@@ -469,7 +359,8 @@
       "title": "GetAllProductsRequest",
       "required": [
         "currentPage",
-        "pageSize"
+        "pageSize",
+        "sortOn"
       ]
     },
     "GetAllProductsResponse": {
@@ -488,13 +379,18 @@
         "totalPages": {
           "type": "integer",
           "format": "int64"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
         }
       },
       "title": "GetAllProductsResponse",
       "required": [
         "products",
         "totalRecords",
-        "totalPages"
+        "totalPages",
+        "status"
       ]
     },
     "GetCategoryByIdRequest": {
@@ -516,26 +412,23 @@
         "category": {
           "$ref": "#/definitions/Category"
         },
-        "statusCode": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage": {
-          "type": "string"
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
         }
       },
       "title": "GetCategoryByIdResponse",
       "required": [
         "category",
-        "statusCode",
-        "statusMessage"
+        "status"
       ]
     },
     "GetCategoryBySlugRequest": {
       "type": "object",
       "properties": {
         "slug": {
-          "type": "string"
+          "type": "string",
+          "description": " slug name of the category"
         }
       },
       "title": "GetCategoryBySlugRequest",
@@ -549,19 +442,15 @@
         "category": {
           "$ref": "#/definitions/Category"
         },
-        "statusCode": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage": {
-          "type": "string"
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
         }
       },
       "title": "GetCategoryBySlugResponse",
       "required": [
         "category",
-        "statusCode",
-        "statusMessage"
+        "status"
       ]
     },
     "GetProductByIdRequest": {
@@ -593,12 +482,31 @@
       "type": "object",
       "properties": {
         "slug": {
-          "type": "string"
+          "type": "string",
+          "description": " slug name of the category"
         }
       },
       "title": "GetProductBySlugRequest",
       "required": [
         "slug"
+      ]
+    },
+    "GetProductResponse": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "$ref": "#/definitions/Product",
+          "description": " slug name of the category"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetProductResponse",
+      "required": [
+        "product",
+        "status"
       ]
     },
     "GetProductsByCategoryIdRequest": {
@@ -643,13 +551,40 @@
         "totalPages": {
           "type": "integer",
           "format": "int64"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
         }
       },
       "title": "GetProductsByCategoryIdResponse",
       "required": [
         "products",
         "totalRecords",
-        "totalPages"
+        "totalPages",
+        "status"
+      ]
+    },
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "access_expire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refresh_after": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "access_token",
+        "access_expire",
+        "refresh_after"
       ]
     },
     "Price": {
@@ -750,80 +685,23 @@
         "variants"
       ]
     },
-    "UpdateCategoryRequest": {
+    "ResponseStatus": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "category": {
-          "$ref": "#/definitions/Category"
-        }
-      },
-      "title": "UpdateCategoryRequest",
-      "required": [
-        "id",
-        "category"
-      ]
-    },
-    "UpdateCategoryResponse": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
-        },
         "statusCode": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
         },
         "statusMessage": {
-          "type": "string"
+          "type": "string",
+          "description": " status message"
         }
       },
-      "title": "UpdateCategoryResponse",
+      "title": "ResponseStatus",
       "required": [
-        "category",
         "statusCode",
         "statusMessage"
-      ]
-    },
-    "UpdateProductRequest": {
-      "type": "object",
-      "properties": {
-        "path:omitempty": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "product:omitempty": {
-          "$ref": "#/definitions/Product"
-        }
-      },
-      "title": "UpdateProductRequest",
-      "required": [
-        "path:omitempty",
-        "product:omitempty"
-      ]
-    },
-    "UpdateProductResponse": {
-      "type": "object",
-      "properties": {
-        "product:omitempty": {
-          "$ref": "#/definitions/Product"
-        },
-        "statusCode:omitempty": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "statusMessage:omitempty": {
-          "type": "string"
-        }
-      },
-      "title": "UpdateProductResponse",
-      "required": [
-        "product:omitempty",
-        "statusCode:omitempty",
-        "statusMessage:omitempty"
       ]
     },
     "Variant": {
