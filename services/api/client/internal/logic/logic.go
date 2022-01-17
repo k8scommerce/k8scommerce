@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"strconv"
+	"strings"
 
 	"k8scommerce/services/api/client/internal/types"
 
@@ -35,5 +36,12 @@ func convertOutgoingPrices(ctx context.Context, p *types.Price) {
 		floatAmount, _ := strconv.ParseFloat(amount.Number(), 64)
 		p.CompareAtAmount = floatAmount
 		p.DisplayCompareAtAmount = formatter.Format(amount)
+	}
+}
+
+func httpResponse(statusCode int64, message ...string) types.ResponseStatus {
+	return types.ResponseStatus{
+		StatusCode:    statusCode,
+		StatusMessage: strings.Join(message, " "),
 	}
 }
