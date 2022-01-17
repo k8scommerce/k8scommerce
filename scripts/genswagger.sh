@@ -16,35 +16,43 @@ for service in $services; do
   mkdir -p $out_dir/swagger/$service
   mkdir -p $out_dir/endpoints/$service
 
+  # create a tmp directory for individual service swagger and markdown generation
+  svc_tpl_path="${api_dir}/tmp/${service}"
+  mkdir -p $svc_tpl_path
+  mkdir -p "${svc_tpl_path}/shared"
+
+  # copy the shared folder to the svc_tpl_path
+  cp -R $api_dir/shared/. $svc_tpl_path/shared
+
   # generate a complete json description
   goctl api plugin -plugin goctl-swagger="swagger -filename ${out_dir}/swagger/${service}.json" -api "${api_dir}/${service}.api" -dir "${api_dir}" >/dev/null 2>&1
   swagger-markdown -i "${out_dir}/swagger/${service}.json" -o "${out_dir}/swagger/${service}.md" >/dev/null 2>&1
+  service_api_file_content=$(cat "${api_dir}/${service}.api") >/dev/null 2>&1
+  shared_imports=$(echo -e "$service_api_file_content" | perl -0777ne 'print "\n    ","$1" while /("shared\/.*"?)/g;') >/dev/null 2>&1
 
-  service_api_file_content=$(cat "${api_dir}/${service}.api")
-  # echo "$service_api_file_content"
-
-  # perl -0777ne'print "$1\n" while /ModelProxy\("([\w*.]+)"\);/g' test.txt
-  shared_imports=$(echo -e "$service_api_file_content" | perl -0777ne 'print "\n    ","$1" while /("shared\/.*"?)/g;')
+  # create an api template to be used in the service api generation
   api_tpl="import($shared_imports\n    IMPORT_API_FILE\n)"
 
+  # loop through each service .api file and generate a swagger file and markdown for each
   for api_file in $(ls ../endpoint-definitions/$service); do
+
+    cp -R $api_dir/$service/. $svc_tpl_path/$service
+
+    # extract the file from the path
     filename=$(basename -- "$api_file")
     extension="${filename##*.}"
     filename="${filename%.*}"
 
-    # create a tmp file with the parts required for generating the service document
-    svc_tpl_path="${api_dir}/tmp/${service}"
-    #
-    mkdir -p $svc_tpl_path
+    # create an .api template for the service
     svc_filename="${svc_tpl_path}/${filename}.api"
     svc_tpl=$(echo "${api_tpl}" | sed "s/IMPORT_API_FILE/\"${service}\/${filename}.api\"/")
     echo -e "${svc_tpl}" >"${svc_filename}"
 
+    # generate the swagger file
     goctl api plugin -plugin goctl-swagger="swagger -filename ${out_dir}/swagger/${service}/${filename}.json" -api "${svc_filename}" -dir "${api_dir}" >/dev/null 2>&1
-    # swagger-markdown -i "${out_dir}/swagger/${service}/${filename}.json" -o "${out_dir}/endpoints/${service}/${filename}.md" > /dev/null 2>&1
-    swagger generate markdown --quiet --spec="${out_dir}/swagger/${service}/${filename}.json" --output="${out_dir}/endpoints/${service}/${filename}.md"
 
-    # cat "${out_dir}/endpoints/${service}/${filename}.md" >> "../../k8scommerce.github.io/content/en/docs/rest-gateway-endpoints/v1/${service}-gateway/${filename}.md"
+    # generate the markdown file from the swagger file
+    swagger generate markdown --quiet --spec="${out_dir}/swagger/${service}/${filename}.json" --output="${out_dir}/endpoints/${service}/${filename}.md" >/dev/null 2>&1
 
     # set the path to the current doc file
     doc_file="../../k8scommerce.github.io/content/en/docs/rest-gateway-endpoints/v1/${service}-gateway/${filename}.md"
@@ -83,5 +91,8 @@ for service in $services; do
     echo "${clean_md}" >>"${doc_file}"
   done
 done
+
+# remove the tmp directory
+rm -rf "${api_dir}/tmp"
 
 # go build -o swagtest -ldflags "-s -w" . && goctl api plugin -plugin ./swagtest="swagger -filename ../k8scommerce/docs/swagger/client/cart.json" -api ../k8scommerce/endpoint-definitions/client/cart.api -dir . && swagger-markdown -i ../k8scommerce/docs/swagger/client/cart.json -o ../k8scommerce/docs/endpoints/client/cart.md
