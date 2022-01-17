@@ -377,12 +377,12 @@ returns all products belonging to a store
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| street | string |  | Yes |
-| city | string |  | Yes |
-| state | string |  | Yes |
-| country | string |  | Yes |
-| postalCode | string |  | Yes |
-| isDefault | boolean (boolean) |  | Yes |
+| street | string |  street name, ie: 1723 NW 23rd Ave. | Yes |
+| city | string |  city name | Yes |
+| stateProvince | string |  state or province name | Yes |
+| country | string |  IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes | Yes |
+| postalCode | string |  postal or zip code | Yes |
+| isDefault | boolean (boolean) |  indicates if this is a default address | Yes |
 
 #### Cart
 
@@ -422,46 +422,46 @@ returns all products belonging to a store
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| customer | [NewCustomer](#newcustomer) |  | Yes |
+| customer | [NewCustomer](#newcustomer) |  NewCustomer object | Yes |
 
 #### CreateCustomerResponse
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| customer | [Customer](#customer) |  | Yes |
+| customer | [Customer](#customer) |  Customer object | Yes |
 | status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### Customer
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| firstName | string |  | Yes |
-| lastName | string |  | Yes |
-| email | string |  | Yes |
-| password | string |  | Yes |
+| id | long |  customer id | Yes |
+| firstName | string |  first name | Yes |
+| lastName | string |  last or given name | Yes |
+| email | string |  email address | Yes |
+| password | string |  password | Yes |
 
 #### CustomerAccount
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| billingAddress | [Address](#address) |  | Yes |
-| shippingAddresses | [ [Address](#address) ] |  | Yes |
+| id | long |  customer id | Yes |
+| billingAddress | [Address](#address) |  Address object | Yes |
+| shippingAddresses | [ [Address](#address) ] |  collection of Address objects | Yes |
 
 #### CustomerLoginRequest
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| email | string |  | Yes |
-| password | string |  | Yes |
+| email | string |  email address, unique to each store id | Yes |
+| password | string |  password | Yes |
 
 #### CustomerLoginResponse
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| jwt | [JwtToken](#jwttoken) |  | Yes |
-| customer | [Customer](#customer) |  | Yes |
+| jwt | [JwtToken](#jwttoken) |  jwt token | Yes |
+| customer | [Customer](#customer) |  Customer object | Yes |
 | status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetAllCategoriesResponse
@@ -591,12 +591,12 @@ returns all products belonging to a store
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| firstName | string |  | Yes |
-| lastName | string |  | Yes |
-| email | string |  | Yes |
-| password | string |  | Yes |
-| billingAddress | [Address](#address) |  | No |
-| shippingAddresses | [Address](#address) |  | No |
+| firstName | string |  first name | Yes |
+| lastName | string |  last or given name | Yes |
+| email | string |  email address, unique per store id | Yes |
+| password | string |  password | Yes |
+| billingAddress | [Address](#address) |  Address object | No |
+| shippingAddresses | [Address](#address) |  Address object | No |
 
 #### Price
 
