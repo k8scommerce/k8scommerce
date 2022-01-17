@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
@@ -25,32 +26,38 @@ func NewGetProductBySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext) G
 	}
 }
 
-func (l *GetProductBySlugLogic) GetProductBySlug(req types.GetProductBySlugRequest) (resp *types.Product, err error) {
+func (l *GetProductBySlugLogic) GetProductBySlug(req types.GetProductBySlugRequest) (resp *types.GetProductResponse, err error) {
+	resp = &types.GetProductResponse{}
+	l.Logger.Info(req)
 	getProductBySlugResponse, err := l.svcCtx.CatalogRpc.GetProductBySlug(l.ctx, &catalogclient.GetProductBySlugRequest{
 		Slug:    req.Slug,
 		StoreId: l.ctx.Value(types.StoreKey).(int64),
 	})
 	if err != nil {
-		return nil, err
+		resp.ResponseStatus = httpResponse(http.StatusBadRequest, err.Error())
+		return resp, err
 	}
 
 	l.Logger.Info(getProductBySlugResponse)
 
 	// convert from one type to another
 	// the structs are identical
-	res := &types.Product{}
+	resp.Product = types.Product{}
 	b, err := json.Marshal(getProductBySlugResponse.Product)
 	if err != nil {
-		return nil, err
+		resp.ResponseStatus = httpResponse(http.StatusBadRequest, err.Error())
+		return resp, err
 	}
-	err = json.Unmarshal(b, res)
+	err = json.Unmarshal(b, &resp.Product)
 
 	// format the currency to the locale and language
-	for x := 0; x < len(res.Variants); x++ {
-		if res.Variants[x].Price != (types.Price{}) {
-			convertOutgoingPrices(l.ctx, &res.Variants[x].Price)
+	for x := 0; x < len(resp.Product.Variants); x++ {
+		if resp.Product.Variants[x].Price != (types.Price{}) {
+			convertOutgoingPrices(l.ctx, &resp.Product.Variants[x].Price)
 		}
 	}
 
-	return res, err
+	// looks good
+	resp.ResponseStatus = httpResponse(http.StatusOK)
+	return resp, err
 }
