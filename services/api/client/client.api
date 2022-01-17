@@ -1,5 +1,0 @@
-import(
-	"definition/cart.api"
-	"definition/catalog.api"
-	"definition/customer.api"
-)

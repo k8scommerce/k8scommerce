@@ -1,0 +1,219 @@
+info(
+	title: "Catalog API Endpoints"
+	desc: "admin gateway catalog api endpoints"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1"
+)
+
+// objects
+type Category {
+	Id              int64  `json:"id"`                        // category id
+	ParentId        int64  `json:"parentId"`                  // parent category id. references Category.Id
+	Slug            string `json:"slug"`                      // slug name of the category
+	Name            string `json:"name"`                      // name of category
+	Description     string `json:"description"`               // description of category
+	MetaTitle       string `json:"metaTitle,omitempty"`       // metatag title for SEO
+	MetaDescription string `json:"metaDescription,omitempty"` // metatag description for SEO
+	MetaKeywords    string `json:"metaKeywords,omitempty"`    // metatag keywords for SEO
+	SortOrder       int32  `json:"sortOrder"`                 // sort order of menu items on the same level and same parent id
+}
+
+type Product {
+	Id               int64     `json:"id"`                        // product id
+	Slug             string    `json:"slug"`                      // product slug
+	Name             string    `json:"name"`                      // product name
+	ShortDescription string    `json:"shortDescription"`          // product short description. used in category pages
+	Description      string    `json:"description"`               // category description
+	MetaTitle        string    `json:"metaTitle,omitempty"`       // metatag title for SEO
+	MetaDescription  string    `json:"metaDescription,omitempty"` // metatag description for SEO
+	MetaKeywords     string    `json:"metaKeywords,omitempty"`    // metatag keywords for SEO
+	Variants         []Variant `json:"variants,omitempty"`        // collection of Variant objects
+}
+
+type Variant {
+	Id        int64   `json:"id,omitempty"`        // variant id
+	IsDefault bool    `json:"isDefault,omitempty"` // is default variant. each product must have exactly 1 default variant
+	Sku       string  `json:"sku,omitempty"`       // variant sku. usually the product sku with appended identification tags
+	Weight    float64 `json:"weight,omitempty"`    // variant weight. used in calculating shipping
+	Height    float64 `json:"height,omitempty"`    // variant height. used in calculating shipping
+	Width     float64 `json:"width,omitempty"`     // variant width. used in calculating shipping
+	Depth     float64 `json:"depth,omitempty"`     // variant depth. used in calculating shipping
+	Price     Price   `json:"price,omitempty"`     // variant Price object
+}
+
+type Price {
+	Id                     int64   `json:"id,omitempty"` // price id
+	Amount                 float64 `json:"amount,omitempty"` // price amount
+	DisplayAmount          string  `json:"displayAmount,omitempty"` // price display amount
+	CompareAtAmount        float64 `json:"compareAtAmount,omitempty"` // price compare amount
+	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,omitempty"` // price display compare amount
+	Currency               string  `json:"currency,omitempty"` // price currency. example: USD, CAN, etc.
+}
+
+//
+// requests & responses
+//
+// get all categories
+// type GetAllCategoriesRequest {}
+
+type GetAllCategoriesResponse {
+	Categories    []Category `json:"categories,omitempty"` // a collection of Category
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+}
+
+// get category by slug
+type GetCategoryBySlugRequest {
+	Slug string `path:"slug"` // slug name of the category
+}
+
+type GetCategoryBySlugResponse {
+	Category      Category `json:"category,omitempty"`
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+}
+
+// get category by id
+type GetCategoryByIdRequest {
+	Id int64 `json:"id,omitempty"`
+}
+
+type GetCategoryByIdResponse {
+	Category      Category `json:"category,omitempty"`
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+}
+
+//
+//
+// Products
+//
+//
+
+// get product by sku
+type GetProductBySkuRequest {
+	Sku string `path:"sku"`
+}
+
+// get product by slug
+type GetProductBySlugRequest {
+	Slug string `path:"slug"` // slug name of the category
+}
+
+type GetProductResponse {
+	Product Product `json:"product"` // slug name of the category
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+}
+
+// get product by id
+type GetProductByIdRequest {
+	Id int64 `path:"id"`
+}
+
+// get products by category id
+type GetProductsByCategoryIdRequest {
+	CategoryId  int64  `path:"categoryId"`
+	CurrentPage int64  `path:"currentPage"`
+	PageSize    int64  `path:"pageSize"`
+	SortOn      string `form:"sortOn,optional"`
+}
+
+type GetProductsByCategoryIdResponse {
+	Products     []Product `json:"products"`
+	TotalRecords int64     `json:"totalRecords"`
+	TotalPages   int64     `json:"totalPages"`
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+}
+
+// get all products
+type GetAllProductsRequest {
+	CurrentPage int64  `path:"currentPage"`
+	PageSize    int64  `path:"pageSize"`
+	SortOn      string `form:"sortOn"`
+}
+
+type GetAllProductsResponse {
+	Products     []Product `json:"products"`
+	TotalRecords int64     `json:"totalRecords"`
+	TotalPages   int64     `json:"totalPages"`
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+}
+
+//
+// endpoints
+//
+
+@server(
+	jwt: Auth
+	middleware: Locale, StoreKey
+)
+service client {
+	// categories
+
+	@doc(
+		summary: "Get All Categories"
+		description: "returns all categories belonging to a store"
+	)
+	@handler getAllCategories
+	get /v1/categories returns (GetAllCategoriesResponse)
+	
+	@doc(
+		summary: "Get Category By Slug"
+		description: "returns all categories by slug belonging to a store"
+		slug: "category slug"
+	)
+	@handler getCategoryBySlug
+	get /v1/category/slug/:slug(GetCategoryBySlugRequest) returns (GetCategoryBySlugResponse)
+	
+	@doc(
+		summary: "Get Category By Id"
+		description: "returns all categories by id belonging to a store"
+		id: "category id"
+	)
+	@handler getCategoryById
+	get /v1/category/:id(GetCategoryByIdRequest) returns (GetCategoryByIdResponse)
+
+	
+	// products
+
+	@doc(
+		summary: "Get Product By Sku"
+		description: "returns all products by sku belonging to a store"
+		sku: "product sku"
+	)
+	@handler getProductBySku
+	get /v1/product/sku/:sku(GetProductBySkuRequest) returns (GetProductResponse)
+	
+	@doc(
+		summary: "Get Product By Slug"
+		description: "returns matching product by slug"
+		slug: "product slug"
+	)
+	@handler getProductBySlug
+	get /v1/product/slug/:slug(GetProductBySlugRequest) returns (GetProductResponse)
+	
+	@doc(
+		summary: "Get Product By Id"
+		description: "returns matching product by id"
+		id: "product id"
+	)
+	@handler getProductById
+	get /v1/product/:id(GetProductByIdRequest) returns (GetProductResponse)
+	
+	@doc(
+		summary: "Get Products By Category Id"
+		description: "returns all products by category id belonging to a store"
+		categoryId: "category id"
+		currentPage: "current page number"
+		pageSize: "number of records per page"
+	)
+	@handler getProductsByCategoryId
+	get /v1/products/:categoryId/:currentPage/:pageSize(GetProductsByCategoryIdRequest) returns (GetProductsByCategoryIdResponse)
+	
+	@doc(
+		summary: "Get All Products"
+		description: "returns all products belonging to a store"
+		currentPage: "current page number"
+		pageSize: "number of records per page"
+	)
+	@handler getAllProducts
+	get /v1/products/:currentPage/:pageSize(GetAllProductsRequest) returns (GetAllProductsResponse)
+}
