@@ -61,7 +61,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/category/:categoryId/:currentPage/:pageSize",
+					Path:    "/v1/products/:categoryId/:currentPage/:pageSize",
 					Handler: getProductsByCategoryIdHandler(serverCtx),
 				},
 				{
@@ -91,9 +91,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale},
-			[]rest.Route{}...,
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer",
+					Handler: createCustomerHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/login",
+					Handler: customerLoginHandler(serverCtx),
+				},
+			}...,
 		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
