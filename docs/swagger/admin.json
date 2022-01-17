@@ -1,0 +1,1504 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Admin Gateway API",
+    "description": "admin gateway api",
+    "version": "1"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/categories": {
+      "get": {
+        "summary": "Get All Categories",
+        "description": "returns all categories belonging to a store",
+        "operationId": "getAllCategories",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAllCategoriesResponse"
+            }
+          }
+        },
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/category": {
+      "post": {
+        "summary": "Create Category",
+        "description": "creates a category",
+        "operationId": "createCategory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateCategoryResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCategoryRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/category/slug/{slug}": {
+      "get": {
+        "summary": "Get Category By Slug",
+        "description": "returns all categories by slug belonging to a store",
+        "operationId": "getCategoryBySlug",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCategoryBySlugResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slug",
+            "description": "category slug",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/category/{id}": {
+      "get": {
+        "summary": "Get Category By Id",
+        "description": "returns all categories by id belonging to a store",
+        "operationId": "getCategoryById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCategoryByIdResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "category id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "Delete Category",
+        "description": "deletes a category",
+        "operationId": "deleteCategory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteCategoryResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "category id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteCategoryRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "Update Category",
+        "description": "updates a category",
+        "operationId": "updateCategory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateCategoryResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "category id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCategoryRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/customer": {
+      "post": {
+        "summary": "Create Customer",
+        "description": "creates a new customer",
+        "operationId": "createCustomer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/customer/login": {
+      "post": {
+        "summary": "Login",
+        "description": "login for customers",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CustomerLoginResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomerLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/product": {
+      "post": {
+        "summary": "Create Product",
+        "description": "creates a product",
+        "operationId": "createProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateProductResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateProductRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/product/sku/{sku}": {
+      "get": {
+        "summary": "Get Product By Sku",
+        "description": "returns all products by sku belonging to a store",
+        "operationId": "getProductBySku",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetProductResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "description": "product sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/product/slug/{slug}": {
+      "get": {
+        "summary": "Get Product By Slug",
+        "description": "returns matching product by slug",
+        "operationId": "getProductBySlug",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetProductResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slug",
+            "description": "product slug",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/product/{id}": {
+      "get": {
+        "summary": "Get Product By Id",
+        "description": "returns matching product by id",
+        "operationId": "getProductById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetProductResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "product id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "Delete Product",
+        "description": "delete a product",
+        "operationId": "deleteProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteProductResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "product id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteProductRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "Update Product",
+        "description": "updates a product",
+        "operationId": "updateProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateProductResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "product id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateProductRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/products/{categoryId}/{currentPage}/{pageSize}": {
+      "get": {
+        "summary": "Get Products By Category Id",
+        "description": "returns all products by category id belonging to a store",
+        "operationId": "getProductsByCategoryId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetProductsByCategoryIdResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "categoryId",
+            "description": "category id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "currentPage",
+            "description": "current page number",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "description": "number of records per page",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sortOn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/products/{currentPage}/{pageSize}": {
+      "get": {
+        "summary": "Get All Products",
+        "description": "returns all products belonging to a store",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAllProductsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "currentPage",
+            "description": "current page number",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "description": "number of records per page",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sortOn",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/user/login": {
+      "post": {
+        "summary": "Login",
+        "description": "login for administration users",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UserLoginResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": " street name, ie: 1723 NW 23rd Ave."
+        },
+        "city": {
+          "type": "string",
+          "description": " city name"
+        },
+        "stateProvince": {
+          "type": "string",
+          "description": " state or province name"
+        },
+        "country": {
+          "type": "string",
+          "description": " IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": " postal or zip code"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " indicates if this is a default address"
+        }
+      },
+      "title": "Address",
+      "required": [
+        "street",
+        "city",
+        "stateProvince",
+        "country",
+        "postalCode",
+        "isDefault"
+      ]
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " category id"
+        },
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " parent category id. references Category.Id"
+        },
+        "slug": {
+          "type": "string",
+          "description": " slug name of the category"
+        },
+        "name": {
+          "type": "string",
+          "description": " name of category"
+        },
+        "description": {
+          "type": "string",
+          "description": " description of category"
+        },
+        "metaTitle": {
+          "type": "string",
+          "description": " metatag title for SEO"
+        },
+        "metaDescription": {
+          "type": "string",
+          "description": " metatag description for SEO"
+        },
+        "metaKeywords": {
+          "type": "string",
+          "description": " metatag keywords for SEO"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32",
+          "description": " sort order of menu items on the same level and same parent id"
+        }
+      },
+      "title": "Category",
+      "required": [
+        "id",
+        "parentId",
+        "slug",
+        "name",
+        "description",
+        "metaTitle",
+        "metaDescription",
+        "metaKeywords",
+        "sortOrder"
+      ]
+    },
+    "CreateCategoryRequest": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        }
+      },
+      "title": "CreateCategoryRequest",
+      "required": [
+        "category"
+      ]
+    },
+    "CreateCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "CreateCategoryResponse",
+      "required": [
+        "category",
+        "status"
+      ]
+    },
+    "CreateCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/NewCustomer",
+          "description": " NewCustomer object"
+        }
+      },
+      "title": "CreateCustomerRequest",
+      "required": [
+        "customer"
+      ]
+    },
+    "CreateCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "CreateCustomerResponse",
+      "required": [
+        "customer",
+        "status"
+      ]
+    },
+    "CreateProductRequest": {
+      "type": "object",
+      "properties": {
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        }
+      },
+      "title": "CreateProductRequest",
+      "required": [
+        "product:omitempty"
+      ]
+    },
+    "CreateProductResponse": {
+      "type": "object",
+      "properties": {
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "CreateProductResponse",
+      "required": [
+        "product:omitempty",
+        "status"
+      ]
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " customer id"
+        },
+        "firstName": {
+          "type": "string",
+          "description": " first name"
+        },
+        "lastName": {
+          "type": "string",
+          "description": " last or given name"
+        },
+        "email": {
+          "type": "string",
+          "description": " email address"
+        },
+        "password": {
+          "type": "string",
+          "description": " password"
+        }
+      },
+      "title": "Customer",
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ]
+    },
+    "CustomerAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " customer id"
+        },
+        "billingAddress": {
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
+        },
+        "shippingAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          },
+          "description": " collection of Address objects"
+        }
+      },
+      "title": "CustomerAccount",
+      "required": [
+        "id",
+        "billingAddress",
+        "shippingAddresses"
+      ]
+    },
+    "CustomerLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " email address, unique to each store id"
+        },
+        "password": {
+          "type": "string",
+          "description": " password"
+        }
+      },
+      "title": "CustomerLoginRequest",
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "CustomerLoginResponse": {
+      "type": "object",
+      "properties": {
+        "jwt": {
+          "$ref": "#/definitions/JwtToken",
+          "description": " jwt token"
+        },
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "CustomerLoginResponse",
+      "required": [
+        "jwt",
+        "customer",
+        "status"
+      ]
+    },
+    "DeleteCategoryRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DeleteCategoryRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "DeleteCategoryResponse",
+      "required": [
+        "status"
+      ]
+    },
+    "DeleteProductRequest": {
+      "type": "object",
+      "properties": {
+        "path:omitempty": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DeleteProductRequest",
+      "required": [
+        "path:omitempty"
+      ]
+    },
+    "DeleteProductResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "DeleteProductResponse",
+      "required": [
+        "status"
+      ]
+    },
+    "GetAllCategoriesResponse": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          },
+          "description": " a collection of Category"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetAllCategoriesResponse",
+      "required": [
+        "categories",
+        "status"
+      ]
+    },
+    "GetAllProductsRequest": {
+      "type": "object",
+      "properties": {
+        "currentPage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sortOn": {
+          "type": "string"
+        }
+      },
+      "title": "GetAllProductsRequest",
+      "required": [
+        "currentPage",
+        "pageSize",
+        "sortOn"
+      ]
+    },
+    "GetAllProductsResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          }
+        },
+        "totalRecords": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetAllProductsResponse",
+      "required": [
+        "products",
+        "totalRecords",
+        "totalPages",
+        "status"
+      ]
+    },
+    "GetCategoryByIdRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetCategoryByIdRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "GetCategoryByIdResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetCategoryByIdResponse",
+      "required": [
+        "category",
+        "status"
+      ]
+    },
+    "GetCategoryBySlugRequest": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "description": " slug name of the category"
+        }
+      },
+      "title": "GetCategoryBySlugRequest",
+      "required": [
+        "slug"
+      ]
+    },
+    "GetCategoryBySlugResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetCategoryBySlugResponse",
+      "required": [
+        "category",
+        "status"
+      ]
+    },
+    "GetProductByIdRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetProductByIdRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "GetProductBySkuRequest": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        }
+      },
+      "title": "GetProductBySkuRequest",
+      "required": [
+        "sku"
+      ]
+    },
+    "GetProductBySlugRequest": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "description": " slug name of the category"
+        }
+      },
+      "title": "GetProductBySlugRequest",
+      "required": [
+        "slug"
+      ]
+    },
+    "GetProductResponse": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "$ref": "#/definitions/Product",
+          "description": " slug name of the category"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetProductResponse",
+      "required": [
+        "product",
+        "status"
+      ]
+    },
+    "GetProductsByCategoryIdRequest": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "currentPage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sortOn": {
+          "type": "string"
+        }
+      },
+      "title": "GetProductsByCategoryIdRequest",
+      "required": [
+        "categoryId",
+        "currentPage",
+        "pageSize"
+      ]
+    },
+    "GetProductsByCategoryIdResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          }
+        },
+        "totalRecords": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetProductsByCategoryIdResponse",
+      "required": [
+        "products",
+        "totalRecords",
+        "totalPages",
+        "status"
+      ]
+    },
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "access_expire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refresh_after": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "access_token",
+        "access_expire",
+        "refresh_after"
+      ]
+    },
+    "NewCustomer": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "description": " first name"
+        },
+        "lastName": {
+          "type": "string",
+          "description": " last or given name"
+        },
+        "email": {
+          "type": "string",
+          "description": " email address, unique per store id"
+        },
+        "password": {
+          "type": "string",
+          "description": " password"
+        },
+        "billingAddress": {
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
+        },
+        "shippingAddresses": {
+          "$ref": "#/definitions/Address",
+          "description": " Address object"
+        }
+      },
+      "title": "NewCustomer",
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ]
+    },
+    "Price": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " price id"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": " price amount"
+        },
+        "displayAmount": {
+          "type": "string",
+          "description": " price display amount"
+        },
+        "compareAtAmount": {
+          "type": "number",
+          "format": "double",
+          "description": " price compare amount"
+        },
+        "displayCompareAtAmount": {
+          "type": "string",
+          "description": " price display compare amount"
+        },
+        "currency": {
+          "type": "string",
+          "description": " price currency. example: USD, CAN, etc."
+        }
+      },
+      "title": "Price",
+      "required": [
+        "id",
+        "amount",
+        "displayAmount",
+        "compareAtAmount",
+        "displayCompareAtAmount",
+        "currency"
+      ]
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " product id"
+        },
+        "slug": {
+          "type": "string",
+          "description": " product slug"
+        },
+        "name": {
+          "type": "string",
+          "description": " product name"
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": " product short description. used in category pages"
+        },
+        "description": {
+          "type": "string",
+          "description": " category description"
+        },
+        "metaTitle": {
+          "type": "string",
+          "description": " metatag title for SEO"
+        },
+        "metaDescription": {
+          "type": "string",
+          "description": " metatag description for SEO"
+        },
+        "metaKeywords": {
+          "type": "string",
+          "description": " metatag keywords for SEO"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Variant"
+          },
+          "description": " collection of Variant objects"
+        }
+      },
+      "title": "Product",
+      "required": [
+        "id",
+        "slug",
+        "name",
+        "shortDescription",
+        "description",
+        "metaTitle",
+        "metaDescription",
+        "metaKeywords",
+        "variants"
+      ]
+    },
+    "ResponseStatus": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int64",
+          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": " status message"
+        }
+      },
+      "title": "ResponseStatus",
+      "required": [
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "UpdateCategoryRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        }
+      },
+      "title": "UpdateCategoryRequest",
+      "required": [
+        "id",
+        "category"
+      ]
+    },
+    "UpdateCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "UpdateCategoryResponse",
+      "required": [
+        "category",
+        "status"
+      ]
+    },
+    "UpdateProductRequest": {
+      "type": "object",
+      "properties": {
+        "path:omitempty": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        }
+      },
+      "title": "UpdateProductRequest",
+      "required": [
+        "path:omitempty",
+        "product:omitempty"
+      ]
+    },
+    "UpdateProductResponse": {
+      "type": "object",
+      "properties": {
+        "product:omitempty": {
+          "$ref": "#/definitions/Product"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "UpdateProductResponse",
+      "required": [
+        "product:omitempty",
+        "status"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "User",
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ]
+    },
+    "UserLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "UserLoginRequest",
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "UserLoginResponse": {
+      "type": "object",
+      "properties": {
+        "jwt": {
+          "$ref": "#/definitions/JwtToken"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusMessage": {
+          "type": "string"
+        }
+      },
+      "title": "UserLoginResponse",
+      "required": [
+        "jwt",
+        "user",
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "Variant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " variant id"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " is default variant. each product must have exactly 1 default variant"
+        },
+        "sku": {
+          "type": "string",
+          "description": " variant sku. usually the product sku with appended identification tags"
+        },
+        "weight": {
+          "type": "number",
+          "format": "double",
+          "description": " variant weight. used in calculating shipping"
+        },
+        "height": {
+          "type": "number",
+          "format": "double",
+          "description": " variant height. used in calculating shipping"
+        },
+        "width": {
+          "type": "number",
+          "format": "double",
+          "description": " variant width. used in calculating shipping"
+        },
+        "depth": {
+          "type": "number",
+          "format": "double",
+          "description": " variant depth. used in calculating shipping"
+        },
+        "price": {
+          "$ref": "#/definitions/Price",
+          "description": " variant Price object"
+        }
+      },
+      "title": "Variant",
+      "required": [
+        "id",
+        "isDefault",
+        "sku",
+        "weight",
+        "height",
+        "width",
+        "depth",
+        "price"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

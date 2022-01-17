@@ -15,14 +15,29 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
 			[]rest.Route{
 				{
-					Method:  http.MethodPost,
-					Path:    "/v1/cart/:customerId",
-					Handler: createCartHandler(serverCtx),
-				},
-				{
 					Method:  http.MethodGet,
 					Path:    "/v1/cart/:customerId",
 					Handler: getCartHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart/:customerId",
+					Handler: addItemToCartHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/cart/:customerId/:sku",
+					Handler: updateCartItemQuantityHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/v1/cart/:customerId/:sku",
+					Handler: removeCartItemHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/v1/cart/:customerId",
+					Handler: clearCartHandler(serverCtx),
 				},
 			}...,
 		),
@@ -50,11 +65,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/product/:id",
-					Handler: getProductByIdHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
 					Path:    "/v1/product/sku/:sku",
 					Handler: getProductBySkuHandler(serverCtx),
 				},
@@ -65,7 +75,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/category/:categoryId/:currentPage/:pageSize",
+					Path:    "/v1/product/:id",
+					Handler: getProductByIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/products/:categoryId/:currentPage/:pageSize",
 					Handler: getProductsByCategoryIdHandler(serverCtx),
 				},
 				{
@@ -75,6 +90,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 			}...,
 		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
@@ -83,8 +99,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
+					Path:    "/v1/customer",
+					Handler: createCustomerHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/v1/customer/login",
-					Handler: loginHandler(serverCtx),
+					Handler: customerLoginHandler(serverCtx),
 				},
 			}...,
 		),
