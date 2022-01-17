@@ -68,7 +68,6 @@ returns all categories by slug belonging to a store
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | slug | path | category slug | Yes | string |
-| slug | query |  slug name of the category | Yes | string |
 
 ##### Responses
 
@@ -144,6 +143,52 @@ updates a category
 | ---- | ----------- | ------ |
 | 200 | A successful response. | [UpdateCategoryResponse](#updatecategoryresponse) |
 
+### /v1/customer
+
+#### POST
+##### Summary
+
+Create Customer
+
+##### Description
+
+creates a new customer
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| body | body |  | Yes | [CreateCustomerRequest](#createcustomerrequest) |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | A successful response. | [CreateCustomerResponse](#createcustomerresponse) |
+
+### /v1/customer/login
+
+#### POST
+##### Summary
+
+Login
+
+##### Description
+
+login for customers
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| body | body |  | Yes | [CustomerLoginRequest](#customerloginrequest) |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | A successful response. | [CustomerLoginResponse](#customerloginresponse) |
+
 ### /v1/product
 
 #### POST
@@ -188,7 +233,7 @@ returns all products by sku belonging to a store
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+| 200 | A successful response. | [GetProductResponse](#getproductresponse) |
 
 ### /v1/product/slug/{slug}
 
@@ -206,13 +251,12 @@ returns matching product by slug
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | slug | path | product slug | Yes | string |
-| status | query |  a ResponseStatus object | Yes | invalid (UNKNOWN) |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+| 200 | A successful response. | [GetProductResponse](#getproductresponse) |
 
 ### /v1/product/{id}
 
@@ -235,7 +279,7 @@ returns matching product by id
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+| 200 | A successful response. | [GetProductResponse](#getproductresponse) |
 
 #### DELETE
 ##### Summary
@@ -281,7 +325,7 @@ updates a product
 | ---- | ----------- | ------ |
 | 200 | A successful response. | [UpdateProductResponse](#updateproductresponse) |
 
-### /v1/products/category/{categoryId}/{currentPage}/{pageSize}
+### /v1/products/{categoryId}/{currentPage}/{pageSize}
 
 #### GET
 ##### Summary
@@ -357,6 +401,17 @@ login for administration users
 
 ### Models
 
+#### Address
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| street | string |  street name, ie: 1723 NW 23rd Ave. | Yes |
+| city | string |  city name | Yes |
+| stateProvince | string |  state or province name | Yes |
+| country | string |  IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes | Yes |
+| postalCode | string |  postal or zip code | Yes |
+| isDefault | boolean (boolean) |  indicates if this is a default address | Yes |
+
 #### Category
 
 | Name | Type | Description | Required |
@@ -384,6 +439,19 @@ login for administration users
 | category | [Category](#category) |  | Yes |
 | status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
+#### CreateCustomerRequest
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| customer | [NewCustomer](#newcustomer) |  NewCustomer object | Yes |
+
+#### CreateCustomerResponse
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| customer | [Customer](#customer) |  Customer object | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
+
 #### CreateProductRequest
 
 | Name | Type | Description | Required |
@@ -401,11 +469,34 @@ login for administration users
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| firstName | string |  | Yes |
-| lastName | string |  | Yes |
-| email | string |  | Yes |
-| password | string |  | Yes |
+| id | long |  customer id | Yes |
+| firstName | string |  first name | Yes |
+| lastName | string |  last or given name | Yes |
+| email | string |  email address | Yes |
+| password | string |  password | Yes |
+
+#### CustomerAccount
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long |  customer id | Yes |
+| billingAddress | [Address](#address) |  Address object | Yes |
+| shippingAddresses | [ [Address](#address) ] |  collection of Address objects | Yes |
+
+#### CustomerLoginRequest
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| email | string |  email address, unique to each store id | Yes |
+| password | string |  password | Yes |
+
+#### CustomerLoginResponse
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| jwt | [JwtToken](#jwttoken) |  jwt token | Yes |
+| customer | [Customer](#customer) |  Customer object | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### DeleteCategoryRequest
 
@@ -498,6 +589,12 @@ login for administration users
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | slug | string |  slug name of the category | Yes |
+
+#### GetProductResponse
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| product | [Product](#product) |  slug name of the category | Yes |
 | status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetProductsByCategoryIdRequest
@@ -525,6 +622,17 @@ login for administration users
 | access_token | string |  | Yes |
 | access_expire | long |  | Yes |
 | refresh_after | long |  | Yes |
+
+#### NewCustomer
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| firstName | string |  first name | Yes |
+| lastName | string |  last or given name | Yes |
+| email | string |  email address, unique per store id | Yes |
+| password | string |  password | Yes |
+| billingAddress | [Address](#address) |  Address object | No |
+| shippingAddresses | [Address](#address) |  Address object | No |
 
 #### Price
 

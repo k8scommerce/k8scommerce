@@ -64,7 +64,7 @@ type GetAllCategoriesResponse {
 
 // get category by slug
 type GetCategoryBySlugRequest {
-	Slug string `json:"slug,omitempty"` // slug name of the category
+	Slug string `path:"slug"` // slug name of the category
 }
 
 type GetCategoryBySlugResponse {
@@ -96,6 +96,10 @@ type GetProductBySkuRequest {
 // get product by slug
 type GetProductBySlugRequest {
 	Slug string `path:"slug"` // slug name of the category
+}
+
+type GetProductResponse {
+	Product Product `json:"product"` // slug name of the category
 	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
@@ -167,6 +171,7 @@ service client {
 	@handler getCategoryById
 	get /v1/category/:id(GetCategoryByIdRequest) returns (GetCategoryByIdResponse)
 
+	
 	// products
 
 	@doc(
@@ -175,7 +180,7 @@ service client {
 		sku: "product sku"
 	)
 	@handler getProductBySku
-	get /v1/product/sku/:sku(GetProductBySkuRequest) returns (Product)
+	get /v1/product/sku/:sku(GetProductBySkuRequest) returns (GetProductResponse)
 	
 	@doc(
 		summary: "Get Product By Slug"
@@ -183,7 +188,7 @@ service client {
 		slug: "product slug"
 	)
 	@handler getProductBySlug
-	get /v1/product/slug/:slug(GetProductBySlugRequest) returns (Product)
+	get /v1/product/slug/:slug(GetProductBySlugRequest) returns (GetProductResponse)
 	
 	@doc(
 		summary: "Get Product By Id"
@@ -191,7 +196,7 @@ service client {
 		id: "product id"
 	)
 	@handler getProductById
-	get /v1/product/:id(GetProductByIdRequest) returns (Product)
+	get /v1/product/:id(GetProductByIdRequest) returns (GetProductResponse)
 	
 	@doc(
 		summary: "Get Products By Category Id"
@@ -201,7 +206,7 @@ service client {
 		pageSize: "number of records per page"
 	)
 	@handler getProductsByCategoryId
-	get /v1/products/category/:categoryId/:currentPage/:pageSize(GetProductsByCategoryIdRequest) returns (GetProductsByCategoryIdResponse)
+	get /v1/products/:categoryId/:currentPage/:pageSize(GetProductsByCategoryIdRequest) returns (GetProductsByCategoryIdResponse)
 	
 	@doc(
 		summary: "Get All Products"

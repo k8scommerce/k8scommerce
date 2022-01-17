@@ -1,15 +1,7 @@
 
 
 
-# Catalog API Endpoints
-admin gateway catalog api endpoints
   
-
-## Informations
-
-### Version
-
-1
 
 ## Content negotiation
 
@@ -43,20 +35,13 @@ Enter JWT Bearer token **_only_**
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
 | GET | /v1/categories | [get all categories](#get-all-categories) | Get All Categories |
-| GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) | getAllProducts
-	returns all products |
-| GET | /v1/category/{id} | [get category by Id](#get-category-by-id) | getCategoryById
-	returns a category by id |
-| GET | /v1/category/slug/{slug} | [get category by slug](#get-category-by-slug) | getCategoryBySlug
-	returns a category by url slug and storeId |
-| GET | /v1/product/{id} | [get product by Id](#get-product-by-id) | getProductById
-	returns a product by id |
-| GET | /v1/product/sku/{sku} | [get product by sku](#get-product-by-sku) | getProductBySku
-	returns a product by sku |
-| GET | /v1/product/slug/{slug} | [get product by slug](#get-product-by-slug) | getProductBySlug
-	returns a product by url slug |
-| GET | /v1/products/category/{categoryId}/{currentPage}/{pageSize} | [get products by category Id](#get-products-by-category-id) | getProductsByCategoryId
-	returns all products belonging to a category id |
+| GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) | Get All Products |
+| GET | /v1/category/{id} | [get category by Id](#get-category-by-id) | Get Category By Id |
+| GET | /v1/category/slug/{slug} | [get category by slug](#get-category-by-slug) | Get Category By Slug |
+| GET | /v1/product/{id} | [get product by Id](#get-product-by-id) | Get Product By Id |
+| GET | /v1/product/sku/{sku} | [get product by sku](#get-product-by-sku) | Get Product By Sku |
+| GET | /v1/product/slug/{slug} | [get product by slug](#get-product-by-slug) | Get Product By Slug |
+| GET | /v1/products/{categoryId}/{currentPage}/{pageSize} | [get products by category Id](#get-products-by-category-id) | Get Products By Category Id |
   
 
 
@@ -68,7 +53,7 @@ Enter JWT Bearer token **_only_**
 GET /v1/categories
 ```
 
-returns all categories by belonging to a store
+returns all categories belonging to a store
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -87,20 +72,21 @@ Status: OK
 
 [GetAllCategoriesResponse](#get-all-categories-response)
 
-### <span id="get-all-products"></span> getAllProducts
-	returns all products (*getAllProducts*)
+### <span id="get-all-products"></span> Get All Products (*getAllProducts*)
 
 ```
 GET /v1/products/{currentPage}/{pageSize}
 ```
 
+returns all products belonging to a store
+
 #### Parameters
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| currentPage | `path` | string | `string` |  | ✓ |  |  |
-| pageSize | `path` | string | `string` |  | ✓ |  |  |
-| sortOn | `query` | string | `string` |  |  |  |  |
+| currentPage | `path` | string | `string` |  | ✓ |  | current page number |
+| pageSize | `path` | string | `string` |  | ✓ |  | number of records per page |
+| sortOn | `query` | string | `string` |  | ✓ |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -119,18 +105,20 @@ Status: OK
 
 [GetAllProductsResponse](#get-all-products-response)
 
-### <span id="get-category-by-id"></span> getCategoryById
-	returns a category by id (*getCategoryById*)
+### <span id="get-category-by-id"></span> Get Category By Id (*getCategoryById*)
 
 ```
 GET /v1/category/{id}
 ```
 
+returns all categories by id belonging to a store
+
 #### Parameters
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| id | `path` | string | `string` |  | ✓ |  |  |
+| id | `path` | string | `string` |  | ✓ |  | category id |
+| id | `query` | int64 (formatted integer) | `int64` |  | ✓ |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -149,18 +137,19 @@ Status: OK
 
 [GetCategoryByIDResponse](#get-category-by-id-response)
 
-### <span id="get-category-by-slug"></span> getCategoryBySlug
-	returns a category by url slug and storeId (*getCategoryBySlug*)
+### <span id="get-category-by-slug"></span> Get Category By Slug (*getCategoryBySlug*)
 
 ```
 GET /v1/category/slug/{slug}
 ```
 
+returns all categories by slug belonging to a store
+
 #### Parameters
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| slug | `path` | string | `string` |  | ✓ |  |  |
+| slug | `path` | string | `string` |  | ✓ |  | category slug |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -179,18 +168,19 @@ Status: OK
 
 [GetCategoryBySlugResponse](#get-category-by-slug-response)
 
-### <span id="get-product-by-id"></span> getProductById
-	returns a product by id (*getProductById*)
+### <span id="get-product-by-id"></span> Get Product By Id (*getProductById*)
 
 ```
 GET /v1/product/{id}
 ```
 
+returns matching product by id
+
 #### Parameters
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| id | `path` | string | `string` |  | ✓ |  |  |
+| id | `path` | string | `string` |  | ✓ |  | product id |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -207,20 +197,21 @@ Status: OK
    
   
 
-[Product](#product)
+[GetProductResponse](#get-product-response)
 
-### <span id="get-product-by-sku"></span> getProductBySku
-	returns a product by sku (*getProductBySku*)
+### <span id="get-product-by-sku"></span> Get Product By Sku (*getProductBySku*)
 
 ```
 GET /v1/product/sku/{sku}
 ```
 
+returns all products by sku belonging to a store
+
 #### Parameters
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| sku | `path` | string | `string` |  | ✓ |  |  |
+| sku | `path` | string | `string` |  | ✓ |  | product sku |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -237,20 +228,21 @@ Status: OK
    
   
 
-[Product](#product)
+[GetProductResponse](#get-product-response)
 
-### <span id="get-product-by-slug"></span> getProductBySlug
-	returns a product by url slug (*getProductBySlug*)
+### <span id="get-product-by-slug"></span> Get Product By Slug (*getProductBySlug*)
 
 ```
 GET /v1/product/slug/{slug}
 ```
 
+returns matching product by slug
+
 #### Parameters
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| slug | `path` | string | `string` |  | ✓ |  |  |
+| slug | `path` | string | `string` |  | ✓ |  | product slug |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -267,22 +259,23 @@ Status: OK
    
   
 
-[Product](#product)
+[GetProductResponse](#get-product-response)
 
-### <span id="get-products-by-category-id"></span> getProductsByCategoryId
-	returns all products belonging to a category id (*getProductsByCategoryId*)
+### <span id="get-products-by-category-id"></span> Get Products By Category Id (*getProductsByCategoryId*)
 
 ```
-GET /v1/products/category/{categoryId}/{currentPage}/{pageSize}
+GET /v1/products/{categoryId}/{currentPage}/{pageSize}
 ```
+
+returns all products by category id belonging to a store
 
 #### Parameters
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| categoryId | `path` | string | `string` |  | ✓ |  |  |
-| currentPage | `path` | string | `string` |  | ✓ |  |  |
-| pageSize | `path` | string | `string` |  | ✓ |  |  |
+| categoryId | `path` | string | `string` |  | ✓ |  | category id |
+| currentPage | `path` | string | `string` |  | ✓ |  | current page number |
+| pageSize | `path` | string | `string` |  | ✓ |  | number of records per page |
 | sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
@@ -327,139 +320,6 @@ Status: OK
 
 
 
-### <span id="create-category-request"></span> CreateCategoryRequest
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
-
-
-
-### <span id="create-category-response"></span> CreateCategoryResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
-| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage | string| `string` | ✓ | |  |  |
-
-
-
-### <span id="create-product-request"></span> CreateProductRequest
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-
-
-
-### <span id="create-product-response"></span> CreateProductResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-| statusCode:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage:omitempty | string| `string` | ✓ | |  |  |
-
-
-
-### <span id="delete-category-request"></span> DeleteCategoryRequest
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-
-
-
-### <span id="delete-category-response"></span> DeleteCategoryResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage | string| `string` | ✓ | |  |  |
-
-
-
-### <span id="delete-product-request"></span> DeleteProductRequest
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
-
-
-
-### <span id="delete-product-response"></span> DeleteProductResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| statusCode:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage:omitempty | string| `string` | ✓ | |  |  |
-
-
-
-### <span id="get-all-categories-request"></span> GetAllCategoriesRequest
-
-
-  
-
-[interface{}](#interface)
-
 ### <span id="get-all-categories-response"></span> GetAllCategoriesResponse
 
 
@@ -471,9 +331,8 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| categories | [][Category](#category)| `[]*Category` | ✓ | |  |  |
-| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage | string| `string` | ✓ | |  |  |
+| categories | [][Category](#category)| `[]*Category` | ✓ | | a collection of Category |  |
+| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -490,7 +349,7 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| sortOn | string| `string` |  | |  |  |
+| sortOn | string| `string` | ✓ | |  |  |
 
 
 
@@ -506,6 +365,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | products | [][Product](#product)| `[]*Product` | ✓ | |  |  |
+| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 | totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
@@ -538,8 +398,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
-| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage | string| `string` | ✓ | |  |  |
+| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -554,7 +413,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| slug | string| `string` | ✓ | |  |  |
+| slug | string| `string` | ✓ | | slug name of the category |  |
 
 
 
@@ -570,8 +429,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
-| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage | string| `string` | ✓ | |  |  |
+| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -616,7 +474,23 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| slug | string| `string` | ✓ | |  |  |
+| slug | string| `string` | ✓ | | slug name of the category |  |
+
+
+
+### <span id="get-product-response"></span> GetProductResponse
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| product | [Product](#product)| `Product` | ✓ | | slug name of the category |  |
+| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -650,8 +524,26 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | products | [][Product](#product)| `[]*Product` | ✓ | |  |  |
+| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 | totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="jwt-token"></span> JwtToken
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| access_expire | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| access_token | string| `string` | ✓ | |  |  |
+| refresh_after | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -698,7 +590,7 @@ Status: OK
 
 
 
-### <span id="update-category-request"></span> UpdateCategoryRequest
+### <span id="response-status"></span> ResponseStatus
 
 
   
@@ -709,58 +601,8 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
-| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-
-
-
-### <span id="update-category-response"></span> UpdateCategoryResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
-| statusCode | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage | string| `string` | ✓ | |  |  |
-
-
-
-### <span id="update-product-request"></span> UpdateProductRequest
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-
-
-
-### <span id="update-product-response"></span> UpdateProductResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-| statusCode:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| statusMessage:omitempty | string| `string` | ✓ | |  |  |
+| statusCode | int64 (formatted integer)| `int64` | ✓ | | RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go |  |
+| statusMessage | string| `string` | ✓ | | status message |  |
 
 
 

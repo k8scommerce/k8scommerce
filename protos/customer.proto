@@ -36,7 +36,7 @@ message Address {
 // Requests & Responses
 //
 
-// create Customer product
+// create customer
 message CreateCustomerRequest {
   int64 storeId = 1;
   Customer Customer = 2;
