@@ -96,7 +96,32 @@ prereq:
 .PHONY: test
 test:
 	@echo ${envfile}
-	@echo $(value COMMERCE_ADAPTER)
+	@cd ./services/api/admin; make test-all
+	@cd ../
+	@cd ./services/api/client; make test-all
+	@cd ../
+	@cd ./services/rpc/customer; make test-all
+	@cd ../
+	@cd ./services/rpc/email; make test-all
+	@cd ../
+	@cd ./services/rpc/inventory; make test-all
+	@cd ../
+	@cd ./services/rpc/othersbought; make test-all
+	@cd ../
+	@cd ./services/rpc/cart; make test-all
+	@cd ../
+	@cd ./services/rpc/payment; make test-all
+	@cd ../
+	@cd ./services/rpc/shipping; make test-all
+	@cd ../
+	@cd ./services/rpc/similarproducts; make test-all
+	@cd ../
+	@cd ./services/rpc/store; make test-all
+	@cd ../
+	@cd ./services/rpc/user; make test-all
+	@cd ../
+	@cd ./services/rpc/warehouse; make test-all
+	@cd ../
 
 .PHONY: cleanup
 cleanup:
