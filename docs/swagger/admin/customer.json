@@ -47,7 +47,7 @@
       "post": {
         "summary": "Login",
         "description": "login for customers",
-        "operationId": "login",
+        "operationId": "customerLogin",
         "responses": {
           "200": {
             "description": "A successful response.",

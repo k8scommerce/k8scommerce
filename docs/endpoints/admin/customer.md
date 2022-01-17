@@ -35,7 +35,7 @@ Enter JWT Bearer token **_only_**
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
 | POST | /v1/customer | [create customer](#create-customer) | Create Customer |
-| POST | /v1/customer/login | [login](#login) | Login |
+| POST | /v1/customer/login | [customer login](#customer-login) | Login |
   
 
 
@@ -72,7 +72,7 @@ Status: OK
 
 [CreateCustomerResponse](#create-customer-response)
 
-### <span id="login"></span> Login (*login*)
+### <span id="customer-login"></span> Login (*customerLogin*)
 
 ```
 POST /v1/customer/login
@@ -89,15 +89,15 @@ login for customers
 #### All responses
 | Code | Status | Description | Has headers | Schema |
 |------|--------|-------------|:-----------:|--------|
-| [200](#login-200) | OK | A successful response. |  | [schema](#login-200-schema) |
+| [200](#customer-login-200) | OK | A successful response. |  | [schema](#customer-login-200-schema) |
 
 #### Responses
 
 
-##### <span id="login-200"></span> 200 - A successful response.
+##### <span id="customer-login-200"></span> 200 - A successful response.
 Status: OK
 
-###### <span id="login-200-schema"></span> Schema
+###### <span id="customer-login-200-schema"></span> Schema
    
   
 
