@@ -1,9 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Client Gateway API",
-    "description": "client gateway api",
-    "version": "1"
+    "title": "",
+    "version": ""
   },
   "schemes": [
     "http",
@@ -344,6 +343,28 @@
         "quantity",
         "price",
         "expiresAt"
+      ]
+    },
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "access_expire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refresh_after": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "access_token",
+        "access_expire",
+        "refresh_after"
       ]
     },
     "RemoveCartItemRequest": {

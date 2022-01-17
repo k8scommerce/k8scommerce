@@ -160,7 +160,6 @@ returns all categories by slug belonging to a store
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | slug | path | category slug | Yes | string |
-| slug | query |  slug name of the category | Yes | string |
 
 ##### Responses
 
@@ -191,6 +190,29 @@ returns all categories by id belonging to a store
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | A successful response. | [GetCategoryByIdResponse](#getcategorybyidresponse) |
+
+### /v1/customer
+
+#### POST
+##### Summary
+
+Create Customer
+
+##### Description
+
+creates a new customer
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| body | body |  | Yes | [CreateCustomerRequest](#createcustomerrequest) |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | A successful response. | [CreateCustomerResponse](#createcustomerresponse) |
 
 ### /v1/customer/login
 
@@ -236,7 +258,7 @@ returns all products by sku belonging to a store
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+| 200 | A successful response. | [GetProductResponse](#getproductresponse) |
 
 ### /v1/product/slug/{slug}
 
@@ -254,13 +276,12 @@ returns matching product by slug
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | slug | path | product slug | Yes | string |
-| status | query |  a ResponseStatus object | Yes | invalid (UNKNOWN) |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+| 200 | A successful response. | [GetProductResponse](#getproductresponse) |
 
 ### /v1/product/{id}
 
@@ -283,9 +304,9 @@ returns matching product by id
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | A successful response. | [Product](#product) |
+| 200 | A successful response. | [GetProductResponse](#getproductresponse) |
 
-### /v1/products/category/{categoryId}/{currentPage}/{pageSize}
+### /v1/products/{categoryId}/{currentPage}/{pageSize}
 
 #### GET
 ##### Summary
@@ -352,6 +373,17 @@ returns all products belonging to a store
 | cart | [Cart](#cart) |  a Cart object | Yes |
 | status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
+#### Address
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| street | string |  | Yes |
+| city | string |  | Yes |
+| state | string |  | Yes |
+| country | string |  | Yes |
+| postalCode | string |  | Yes |
+| isDefault | boolean (boolean) |  | Yes |
+
 #### Cart
 
 | Name | Type | Description | Required |
@@ -386,6 +418,19 @@ returns all products belonging to a store
 | ---- | ---- | ----------- | -------- |
 | status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
+#### CreateCustomerRequest
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| customer | [NewCustomer](#newcustomer) |  | Yes |
+
+#### CreateCustomerResponse
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| customer | [Customer](#customer) |  | Yes |
+| status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
+
 #### Customer
 
 | Name | Type | Description | Required |
@@ -395,6 +440,14 @@ returns all products belonging to a store
 | lastName | string |  | Yes |
 | email | string |  | Yes |
 | password | string |  | Yes |
+
+#### CustomerAccount
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long |  | Yes |
+| billingAddress | [Address](#address) |  | Yes |
+| shippingAddresses | [ [Address](#address) ] |  | Yes |
 
 #### CustomerLoginRequest
 
@@ -491,6 +544,12 @@ returns all products belonging to a store
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | slug | string |  slug name of the category | Yes |
+
+#### GetProductResponse
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| product | [Product](#product) |  slug name of the category | Yes |
 | status | [ResponseStatus](#responsestatus) |  a ResponseStatus object | Yes |
 
 #### GetProductsByCategoryIdRequest
@@ -527,6 +586,17 @@ returns all products belonging to a store
 | access_token | string |  | Yes |
 | access_expire | long |  | Yes |
 | refresh_after | long |  | Yes |
+
+#### NewCustomer
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| firstName | string |  | Yes |
+| lastName | string |  | Yes |
+| email | string |  | Yes |
+| password | string |  | Yes |
+| billingAddress | [Address](#address) |  | No |
+| shippingAddresses | [Address](#address) |  | No |
 
 #### Price
 

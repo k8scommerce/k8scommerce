@@ -1,15 +1,7 @@
 
 
 
-# Client Gateway API
-client gateway api
   
-
-## Informations
-
-### Version
-
-1
 
 ## Content negotiation
 
@@ -340,6 +332,23 @@ Status: OK
 | price | double (formatted number)| `float64` | ✓ | | the item's price |  |
 | quantity | int32 (formatted integer)| `int32` | ✓ | | how many of identical items |  |
 | sku | string| `string` | ✓ | | an item's variant sku number |  |
+
+
+
+### <span id="jwt-token"></span> JwtToken
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| access_expire | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| access_token | string| `string` | ✓ | |  |  |
+| refresh_after | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 

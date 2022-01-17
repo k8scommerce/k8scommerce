@@ -62,7 +62,7 @@ type GetAllCategoriesResponse struct {
 }
 
 type GetCategoryBySlugRequest struct {
-	Slug string `json:"slug,omitempty"` // slug name of the category
+	Slug string `path:"slug"` // slug name of the category
 }
 
 type GetCategoryBySlugResponse struct {
@@ -111,8 +111,12 @@ type GetProductBySkuRequest struct {
 }
 
 type GetProductBySlugRequest struct {
-	Slug           string         `path:"slug"`   // slug name of the category
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Slug string `path:"slug"` // slug name of the category
+}
+
+type GetProductResponse struct {
+	Product        Product        `json:"product"` // slug name of the category
+	ResponseStatus ResponseStatus `json:"status"`  // a ResponseStatus object
 }
 
 type GetProductByIdRequest struct {
@@ -174,11 +178,55 @@ type DeleteProductResponse struct {
 }
 
 type Customer struct {
-	Id        int64  `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Email     string `json:"email"`
-	Password  string `json:"password,omitempty"`
+	Id        int64  `json:"id"`                 // customer id
+	FirstName string `json:"firstName"`          // first name
+	LastName  string `json:"lastName"`           // last or given name
+	Email     string `json:"email,required"`     // email address
+	Password  string `json:"password,omitempty"` // password
+}
+
+type NewCustomer struct {
+	FirstName       string  `json:"firstName,required"`         // first name
+	LastName        string  `json:"lastName,required"`          // last or given name
+	Email           string  `json:"email,required"`             // email address, unique per store id
+	Password        string  `json:"password,required"`          // password
+	BillingAddress  Address `json:"billingAddress,optional"`    // Address object
+	ShippingAddress Address `json:"shippingAddresses,optional"` // Address object
+}
+
+type CustomerAccount struct {
+	CustomerId        int64     `json:"id"`                // customer id
+	BillingAddress    Address   `json:"billingAddress"`    // Address object
+	ShippingAddresses []Address `json:"shippingAddresses"` // collection of Address objects
+}
+
+type Address struct {
+	Street        string `json:"street"`             // street name, ie: 1723 NW 23rd Ave.
+	City          string `json:"city"`               // city name
+	StateProvince string `json:"stateProvince"`      // state or province name
+	Country       string `json:"country"`            // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
+	PostalCode    string `json:"postalCode"`         // postal or zip code
+	IsDefault     bool   `json:"isDefault,required"` // indicates if this is a default address
+}
+
+type CustomerLoginRequest struct {
+	Email    string `json:"email,required"`    // email address, unique to each store id
+	Password string `json:"password,required"` // password
+}
+
+type CustomerLoginResponse struct {
+	JwtToken       JwtToken       `json:"jwt"`      // jwt token
+	Customer       Customer       `json:"customer"` // Customer object
+	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
+}
+
+type CreateCustomerRequest struct {
+	Customer NewCustomer `json:"customer"` // NewCustomer object
+}
+
+type CreateCustomerResponse struct {
+	Customer       Customer       `json:"customer"` // Customer object
+	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
 }
 
 type User struct {
