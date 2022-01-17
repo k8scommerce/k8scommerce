@@ -1,0 +1,489 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/cart/{customerId}": {
+      "get": {
+        "summary": "Get Cart",
+        "description": "returns a shopping cart if one exists",
+        "operationId": "getCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "customerId",
+            "description": "a customer's id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "Clear Cart",
+        "description": "clear a customer's cart",
+        "operationId": "clearCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ClearCartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "customerId",
+            "description": "a customer's id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ClearCartRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "summary": "Add Item to Cart",
+        "description": "adds an item to an existing cart",
+        "operationId": "addItemToCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AddItemToCartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "customerId",
+            "description": "a customer's id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddItemToCartRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/cart/{customerId}/{sku}": {
+      "delete": {
+        "summary": "Remove Item",
+        "description": "removes an item from a customer's cart",
+        "operationId": "removeCartItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RemoveCartItemResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "customerId",
+            "description": "a customer's id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sku",
+            "description": "an Item's sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RemoveCartItemRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "Update Item Quantity",
+        "description": "updates a cart item's quantity",
+        "operationId": "updateCartItemQuantity",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateCartItemQuantityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "customerId",
+            "description": "a customer's id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sku",
+            "description": "an item's sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCartItemQuantityRequest"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AddItemToCartRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " a customer's id"
+        },
+        "item": {
+          "$ref": "#/definitions/Item",
+          "description": " an Item object"
+        }
+      },
+      "title": "AddItemToCartRequest",
+      "required": [
+        "customerId",
+        "item"
+      ]
+    },
+    "AddItemToCartResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart",
+          "description": " a Cart object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "AddItemToCartResponse",
+      "required": [
+        "cart",
+        "status"
+      ]
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          },
+          "description": " a collection of Item"
+        },
+        "totalPrice": {
+          "type": "number",
+          "format": "double",
+          "description": " the sum total of the cart"
+        }
+      },
+      "title": "Cart",
+      "required": [
+        "items",
+        "totalPrice"
+      ]
+    },
+    "ClearCartRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " a customer's id"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "ClearCartRequest",
+      "required": [
+        "customerId",
+        "status"
+      ]
+    },
+    "ClearCartResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "ClearCartResponse",
+      "required": [
+        "status"
+      ]
+    },
+    "GetCartRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " a customer's id"
+        }
+      },
+      "title": "GetCartRequest",
+      "required": [
+        "customerId"
+      ]
+    },
+    "GetCartResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart",
+          "description": " a Cart object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "GetCartResponse",
+      "required": [
+        "cart",
+        "status"
+      ]
+    },
+    "Item": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string",
+          "description": " an item's variant sku number"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32",
+          "description": " how many of identical items"
+        },
+        "price": {
+          "type": "number",
+          "format": "double",
+          "description": " the item's price"
+        },
+        "expiresAt": {
+          "type": "string",
+          "description": " when this item expires in the cart"
+        }
+      },
+      "title": "Item",
+      "required": [
+        "sku",
+        "quantity",
+        "price",
+        "expiresAt"
+      ]
+    },
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "access_expire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refresh_after": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "access_token",
+        "access_expire",
+        "refresh_after"
+      ]
+    },
+    "RemoveCartItemRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " a customer's id"
+        },
+        "sku": {
+          "type": "string",
+          "description": " an item's variant sku number"
+        },
+        "quanity": {
+          "type": "integer",
+          "format": "int32",
+          "description": " a new quantity"
+        }
+      },
+      "title": "RemoveCartItemRequest",
+      "required": [
+        "customerId",
+        "sku",
+        "quanity"
+      ]
+    },
+    "RemoveCartItemResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart",
+          "description": " a Cart object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "RemoveCartItemResponse",
+      "required": [
+        "cart",
+        "status"
+      ]
+    },
+    "ResponseStatus": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int64",
+          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": " status message"
+        }
+      },
+      "title": "ResponseStatus",
+      "required": [
+        "statusCode",
+        "statusMessage"
+      ]
+    },
+    "UpdateCartItemQuantityRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " a customer's id"
+        },
+        "sku": {
+          "type": "string",
+          "description": " an item's variant sku number"
+        },
+        "quanity": {
+          "type": "integer",
+          "format": "int32",
+          "description": " a new quantity"
+        }
+      },
+      "title": "UpdateCartItemQuantityRequest",
+      "required": [
+        "customerId",
+        "sku",
+        "quanity"
+      ]
+    },
+    "UpdateCartItemQuantityResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart",
+          "description": " a Cart object"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus",
+          "description": " a ResponseStatus object"
+        }
+      },
+      "title": "UpdateCartItemQuantityResponse",
+      "required": [
+        "cart",
+        "status"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 out_dir='../services/rpc'
 protos_dir='../protos'
 

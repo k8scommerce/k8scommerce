@@ -23,7 +23,7 @@ func NewGetAllCategoriesLogic(ctx context.Context, svcCtx *svc.ServiceContext) G
 	}
 }
 
-func (l *GetAllCategoriesLogic) GetAllCategories(req types.GetAllCategoriesRequest) (resp *types.GetAllCategoriesResponse, err error) {
+func (l *GetAllCategoriesLogic) GetAllCategories() (resp *types.GetAllCategoriesResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return
