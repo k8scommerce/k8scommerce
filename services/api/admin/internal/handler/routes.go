@@ -12,17 +12,77 @@ import (
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
 			[]rest.Route{
 				{
-					Method:  http.MethodPost,
-					Path:    "/v1/cart/:userId",
-					Handler: createCartHandler(serverCtx),
+					Method:  http.MethodGet,
+					Path:    "/v1/categories",
+					Handler: getAllCategoriesHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/cart/:userId",
-					Handler: getCartHandler(serverCtx),
+					Path:    "/v1/category/slug/:slug",
+					Handler: getCategoryBySlugHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/category/:id",
+					Handler: getCategoryByIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/category",
+					Handler: createCategoryHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/category/:id",
+					Handler: updateCategoryHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/v1/category/:id",
+					Handler: deleteCategoryHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/product/sku/:sku",
+					Handler: getProductBySkuHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/product/slug/:slug",
+					Handler: getProductBySlugHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/product/:id",
+					Handler: getProductByIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/products/:categoryId/:currentPage/:pageSize",
+					Handler: getProductsByCategoryIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/products/:currentPage/:pageSize",
+					Handler: getAllProductsHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/product",
+					Handler: createProductHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/product/:id",
+					Handler: updateProductHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/v1/product/:id",
+					Handler: deleteProductHandler(serverCtx),
 				},
 			}...,
 		),
@@ -31,42 +91,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale},
-			[]rest.Route{}...,
-		),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
 			[]rest.Route{
 				{
-					Method:  http.MethodGet,
-					Path:    "/v1/product/sku/:sku",
-					Handler: getProductBySkuRequestHandler(serverCtx),
+					Method:  http.MethodPost,
+					Path:    "/v1/customer",
+					Handler: createCustomerHandler(serverCtx),
 				},
 				{
-					Method:  http.MethodGet,
-					Path:    "/v1/product/slug/:slug",
-					Handler: getProductBySlugRequestHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/v1/product/:id",
-					Handler: getProductByIdRequestHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/v1/products/category/:categoryId/:currentPage/:pageSize",
-					Handler: getProductsByCategoryIdRequestHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/v1/products/:currentPage/:pageSize",
-					Handler: getAllProductsRequestHandler(serverCtx),
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/login",
+					Handler: customerLoginHandler(serverCtx),
 				},
 			}...,
 		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(

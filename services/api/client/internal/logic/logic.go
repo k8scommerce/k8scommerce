@@ -15,8 +15,6 @@ func convertOutgoingPrices(ctx context.Context, p *types.Price) {
 	}
 
 	locale := ctx.Value(types.Locale).(string)
-	// fmt.Println("INCOMING LOCALE:", locale)
-
 	if locale == "" {
 		locale = "en"
 	}
