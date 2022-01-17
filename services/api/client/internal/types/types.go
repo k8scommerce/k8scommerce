@@ -8,8 +8,8 @@ type JwtToken struct {
 }
 
 type ResponseStatus struct {
-	StatusCode    int64  `json:"statusCode"`    // RFC http status code, ie. 204, etc - https://go.dev/src/net/http/status.go
-	StatusMessage string `json:"statusMessage"` // status message
+	StatusCode    int64  `json:"statusCode"`              // RFC http status code, ie. 204, etc - https://go.dev/src/net/http/status.go
+	StatusMessage string `json:"statusMessage,omitempty"` // status message
 }
 
 type Cart struct {
