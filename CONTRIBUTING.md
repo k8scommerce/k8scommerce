@@ -29,8 +29,7 @@ changes.
 Testing
 -------
 
-Tests are written using golang's standard testing tools, and are run prior to 
-the PR being accepted.
+Tests are written using [Ginkgo's](https://github.com/onsi/ginkgo) testing tools, and are run prior to the PR being accepted.
 
 Issues
 ------
@@ -42,10 +41,9 @@ For creating an issue:
   an extension of a current feature, please include whether or not this would 
   be a breaking change or how to extend the feature with backwards 
   compatibility.
-* **Security Vulnerability:** please report it at 
-  https://my.xfinity.com/vulnerabilityreport and contact the [maintainers](MAINTAINERS.md).
+* **Security Vulnerability:** please contact the [maintainers](MAINTAINERS.md).
 
-If you wish to work on an issue, please assign it to yourself.  If you have any
+If you wish to work on an issue, please assign it to yourself. If you have any
 questions regarding implementation, feel free to ask clarifying questions on 
 the issue itself.
 
