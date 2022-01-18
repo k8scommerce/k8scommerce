@@ -5,7 +5,11 @@
 
 K8sCommerce is in active development! The goal is to create a cloud native microservice-based ecommerce platform written in [Go](https://go.dev/)—for kubernetes deployments.
 
-Project status: **pre-alpha**
+Project status: in active development / **pre-alpha**
+
+## Documentation
+
+Documentation is in active development at [k8scommerce.com](https://k8scommerce.com/docs/). 
 
 ## Project Origin
 
