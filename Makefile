@@ -1,4 +1,4 @@
-SHELL := bash
+SHELL:=bash
 
 envfile=.env
 include ${envfile}
@@ -23,7 +23,7 @@ TAG := $(shell echo $(HASH))
 $(call check_defined, BRANCH HASH TAG)
 
 # if the release branch is main push to prod
-ifeq ($(BRANCH),     $(RELEASE_BRANCH))
+ifeq ($(BRANCH), $(RELEASE_BRANCH))
 IMAGE_REPO=k8scommerce
 else
 IMAGE_REPO=127.0.0.1:5000
