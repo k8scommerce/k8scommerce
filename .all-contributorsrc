@@ -9,7 +9,17 @@
   "imageSize": 100,
   "commit": "angular",
   "commitConvention": "none",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "localrivet",
+      "name": "localrivet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/833950?v=4",
+      "profile": "https://github.com/localrivet",
+      "contributions": [
+        "infra"
+      ]
+    }
+  ],
   "contributorsPerLine": 7,
   "skipCi": true
 }
