@@ -77,7 +77,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/localrivet"><img src="https://avatars.githubusercontent.com/u/833950?v=4?s=100" width="100px;" alt=""/><br /><sub><b>localrivet</b></sub></a><br /><a href="#infra-localrivet" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://github.com/localrivet"><img src="https://avatars.githubusercontent.com/u/833950?v=4?s=100" width="100px;" alt=""/><br /><sub><b>localrivet</b></sub></a><br /><a href="#infra-localrivet" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/k8scommerce/k8scommerce/commits?author=localrivet" title="Code">💻</a> <a href="https://github.com/k8scommerce/k8scommerce/commits?author=localrivet" title="Documentation">📖</a> <a href="https://github.com/k8scommerce/k8scommerce/commits?author=localrivet" title="Tests">⚠️</a> <a href="#maintenance-localrivet" title="Maintenance">🚧</a> <a href="#content-localrivet" title="Content">🖋</a></td>
   </tr>
 </table>
 

@@ -16,7 +16,12 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/833950?v=4",
       "profile": "https://github.com/localrivet",
       "contributions": [
-        "infra"
+        "infra",
+        "code",
+        "doc",
+        "test",
+        "maintenance",
+        "content"
       ]
     }
   ],
