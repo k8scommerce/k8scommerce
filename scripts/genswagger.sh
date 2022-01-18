@@ -2,41 +2,42 @@
 
 # https://github.com/zeromicro/goctl-swagger
 
-# install swagger-markdown
-# npm install -g swagger-markdown > /dev/null 2>&1
-
+version='v1'
 out_dir='../docs'
 api_dir='../endpoint-definitions'
 
 # define the gateway services
 services='admin client'
 
+# create a tmp directory to work in
+tmp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'k8sswagtemp')
+
 for service in $services; do
   # make the directory if one does not exist
-  mkdir -p $out_dir/swagger/$service
-  mkdir -p $out_dir/endpoints/$service
+  mkdir -p $out_dir/swagger/$version/$service
+  mkdir -p $out_dir/endpoints/$version/$service
 
-  # create a tmp directory for individual service swagger and markdown generation
-  svc_tpl_path="${api_dir}/tmp/${service}"
+  # create a service and shared directory in our
+  # tmp directory for individual service swagger and markdown generation
+  svc_tpl_path="${tmp_dir}/${service}"
   mkdir -p $svc_tpl_path
   mkdir -p "${svc_tpl_path}/shared"
 
   # copy the shared folder to the svc_tpl_path
-  cp -R $api_dir/shared/. $svc_tpl_path/shared
+  cp -R $api_dir/$version/shared/. $svc_tpl_path/shared
 
   # generate a complete json description
-  goctl api plugin -plugin goctl-swagger="swagger -filename ${out_dir}/swagger/${service}.json" -api "${api_dir}/${service}.api" -dir "${api_dir}" >/dev/null 2>&1
-  swagger-markdown -i "${out_dir}/swagger/${service}.json" -o "${out_dir}/swagger/${service}.md" >/dev/null 2>&1
-  service_api_file_content=$(cat "${api_dir}/${service}.api") >/dev/null 2>&1
+  goctl api plugin -plugin goctl-swagger="swagger -filename ${out_dir}/swagger/${version}/${service}.json" -api "${api_dir}/${version}/${service}.api" -dir "${api_dir}" >/dev/null 2>&1
+  service_api_file_content=$(cat "${api_dir}/${version}/${service}.api") >/dev/null 2>&1
   shared_imports=$(echo -e "$service_api_file_content" | perl -0777ne 'print "\n    ","$1" while /("shared\/.*"?)/g;') >/dev/null 2>&1
 
   # create an api template to be used in the service api generation
   api_tpl="import($shared_imports\n    IMPORT_API_FILE\n)"
 
   # loop through each service .api file and generate a swagger file and markdown for each
-  for api_file in $(ls ../endpoint-definitions/$service); do
+  for api_file in $(ls ../endpoint-definitions/$version/$service); do
 
-    cp -R $api_dir/$service/. $svc_tpl_path/$service
+    cp -R $api_dir/$version/$service/. $svc_tpl_path/$service
 
     # extract the file from the path
     filename=$(basename -- "$api_file")
@@ -49,16 +50,16 @@ for service in $services; do
     echo -e "${svc_tpl}" >"${svc_filename}"
 
     # generate the swagger file
-    goctl api plugin -plugin goctl-swagger="swagger -filename ${out_dir}/swagger/${service}/${filename}.json" -api "${svc_filename}" -dir "${api_dir}" >/dev/null 2>&1
+    goctl api plugin -plugin goctl-swagger="swagger -filename ${out_dir}/swagger/${version}/${service}/${filename}.json" -api "${svc_filename}" -dir "${api_dir}" >/dev/null 2>&1
 
     # generate the markdown file from the swagger file
-    swagger generate markdown --quiet --spec="${out_dir}/swagger/${service}/${filename}.json" --output="${out_dir}/endpoints/${service}/${filename}.md" >/dev/null 2>&1
+    swagger generate markdown --quiet --spec="${out_dir}/swagger/${version}/${service}/${filename}.json" --output="${out_dir}/endpoints/${version}/${service}/${filename}.md" >/dev/null 2>&1
 
     # set the path to the current doc file
-    doc_file="../../k8scommerce.github.io/content/en/docs/rest-gateway-endpoints/v1/${service}-gateway/${filename}.md"
+    doc_file="../../k8scommerce.github.io/content/en/docs/rest-gateway-endpoints/${version}/${service}-gateway/${filename}.md"
 
     # get the newly generated markdown
-    gen_md=$(cat "${out_dir}/endpoints/${service}/${filename}.md")
+    gen_md=$(cat "${out_dir}/endpoints/${version}/${service}/${filename}.md")
 
     # remove everything before 'All endpoints'
     cleaned_gen_md=${gen_md#*\#\#\ All\ endpoints}
@@ -89,10 +90,9 @@ for service in $services; do
 
     # append the cleaned, new markdown
     echo "${clean_md}" >>"${doc_file}"
+
   done
 done
 
 # remove the tmp directory
-rm -rf "${api_dir}/tmp"
-
-# go build -o swagtest -ldflags "-s -w" . && goctl api plugin -plugin ./swagtest="swagger -filename ../k8scommerce/docs/swagger/client/cart.json" -api ../k8scommerce/endpoint-definitions/client/cart.api -dir . && swagger-markdown -i ../k8scommerce/docs/swagger/client/cart.json -o ../k8scommerce/docs/endpoints/client/cart.md
+rm -rf $tmp_dir
