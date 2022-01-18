@@ -22,8 +22,12 @@ TAG := $(shell echo $(HASH))
 
 $(call check_defined, BRANCH HASH TAG)
 
-# IMAGE_REPO=127.0.0.1:5000
+# if the release branch is main push to prod
+ifeq ($(BRANCH),     $(RELEASE_BRANCH))
 IMAGE_REPO=k8scommerce
+else
+IMAGE_REPO=127.0.0.1:5000
+endif
 
 
 remove=sf_*.go\
@@ -52,6 +56,22 @@ apiServices=client admin
 
 # cart depends on inventory, othersbought
 
+# if developing, only enable the services you're not writing code for
+# for example if you're working on the customer service:
+# 	1. comment out customer below 
+# 	2. start the customer microservice independently
+# 		- cd services/rpc/cart
+#		- go run customer.go -f etc/customer.yaml
+# 	3. start the remaining services & api gateways
+#		- cd to the project root
+# 		- make start
+# 	4. to shut down all the services, except the one you're working on
+#		- cd to the project root
+# 		- make stop
+#	5. to shut down the service(s) you're working on
+# 		- press CTRL+C
+#
+
 rpcServices=customer\
 email\
 inventory\
@@ -64,10 +84,6 @@ store\
 user\
 warehouse \
 catalog
-
-# rpcServices=inventory\
-# othersbought\
-# cart
 
 
 # define standard colors
@@ -237,294 +253,238 @@ stop:
 ##
 .PHONY: docker-build-admin
 docker-build-admin:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/admin:latest \
 		-t $(IMAGE_REPO)/admin:$(TAG) \
 		--build-arg APP_NAME=admin \
 		--build-arg APP_PATH=services/api \
 		.
-endif
 
 .PHONY: docker-push-admin
 docker-push-admin:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/admin:latest
 	docker push $(IMAGE_REPO)/admin:$(TAG)
-endif
 
 ##
 ## Client
 ##
 .PHONY: docker-build-client
 docker-build-client:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/client:latest \
 		-t $(IMAGE_REPO)/client:$(TAG) \
 		--build-arg APP_NAME=client \
 		--build-arg APP_PATH=services/api \
 		.
-endif
 
 .PHONY: docker-push-client
 docker-push-client:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/client:latest
 	docker push $(IMAGE_REPO)/client:$(TAG)
-endif
 
 ##
 ## Cart
 ##
 .PHONY: docker-build-cart
 docker-build-cart:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/cart:latest \
 		-t $(IMAGE_REPO)/cart:$(TAG) \
 		--build-arg APP_NAME=cart \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-cart
 docker-push-cart:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/cart:latest
 	docker push $(IMAGE_REPO)/cart:$(TAG)
-endif
 
 ##
 ## Catalog
 ##
 .PHONY: docker-build-catalog
 docker-build-catalog:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/catalog:latest \
 		-t $(IMAGE_REPO)/catalog:$(TAG) \
 		--build-arg APP_NAME=catalog \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-catalog
 docker-push-catalog:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/catalog:latest
 	docker push $(IMAGE_REPO)/catalog:$(TAG)
-endif
 
 ##
 ## Customer
 ##
 .PHONY: docker-build-customer
 docker-build-customer:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/customer:latest \
 		-t $(IMAGE_REPO)/customer:$(TAG) \
 		--build-arg APP_NAME=customer \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-customer
 docker-push-customer:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/customer:latest
 	docker push $(IMAGE_REPO)/customer:$(TAG)
-endif
 
 ##
 ## Email
 ##
 .PHONY: docker-build-email
 docker-build-email:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/email:latest \
 		-t $(IMAGE_REPO)/email:$(TAG) \
 		--build-arg APP_NAME=email \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-email
 docker-push-email:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/email:latest
 	docker push $(IMAGE_REPO)/email:$(TAG)
-endif
 
 ##
 ## Inventory
 ##
 .PHONY: docker-build-inventory
 docker-build-inventory:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/inventory:latest \
 		-t $(IMAGE_REPO)/inventory:$(TAG) \
 		--build-arg APP_NAME=inventory \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-inventory
 docker-push-inventory:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/inventory:latest
 	docker push $(IMAGE_REPO)/inventory:$(TAG)
-endif
 
 ##
 ## othersbought
 ##
 .PHONY: docker-build-othersbought
 docker-build-othersbought:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/othersbought:latest \
 		-t $(IMAGE_REPO)/othersbought:$(TAG) \
 		--build-arg APP_NAME=othersbought \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-othersbought
 docker-push-othersbought:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/othersbought:latest
 	docker push $(IMAGE_REPO)/othersbought:$(TAG)
-endif
 
 ##
 ## Payment
 ##
 .PHONY: docker-build-payment
 docker-build-payment:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/payment:latest \
 		-t $(IMAGE_REPO)/payment:$(TAG) \
 		--build-arg APP_NAME=payment \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-payment
 docker-push-payment:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/payment:latest
 	docker push $(IMAGE_REPO)/payment:$(TAG)
-endif
 
 ##
 ## Shipping
 ##
 .PHONY: docker-build-shipping
 docker-build-shipping:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/shipping:latest \
 		-t $(IMAGE_REPO)/shipping:$(TAG) \
 		--build-arg APP_NAME=shipping \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-shipping
 docker-push-shipping:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/shipping:latest
 	docker push $(IMAGE_REPO)/shipping:$(TAG)
-endif
 
 ##
 ## similarproducts
 ##
 .PHONY: docker-build-similarproducts
 docker-build-similarproducts:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/similarproducts:latest \
 		-t $(IMAGE_REPO)/similarproducts:$(TAG) \
 		--build-arg APP_NAME=similarproducts \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-similarproducts
 docker-push-similarproducts:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/similarproducts:latest
 	docker push $(IMAGE_REPO)/similarproducts:$(TAG)
-endif
 
 ##
 ## Store
 ##
 .PHONY: docker-build-store
 docker-build-store:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/store:latest \
 		-t $(IMAGE_REPO)/store:$(TAG) \
 		--build-arg APP_NAME=store \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-store
 docker-push-store:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/store:latest
 	docker push $(IMAGE_REPO)/store:$(TAG)
-endif
 
 ##
 ## user
 ##
 .PHONY: docker-build-user
 docker-build-user:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/user:latest \
 		-t $(IMAGE_REPO)/user:$(TAG) \
 		--build-arg APP_NAME=user \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-user
 docker-push-user:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/user:latest
 	docker push $(IMAGE_REPO)/user:$(TAG)
-endif
 
 ##
 ## Warehouse
 ##
 .PHONY: docker-build-warehouse
 docker-build-warehouse:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/warehouse:latest \
 		-t $(IMAGE_REPO)/warehouse:$(TAG) \
 		--build-arg APP_NAME=warehouse \
 		--build-arg APP_PATH=services/rpc \
 		.
-endif
 
 .PHONY: docker-push-warehouse
 docker-push-warehouse:
-ifeq ($(BRANCH), $(RELEASE_BRANCH))
 	docker push $(IMAGE_REPO)/warehouse:latest
 	docker push $(IMAGE_REPO)/warehouse:$(TAG)
-endif
 
 ##
 ##
