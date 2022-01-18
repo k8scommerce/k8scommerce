@@ -44,8 +44,7 @@ option\
 option_item\
 archetype
 
-
-apiServices=client
+apiServices=client admin
 
 # cart depends on inventory, othersbought
 
@@ -59,9 +58,8 @@ shipping\
 similarproducts\
 store\
 user\
-warehouse
-
-# catalog\
+warehouse \
+catalog
 
 # rpcServices=inventory\
 # othersbought\
