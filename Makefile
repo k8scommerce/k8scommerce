@@ -12,15 +12,23 @@ __check_defined = \
       $(error Undefined $1$(if $2, ($2))))
 
 GOPATH:=$(shell go env GOPATH)
-BRANCH = $(shell git branch --show-current | sed -e 's/\//-/g')
-HASH = $$(git rev-parse --short HEAD)
-TAG := $(shell echo $(BRANCH)-$(HASH))
+BRANCH:=$(shell git branch --show-current | sed -e 's/\//-/g')
+RELEASE_BRANCH:=main
+HASH:=$$(git rev-parse --short HEAD)
+# TAG := $(shell echo $(BRANCH)-$(HASH))
+TAG := $(shell echo $(HASH))
 
 # TS = $$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
 $(call check_defined, BRANCH HASH TAG)
 
-IMAGE_REPO = 127.0.0.1:5000
+# if the release branch is main push to prod
+ifeq ($(BRANCH),     $(RELEASE_BRANCH))
+IMAGE_REPO=k8scommerce
+else
+IMAGE_REPO=127.0.0.1:5000
+endif
+
 
 remove=sf_*.go\
 sf_*.go\
@@ -48,6 +56,22 @@ apiServices=client admin
 
 # cart depends on inventory, othersbought
 
+# if developing, only enable the services you're not writing code for
+# for example if you're working on the customer service:
+# 	1. comment out customer below 
+# 	2. start the customer microservice independently
+# 		- cd services/rpc/cart
+#		- go run customer.go -f etc/customer.yaml
+# 	3. start the remaining services & api gateways
+#		- cd to the project root
+# 		- make start
+# 	4. to shut down all the services, except the one you're working on
+#		- cd to the project root
+# 		- make stop
+#	5. to shut down the service(s) you're working on
+# 		- press CTRL+C
+#
+
 rpcServices=customer\
 email\
 inventory\
@@ -60,10 +84,6 @@ store\
 user\
 warehouse \
 catalog
-
-# rpcServices=inventory\
-# othersbought\
-# cart
 
 
 # define standard colors
@@ -229,32 +249,12 @@ stop:
 	@killall etcd
 
 ##
-## Client
-##
-.PHONY: docker-build-client
-docker-build-client:
-	docker build -f Dockerfile.prod \
-		-t $(IMAGE_REPO)/client:latest \
-		-t $(IMAGE_REPO)/client:$(BRANCH)-latest \
-		-t $(IMAGE_REPO)/client:$(TAG) \
-		--build-arg APP_NAME=client \
-		--build-arg APP_PATH=services/api \
-		.
-
-.PHONY: docker-push-client
-docker-push-client:
-	docker push $(IMAGE_REPO)/client:latest
-	docker push $(IMAGE_REPO)/client:$(BRANCH)-latest
-	docker push $(IMAGE_REPO)/client:$(TAG)
-
-##
 ## Admin
 ##
 .PHONY: docker-build-admin
 docker-build-admin:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/admin:latest \
-		-t $(IMAGE_REPO)/admin:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/admin:$(TAG) \
 		--build-arg APP_NAME=admin \
 		--build-arg APP_PATH=services/api \
@@ -263,8 +263,24 @@ docker-build-admin:
 .PHONY: docker-push-admin
 docker-push-admin:
 	docker push $(IMAGE_REPO)/admin:latest
-	docker push $(IMAGE_REPO)/admin:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/admin:$(TAG)
+
+##
+## Client
+##
+.PHONY: docker-build-client
+docker-build-client:
+	docker build -f Dockerfile.prod \
+		-t $(IMAGE_REPO)/client:latest \
+		-t $(IMAGE_REPO)/client:$(TAG) \
+		--build-arg APP_NAME=client \
+		--build-arg APP_PATH=services/api \
+		.
+
+.PHONY: docker-push-client
+docker-push-client:
+	docker push $(IMAGE_REPO)/client:latest
+	docker push $(IMAGE_REPO)/client:$(TAG)
 
 ##
 ## Cart
@@ -273,7 +289,6 @@ docker-push-admin:
 docker-build-cart:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/cart:latest \
-		-t $(IMAGE_REPO)/cart:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/cart:$(TAG) \
 		--build-arg APP_NAME=cart \
 		--build-arg APP_PATH=services/rpc \
@@ -282,7 +297,6 @@ docker-build-cart:
 .PHONY: docker-push-cart
 docker-push-cart:
 	docker push $(IMAGE_REPO)/cart:latest
-	docker push $(IMAGE_REPO)/cart:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/cart:$(TAG)
 
 ##
@@ -292,7 +306,6 @@ docker-push-cart:
 docker-build-catalog:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/catalog:latest \
-		-t $(IMAGE_REPO)/catalog:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/catalog:$(TAG) \
 		--build-arg APP_NAME=catalog \
 		--build-arg APP_PATH=services/rpc \
@@ -301,7 +314,6 @@ docker-build-catalog:
 .PHONY: docker-push-catalog
 docker-push-catalog:
 	docker push $(IMAGE_REPO)/catalog:latest
-	docker push $(IMAGE_REPO)/catalog:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/catalog:$(TAG)
 
 ##
@@ -311,7 +323,6 @@ docker-push-catalog:
 docker-build-customer:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/customer:latest \
-		-t $(IMAGE_REPO)/customer:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/customer:$(TAG) \
 		--build-arg APP_NAME=customer \
 		--build-arg APP_PATH=services/rpc \
@@ -320,7 +331,6 @@ docker-build-customer:
 .PHONY: docker-push-customer
 docker-push-customer:
 	docker push $(IMAGE_REPO)/customer:latest
-	docker push $(IMAGE_REPO)/customer:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/customer:$(TAG)
 
 ##
@@ -330,7 +340,6 @@ docker-push-customer:
 docker-build-email:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/email:latest \
-		-t $(IMAGE_REPO)/email:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/email:$(TAG) \
 		--build-arg APP_NAME=email \
 		--build-arg APP_PATH=services/rpc \
@@ -339,7 +348,6 @@ docker-build-email:
 .PHONY: docker-push-email
 docker-push-email:
 	docker push $(IMAGE_REPO)/email:latest
-	docker push $(IMAGE_REPO)/email:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/email:$(TAG)
 
 ##
@@ -349,7 +357,6 @@ docker-push-email:
 docker-build-inventory:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/inventory:latest \
-		-t $(IMAGE_REPO)/inventory:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/inventory:$(TAG) \
 		--build-arg APP_NAME=inventory \
 		--build-arg APP_PATH=services/rpc \
@@ -358,7 +365,6 @@ docker-build-inventory:
 .PHONY: docker-push-inventory
 docker-push-inventory:
 	docker push $(IMAGE_REPO)/inventory:latest
-	docker push $(IMAGE_REPO)/inventory:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/inventory:$(TAG)
 
 ##
@@ -368,7 +374,6 @@ docker-push-inventory:
 docker-build-othersbought:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/othersbought:latest \
-		-t $(IMAGE_REPO)/othersbought:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/othersbought:$(TAG) \
 		--build-arg APP_NAME=othersbought \
 		--build-arg APP_PATH=services/rpc \
@@ -377,7 +382,6 @@ docker-build-othersbought:
 .PHONY: docker-push-othersbought
 docker-push-othersbought:
 	docker push $(IMAGE_REPO)/othersbought:latest
-	docker push $(IMAGE_REPO)/othersbought:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/othersbought:$(TAG)
 
 ##
@@ -387,7 +391,6 @@ docker-push-othersbought:
 docker-build-payment:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/payment:latest \
-		-t $(IMAGE_REPO)/payment:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/payment:$(TAG) \
 		--build-arg APP_NAME=payment \
 		--build-arg APP_PATH=services/rpc \
@@ -396,7 +399,6 @@ docker-build-payment:
 .PHONY: docker-push-payment
 docker-push-payment:
 	docker push $(IMAGE_REPO)/payment:latest
-	docker push $(IMAGE_REPO)/payment:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/payment:$(TAG)
 
 ##
@@ -406,7 +408,6 @@ docker-push-payment:
 docker-build-shipping:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/shipping:latest \
-		-t $(IMAGE_REPO)/shipping:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/shipping:$(TAG) \
 		--build-arg APP_NAME=shipping \
 		--build-arg APP_PATH=services/rpc \
@@ -415,7 +416,6 @@ docker-build-shipping:
 .PHONY: docker-push-shipping
 docker-push-shipping:
 	docker push $(IMAGE_REPO)/shipping:latest
-	docker push $(IMAGE_REPO)/shipping:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/shipping:$(TAG)
 
 ##
@@ -425,7 +425,6 @@ docker-push-shipping:
 docker-build-similarproducts:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/similarproducts:latest \
-		-t $(IMAGE_REPO)/similarproducts:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/similarproducts:$(TAG) \
 		--build-arg APP_NAME=similarproducts \
 		--build-arg APP_PATH=services/rpc \
@@ -434,7 +433,6 @@ docker-build-similarproducts:
 .PHONY: docker-push-similarproducts
 docker-push-similarproducts:
 	docker push $(IMAGE_REPO)/similarproducts:latest
-	docker push $(IMAGE_REPO)/similarproducts:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/similarproducts:$(TAG)
 
 ##
@@ -444,7 +442,6 @@ docker-push-similarproducts:
 docker-build-store:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/store:latest \
-		-t $(IMAGE_REPO)/store:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/store:$(TAG) \
 		--build-arg APP_NAME=store \
 		--build-arg APP_PATH=services/rpc \
@@ -453,7 +450,6 @@ docker-build-store:
 .PHONY: docker-push-store
 docker-push-store:
 	docker push $(IMAGE_REPO)/store:latest
-	docker push $(IMAGE_REPO)/store:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/store:$(TAG)
 
 ##
@@ -463,7 +459,6 @@ docker-push-store:
 docker-build-user:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/user:latest \
-		-t $(IMAGE_REPO)/user:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/user:$(TAG) \
 		--build-arg APP_NAME=user \
 		--build-arg APP_PATH=services/rpc \
@@ -472,7 +467,6 @@ docker-build-user:
 .PHONY: docker-push-user
 docker-push-user:
 	docker push $(IMAGE_REPO)/user:latest
-	docker push $(IMAGE_REPO)/user:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/user:$(TAG)
 
 ##
@@ -482,7 +476,6 @@ docker-push-user:
 docker-build-warehouse:
 	docker build -f Dockerfile.prod \
 		-t $(IMAGE_REPO)/warehouse:latest \
-		-t $(IMAGE_REPO)/warehouse:$(BRANCH)-latest \
 		-t $(IMAGE_REPO)/warehouse:$(TAG) \
 		--build-arg APP_NAME=warehouse \
 		--build-arg APP_PATH=services/rpc \
@@ -491,7 +484,6 @@ docker-build-warehouse:
 .PHONY: docker-push-warehouse
 docker-push-warehouse:
 	docker push $(IMAGE_REPO)/warehouse:latest
-	docker push $(IMAGE_REPO)/warehouse:$(BRANCH)-latest
 	docker push $(IMAGE_REPO)/warehouse:$(TAG)
 
 ##
@@ -499,7 +491,7 @@ docker-push-warehouse:
 ##
 
 .PHONY: docker-build
-docker-build: docker-build-cart docker-build-customer docker-build-email docker-build-inventory docker-build-othersbought docker-build-payment docker-build-product docker-build-shipping docker-build-similarproducts docker-build-store docker-build-user docker-build-warehouse
+docker-build: docker-build-admin docker-build-client docker-build-cart docker-build-catalog docker-build-customer docker-build-email docker-build-inventory docker-build-othersbought docker-build-payment docker-build-shipping docker-build-similarproducts docker-build-store docker-build-user docker-build-warehouse
 
 .PHONY: docker-push
-docker-push: docker-push-cart docker-push-customer docker-push-email docker-push-inventory docker-push-othersbought docker-push-payment docker-push-product docker-push-shipping docker-push-similarproducts docker-push-store docker-push-user docker-push-warehouse 
+docker-push: docker-push-admin docker-push-client docker-push-cart docker-push-catalog docker-push-customer docker-push-email docker-push-inventory docker-push-othersbought docker-push-payment docker-push-shipping docker-push-similarproducts docker-push-store docker-push-user docker-push-warehouse
