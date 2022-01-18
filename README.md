@@ -9,7 +9,7 @@ Project status: in active development / **pre-alpha**
 
 ## Documentation
 
-Documentation is in active development at [k8scommerce.com](https://k8scommerce.com/docs/). 
+Documentation is in active development at [k8scommerce.com](https://k8scommerce.com/). 
 
 ## Project Origin
 
