@@ -52,7 +52,7 @@ option\
 option_item\
 archetype
 
-apiServices=client admin
+apiServices=client
 
 # cart depends on inventory, othersbought
 
@@ -219,7 +219,7 @@ start:
 		port=$$((port+1)); \
 	done
 	@sleep 15
-	@port=8888; \
+	@port=64000; \
 	for service in $(apiServices); do \
 		printf "$(BLUE)Starting API Service: $(WHITE)$$service::$$port$(RESET)\n"; \
 		cd ./services/api/$$service; \

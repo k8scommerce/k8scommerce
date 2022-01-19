@@ -71,7 +71,7 @@ type CreateCustomerResponse {
 
 @server(
 	jwt: Auth
-	middleware: Locale, StoreKey
+	middleware: Locale
 )
 service admin {
 	@doc(
