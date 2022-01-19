@@ -230,21 +230,20 @@ type CreateCustomerResponse struct {
 }
 
 type User struct {
-	Id        int64  `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Email     string `json:"email"`
-	Password  string `json:"password,omitempty"`
+	Id        int64  `json:"id"`                 // user id
+	FirstName string `json:"firstName"`          // first name
+	LastName  string `json:"lastName"`           // last name
+	Email     string `json:"email"`              // email address
+	Password  string `json:"password,omitempty"` // password
 }
 
 type UserLoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email"`    // email address
+	Password string `json:"password"` // password
 }
 
 type UserLoginResponse struct {
-	JwtToken      JwtToken `json:"jwt"`
-	User          User     `json:"user"`
-	StatusCode    int64    `json:"statusCode"`
-	StatusMessage string   `json:"statusMessage"`
+	JwtToken       JwtToken       `json:"jwt"`    // JwtToken object
+	User           User           `json:"user"`   // User object
+	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }

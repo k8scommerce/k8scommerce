@@ -1,7 +1,12 @@
 #!/bin/bash
 
-out_dir='../services/rpc'
-protos_dir='../protos'
+# get the root path of the directory this file resides
+# this enables this script to be called from any path
+# https://gist.github.com/olegch/1730673
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+out_dir=$ROOT/../services/rpc
+protos_dir=$ROOT/../protos
 
 # define the RPC services
 services='cart catalog customer email inventory othersbought payment shipping similarproducts store user warehouse'

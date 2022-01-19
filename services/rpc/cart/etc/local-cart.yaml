@@ -1,0 +1,29 @@
+Name: cart.rpc
+Target: k8s://k8scommerce/cart
+ListenOn: :65004
+Log:
+  Mode: console
+Etcd:
+  Hosts:
+    - localhost:2379
+  Key: cart.rpc
+InventoryRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: inventory.rpc
+OthersBoughtRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: othersbought.rpc
+SimilarProductsRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: similarproducts.rpc
+Postgres:
+  Connection: postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable
+  MaxOpenConnections: 10
+  MaxIdleConnections: 2
+  MaxConnectionLifetimeMinutes: 5
