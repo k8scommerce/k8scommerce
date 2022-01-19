@@ -866,23 +866,23 @@
     "JwtToken": {
       "type": "object",
       "properties": {
-        "access_token": {
+        "accessToken": {
           "type": "string"
         },
-        "access_expire": {
+        "accessExpire": {
           "type": "integer",
           "format": "int64"
         },
-        "refresh_after": {
+        "refreshAfter": {
           "type": "integer",
           "format": "int64"
         }
       },
       "title": "JwtToken",
       "required": [
-        "access_token",
-        "access_expire",
-        "refresh_after"
+        "accessToken",
+        "accessExpire",
+        "refreshAfter"
       ]
     },
     "Price": {

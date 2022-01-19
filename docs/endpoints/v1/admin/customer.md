@@ -236,9 +236,9 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| access_expire | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| access_token | string| `string` | ✓ | |  |  |
-| refresh_after | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| accessExpire | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| accessToken | string| `string` | ✓ | |  |  |
+| refreshAfter | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
