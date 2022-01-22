@@ -261,7 +261,7 @@ func (x *Address) GetIsDefault() bool {
 	return false
 }
 
-// create Customer product
+// create customer
 type CreateCustomerRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

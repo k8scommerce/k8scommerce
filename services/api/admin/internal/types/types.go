@@ -56,13 +56,21 @@ type Price struct {
 	Currency               string  `json:"currency,omitempty"`               // price currency. example: USD, CAN, etc.
 }
 
+type GetAllCategoriesRequest struct {
+	StoreId     int64  `path:"storeId"`
+	CurrentPage int64  `path:"currentPage"`
+	PageSize    int64  `path:"pageSize"`
+	SortOn      string `form:"sortOn,optional"`
+}
+
 type GetAllCategoriesResponse struct {
 	Categories     []Category     `json:"categories,omitempty"` // a collection of Category
 	ResponseStatus ResponseStatus `json:"status"`               // a ResponseStatus object
 }
 
 type GetCategoryBySlugRequest struct {
-	Slug string `path:"slug"` // slug name of the category
+	StoreId int64  `path:"storeId"`
+	Slug    string `path:"slug"` // slug name of the category
 }
 
 type GetCategoryBySlugResponse struct {
@@ -71,7 +79,8 @@ type GetCategoryBySlugResponse struct {
 }
 
 type GetCategoryByIdRequest struct {
-	Id int64 `json:"id,omitempty"`
+	StoreId int64 `path:"storeId"`
+	Id      int64 `json:"id,omitempty"`
 }
 
 type GetCategoryByIdResponse struct {
@@ -80,6 +89,7 @@ type GetCategoryByIdResponse struct {
 }
 
 type CreateCategoryRequest struct {
+	StoreId  int64    `path:"storeId"`
 	Category Category `json:"category,omitempty"`
 }
 
@@ -89,6 +99,7 @@ type CreateCategoryResponse struct {
 }
 
 type UpdateCategoryRequest struct {
+	StoreId  int64    `path:"storeId"`
 	Id       int64    `json:"id,omitempty"`
 	Category Category `json:"category,omitempty"`
 }
@@ -99,7 +110,8 @@ type UpdateCategoryResponse struct {
 }
 
 type DeleteCategoryRequest struct {
-	Id int64 `json:"id,omitempty"`
+	StoreId int64 `path:"storeId"`
+	Id      int64 `json:"id,omitempty"`
 }
 
 type DeleteCategoryResponse struct {
@@ -107,7 +119,8 @@ type DeleteCategoryResponse struct {
 }
 
 type GetProductBySkuRequest struct {
-	Sku string `path:"sku"`
+	StoreId int64  `path:"storeId"`
+	Sku     string `path:"sku"`
 }
 
 type GetProductBySlugRequest struct {
@@ -115,6 +128,7 @@ type GetProductBySlugRequest struct {
 }
 
 type GetProductResponse struct {
+	StoreId        int64          `path:"storeId"`
 	Product        Product        `json:"product"` // slug name of the category
 	ResponseStatus ResponseStatus `json:"status"`  // a ResponseStatus object
 }
@@ -124,6 +138,7 @@ type GetProductByIdRequest struct {
 }
 
 type GetProductsByCategoryIdRequest struct {
+	StoreId     int64  `path:"storeId"`
 	CategoryId  int64  `path:"categoryId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
@@ -138,6 +153,7 @@ type GetProductsByCategoryIdResponse struct {
 }
 
 type GetAllProductsRequest struct {
+	StoreId     int64  `path:"storeId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
 	SortOn      string `form:"sortOn"`
@@ -151,6 +167,7 @@ type GetAllProductsResponse struct {
 }
 
 type CreateProductRequest struct {
+	StoreId int64   `path:"storeId"`
 	Product Product `json:"product:omitempty"`
 }
 
@@ -160,6 +177,7 @@ type CreateProductResponse struct {
 }
 
 type UpdateProductRequest struct {
+	StoreId int64   `path:"storeId"`
 	Id      int64   `json:"path:omitempty"`
 	Product Product `json:"product:omitempty"`
 }
@@ -170,7 +188,8 @@ type UpdateProductResponse struct {
 }
 
 type DeleteProductRequest struct {
-	Id int64 `json:"path:omitempty"`
+	StoreId int64 `path:"storeId"`
+	Id      int64 `json:"path:omitempty"`
 }
 
 type DeleteProductResponse struct {

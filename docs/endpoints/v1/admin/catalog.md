@@ -187,6 +187,12 @@ GET /v1/categories
 
 returns all categories belonging to a store
 
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| sortOn | `query` | string | `string` |  |  |  |  |
+
 #### All responses
 | Code | Status | Description | Has headers | Schema |
 |------|--------|-------------|:-----------:|--------|
@@ -528,6 +534,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -559,6 +566,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -590,6 +598,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -620,6 +629,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -635,6 +645,24 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
+
+
+
+### <span id="get-all-categories-request"></span> GetAllCategoriesRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| sortOn | string| `string` |  | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -668,6 +696,7 @@ Status: OK
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | sortOn | string| `string` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -701,6 +730,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -732,6 +762,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | slug | string| `string` | ✓ | | slug name of the category |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -778,6 +809,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | sku | string| `string` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -809,6 +841,7 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | product | [Product](#product)| `Product` | ✓ | | slug name of the category |  |
 | status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -827,6 +860,7 @@ Status: OK
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | sortOn | string| `string` |  | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -937,6 +971,7 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
 | id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -969,6 +1004,7 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
