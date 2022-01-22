@@ -6,7 +6,6 @@ import (
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"net/http"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
@@ -34,10 +33,10 @@ func (l *CreateCategoryLogic) CreateCategory(in *catalog.CreateCategoryRequest) 
 	if err := l.svcCtx.Repo.Category().Create(&prod); err != nil {
 		logx.Infof("error: %s", err)
 		return &catalog.CreateCategoryResponse{
-			Category:      nil,
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			Category: nil,
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	// the output object
@@ -46,8 +45,8 @@ func (l *CreateCategoryLogic) CreateCategory(in *catalog.CreateCategoryRequest) 
 
 	// the response struct
 	return &catalog.CreateCategoryResponse{
-		Category:      out,
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		Category: out,
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
 	}, nil
 }

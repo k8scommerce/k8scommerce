@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 
-	"net/http"
 	"strconv"
 	"sync"
 
@@ -35,9 +34,9 @@ func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*c
 	prod, err := l.svcCtx.Repo.Product().GetProductById(in.Id)
 	if err != nil {
 		return &catalog.DeleteProductResponse{
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	// get the sku from the primary variant
@@ -51,9 +50,9 @@ func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*c
 	// delete the product
 	if err := l.svcCtx.Repo.Product().Delete(in.Id); err != nil {
 		return &catalog.DeleteProductResponse{
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	// invalidate the cache for this record
@@ -72,7 +71,7 @@ func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*c
 
 	// the response struct
 	return &catalog.DeleteProductResponse{
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
 	}, nil
 }

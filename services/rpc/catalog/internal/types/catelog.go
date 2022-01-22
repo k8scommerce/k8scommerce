@@ -8,10 +8,12 @@ import (
 func ConvertModelCategoryToProtoCategory(modelCategory *models.Category, protoCategory *catalog.Category) {
 	// convert the Category
 	protoCategory.Id = modelCategory.ID
+	protoCategory.ParentId = modelCategory.ParentID.Int64
 	protoCategory.Slug = modelCategory.Slug
 	protoCategory.Name = modelCategory.Name
 	protoCategory.Description = modelCategory.Description.String
 	protoCategory.MetaTitle = modelCategory.MetaTitle.String
 	protoCategory.MetaDescription = modelCategory.MetaDescription.String
 	protoCategory.MetaKeywords = modelCategory.MetaKeywords.String
+	protoCategory.SortOrder = int32(modelCategory.SortOrder.Int64)
 }

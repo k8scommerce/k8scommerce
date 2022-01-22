@@ -83,8 +83,6 @@ message GetAllCategoriesResponse {
   repeated Category categories = 1;
   int64 totalRecords = 2;
   int64 totalPages = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
 }
 
 // get category by slug
@@ -95,8 +93,6 @@ message GetCategoryBySlugRequest {
 
 message GetCategoryBySlugResponse {
   Category category = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // get category by id
@@ -107,8 +103,6 @@ message GetCategoryByIdRequest {
 
 message GetCategoryByIdResponse {
   Category category = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // create category
@@ -119,8 +113,6 @@ message CreateCategoryRequest {
 
 message CreateCategoryResponse {
   Category category = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // update category
@@ -132,8 +124,6 @@ message UpdateCategoryRequest {
 
 message UpdateCategoryResponse {
   Category category = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // delete category
@@ -143,8 +133,6 @@ message DeleteCategoryRequest {
 }
 
 message DeleteCategoryResponse {
-  int64 statusCode = 1;
-  string statusMessage = 2;
 }
 
 //
@@ -161,8 +149,6 @@ message GetProductBySkuRequest {
 
 message GetProductBySkuResponse {
   Product product = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // get one by slug
@@ -173,8 +159,6 @@ message GetProductBySlugRequest {
 
 message GetProductBySlugResponse {
   Product product = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // get one by id
@@ -185,8 +169,6 @@ message GetProductByIdRequest {
 
 message GetProductByIdResponse {
   Product product = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // get all by category id
@@ -202,8 +184,6 @@ message GetProductsByCategoryIdResponse {
   repeated Product products = 1;
   int64 totalRecords = 2;
   int64 totalPages = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
 }
 
 // get all by category slug
@@ -219,8 +199,6 @@ message GetProductsByCategorySlugResponse {
   repeated Product products = 1;
   int64 totalRecords = 2;
   int64 totalPages = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
 }
 
 // get all products
@@ -235,8 +213,6 @@ message GetAllProductsResponse {
   repeated Product products = 1;
   int64 totalRecords = 2;
   int64 totalPages = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
 }
 
 // create product
@@ -247,8 +223,6 @@ message CreateProductRequest {
 
 message CreateProductResponse {
   Product product = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // update product
@@ -260,8 +234,6 @@ message UpdateProductRequest {
 
 message UpdateProductResponse {
   Product product = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // delete product
@@ -271,8 +243,6 @@ message DeleteProductRequest {
 }
 
 message DeleteProductResponse {
-  int64 statusCode = 1;
-  string statusMessage = 2;
 }
 
 // client

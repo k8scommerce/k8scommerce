@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"net/http"
 	"strconv"
 	"sync"
 
@@ -87,13 +86,13 @@ func (l *GetProductByIdLogic) GetProductById(in *catalog.GetProductByIdRequest) 
 		return nil, err
 	}
 	res := &catalog.GetProductByIdResponse{
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
 	}
 	err = json.Unmarshal(b, res)
 	if err != nil {
-		res.StatusCode = http.StatusExpectationFailed
-		res.StatusMessage = err.Error()
+		// res.StatusCode = http.StatusExpectationFailed
+		// res.StatusMessage = err.Error()
 	}
-	return res, nil
+	return res, err
 }

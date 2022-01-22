@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"net/http"
 	"strconv"
 	"sync"
 
@@ -36,9 +35,9 @@ func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*c
 	found, err := l.svcCtx.Repo.Product().GetProductById(in.Id)
 	if err != nil {
 		return &catalog.UpdateProductResponse{
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	prod := models.Product{}
@@ -47,10 +46,10 @@ func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*c
 	if err := l.svcCtx.Repo.Product().Update(&prod); err != nil {
 		logx.Infof("error: %s", err)
 		return &catalog.UpdateProductResponse{
-			Product:       nil,
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			Product: nil,
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	// get the sku from the primary variant
@@ -81,8 +80,8 @@ func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*c
 
 	// the response struct
 	return &catalog.UpdateProductResponse{
-		Product:       out,
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
-	}, nil
+		Product: out,
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
+	}, err
 }

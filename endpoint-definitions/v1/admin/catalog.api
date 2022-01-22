@@ -43,12 +43,12 @@ type Variant {
 }
 
 type Price {
-	Id                     int64   `json:"id,omitempty"` // price id
-	Amount                 float64 `json:"amount,omitempty"` // price amount
-	DisplayAmount          string  `json:"displayAmount,omitempty"` // price display amount
-	CompareAtAmount        float64 `json:"compareAtAmount,omitempty"` // price compare amount
+	Id                     int64   `json:"id,omitempty"`                     // price id
+	Amount                 float64 `json:"amount,omitempty"`                 // price amount
+	DisplayAmount          string  `json:"displayAmount,omitempty"`          // price display amount
+	CompareAtAmount        float64 `json:"compareAtAmount,omitempty"`        // price compare amount
 	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,omitempty"` // price display compare amount
-	Currency               string  `json:"currency,omitempty"` // price currency. example: USD, CAN, etc.
+	Currency               string  `json:"currency,omitempty"`               // price currency. example: USD, CAN, etc.
 }
 
 //
@@ -56,48 +56,50 @@ type Price {
 //
 // get all categories
 type GetAllCategoriesRequest {
-	StoreId 	int64  `path:"storeId"`
+	StoreId     int64  `path:"storeId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
 	SortOn      string `form:"sortOn,optional"`
 }
 
 type GetAllCategoriesResponse {
-	Categories    []Category `json:"categories,omitempty"` // a collection of Category
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Categories   []Category `json:"categories,omitempty"` // a collection of Category
+	TotalRecords int64      `json:"totalRecords"`
+	TotalPages   int64      `json:"totalPages"`
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // get category by slug
 type GetCategoryBySlugRequest {
-	StoreId 	int64  `path:"storeId"`
-	Slug 		string `path:"slug"` // slug name of the category
+	StoreId int64  `path:"storeId"`
+	Slug    string `path:"slug"` // slug name of the category
 }
 
 type GetCategoryBySlugResponse {
-	Category      Category `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // get category by id
 type GetCategoryByIdRequest {
-	StoreId 	int64 `path:"storeId"`
-	Id 			int64 `json:"id,omitempty"`
+	StoreId int64 `path:"storeId"`
+	Id      int64 `json:"id,omitempty"`
 }
 
 type GetCategoryByIdResponse {
-	Category      Category `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // create category
 type CreateCategoryRequest {
-	StoreId 	int64    `path:"storeId"`
-	Category 	Category `json:"category,omitempty"`
+	StoreId  int64    `path:"storeId"`
+	Category Category `json:"category,omitempty"`
 }
 
 type CreateCategoryResponse {
-	Category      Category `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // update category
@@ -108,18 +110,18 @@ type UpdateCategoryRequest {
 }
 
 type UpdateCategoryResponse {
-	Category      Category `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // delete category
 type DeleteCategoryRequest {
-	StoreId 	int64 `path:"storeId"`
-	Id 			int64 `json:"id,omitempty"`
+	StoreId int64 `path:"storeId"`
+	Id      int64 `json:"id,omitempty"`
 }
 
 type DeleteCategoryResponse {
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 //
@@ -131,7 +133,7 @@ type DeleteCategoryResponse {
 // get product by sku
 type GetProductBySkuRequest {
 	StoreId int64  `path:"storeId"`
-	Sku 	string `path:"sku"`
+	Sku     string `path:"sku"`
 }
 
 // get product by slug
@@ -140,9 +142,9 @@ type GetProductBySlugRequest {
 }
 
 type GetProductResponse {
-	StoreId 	   int64  		  `path:"storeId"`
-	Product 	   Product 		  `json:"product"` // slug name of the category
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	StoreId int64   `path:"storeId"`
+	Product Product `json:"product"` // slug name of the category
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // get product by id
@@ -152,7 +154,7 @@ type GetProductByIdRequest {
 
 // get products by category id
 type GetProductsByCategoryIdRequest {
-	StoreId 	int64  `path:"storeId"`
+	StoreId     int64  `path:"storeId"`
 	CategoryId  int64  `path:"categoryId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
@@ -163,12 +165,12 @@ type GetProductsByCategoryIdResponse {
 	Products     []Product `json:"products"`
 	TotalRecords int64     `json:"totalRecords"`
 	TotalPages   int64     `json:"totalPages"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // get all products
 type GetAllProductsRequest {
-	StoreId 	int64  `path:"storeId"`
+	StoreId     int64  `path:"storeId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
 	SortOn      string `form:"sortOn"`
@@ -178,7 +180,7 @@ type GetAllProductsResponse {
 	Products     []Product `json:"products"`
 	TotalRecords int64     `json:"totalRecords"`
 	TotalPages   int64     `json:"totalPages"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // create product
@@ -188,8 +190,8 @@ type CreateProductRequest {
 }
 
 type CreateProductResponse {
-	Product       Product `json:"product:omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Product Product `json:"product:omitempty"`
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // update product
@@ -200,18 +202,18 @@ type UpdateProductRequest {
 }
 
 type UpdateProductResponse {
-	Product       Product `json:"product:omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Product Product `json:"product:omitempty"`
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // delete product
 type DeleteProductRequest {
 	StoreId int64 `path:"storeId"`
-	Id 		int64 `json:"path:omitempty"`
+	Id      int64 `json:"path:omitempty"`
 }
 
 type DeleteProductResponse {
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 //
@@ -219,18 +221,18 @@ type DeleteProductResponse {
 //
 
 @server(
-	jwt: Auth
+	// jwt: Auth
 	middleware: Locale
 )
 service admin {
 	// categories
-
+	
 	@doc(
 		summary: "Get All Categories"
 		description: "returns all categories belonging to a store"
 	)
 	@handler getAllCategories
-	get /v1/categories(GetAllCategoriesRequest) returns (GetAllCategoriesResponse)
+	get /v1/categories/:storeId/:currentPage/:pageSize(GetAllCategoriesRequest) returns (GetAllCategoriesResponse)
 	
 	@doc(
 		summary: "Get Category By Slug"
@@ -247,7 +249,7 @@ service admin {
 	)
 	@handler getCategoryById
 	get /v1/category/:id(GetCategoryByIdRequest) returns (GetCategoryByIdResponse)
-
+	
 	@doc(
 		summary: "Create Category"
 		description: "creates a category"
@@ -271,9 +273,8 @@ service admin {
 	@handler deleteCategory
 	delete /v1/category/:id(DeleteCategoryRequest) returns (DeleteCategoryResponse)
 	
-	
 	// products
-
+	
 	@doc(
 		summary: "Get Product By Sku"
 		description: "returns all products by sku belonging to a store"

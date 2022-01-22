@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"net/http"
+	"fmt"
 
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
@@ -34,19 +34,19 @@ func (l *GetAllCategoriesLogic) GetAllCategories(req types.GetAllCategoriesReque
 		SortOn:      req.SortOn,
 		StoreId:     req.StoreId,
 	})
+	fmt.Println(response)
 	if err != nil {
-		resp.ResponseStatus = httpResponse(http.StatusBadRequest, err.Error())
 		return nil, err
 	}
+
+	fmt.Println(response)
 
 	// convert from one type to another
 	// the structs are identical
 	b, err := json.Marshal(response)
 	if err != nil {
-		resp.ResponseStatus = httpResponse(http.StatusBadRequest, err.Error())
 		return nil, err
 	}
 	err = json.Unmarshal(b, &resp)
-	resp.ResponseStatus = httpResponse(http.StatusOK)
 	return resp, err
 }

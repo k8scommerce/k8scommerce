@@ -5,7 +5,6 @@ import (
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"net/http"
 	"strconv"
 	"sync"
 
@@ -34,18 +33,18 @@ func (l *UpdateCategoryLogic) UpdateCategory(in *catalog.UpdateCategoryRequest) 
 	found, err := l.svcCtx.Repo.Category().GetCategoryById(in.Id)
 	if err != nil {
 		return &catalog.UpdateCategoryResponse{
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	if err := l.svcCtx.Repo.Category().Update(found); err != nil {
 		logx.Infof("error: %s", err)
 		return &catalog.UpdateCategoryResponse{
-			Category:      nil,
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			Category: nil,
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	// invalidate the cache for this record
@@ -80,9 +79,9 @@ func (l *UpdateCategoryLogic) UpdateCategory(in *catalog.UpdateCategoryRequest) 
 
 	// the response struct
 	return &catalog.UpdateCategoryResponse{
-		Category:      out,
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
-	}, nil
+		Category: out,
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
+	}, err
 
 }

@@ -7,7 +7,6 @@ import (
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"net/http"
 	"strconv"
 	"strings"
 	"sync"
@@ -114,19 +113,23 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 	codec := &galaxycache.ByteCodec{}
 	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
 	if err := entryGetAllCategoriesLogic.galaxy.Get(l.ctx, key, codec); err != nil {
-		res.StatusCode = http.StatusNoContent
-		res.StatusMessage = err.Error()
-		return res, nil
+		// res.StatusCode = http.StatusNoContent
+		// res.StatusMessage = "ERROR 2: " + err.Error()
+		return res, err
 	}
 
 	b, err := codec.MarshalBinary()
 	if err != nil {
-		res.StatusCode = http.StatusInternalServerError
-		res.StatusMessage = err.Error()
-		return res, nil
+		// res.StatusCode = http.StatusInternalServerError
+		// res.StatusMessage = "ERROR 2: " + err.Error()
+		return res, err
 	}
 
 	err = json.Unmarshal(b, res)
+
+	// remove for testing
+	entryGetAllCategoriesLogic.galaxy.Remove(l.ctx, key)
+
 	return res, err
 
 }

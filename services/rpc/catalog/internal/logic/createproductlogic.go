@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"net/http"
 
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/utils"
@@ -35,9 +34,9 @@ func (l *CreateProductLogic) CreateProduct(in *catalog.CreateProductRequest) (*c
 	if err := l.svcCtx.Repo.Product().Create(&prod); err != nil {
 		logx.Infof("error: %s", err)
 		return &catalog.CreateProductResponse{
-			Product:       nil,
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
+			Product: nil,
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
 		}, nil
 	}
 
@@ -47,8 +46,8 @@ func (l *CreateProductLogic) CreateProduct(in *catalog.CreateProductRequest) (*c
 
 	// the response struct
 	return &catalog.CreateProductResponse{
-		Product:       out,
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		Product: out,
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
 	}, nil
 }

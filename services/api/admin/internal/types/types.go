@@ -64,8 +64,9 @@ type GetAllCategoriesRequest struct {
 }
 
 type GetAllCategoriesResponse struct {
-	Categories     []Category     `json:"categories,omitempty"` // a collection of Category
-	ResponseStatus ResponseStatus `json:"status"`               // a ResponseStatus object
+	Categories   []Category `json:"categories,omitempty"` // a collection of Category
+	TotalRecords int64      `json:"totalRecords"`
+	TotalPages   int64      `json:"totalPages"`
 }
 
 type GetCategoryBySlugRequest struct {
@@ -74,8 +75,7 @@ type GetCategoryBySlugRequest struct {
 }
 
 type GetCategoryBySlugResponse struct {
-	Category       Category       `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
 }
 
 type GetCategoryByIdRequest struct {
@@ -84,8 +84,7 @@ type GetCategoryByIdRequest struct {
 }
 
 type GetCategoryByIdResponse struct {
-	Category       Category       `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
 }
 
 type CreateCategoryRequest struct {
@@ -94,8 +93,7 @@ type CreateCategoryRequest struct {
 }
 
 type CreateCategoryResponse struct {
-	Category       Category       `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
 }
 
 type UpdateCategoryRequest struct {
@@ -105,8 +103,7 @@ type UpdateCategoryRequest struct {
 }
 
 type UpdateCategoryResponse struct {
-	Category       Category       `json:"category,omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Category Category `json:"category,omitempty"`
 }
 
 type DeleteCategoryRequest struct {
@@ -115,7 +112,6 @@ type DeleteCategoryRequest struct {
 }
 
 type DeleteCategoryResponse struct {
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 type GetProductBySkuRequest struct {
@@ -128,9 +124,8 @@ type GetProductBySlugRequest struct {
 }
 
 type GetProductResponse struct {
-	StoreId        int64          `path:"storeId"`
-	Product        Product        `json:"product"` // slug name of the category
-	ResponseStatus ResponseStatus `json:"status"`  // a ResponseStatus object
+	StoreId int64   `path:"storeId"`
+	Product Product `json:"product"` // slug name of the category
 }
 
 type GetProductByIdRequest struct {
@@ -146,10 +141,9 @@ type GetProductsByCategoryIdRequest struct {
 }
 
 type GetProductsByCategoryIdResponse struct {
-	Products       []Product      `json:"products"`
-	TotalRecords   int64          `json:"totalRecords"`
-	TotalPages     int64          `json:"totalPages"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Products     []Product `json:"products"`
+	TotalRecords int64     `json:"totalRecords"`
+	TotalPages   int64     `json:"totalPages"`
 }
 
 type GetAllProductsRequest struct {
@@ -160,10 +154,9 @@ type GetAllProductsRequest struct {
 }
 
 type GetAllProductsResponse struct {
-	Products       []Product      `json:"products"`
-	TotalRecords   int64          `json:"totalRecords"`
-	TotalPages     int64          `json:"totalPages"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Products     []Product `json:"products"`
+	TotalRecords int64     `json:"totalRecords"`
+	TotalPages   int64     `json:"totalPages"`
 }
 
 type CreateProductRequest struct {
@@ -172,8 +165,7 @@ type CreateProductRequest struct {
 }
 
 type CreateProductResponse struct {
-	Product        Product        `json:"product:omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Product Product `json:"product:omitempty"`
 }
 
 type UpdateProductRequest struct {
@@ -183,8 +175,7 @@ type UpdateProductRequest struct {
 }
 
 type UpdateProductResponse struct {
-	Product        Product        `json:"product:omitempty"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Product Product `json:"product:omitempty"`
 }
 
 type DeleteProductRequest struct {
@@ -193,7 +184,6 @@ type DeleteProductRequest struct {
 }
 
 type DeleteProductResponse struct {
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 type Customer struct {
