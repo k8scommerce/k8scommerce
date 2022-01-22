@@ -16,7 +16,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/categories",
+					Path:    "/v1/categories/:storeId/:currentPage/:pageSize",
 					Handler: getAllCategoriesHandler(serverCtx),
 				},
 				{
@@ -86,7 +86,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 			}...,
 		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(

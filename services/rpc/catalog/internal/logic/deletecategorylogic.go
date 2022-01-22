@@ -4,7 +4,6 @@ import (
 	"context"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"net/http"
 	"strconv"
 	"sync"
 
@@ -40,17 +39,17 @@ func (l *DeleteCategoryLogic) DeleteCategory(in *catalog.DeleteCategoryRequest) 
 	_, err := l.svcCtx.Repo.Category().GetCategoryById(in.Id)
 	if err != nil {
 		return &catalog.DeleteCategoryResponse{
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	// delete the Category
 	if err := l.svcCtx.Repo.Category().Delete(in.Id); err != nil {
 		return &catalog.DeleteCategoryResponse{
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
-		}, nil
+			// StatusCode:    http.StatusExpectationFailed,
+			// StatusMessage: err.Error(),
+		}, err
 	}
 
 	// invalidate the cache for this record
@@ -69,7 +68,7 @@ func (l *DeleteCategoryLogic) DeleteCategory(in *catalog.DeleteCategoryRequest) 
 
 	// the response struct
 	return &catalog.DeleteCategoryResponse{
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
 	}, nil
 }

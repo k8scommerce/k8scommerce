@@ -38,7 +38,7 @@ Enter JWT Bearer token **_only_**
 | POST | /v1/product | [create product](#create-product) | Create Product |
 | DELETE | /v1/category/{id} | [delete category](#delete-category) | Delete Category |
 | DELETE | /v1/product/{id} | [delete product](#delete-product) | Delete Product |
-| GET | /v1/categories | [get all categories](#get-all-categories) | Get All Categories |
+| GET | /v1/categories/{storeId}/{currentPage}/{pageSize} | [get all categories](#get-all-categories) | Get All Categories |
 | GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) | Get All Products |
 | GET | /v1/category/{id} | [get category by Id](#get-category-by-id) | Get Category By Id |
 | GET | /v1/category/slug/{slug} | [get category by slug](#get-category-by-slug) | Get Category By Slug |
@@ -182,7 +182,7 @@ Status: OK
 ### <span id="get-all-categories"></span> Get All Categories (*getAllCategories*)
 
 ```
-GET /v1/categories
+GET /v1/categories/{storeId}/{currentPage}/{pageSize}
 ```
 
 returns all categories belonging to a store
@@ -191,6 +191,9 @@ returns all categories belonging to a store
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
+| currentPage | `path` | string | `string` |  | ✓ |  |  |
+| pageSize | `path` | string | `string` |  | ✓ |  |  |
+| storeId | `path` | string | `string` |  | ✓ |  |  |
 | sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
@@ -550,7 +553,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -582,7 +584,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -607,15 +608,7 @@ Status: OK
 
   
 
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
-
-
+[interface{}](#interface)
 
 ### <span id="delete-product-request"></span> DeleteProductRequest
 
@@ -638,15 +631,7 @@ Status: OK
 
   
 
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
-
-
+[interface{}](#interface)
 
 ### <span id="get-all-categories-request"></span> GetAllCategoriesRequest
 
@@ -678,7 +663,8 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | categories | [][Category](#category)| `[]*Category` | ✓ | | a collection of Category |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
+| totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -712,7 +698,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | products | [][Product](#product)| `[]*Product` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 | totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
@@ -746,7 +731,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -778,7 +762,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -840,7 +823,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | product | [Product](#product)| `Product` | ✓ | | slug name of the category |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 | storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
@@ -876,7 +858,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | products | [][Product](#product)| `[]*Product` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 | totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
@@ -987,7 +968,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -1020,7 +1000,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 

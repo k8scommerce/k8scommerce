@@ -52,9 +52,6 @@ func (m *categoryRepo) GetCategoryById(id int64) (*models.Category, error) {
 }
 
 func (m *categoryRepo) GetAllCategories(storeId int64, currentPage, pageSize int64, sortOn string) (res *getAllCategoriesResponse, err error) {
-	fmt.Println("currentPage", currentPage)
-	fmt.Println("pageSize", pageSize)
-
 	orderBy, err := BuildOrderBy(sortOn, map[string]string{
 		"parent_id":  "s",
 		"sort_order": "s",
@@ -69,7 +66,7 @@ func (m *categoryRepo) GetAllCategories(storeId int64, currentPage, pageSize int
 
 	// set a default order by
 	if orderBy == "" {
-		orderBy = "ORDER BY p.name ASC"
+		orderBy = "ORDER BY c.lft ASC"
 	}
 	offset := fmt.Sprintf("OFFSET %d", (currentPage-1)*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
@@ -77,24 +74,24 @@ func (m *categoryRepo) GetAllCategories(storeId int64, currentPage, pageSize int
 	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
 			select 
 				-- catgory
-				c.id,
-				c.parent_id,
-				c.name,
-				c.description,
-				c.permalink,
-				c.meta_title,
-				c.meta_description,
-				c.meta_keywords,
-				c.hide_from_nav,
-				c.lft,
-				c.rgt,
-				c.depth,
-				c.sort_order,
+				c.id AS "category.id",
+				c.parent_id AS "category.parent_id",
+				c.slug AS "category.slug",
+				c.name AS "category.name",
+				c.description AS "category.description",
+				c.meta_title AS "category.meta_title",
+				c.meta_description AS "category.meta_description",
+				c.meta_keywords AS "category.meta_keywords",
+				c.hide_from_nav AS "category.hide_from_nav",
+				c.lft AS "category.lft",
+				c.rgt AS "category.rgt",
+				c.depth AS "category.depth",
+				c.sort_order AS "category.sort_order",
 				
 				-- stats
 				COUNT(c.*) OVER() AS "pagingstats.total_records"
-			from category c 
-			where store_id = :store_id
+			from category c
+			where c.store_id = :store_id
 			%s
 			%s
 			%s
@@ -103,8 +100,8 @@ func (m *categoryRepo) GetAllCategories(storeId int64, currentPage, pageSize int
 		return nil, fmt.Errorf("error::GetAllCategories::%s", err.Error())
 	}
 
-	var result *struct {
-		Categories  []models.Category
+	var result []*struct {
+		Category    models.Category
 		PagingStats PagingStats
 	}
 
@@ -116,17 +113,23 @@ func (m *categoryRepo) GetAllCategories(storeId int64, currentPage, pageSize int
 			"order_by": orderBy,
 		})
 
-	if result != nil && len(result.Categories) > 0 {
+	var categories []models.Category
+	if len(result) > 0 {
 		var stats *PagingStats
-		stats = result.PagingStats.Calc(pageSize)
-
-		out := &getAllCategoriesResponse{
-			Categories:  result.Categories,
-			PagingStats: *stats,
+		for i, r := range result {
+			if i == 0 {
+				stats = r.PagingStats.Calc(pageSize)
+			}
+			categories = append(categories, r.Category)
 		}
 
+		out := &getAllCategoriesResponse{
+			Categories:  categories,
+			PagingStats: *stats,
+		}
 		return out, err
 	}
+
 	return nil, err
 }
 

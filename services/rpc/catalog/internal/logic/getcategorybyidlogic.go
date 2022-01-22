@@ -7,7 +7,6 @@ import (
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"net/http"
 	"strconv"
 	"sync"
 
@@ -89,13 +88,13 @@ func (l *GetCategoryByIdLogic) GetCategoryById(in *catalog.GetCategoryByIdReques
 		return nil, err
 	}
 	res := &catalog.GetCategoryByIdResponse{
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
 	}
 	err = json.Unmarshal(b, res)
 	if err != nil {
-		res.StatusCode = http.StatusExpectationFailed
-		res.StatusMessage = err.Error()
+		// res.StatusCode = http.StatusExpectationFailed
+		// res.StatusMessage = err.Error()
 	}
-	return res, nil
+	return res, err
 }

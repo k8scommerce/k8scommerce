@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 	"sync"
@@ -93,13 +92,13 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 		return nil, err
 	}
 	res := &catalog.GetProductBySkuResponse{
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		// StatusCode:    http.StatusOK,
+		// StatusMessage: "",
 	}
 	err = json.Unmarshal(b, res)
 	if err != nil {
-		res.StatusCode = http.StatusExpectationFailed
-		res.StatusMessage = err.Error()
+		// res.StatusCode = http.StatusExpectationFailed
+		// res.StatusMessage = err.Error()
 	}
-	return res, nil
+	return res, err
 }

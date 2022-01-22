@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/categories": {
+    "/v1/categories/{storeId}/{currentPage}/{pageSize}": {
       "get": {
         "summary": "Get All Categories",
         "description": "returns all categories belonging to a store",
@@ -30,6 +30,24 @@
           }
         },
         "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "currentPage",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "sortOn",
             "in": "query",
@@ -662,16 +680,11 @@
       "properties": {
         "category": {
           "$ref": "#/definitions/Category"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "CreateCategoryResponse",
       "required": [
-        "category",
-        "status"
+        "category"
       ]
     },
     "CreateCustomerRequest": {
@@ -727,16 +740,11 @@
       "properties": {
         "product:omitempty": {
           "$ref": "#/definitions/Product"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "CreateProductResponse",
       "required": [
-        "product:omitempty",
-        "status"
+        "product:omitempty"
       ]
     },
     "Customer": {
@@ -861,16 +869,7 @@
     },
     "DeleteCategoryResponse": {
       "type": "object",
-      "properties": {
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
-        }
-      },
-      "title": "DeleteCategoryResponse",
-      "required": [
-        "status"
-      ]
+      "title": "DeleteCategoryResponse"
     },
     "DeleteProductRequest": {
       "type": "object",
@@ -892,16 +891,7 @@
     },
     "DeleteProductResponse": {
       "type": "object",
-      "properties": {
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
-        }
-      },
-      "title": "DeleteProductResponse",
-      "required": [
-        "status"
-      ]
+      "title": "DeleteProductResponse"
     },
     "GetAllCategoriesRequest": {
       "type": "object",
@@ -939,15 +929,20 @@
           },
           "description": " a collection of Category"
         },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
+        "totalRecords": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64"
         }
       },
       "title": "GetAllCategoriesResponse",
       "required": [
         "categories",
-        "status"
+        "totalRecords",
+        "totalPages"
       ]
     },
     "GetAllProductsRequest": {
@@ -993,18 +988,13 @@
         "totalPages": {
           "type": "integer",
           "format": "int64"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "GetAllProductsResponse",
       "required": [
         "products",
         "totalRecords",
-        "totalPages",
-        "status"
+        "totalPages"
       ]
     },
     "GetCategoryByIdRequest": {
@@ -1030,16 +1020,11 @@
       "properties": {
         "category": {
           "$ref": "#/definitions/Category"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "GetCategoryByIdResponse",
       "required": [
-        "category",
-        "status"
+        "category"
       ]
     },
     "GetCategoryBySlugRequest": {
@@ -1065,16 +1050,11 @@
       "properties": {
         "category": {
           "$ref": "#/definitions/Category"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "GetCategoryBySlugResponse",
       "required": [
-        "category",
-        "status"
+        "category"
       ]
     },
     "GetProductByIdRequest": {
@@ -1130,17 +1110,12 @@
         "product": {
           "$ref": "#/definitions/Product",
           "description": " slug name of the category"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "GetProductResponse",
       "required": [
         "storeId",
-        "product",
-        "status"
+        "product"
       ]
     },
     "GetProductsByCategoryIdRequest": {
@@ -1190,18 +1165,13 @@
         "totalPages": {
           "type": "integer",
           "format": "int64"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "GetProductsByCategoryIdResponse",
       "required": [
         "products",
         "totalRecords",
-        "totalPages",
-        "status"
+        "totalPages"
       ]
     },
     "JwtToken": {
@@ -1406,16 +1376,11 @@
       "properties": {
         "category": {
           "$ref": "#/definitions/Category"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "UpdateCategoryResponse",
       "required": [
-        "category",
-        "status"
+        "category"
       ]
     },
     "UpdateProductRequest": {
@@ -1445,16 +1410,11 @@
       "properties": {
         "product:omitempty": {
           "$ref": "#/definitions/Product"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "UpdateProductResponse",
       "required": [
-        "product:omitempty",
-        "status"
+        "product:omitempty"
       ]
     },
     "User": {
