@@ -29,6 +29,14 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "sortOn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "admin"
         ]
@@ -635,12 +643,17 @@
     "CreateCategoryRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "category": {
           "$ref": "#/definitions/Category"
         }
       },
       "title": "CreateCategoryRequest",
       "required": [
+        "storeId",
         "category"
       ]
     },
@@ -695,12 +708,17 @@
     "CreateProductRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "product:omitempty": {
           "$ref": "#/definitions/Product"
         }
       },
       "title": "CreateProductRequest",
       "required": [
+        "storeId",
         "product:omitempty"
       ]
     },
@@ -826,6 +844,10 @@
     "DeleteCategoryRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "id": {
           "type": "integer",
           "format": "int64"
@@ -833,6 +855,7 @@
       },
       "title": "DeleteCategoryRequest",
       "required": [
+        "storeId",
         "id"
       ]
     },
@@ -852,6 +875,10 @@
     "DeleteProductRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "path:omitempty": {
           "type": "integer",
           "format": "int64"
@@ -859,6 +886,7 @@
       },
       "title": "DeleteProductRequest",
       "required": [
+        "storeId",
         "path:omitempty"
       ]
     },
@@ -873,6 +901,32 @@
       "title": "DeleteProductResponse",
       "required": [
         "status"
+      ]
+    },
+    "GetAllCategoriesRequest": {
+      "type": "object",
+      "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "currentPage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sortOn": {
+          "type": "string"
+        }
+      },
+      "title": "GetAllCategoriesRequest",
+      "required": [
+        "storeId",
+        "currentPage",
+        "pageSize"
       ]
     },
     "GetAllCategoriesResponse": {
@@ -899,6 +953,10 @@
     "GetAllProductsRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "currentPage": {
           "type": "integer",
           "format": "int64"
@@ -913,6 +971,7 @@
       },
       "title": "GetAllProductsRequest",
       "required": [
+        "storeId",
         "currentPage",
         "pageSize",
         "sortOn"
@@ -951,6 +1010,10 @@
     "GetCategoryByIdRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "id": {
           "type": "integer",
           "format": "int64"
@@ -958,6 +1021,7 @@
       },
       "title": "GetCategoryByIdRequest",
       "required": [
+        "storeId",
         "id"
       ]
     },
@@ -981,6 +1045,10 @@
     "GetCategoryBySlugRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "slug": {
           "type": "string",
           "description": " slug name of the category"
@@ -988,6 +1056,7 @@
       },
       "title": "GetCategoryBySlugRequest",
       "required": [
+        "storeId",
         "slug"
       ]
     },
@@ -1024,12 +1093,17 @@
     "GetProductBySkuRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "sku": {
           "type": "string"
         }
       },
       "title": "GetProductBySkuRequest",
       "required": [
+        "storeId",
         "sku"
       ]
     },
@@ -1049,6 +1123,10 @@
     "GetProductResponse": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "product": {
           "$ref": "#/definitions/Product",
           "description": " slug name of the category"
@@ -1060,6 +1138,7 @@
       },
       "title": "GetProductResponse",
       "required": [
+        "storeId",
         "product",
         "status"
       ]
@@ -1067,6 +1146,10 @@
     "GetProductsByCategoryIdRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "categoryId": {
           "type": "integer",
           "format": "int64"
@@ -1085,6 +1168,7 @@
       },
       "title": "GetProductsByCategoryIdRequest",
       "required": [
+        "storeId",
         "categoryId",
         "currentPage",
         "pageSize"
@@ -1298,6 +1382,10 @@
     "UpdateCategoryRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "id": {
           "type": "integer",
           "format": "int64"
@@ -1308,6 +1396,7 @@
       },
       "title": "UpdateCategoryRequest",
       "required": [
+        "storeId",
         "id",
         "category"
       ]
@@ -1332,6 +1421,10 @@
     "UpdateProductRequest": {
       "type": "object",
       "properties": {
+        "storeId": {
+          "type": "integer",
+          "format": "int64"
+        },
         "path:omitempty": {
           "type": "integer",
           "format": "int64"
@@ -1342,6 +1435,7 @@
       },
       "title": "UpdateProductRequest",
       "required": [
+        "storeId",
         "path:omitempty",
         "product:omitempty"
       ]
