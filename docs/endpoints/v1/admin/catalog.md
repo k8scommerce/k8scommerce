@@ -259,7 +259,6 @@ returns all categories by id belonging to a store
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
 | id | `path` | string | `string` |  | ✓ |  | category id |
-| id | `query` | int64 (formatted integer) | `int64` |  | ✓ |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
