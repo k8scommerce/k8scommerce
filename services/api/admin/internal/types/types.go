@@ -80,7 +80,7 @@ type GetCategoryBySlugResponse struct {
 
 type GetCategoryByIdRequest struct {
 	StoreId int64 `path:"storeId"`
-	Id      int64 `json:"id,omitempty"`
+	Id      int64 `path:"id,omitempty"`
 }
 
 type GetCategoryByIdResponse struct {

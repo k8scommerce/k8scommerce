@@ -83,7 +83,7 @@ type GetCategoryBySlugResponse {
 // get category by id
 type GetCategoryByIdRequest {
 	StoreId int64 `path:"storeId"`
-	Id      int64 `json:"id,omitempty"`
+	Id      int64 `path:"id,omitempty"`
 }
 
 type GetCategoryByIdResponse {
