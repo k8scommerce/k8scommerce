@@ -512,6 +512,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
+| depth | int32 (formatted integer)| `int32` | ✓ | | category level depth |  |
 | description | string| `string` | ✓ | | description of category |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | category id |  |
 | metaDescription | string| `string` | ✓ | | metatag description for SEO |  |

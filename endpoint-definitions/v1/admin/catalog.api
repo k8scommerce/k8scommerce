@@ -16,6 +16,7 @@ type Category {
 	MetaTitle       string `json:"metaTitle,omitempty"`       // metatag title for SEO
 	MetaDescription string `json:"metaDescription,omitempty"` // metatag description for SEO
 	MetaKeywords    string `json:"metaKeywords,omitempty"`    // metatag keywords for SEO
+	Depth           int32  `json:"depth,omitempty"`           // category level depth
 	SortOrder       int32  `json:"sortOrder"`                 // sort order of menu items on the same level and same parent id
 }
 

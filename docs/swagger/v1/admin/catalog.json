@@ -508,6 +508,11 @@
           "type": "string",
           "description": " metatag keywords for SEO"
         },
+        "depth": {
+          "type": "integer",
+          "format": "int32",
+          "description": " category level depth"
+        },
         "sortOrder": {
           "type": "integer",
           "format": "int32",
@@ -524,6 +529,7 @@
         "metaTitle",
         "metaDescription",
         "metaKeywords",
+        "depth",
         "sortOrder"
       ]
     },
