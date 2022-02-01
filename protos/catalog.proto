@@ -16,7 +16,8 @@ message Category {
   string metaTitle = 7;
   string metaDescription = 8;
   string metaKeywords = 9;
-  int32 sortOrder = 10;
+  int64 sortOrder = 10;
+  int64 depth = 11;
 }
 
 message Product {
@@ -132,8 +133,7 @@ message DeleteCategoryRequest {
   int64 storeId = 2;
 }
 
-message DeleteCategoryResponse {
-}
+message DeleteCategoryResponse {}
 
 //
 //
@@ -242,8 +242,7 @@ message DeleteProductRequest {
   int64 storeId = 2;
 }
 
-message DeleteProductResponse {
-}
+message DeleteProductResponse {}
 
 // client
 service CatalogClient {

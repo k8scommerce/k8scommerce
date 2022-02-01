@@ -30,7 +30,7 @@ Enter JWT Bearer token **_only_**
 
 ## All endpoints
 
-###  admin
+###  customers
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|

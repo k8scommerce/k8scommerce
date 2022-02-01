@@ -36,7 +36,9 @@ type UserLoginResponse {
 //
 
 @server(
+	// jwt: Auth
 	middleware: Locale
+	group: Users
 )
 service admin {
 	// login

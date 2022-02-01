@@ -13,48 +13,48 @@ type ResponseStatus struct {
 }
 
 type Category struct {
-	Id              int64  `json:"id"`                        // category id
-	ParentId        int64  `json:"parentId"`                  // parent category id. references Category.Id
-	Slug            string `json:"slug"`                      // slug name of the category
-	Name            string `json:"name"`                      // name of category
-	Description     string `json:"description"`               // description of category
-	MetaTitle       string `json:"metaTitle,omitempty"`       // metatag title for SEO
-	MetaDescription string `json:"metaDescription,omitempty"` // metatag description for SEO
-	MetaKeywords    string `json:"metaKeywords,omitempty"`    // metatag keywords for SEO
-	Depth           int32  `json:"depth,omitempty"`           // category level depth
-	SortOrder       int32  `json:"sortOrder"`                 // sort order of menu items on the same level and same parent id
+	Id              int64  `json:"id"`              // category id
+	ParentId        int64  `json:"parentId"`        // parent category id. references Category.Id
+	Slug            string `json:"slug"`            // slug name of the category
+	Name            string `json:"name"`            // name of category
+	Description     string `json:"description"`     // description of category
+	MetaTitle       string `json:"metaTitle"`       // metatag title for SEO
+	MetaDescription string `json:"metaDescription"` // metatag description for SEO
+	MetaKeywords    string `json:"metaKeywords"`    // metatag keywords for SEO
+	Depth           int32  `json:"depth"`           // category level depth
+	SortOrder       int32  `json:"sortOrder"`       // sort order of menu items on the same level and same parent id
 }
 
 type Product struct {
-	Id               int64     `json:"id"`                        // product id
-	Slug             string    `json:"slug"`                      // product slug
-	Name             string    `json:"name"`                      // product name
-	ShortDescription string    `json:"shortDescription"`          // product short description. used in category pages
-	Description      string    `json:"description"`               // category description
-	MetaTitle        string    `json:"metaTitle,omitempty"`       // metatag title for SEO
-	MetaDescription  string    `json:"metaDescription,omitempty"` // metatag description for SEO
-	MetaKeywords     string    `json:"metaKeywords,omitempty"`    // metatag keywords for SEO
-	Variants         []Variant `json:"variants,omitempty"`        // collection of Variant objects
+	Id               int64     `json:"id"`               // product id
+	Slug             string    `json:"slug"`             // product slug
+	Name             string    `json:"name"`             // product name
+	ShortDescription string    `json:"shortDescription"` // product short description. used in category pages
+	Description      string    `json:"description"`      // category description
+	MetaTitle        string    `json:"metaTitle"`        // metatag title for SEO
+	MetaDescription  string    `json:"metaDescription"`  // metatag description for SEO
+	MetaKeywords     string    `json:"metaKeywords"`     // metatag keywords for SEO
+	Variants         []Variant `json:"variants"`         // collection of Variant objects
 }
 
 type Variant struct {
-	Id        int64   `json:"id,omitempty"`        // variant id
-	IsDefault bool    `json:"isDefault,omitempty"` // is default variant. each product must have exactly 1 default variant
-	Sku       string  `json:"sku,omitempty"`       // variant sku. usually the product sku with appended identification tags
-	Weight    float64 `json:"weight,omitempty"`    // variant weight. used in calculating shipping
-	Height    float64 `json:"height,omitempty"`    // variant height. used in calculating shipping
-	Width     float64 `json:"width,omitempty"`     // variant width. used in calculating shipping
-	Depth     float64 `json:"depth,omitempty"`     // variant depth. used in calculating shipping
-	Price     Price   `json:"price,omitempty"`     // variant Price object
+	Id        int64   `json:"id"`        // variant id
+	IsDefault bool    `json:"isDefault"` // is default variant. each product must have exactly 1 default variant
+	Sku       string  `json:"sku"`       // variant sku. usually the product sku with appended identification tags
+	Weight    float64 `json:"weight"`    // variant weight. used in calculating shipping
+	Height    float64 `json:"height"`    // variant height. used in calculating shipping
+	Width     float64 `json:"width"`     // variant width. used in calculating shipping
+	Depth     float64 `json:"depth"`     // variant depth. used in calculating shipping
+	Price     Price   `json:"price"`     // variant Price object
 }
 
 type Price struct {
-	Id                     int64   `json:"id,omitempty"`                     // price id
-	Amount                 float64 `json:"amount,omitempty"`                 // price amount
-	DisplayAmount          string  `json:"displayAmount,omitempty"`          // price display amount
-	CompareAtAmount        float64 `json:"compareAtAmount,omitempty"`        // price compare amount
-	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,omitempty"` // price display compare amount
-	Currency               string  `json:"currency,omitempty"`               // price currency. example: USD, CAN, etc.
+	Id                     int64   `json:"id"`                     // price id
+	Amount                 float64 `json:"amount"`                 // price amount
+	DisplayAmount          string  `json:"displayAmount"`          // price display amount
+	CompareAtAmount        float64 `json:"compareAtAmount"`        // price compare amount
+	DisplayCompareAtAmount string  `json:"displayCompareAtAmount"` // price display compare amount
+	Currency               string  `json:"currency"`               // price currency. example: USD, CAN, etc.
 }
 
 type GetAllCategoriesRequest struct {
@@ -65,7 +65,7 @@ type GetAllCategoriesRequest struct {
 }
 
 type GetAllCategoriesResponse struct {
-	Categories   []Category `json:"categories,omitempty"` // a collection of Category
+	Categories   []Category `json:"categories"` // a collection of Category
 	TotalRecords int64      `json:"totalRecords"`
 	TotalPages   int64      `json:"totalPages"`
 }
@@ -76,48 +76,45 @@ type GetCategoryBySlugRequest struct {
 }
 
 type GetCategoryBySlugResponse struct {
-	Category Category `json:"category,omitempty"`
+	Category Category `json:"category"`
 }
 
 type GetCategoryByIdRequest struct {
-	StoreId int64 `path:"storeId"`
-	Id      int64 `path:"id,omitempty"`
+	Id int64 `path:"id"`
 }
 
 type GetCategoryByIdResponse struct {
-	Category Category `json:"category,omitempty"`
+	Category Category `json:"category"`
 }
 
 type CreateCategoryRequest struct {
 	StoreId  int64    `path:"storeId"`
-	Category Category `json:"category,omitempty"`
+	Category Category `json:"category"`
 }
 
 type CreateCategoryResponse struct {
-	Category Category `json:"category,omitempty"`
+	Category Category `json:"category"`
 }
 
 type UpdateCategoryRequest struct {
 	StoreId  int64    `path:"storeId"`
-	Id       int64    `json:"id,omitempty"`
-	Category Category `json:"category,omitempty"`
+	Id       int64    `json:"id"`
+	Category Category `json:"category"`
 }
 
 type UpdateCategoryResponse struct {
-	Category Category `json:"category,omitempty"`
+	Category Category `json:"category"`
 }
 
 type DeleteCategoryRequest struct {
-	StoreId int64 `path:"storeId"`
-	Id      int64 `json:"id,omitempty"`
+	Id int64 `path:"id"`
 }
 
 type DeleteCategoryResponse struct {
 }
 
 type GetProductBySkuRequest struct {
-	StoreId int64  `path:"storeId"`
-	Sku     string `path:"sku"`
+	Sku string `path:"sku"`
 }
 
 type GetProductBySlugRequest struct {
@@ -125,7 +122,6 @@ type GetProductBySlugRequest struct {
 }
 
 type GetProductResponse struct {
-	StoreId int64   `path:"storeId"`
 	Product Product `json:"product"` // slug name of the category
 }
 
@@ -134,7 +130,6 @@ type GetProductByIdRequest struct {
 }
 
 type GetProductsByCategoryIdRequest struct {
-	StoreId     int64  `path:"storeId"`
 	CategoryId  int64  `path:"categoryId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
@@ -148,10 +143,9 @@ type GetProductsByCategoryIdResponse struct {
 }
 
 type GetAllProductsRequest struct {
-	StoreId     int64  `path:"storeId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
-	SortOn      string `form:"sortOn"`
+	SortOn      string `form:"sortOn,optional"`
 }
 
 type GetAllProductsResponse struct {
@@ -161,27 +155,24 @@ type GetAllProductsResponse struct {
 }
 
 type CreateProductRequest struct {
-	StoreId int64   `path:"storeId"`
-	Product Product `json:"product:omitempty"`
+	Product Product `json:"product"`
 }
 
 type CreateProductResponse struct {
-	Product Product `json:"product:omitempty"`
+	Product Product `json:"product"`
 }
 
 type UpdateProductRequest struct {
-	StoreId int64   `path:"storeId"`
-	Id      int64   `json:"path:omitempty"`
-	Product Product `json:"product:omitempty"`
+	Id      int64   `json:"path"`
+	Product Product `json:"product"`
 }
 
 type UpdateProductResponse struct {
-	Product Product `json:"product:omitempty"`
+	Product Product `json:"product"`
 }
 
 type DeleteProductRequest struct {
-	StoreId int64 `path:"storeId"`
-	Id      int64 `json:"path:omitempty"`
+	Id int64 `path:"id"`
 }
 
 type DeleteProductResponse struct {

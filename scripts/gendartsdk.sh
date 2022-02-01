@@ -1,0 +1,25 @@
+#!/bin/bash
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+version=v1
+out_dir=$(cd $ROOT/../.. && pwd)
+json_dir=$(cd $ROOT/../docs/swagger/$version && pwd)
+config_dir=$(cd $ROOT/.. && pwd)
+flavor=dart-dio-next
+
+openapi-generator generate -i ${json_dir}/admin.json -g $flavor -o $out_dir/gateway_admin_sdk -c $config_dir/open-generator-admin-config.yaml --enable-post-process-file
+
+code $out_dir/gateway_admin_sdk
+
+
+# $(cd $out_dir/gateway_admin_sdk && 
+# flutter pub get && flutter pub upgrade && flutter pub upgrade --major-versions && flutter pub outdated && flutter pub run build_runner build --delete-conflicting-outputs
+# flutter pub get
+# flutter pub upgrade
+# flutter pub upgrade --major-versions
+# flutter pub outdated
+# flutter pub run build_runner build --delete-conflicting-outputs
+cd $out_dir/gateway_admin_sdk
+flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs
+cd $ROOT

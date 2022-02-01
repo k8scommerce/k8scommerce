@@ -15,5 +15,6 @@ func ConvertModelCategoryToProtoCategory(modelCategory *models.Category, protoCa
 	protoCategory.MetaTitle = modelCategory.MetaTitle.String
 	protoCategory.MetaDescription = modelCategory.MetaDescription.String
 	protoCategory.MetaKeywords = modelCategory.MetaKeywords.String
-	protoCategory.SortOrder = int32(modelCategory.SortOrder.Int64)
+	protoCategory.SortOrder = modelCategory.SortOrder.Int64
+	protoCategory.Depth = modelCategory.Depth.Int64
 }

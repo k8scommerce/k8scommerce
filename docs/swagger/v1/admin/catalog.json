@@ -55,7 +55,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Categories"
         ]
       }
     },
@@ -83,7 +83,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Categories"
         ]
       }
     },
@@ -110,7 +110,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Categories"
         ]
       }
     },
@@ -137,7 +137,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Categories"
         ]
       },
       "delete": {
@@ -170,7 +170,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Categories"
         ]
       },
       "put": {
@@ -203,7 +203,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Categories"
         ]
       }
     },
@@ -231,7 +231,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       }
     },
@@ -258,7 +258,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       }
     },
@@ -285,7 +285,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       }
     },
@@ -312,7 +312,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       },
       "delete": {
@@ -345,7 +345,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       },
       "put": {
@@ -378,7 +378,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       }
     },
@@ -425,7 +425,7 @@
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       }
     },
@@ -460,12 +460,12 @@
           {
             "name": "sortOn",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           }
         ],
         "tags": [
-          "admin"
+          "Products"
         ]
       }
     }
@@ -565,39 +565,30 @@
     "CreateProductRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "product:omitempty": {
+        "product": {
           "$ref": "#/definitions/Product"
         }
       },
       "title": "CreateProductRequest",
       "required": [
-        "storeId",
-        "product:omitempty"
+        "product"
       ]
     },
     "CreateProductResponse": {
       "type": "object",
       "properties": {
-        "product:omitempty": {
+        "product": {
           "$ref": "#/definitions/Product"
         }
       },
       "title": "CreateProductResponse",
       "required": [
-        "product:omitempty"
+        "product"
       ]
     },
     "DeleteCategoryRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "id": {
           "type": "integer",
           "format": "int64"
@@ -605,7 +596,6 @@
       },
       "title": "DeleteCategoryRequest",
       "required": [
-        "storeId",
         "id"
       ]
     },
@@ -616,19 +606,14 @@
     "DeleteProductRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "path:omitempty": {
+        "id": {
           "type": "integer",
           "format": "int64"
         }
       },
       "title": "DeleteProductRequest",
       "required": [
-        "storeId",
-        "path:omitempty"
+        "id"
       ]
     },
     "DeleteProductResponse": {
@@ -690,10 +675,6 @@
     "GetAllProductsRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "currentPage": {
           "type": "integer",
           "format": "int64"
@@ -708,10 +689,8 @@
       },
       "title": "GetAllProductsRequest",
       "required": [
-        "storeId",
         "currentPage",
-        "pageSize",
-        "sortOn"
+        "pageSize"
       ]
     },
     "GetAllProductsResponse": {
@@ -742,10 +721,6 @@
     "GetCategoryByIdRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "id": {
           "type": "integer",
           "format": "int64"
@@ -753,7 +728,6 @@
       },
       "title": "GetCategoryByIdRequest",
       "required": [
-        "storeId",
         "id"
       ]
     },
@@ -815,17 +789,12 @@
     "GetProductBySkuRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "sku": {
           "type": "string"
         }
       },
       "title": "GetProductBySkuRequest",
       "required": [
-        "storeId",
         "sku"
       ]
     },
@@ -845,10 +814,6 @@
     "GetProductResponse": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "product": {
           "$ref": "#/definitions/Product",
           "description": " slug name of the category"
@@ -856,17 +821,12 @@
       },
       "title": "GetProductResponse",
       "required": [
-        "storeId",
         "product"
       ]
     },
     "GetProductsByCategoryIdRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "categoryId": {
           "type": "integer",
           "format": "int64"
@@ -885,7 +845,6 @@
       },
       "title": "GetProductsByCategoryIdRequest",
       "required": [
-        "storeId",
         "categoryId",
         "currentPage",
         "pageSize"
@@ -1092,35 +1051,30 @@
     "UpdateProductRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
+        "path": {
           "type": "integer",
           "format": "int64"
         },
-        "path:omitempty": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "product:omitempty": {
+        "product": {
           "$ref": "#/definitions/Product"
         }
       },
       "title": "UpdateProductRequest",
       "required": [
-        "storeId",
-        "path:omitempty",
-        "product:omitempty"
+        "path",
+        "product"
       ]
     },
     "UpdateProductResponse": {
       "type": "object",
       "properties": {
-        "product:omitempty": {
+        "product": {
           "$ref": "#/definitions/Product"
         }
       },
       "title": "UpdateProductResponse",
       "required": [
-        "product:omitempty"
+        "product"
       ]
     },
     "Variant": {

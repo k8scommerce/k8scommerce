@@ -30,23 +30,30 @@ Enter JWT Bearer token **_only_**
 
 ## All endpoints
 
-###  admin
+###  categories
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
 | POST | /v1/category | [create category](#create-category) | Create Category |
-| POST | /v1/product | [create product](#create-product) | Create Product |
 | DELETE | /v1/category/{id} | [delete category](#delete-category) | Delete Category |
-| DELETE | /v1/product/{id} | [delete product](#delete-product) | Delete Product |
 | GET | /v1/categories/{storeId}/{currentPage}/{pageSize} | [get all categories](#get-all-categories) | Get All Categories |
-| GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) | Get All Products |
 | GET | /v1/category/{id} | [get category by Id](#get-category-by-id) | Get Category By Id |
 | GET | /v1/category/slug/{slug} | [get category by slug](#get-category-by-slug) | Get Category By Slug |
+| PUT | /v1/category/{id} | [update category](#update-category) | Update Category |
+  
+
+
+###  products
+
+| Method  | URI     | Name   | Summary |
+|---------|---------|--------|---------|
+| POST | /v1/product | [create product](#create-product) | Create Product |
+| DELETE | /v1/product/{id} | [delete product](#delete-product) | Delete Product |
+| GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) | Get All Products |
 | GET | /v1/product/{id} | [get product by Id](#get-product-by-id) | Get Product By Id |
 | GET | /v1/product/sku/{sku} | [get product by sku](#get-product-by-sku) | Get Product By Sku |
 | GET | /v1/product/slug/{slug} | [get product by slug](#get-product-by-slug) | Get Product By Slug |
 | GET | /v1/products/{categoryId}/{currentPage}/{pageSize} | [get products by category Id](#get-products-by-category-id) | Get Products By Category Id |
-| PUT | /v1/category/{id} | [update category](#update-category) | Update Category |
 | PUT | /v1/product/{id} | [update product](#update-product) | Update Product |
   
 
@@ -227,7 +234,7 @@ returns all products belonging to a store
 |------|--------|------|---------|-----------| :------: |---------|-------------|
 | currentPage | `path` | string | `string` |  | ✓ |  | current page number |
 | pageSize | `path` | string | `string` |  | ✓ |  | number of records per page |
-| sortOn | `query` | string | `string` |  | ✓ |  |  |
+| sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -567,8 +574,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| product | [Product](#product)| `Product` | ✓ | |  |  |
 
 
 
@@ -583,7 +589,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+| product | [Product](#product)| `Product` | ✓ | |  |  |
 
 
 
@@ -599,7 +605,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -621,8 +626,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -681,8 +685,7 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| sortOn | string| `string` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| sortOn | string| `string` |  | |  |  |
 
 
 
@@ -715,7 +718,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -792,7 +794,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | sku | string| `string` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -823,7 +824,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | product | [Product](#product)| `Product` | ✓ | | slug name of the category |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -842,7 +842,6 @@ Status: OK
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | sortOn | string| `string` |  | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -982,9 +981,8 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| path:omitempty | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| path | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| product | [Product](#product)| `Product` | ✓ | |  |  |
 
 
 
@@ -999,7 +997,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| product:omitempty | [Product](#product)| `Product` | ✓ | |  |  |
+| product | [Product](#product)| `Product` | ✓ | |  |  |
 
 
 
