@@ -4,6 +4,10 @@ package handler
 import (
 	"net/http"
 
+	Categories "k8scommerce/services/api/admin/internal/handler/Categories"
+	Customers "k8scommerce/services/api/admin/internal/handler/Customers"
+	Products "k8scommerce/services/api/admin/internal/handler/Products"
+	Users "k8scommerce/services/api/admin/internal/handler/Users"
 	"k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/tal-tech/go-zero/rest"
@@ -17,72 +21,80 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/categories/:storeId/:currentPage/:pageSize",
-					Handler: getAllCategoriesHandler(serverCtx),
+					Handler: Categories.GetAllCategoriesHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/category/slug/:slug",
-					Handler: getCategoryBySlugHandler(serverCtx),
+					Handler: Categories.GetCategoryBySlugHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/category/:id",
-					Handler: getCategoryByIdHandler(serverCtx),
+					Handler: Categories.GetCategoryByIdHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/category",
-					Handler: createCategoryHandler(serverCtx),
+					Handler: Categories.CreateCategoryHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/v1/category/:id",
-					Handler: updateCategoryHandler(serverCtx),
+					Handler: Categories.UpdateCategoryHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/v1/category/:id",
-					Handler: deleteCategoryHandler(serverCtx),
+					Handler: Categories.DeleteCategoryHandler(serverCtx),
 				},
+			}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/product/sku/:sku",
-					Handler: getProductBySkuHandler(serverCtx),
+					Handler: Products.GetProductBySkuHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/product/slug/:slug",
-					Handler: getProductBySlugHandler(serverCtx),
+					Handler: Products.GetProductBySlugHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/product/:id",
-					Handler: getProductByIdHandler(serverCtx),
+					Handler: Products.GetProductByIdHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/products/:categoryId/:currentPage/:pageSize",
-					Handler: getProductsByCategoryIdHandler(serverCtx),
+					Handler: Products.GetProductsByCategoryIdHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/v1/products/:currentPage/:pageSize",
-					Handler: getAllProductsHandler(serverCtx),
+					Handler: Products.GetAllProductsHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/product",
-					Handler: createProductHandler(serverCtx),
+					Handler: Products.CreateProductHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/v1/product/:id",
-					Handler: updateProductHandler(serverCtx),
+					Handler: Products.UpdateProductHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/v1/product/:id",
-					Handler: deleteProductHandler(serverCtx),
+					Handler: Products.DeleteProductHandler(serverCtx),
 				},
 			}...,
 		),
@@ -95,16 +107,15 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/customer",
-					Handler: createCustomerHandler(serverCtx),
+					Handler: Customers.CreateCustomerHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/customer/login",
-					Handler: customerLoginHandler(serverCtx),
+					Handler: Customers.CustomerLoginHandler(serverCtx),
 				},
 			}...,
 		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
@@ -114,7 +125,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/user/login",
-					Handler: loginHandler(serverCtx),
+					Handler: Users.LoginHandler(serverCtx),
 				},
 			}...,
 		),

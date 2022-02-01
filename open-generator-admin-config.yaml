@@ -1,0 +1,13 @@
+# Config options for the dart-dio generator
+
+additionalProperties:
+  pubName: gateway_admin
+pubVersion: 0.0.1
+pubDescription: "Gateway Admin SDK"
+pubHomepage: k8scommerce.com
+typeMappings:
+  object: dynamic
+  JsonObject: dynamic
+  LocalDate: LocalDate
+# importMappings:
+  # LocalDate: "package:time_machine/time_machine.dart"
