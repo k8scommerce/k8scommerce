@@ -39,12 +39,98 @@
           }
         ],
         "tags": [
-          "Users"
+          "users"
+        ]
+      }
+    },
+    "/v1/users/{currentPage}/{pageSize}": {
+      "get": {
+        "summary": "Get Users",
+        "description": "returns all users",
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAllUsersResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "currentPage",
+            "description": "current page number",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "pageSize",
+            "description": "number of records per page",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "sortOn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "users"
         ]
       }
     }
   },
   "definitions": {
+    "GetAllUsersRequest": {
+      "type": "object",
+      "properties": {
+        "currentPage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sortOn": {
+          "type": "string"
+        }
+      },
+      "title": "GetAllUsersRequest",
+      "required": [
+        "currentPage",
+        "pageSize"
+      ]
+    },
+    "GetAllUsersResponse": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "totalRecords": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetAllUsersResponse",
+      "required": [
+        "users",
+        "totalRecords",
+        "totalPages"
+      ]
+    },
     "JwtToken": {
       "type": "object",
       "properties": {
@@ -65,6 +151,25 @@
         "accessToken",
         "accessExpire",
         "refreshAfter"
+      ]
+    },
+    "PermissionGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " permission group id"
+        },
+        "groupName": {
+          "type": "string",
+          "description": " groupName"
+        }
+      },
+      "title": "PermissionGroup",
+      "required": [
+        "id",
+        "groupName"
       ]
     },
     "ResponseStatus": {
@@ -116,8 +221,7 @@
         "id",
         "firstName",
         "lastName",
-        "email",
-        "password"
+        "email"
       ]
     },
     "UserLoginRequest": {
@@ -148,17 +252,32 @@
         "user": {
           "$ref": "#/definitions/User",
           "description": " User object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "UserLoginResponse",
       "required": [
         "jwt",
-        "user",
-        "status"
+        "user"
+      ]
+    },
+    "UsersPermissionGroups": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " user id"
+        },
+        "permissionGroupId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " permission group id"
+        }
+      },
+      "title": "UsersPermissionGroups",
+      "required": [
+        "userId",
+        "permissionGroupId"
       ]
     }
   },

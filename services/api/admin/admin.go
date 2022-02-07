@@ -8,6 +8,7 @@ import (
 	"k8scommerce/services/api/admin/internal/handler"
 	"k8scommerce/services/api/admin/internal/svc"
 
+	middleware "github.com/muhfajar/go-zero-cors-middleware"
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/rest"
 )
@@ -21,9 +22,16 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 
 	ctx := svc.NewServiceContext(c)
+
+	cors := middleware.NewCORSMiddleware(&middleware.Options{
+		AllowCredentials: true,
+		AllowHeaders:     []string{"Content-Type", "X-CSRF-Token", "Authorization", "AccessToken", "Token", "Store-Key"},
+	})
+
 	server := rest.MustNewServer(
 		c.RestConf,
 		rest.WithCors("*"),
+		rest.WithNotAllowedHandler(cors.Handler()),
 	)
 	defer server.Stop()
 

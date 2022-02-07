@@ -35,11 +35,11 @@
             "description": "a customer's id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       },
       "delete": {
@@ -72,7 +72,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       },
       "post": {
@@ -105,7 +105,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       }
     },
@@ -147,7 +147,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       },
       "put": {
@@ -187,7 +187,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       }
     },
@@ -205,7 +205,7 @@
           }
         },
         "tags": [
-          "client"
+          "categories"
         ]
       }
     },
@@ -232,7 +232,7 @@
           }
         ],
         "tags": [
-          "client"
+          "categories"
         ]
       }
     },
@@ -260,13 +260,13 @@
           {
             "name": "id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
             "format": "int64"
           }
         ],
         "tags": [
-          "client"
+          "categories"
         ]
       }
     },
@@ -294,7 +294,7 @@
           }
         ],
         "tags": [
-          "client"
+          "customers"
         ]
       }
     },
@@ -322,7 +322,7 @@
           }
         ],
         "tags": [
-          "client"
+          "customers"
         ]
       }
     },
@@ -349,7 +349,7 @@
           }
         ],
         "tags": [
-          "client"
+          "products"
         ]
       }
     },
@@ -376,7 +376,7 @@
           }
         ],
         "tags": [
-          "client"
+          "products"
         ]
       }
     },
@@ -399,11 +399,11 @@
             "description": "product id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "tags": [
-          "client"
+          "products"
         ]
       }
     },
@@ -426,21 +426,21 @@
             "description": "category id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "currentPage",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "pageSize",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "sortOn",
@@ -450,7 +450,7 @@
           }
         ],
         "tags": [
-          "client"
+          "products"
         ]
       }
     },
@@ -473,14 +473,14 @@
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "pageSize",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "sortOn",
@@ -490,7 +490,7 @@
           }
         ],
         "tags": [
-          "client"
+          "products"
         ]
       }
     }
@@ -644,9 +644,6 @@
         "slug",
         "name",
         "description",
-        "metaTitle",
-        "metaDescription",
-        "metaKeywords",
         "sortOrder"
       ]
     },
@@ -743,8 +740,7 @@
         "id",
         "firstName",
         "lastName",
-        "email",
-        "password"
+        "email"
       ]
     },
     "CustomerAccount": {
@@ -832,7 +828,6 @@
       },
       "title": "GetAllCategoriesResponse",
       "required": [
-        "categories",
         "status"
       ]
     },
@@ -928,10 +923,7 @@
           "format": "int64"
         }
       },
-      "title": "GetCategoryByIdRequest",
-      "required": [
-        "id"
-      ]
+      "title": "GetCategoryByIdRequest"
     },
     "GetCategoryByIdResponse": {
       "type": "object",
@@ -946,7 +938,6 @@
       },
       "title": "GetCategoryByIdResponse",
       "required": [
-        "category",
         "status"
       ]
     },
@@ -976,7 +967,6 @@
       },
       "title": "GetCategoryBySlugResponse",
       "required": [
-        "category",
         "status"
       ]
     },
@@ -1211,15 +1201,7 @@
           "description": " price currency. example: USD, CAN, etc."
         }
       },
-      "title": "Price",
-      "required": [
-        "id",
-        "amount",
-        "displayAmount",
-        "compareAtAmount",
-        "displayCompareAtAmount",
-        "currency"
-      ]
+      "title": "Price"
     },
     "Product": {
       "type": "object",
@@ -1271,11 +1253,7 @@
         "slug",
         "name",
         "shortDescription",
-        "description",
-        "metaTitle",
-        "metaDescription",
-        "metaKeywords",
-        "variants"
+        "description"
       ]
     },
     "RemoveCartItemRequest": {
@@ -1425,17 +1403,7 @@
           "description": " variant Price object"
         }
       },
-      "title": "Variant",
-      "required": [
-        "id",
-        "isDefault",
-        "sku",
-        "weight",
-        "height",
-        "width",
-        "depth",
-        "price"
-      ]
+      "title": "Variant"
     }
   },
   "securityDefinitions": {

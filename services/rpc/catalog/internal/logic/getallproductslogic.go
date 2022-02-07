@@ -4,12 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"strconv"
-	"strings"
 	"sync"
 
 	"github.com/localrivet/galaxycache"
@@ -58,16 +57,13 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 		// register the galaxy one time
 		entryGetAllProductsLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllProducts", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// split the key and set the variables
-				v := strings.Split(key, "|")
-				storeId, _ := strconv.ParseInt(v[0], 10, 64)
-				currentPage, _ := strconv.ParseInt(v[1], 10, 64)
-				pageSize, _ := strconv.ParseInt(v[2], 10, 64)
-				sortOn := ""
-				if len(v) > 3 {
-					sortOn = v[3]
-				}
-				found, err := l.svcCtx.Repo.Product().GetAllProducts(storeId, currentPage, pageSize, sortOn)
+
+				found, err := l.svcCtx.Repo.Product().GetAllProducts(
+					galaxyctx.GetStoreId(ctx),
+					galaxyctx.GetCurrentPage(ctx),
+					galaxyctx.GetPageSize(ctx),
+					galaxyctx.GetSortOn(ctx),
+				)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -113,21 +109,21 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 
 	codec := &galaxycache.ByteCodec{}
 
+	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
+	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
+	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
+
 	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
 	if err := entryGetAllProductsLogic.galaxy.Get(l.ctx, key, codec); err != nil {
-		// res.StatusCode = http.StatusNoContent
-		// res.StatusMessage = err.Error()
 		return res, err
 	}
 
 	b, err := codec.MarshalBinary()
 	if err != nil {
-		// res.StatusCode = http.StatusInternalServerError
-		// res.StatusMessage = err.Error()
 		return res, err
 	}
 
 	err = json.Unmarshal(b, res)
 	return res, err
-
 }

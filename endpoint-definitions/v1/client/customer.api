@@ -12,7 +12,7 @@ type Customer {
 	FirstName string `json:"firstName"`          // first name
 	LastName  string `json:"lastName"`           // last or given name
 	Email     string `json:"email,required"`     // email address
-	Password  string `json:"password,omitempty"` // password
+	Password  string `json:"password,optional"` // password
 }
 
 type NewCustomer {
@@ -71,6 +71,7 @@ type CreateCustomerResponse {
 
 @server(
 	middleware: Locale, StoreKey
+	group: customers
 )
 service client {
 	@doc(

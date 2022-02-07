@@ -1,10 +1,10 @@
-package Customers
+package customers
 
 import (
 	"net/http"
 
 	"github.com/tal-tech/go-zero/rest/httpx"
-	"k8scommerce/services/api/admin/internal/logic/Customers"
+	"k8scommerce/services/api/admin/internal/logic/customers"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 )
@@ -17,7 +17,7 @@ func CreateCustomerHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := Customers.NewCreateCustomerLogic(r.Context(), svcCtx)
+		l := customers.NewCreateCustomerLogic(r.Context(), svcCtx)
 		resp, err := l.CreateCustomer(req)
 		if err != nil {
 			httpx.Error(w, err)

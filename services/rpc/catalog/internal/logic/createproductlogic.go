@@ -35,8 +35,6 @@ func (l *CreateProductLogic) CreateProduct(in *catalog.CreateProductRequest) (*c
 		logx.Infof("error: %s", err)
 		return &catalog.CreateProductResponse{
 			Product: nil,
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
 		}, nil
 	}
 
@@ -47,7 +45,5 @@ func (l *CreateProductLogic) CreateProduct(in *catalog.CreateProductRequest) (*c
 	// the response struct
 	return &catalog.CreateProductResponse{
 		Product: out,
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
 	}, nil
 }

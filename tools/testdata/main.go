@@ -14,11 +14,12 @@ var (
 	categories    map[string]int64 = make(map[string]int64)
 	storeID       int64
 	db            *sqlx.DB
+	repo          repos.Repo
 )
 
 func init() {
 	// env.Load()
-	repo := repos.MustNewRepo(&repos.Config{
+	repo = repos.MustNewRepo(&repos.Config{
 		Connection:                   "postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable",
 		MaxOpenConnections:           10,
 		MaxIdleConnections:           2,
@@ -33,6 +34,7 @@ func main() {
 	createCategory()
 	createArchetypes()
 	createProducts()
+	createUsers()
 }
 
 func truncateAll() {
@@ -46,6 +48,7 @@ func truncateAll() {
 		"property",
 		"archetype_property",
 		"product",
+		"users",
 	}
 	for _, table := range tables {
 		db.MustExec(fmt.Sprintf("truncate %s RESTART IDENTITY CASCADE;", table))

@@ -34,7 +34,7 @@
             "description": "a customer's id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "tags": [

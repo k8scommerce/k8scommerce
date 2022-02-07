@@ -31,21 +31,24 @@
         "parameters": [
           {
             "name": "storeId",
+            "description": "store id",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "currentPage",
+            "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "pageSize",
+            "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "sortOn",
@@ -55,7 +58,7 @@
           }
         ],
         "tags": [
-          "Categories"
+          "categories"
         ]
       }
     },
@@ -68,7 +71,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/CreateCategoryResponse"
+              "$ref": "#/definitions/Category"
             }
           }
         },
@@ -83,7 +86,7 @@
           }
         ],
         "tags": [
-          "Categories"
+          "categories"
         ]
       }
     },
@@ -96,7 +99,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetCategoryBySlugResponse"
+              "$ref": "#/definitions/Category"
             }
           }
         },
@@ -110,7 +113,7 @@
           }
         ],
         "tags": [
-          "Categories"
+          "categories"
         ]
       }
     },
@@ -123,7 +126,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetCategoryByIdResponse"
+              "$ref": "#/definitions/Category"
             }
           }
         },
@@ -133,11 +136,11 @@
             "description": "category id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "tags": [
-          "Categories"
+          "categories"
         ]
       },
       "delete": {
@@ -170,7 +173,7 @@
           }
         ],
         "tags": [
-          "Categories"
+          "categories"
         ]
       },
       "put": {
@@ -181,7 +184,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/UpdateCategoryResponse"
+              "$ref": "#/definitions/Category"
             }
           }
         },
@@ -203,7 +206,7 @@
           }
         ],
         "tags": [
-          "Categories"
+          "categories"
         ]
       }
     },
@@ -216,7 +219,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/CreateProductResponse"
+              "$ref": "#/definitions/Product"
             }
           }
         },
@@ -231,7 +234,7 @@
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       }
     },
@@ -244,7 +247,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetProductResponse"
+              "$ref": "#/definitions/Product"
             }
           }
         },
@@ -258,7 +261,7 @@
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       }
     },
@@ -271,7 +274,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetProductResponse"
+              "$ref": "#/definitions/Product"
             }
           }
         },
@@ -285,7 +288,7 @@
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       }
     },
@@ -298,7 +301,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetProductResponse"
+              "$ref": "#/definitions/Product"
             }
           }
         },
@@ -308,11 +311,11 @@
             "description": "product id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       },
       "delete": {
@@ -345,7 +348,7 @@
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       },
       "put": {
@@ -356,7 +359,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/UpdateProductResponse"
+              "$ref": "#/definitions/Product"
             }
           }
         },
@@ -378,7 +381,7 @@
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       }
     },
@@ -401,21 +404,21 @@
             "description": "category id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "currentPage",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "pageSize",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "sortOn",
@@ -425,7 +428,7 @@
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       }
     },
@@ -448,14 +451,14 @@
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "pageSize",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "sortOn",
@@ -465,7 +468,7 @@
           }
         ],
         "tags": [
-          "Products"
+          "products"
         ]
       }
     }
@@ -522,42 +525,18 @@
       "title": "Category",
       "required": [
         "id",
-        "parentId",
         "slug",
-        "name",
-        "description",
-        "metaTitle",
-        "metaDescription",
-        "metaKeywords",
-        "depth",
-        "sortOrder"
+        "name"
       ]
     },
     "CreateCategoryRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "category": {
           "$ref": "#/definitions/Category"
         }
       },
       "title": "CreateCategoryRequest",
-      "required": [
-        "storeId",
-        "category"
-      ]
-    },
-    "CreateCategoryResponse": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
-        }
-      },
-      "title": "CreateCategoryResponse",
       "required": [
         "category"
       ]
@@ -570,18 +549,6 @@
         }
       },
       "title": "CreateProductRequest",
-      "required": [
-        "product"
-      ]
-    },
-    "CreateProductResponse": {
-      "type": "object",
-      "properties": {
-        "product": {
-          "$ref": "#/definitions/Product"
-        }
-      },
-      "title": "CreateProductResponse",
       "required": [
         "product"
       ]
@@ -623,10 +590,6 @@
     "GetAllCategoriesRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "currentPage": {
           "type": "integer",
           "format": "int64"
@@ -641,7 +604,6 @@
       },
       "title": "GetAllCategoriesRequest",
       "required": [
-        "storeId",
         "currentPage",
         "pageSize"
       ]
@@ -731,25 +693,9 @@
         "id"
       ]
     },
-    "GetCategoryByIdResponse": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
-        }
-      },
-      "title": "GetCategoryByIdResponse",
-      "required": [
-        "category"
-      ]
-    },
     "GetCategoryBySlugRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "slug": {
           "type": "string",
           "description": " slug name of the category"
@@ -757,20 +703,7 @@
       },
       "title": "GetCategoryBySlugRequest",
       "required": [
-        "storeId",
         "slug"
-      ]
-    },
-    "GetCategoryBySlugResponse": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
-        }
-      },
-      "title": "GetCategoryBySlugResponse",
-      "required": [
-        "category"
       ]
     },
     "GetProductByIdRequest": {
@@ -809,19 +742,6 @@
       "title": "GetProductBySlugRequest",
       "required": [
         "slug"
-      ]
-    },
-    "GetProductResponse": {
-      "type": "object",
-      "properties": {
-        "product": {
-          "$ref": "#/definitions/Product",
-          "description": " slug name of the category"
-        }
-      },
-      "title": "GetProductResponse",
-      "required": [
-        "product"
       ]
     },
     "GetProductsByCategoryIdRequest": {
@@ -930,12 +850,8 @@
       },
       "title": "Price",
       "required": [
-        "id",
         "amount",
-        "displayAmount",
-        "compareAtAmount",
-        "displayCompareAtAmount",
-        "currency"
+        "displayAmount"
       ]
     },
     "Product": {
@@ -986,13 +902,7 @@
       "required": [
         "id",
         "slug",
-        "name",
-        "shortDescription",
-        "description",
-        "metaTitle",
-        "metaDescription",
-        "metaKeywords",
-        "variants"
+        "name"
       ]
     },
     "ResponseStatus": {
@@ -1017,10 +927,6 @@
     "UpdateCategoryRequest": {
       "type": "object",
       "properties": {
-        "storeId": {
-          "type": "integer",
-          "format": "int64"
-        },
         "id": {
           "type": "integer",
           "format": "int64"
@@ -1031,20 +937,7 @@
       },
       "title": "UpdateCategoryRequest",
       "required": [
-        "storeId",
         "id",
-        "category"
-      ]
-    },
-    "UpdateCategoryResponse": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
-        }
-      },
-      "title": "UpdateCategoryResponse",
-      "required": [
         "category"
       ]
     },
@@ -1062,18 +955,6 @@
       "title": "UpdateProductRequest",
       "required": [
         "path",
-        "product"
-      ]
-    },
-    "UpdateProductResponse": {
-      "type": "object",
-      "properties": {
-        "product": {
-          "$ref": "#/definitions/Product"
-        }
-      },
-      "title": "UpdateProductResponse",
-      "required": [
         "product"
       ]
     },
@@ -1123,12 +1004,7 @@
       "required": [
         "id",
         "isDefault",
-        "sku",
-        "weight",
-        "height",
-        "width",
-        "depth",
-        "price"
+        "sku"
       ]
     }
   },

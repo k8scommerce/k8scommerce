@@ -75,52 +75,52 @@ type ClearCartResponse struct {
 }
 
 type Category struct {
-	Id              int64  `json:"id"`                        // category id
-	ParentId        int64  `json:"parentId"`                  // parent category id. references Category.Id
-	Slug            string `json:"slug"`                      // slug name of the category
-	Name            string `json:"name"`                      // name of category
-	Description     string `json:"description"`               // description of category
-	MetaTitle       string `json:"metaTitle,omitempty"`       // metatag title for SEO
-	MetaDescription string `json:"metaDescription,omitempty"` // metatag description for SEO
-	MetaKeywords    string `json:"metaKeywords,omitempty"`    // metatag keywords for SEO
-	SortOrder       int32  `json:"sortOrder"`                 // sort order of menu items on the same level and same parent id
+	Id              int64  `json:"id"`                       // category id
+	ParentId        int64  `json:"parentId"`                 // parent category id. references Category.Id
+	Slug            string `json:"slug"`                     // slug name of the category
+	Name            string `json:"name"`                     // name of category
+	Description     string `json:"description"`              // description of category
+	MetaTitle       string `json:"metaTitle,optional"`       // metatag title for SEO
+	MetaDescription string `json:"metaDescription,optional"` // metatag description for SEO
+	MetaKeywords    string `json:"metaKeywords,optional"`    // metatag keywords for SEO
+	SortOrder       int32  `json:"sortOrder"`                // sort order of menu items on the same level and same parent id
 }
 
 type Product struct {
-	Id               int64     `json:"id"`                        // product id
-	Slug             string    `json:"slug"`                      // product slug
-	Name             string    `json:"name"`                      // product name
-	ShortDescription string    `json:"shortDescription"`          // product short description. used in category pages
-	Description      string    `json:"description"`               // category description
-	MetaTitle        string    `json:"metaTitle,omitempty"`       // metatag title for SEO
-	MetaDescription  string    `json:"metaDescription,omitempty"` // metatag description for SEO
-	MetaKeywords     string    `json:"metaKeywords,omitempty"`    // metatag keywords for SEO
-	Variants         []Variant `json:"variants,omitempty"`        // collection of Variant objects
+	Id               int64     `json:"id"`                       // product id
+	Slug             string    `json:"slug"`                     // product slug
+	Name             string    `json:"name"`                     // product name
+	ShortDescription string    `json:"shortDescription"`         // product short description. used in category pages
+	Description      string    `json:"description"`              // category description
+	MetaTitle        string    `json:"metaTitle,optional"`       // metatag title for SEO
+	MetaDescription  string    `json:"metaDescription,optional"` // metatag description for SEO
+	MetaKeywords     string    `json:"metaKeywords,optional"`    // metatag keywords for SEO
+	Variants         []Variant `json:"variants,optional"`        // collection of Variant objects
 }
 
 type Variant struct {
-	Id        int64   `json:"id,omitempty"`        // variant id
-	IsDefault bool    `json:"isDefault,omitempty"` // is default variant. each product must have exactly 1 default variant
-	Sku       string  `json:"sku,omitempty"`       // variant sku. usually the product sku with appended identification tags
-	Weight    float64 `json:"weight,omitempty"`    // variant weight. used in calculating shipping
-	Height    float64 `json:"height,omitempty"`    // variant height. used in calculating shipping
-	Width     float64 `json:"width,omitempty"`     // variant width. used in calculating shipping
-	Depth     float64 `json:"depth,omitempty"`     // variant depth. used in calculating shipping
-	Price     Price   `json:"price,omitempty"`     // variant Price object
+	Id        int64   `json:"id,optional"`        // variant id
+	IsDefault bool    `json:"isDefault,optional"` // is default variant. each product must have exactly 1 default variant
+	Sku       string  `json:"sku,optional"`       // variant sku. usually the product sku with appended identification tags
+	Weight    float64 `json:"weight,optional"`    // variant weight. used in calculating shipping
+	Height    float64 `json:"height,optional"`    // variant height. used in calculating shipping
+	Width     float64 `json:"width,optional"`     // variant width. used in calculating shipping
+	Depth     float64 `json:"depth,optional"`     // variant depth. used in calculating shipping
+	Price     Price   `json:"price,optional"`     // variant Price object
 }
 
 type Price struct {
-	Id                     int64   `json:"id,omitempty"`                     // price id
-	Amount                 float64 `json:"amount,omitempty"`                 // price amount
-	DisplayAmount          string  `json:"displayAmount,omitempty"`          // price display amount
-	CompareAtAmount        float64 `json:"compareAtAmount,omitempty"`        // price compare amount
-	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,omitempty"` // price display compare amount
-	Currency               string  `json:"currency,omitempty"`               // price currency. example: USD, CAN, etc.
+	Id                     int64   `json:"id,optional"`                     // price id
+	Amount                 float64 `json:"amount,optional"`                 // price amount
+	DisplayAmount          string  `json:"displayAmount,optional"`          // price display amount
+	CompareAtAmount        float64 `json:"compareAtAmount,optional"`        // price compare amount
+	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,optional"` // price display compare amount
+	Currency               string  `json:"currency,optional"`               // price currency. example: USD, CAN, etc.
 }
 
 type GetAllCategoriesResponse struct {
-	Categories     []Category     `json:"categories,omitempty"` // a collection of Category
-	ResponseStatus ResponseStatus `json:"status"`               // a ResponseStatus object
+	Categories     []Category     `json:"categories,optional"` // a collection of Category
+	ResponseStatus ResponseStatus `json:"status"`              // a ResponseStatus object
 }
 
 type GetCategoryBySlugRequest struct {
@@ -128,16 +128,16 @@ type GetCategoryBySlugRequest struct {
 }
 
 type GetCategoryBySlugResponse struct {
-	Category       Category       `json:"category,omitempty"`
+	Category       Category       `json:"category,optional"`
 	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 type GetCategoryByIdRequest struct {
-	Id int64 `json:"id,omitempty"`
+	Id int64 `json:"id,optional"`
 }
 
 type GetCategoryByIdResponse struct {
-	Category       Category       `json:"category,omitempty"`
+	Category       Category       `json:"category,optional"`
 	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
@@ -186,11 +186,11 @@ type GetAllProductsResponse struct {
 }
 
 type Customer struct {
-	Id        int64  `json:"id"`                 // customer id
-	FirstName string `json:"firstName"`          // first name
-	LastName  string `json:"lastName"`           // last or given name
-	Email     string `json:"email,required"`     // email address
-	Password  string `json:"password,omitempty"` // password
+	Id        int64  `json:"id"`                // customer id
+	FirstName string `json:"firstName"`         // first name
+	LastName  string `json:"lastName"`          // last or given name
+	Email     string `json:"email,required"`    // email address
+	Password  string `json:"password,optional"` // password
 }
 
 type NewCustomer struct {

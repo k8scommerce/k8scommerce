@@ -12,11 +12,17 @@ message User {
   string lastName = 3;
   string email = 4;
   string password = 5;
+  map<string, string> attributes = 6;
 }
 
-message Group {
+message PermissionGroup {
   int64 id = 1;
   string groupName = 2;
+}
+
+message UsersPermissionGroups {
+    int64 userId = 1;
+    int64 permissionGroupId = 2;
 }
 
 //
@@ -25,6 +31,32 @@ message Group {
 // Requests & Responses
 //
 
+// get all users
+message GetAllUsersRequest {
+  int64 currentPage = 1;
+  int64 pageSize = 2;
+  string sortOn = 3;
+}
+
+message GetAllUsersResponse {
+  repeated User users = 1;
+  int64 totalRecords = 2;
+  int64 totalPages = 3;
+}
+
+// get all permissions groups
+message GetAllPermissionGroupsRequest {
+  int64 currentPage = 1;
+  int64 pageSize = 2;
+  string sortOn = 3;
+}
+
+message GetAllPermissionGroupsResponse {
+  repeated PermissionGroup permissionGroups = 1;
+  int64 totalRecords = 2;
+  int64 totalPages = 3;
+}
+
 // create user product
 message CreateUserRequest {
   User user = 1;
@@ -32,8 +64,6 @@ message CreateUserRequest {
 
 message CreateUserResponse {
   User user = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // login
@@ -44,12 +74,12 @@ message LoginRequest {
 
 message LoginResponse {
   User user = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // service client
 service UserClient {
+  rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
+  rpc GetAllPermissionGroups(GetAllPermissionGroupsRequest) returns (GetAllPermissionGroupsResponse);
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
 }

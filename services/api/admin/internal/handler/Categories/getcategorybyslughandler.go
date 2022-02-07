@@ -1,10 +1,10 @@
-package Categories
+package categories
 
 import (
 	"net/http"
 
 	"github.com/tal-tech/go-zero/rest/httpx"
-	"k8scommerce/services/api/admin/internal/logic/Categories"
+	"k8scommerce/services/api/admin/internal/logic/categories"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 )
@@ -17,7 +17,7 @@ func GetCategoryBySlugHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := Categories.NewGetCategoryBySlugLogic(r.Context(), svcCtx)
+		l := categories.NewGetCategoryBySlugLogic(r.Context(), svcCtx)
 		resp, err := l.GetCategoryBySlug(req)
 		if err != nil {
 			httpx.Error(w, err)

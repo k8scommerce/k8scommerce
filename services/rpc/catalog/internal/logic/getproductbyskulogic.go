@@ -4,10 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
 	"sync"
 
+	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
@@ -56,11 +55,10 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 		entryGetProductBySkuLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductBySku", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 
-				v := strings.Split(key, "|")
-				storeId, _ := strconv.ParseInt(v[0], 10, 64)
-				sku := v[1]
-
-				found, err := l.svcCtx.Repo.Product().GetProductBySku(storeId, sku)
+				found, err := l.svcCtx.Repo.Product().GetProductBySku(
+					galaxyctx.GetStoreId(ctx),
+					galaxyctx.GetSku(ctx),
+				)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -85,20 +83,17 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 	})
 
 	codec := &galaxycache.ByteCodec{}
+
+	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = galaxyctx.SetSku(l.ctx, in.Sku)
+
 	key := fmt.Sprintf("%d|%s", in.StoreId, in.Sku)
 	entryGetProductBySkuLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
 		return nil, err
 	}
-	res := &catalog.GetProductBySkuResponse{
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
-	}
+	res := &catalog.GetProductBySkuResponse{}
 	err = json.Unmarshal(b, res)
-	if err != nil {
-		// res.StatusCode = http.StatusExpectationFailed
-		// res.StatusMessage = err.Error()
-	}
 	return res, err
 }

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"net/http"
 
 	"k8scommerce/services/rpc/user/internal/svc"
 	"k8scommerce/services/rpc/user/pb/user"
@@ -31,9 +30,7 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 	found, err := l.svcCtx.Repo.User().Login(in.Email, in.Password)
 	if err != nil {
 		return &user.LoginResponse{
-			User:          nil,
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
+			User: nil,
 		}, nil
 	}
 
@@ -44,8 +41,6 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 			LastName:  found.LastName,
 			Email:     found.Email,
 		},
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
 	}
 	return res, nil
 }

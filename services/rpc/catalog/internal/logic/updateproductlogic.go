@@ -34,10 +34,7 @@ func NewUpdateProductLogic(ctx context.Context, svcCtx *svc.ServiceContext, univ
 func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*catalog.UpdateProductResponse, error) {
 	found, err := l.svcCtx.Repo.Product().GetProductById(in.Id)
 	if err != nil {
-		return &catalog.UpdateProductResponse{
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
-		}, err
+		return &catalog.UpdateProductResponse{}, err
 	}
 
 	prod := models.Product{}
@@ -47,8 +44,6 @@ func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*c
 		logx.Infof("error: %s", err)
 		return &catalog.UpdateProductResponse{
 			Product: nil,
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
 		}, err
 	}
 
@@ -81,7 +76,5 @@ func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*c
 	// the response struct
 	return &catalog.UpdateProductResponse{
 		Product: out,
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
 	}, err
 }

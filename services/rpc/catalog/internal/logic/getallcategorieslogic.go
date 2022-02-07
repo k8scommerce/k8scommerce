@@ -4,11 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"strconv"
-	"strings"
 	"sync"
 
 	"github.com/localrivet/galaxycache"
@@ -62,16 +61,13 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 		// register the galaxy one time
 		entryGetAllCategoriesLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllCategories", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// split the key and set the variables
-				v := strings.Split(key, "|")
-				storeId, _ := strconv.ParseInt(v[0], 10, 64)
-				currentPage, _ := strconv.ParseInt(v[1], 10, 64)
-				pageSize, _ := strconv.ParseInt(v[2], 10, 64)
-				sortOn := ""
-				if len(v) > 3 {
-					sortOn = v[3]
-				}
-				found, err := l.svcCtx.Repo.Category().GetAllCategories(storeId, currentPage, pageSize, sortOn)
+
+				found, err := l.svcCtx.Repo.Category().GetAllCategories(
+					galaxyctx.GetStoreId(ctx),
+					galaxyctx.GetCurrentPage(ctx),
+					galaxyctx.GetPageSize(ctx),
+					galaxyctx.GetSortOn(ctx),
+				)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -111,6 +107,12 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 	res := &catalog.GetAllCategoriesResponse{}
 
 	codec := &galaxycache.ByteCodec{}
+
+	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
+	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
+	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
+
 	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
 	if err := entryGetAllCategoriesLogic.galaxy.Get(l.ctx, key, codec); err != nil {
 		// res.StatusCode = http.StatusNoContent

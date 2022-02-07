@@ -33,10 +33,7 @@ func NewDeleteProductLogic(ctx context.Context, svcCtx *svc.ServiceContext, univ
 func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*catalog.DeleteProductResponse, error) {
 	prod, err := l.svcCtx.Repo.Product().GetProductById(in.Id)
 	if err != nil {
-		return &catalog.DeleteProductResponse{
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
-		}, err
+		return &catalog.DeleteProductResponse{}, err
 	}
 
 	// get the sku from the primary variant
@@ -49,10 +46,7 @@ func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*c
 
 	// delete the product
 	if err := l.svcCtx.Repo.Product().Delete(in.Id); err != nil {
-		return &catalog.DeleteProductResponse{
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
-		}, err
+		return &catalog.DeleteProductResponse{}, err
 	}
 
 	// invalidate the cache for this record
@@ -70,8 +64,5 @@ func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*c
 	}
 
 	// the response struct
-	return &catalog.DeleteProductResponse{
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
-	}, nil
+	return &catalog.DeleteProductResponse{}, nil
 }

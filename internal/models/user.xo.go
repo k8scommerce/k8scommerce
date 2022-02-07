@@ -9,7 +9,6 @@ import (
 // User represents a row from 'public.users'.
 type User struct {
 	ID        int64  `json:"id" db:"id"`                 // id
-	StoreID   int64  `json:"store_id" db:"store_id"`     // store_id
 	FirstName string `json:"first_name" db:"first_name"` // first_name
 	LastName  string `json:"last_name" db:"last_name"`   // last_name
 	Email     string `json:"email" db:"email"`           // email
@@ -39,13 +38,13 @@ func (u *User) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.users (` +
-		`store_id, first_name, last_name, email, password` +
+		`first_name, last_name, email, password` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5` +
+		`$1, $2, $3, $4` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, u.StoreID, u.FirstName, u.LastName, u.Email, u.Password)
-	if err := db.QueryRowContext(ctx, sqlstr, u.StoreID, u.FirstName, u.LastName, u.Email, u.Password).Scan(&u.ID); err != nil {
+	logf(sqlstr, u.FirstName, u.LastName, u.Email, u.Password)
+	if err := db.QueryRowContext(ctx, sqlstr, u.FirstName, u.LastName, u.Email, u.Password).Scan(&u.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -63,11 +62,11 @@ func (u *User) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.users SET ` +
-		`store_id = $1, first_name = $2, last_name = $3, email = $4, password = $5 ` +
-		`WHERE id = $6`
+		`first_name = $1, last_name = $2, email = $3, password = $4 ` +
+		`WHERE id = $5`
 	// run
-	logf(sqlstr, u.StoreID, u.FirstName, u.LastName, u.Email, u.Password, u.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, u.StoreID, u.FirstName, u.LastName, u.Email, u.Password, u.ID); err != nil {
+	logf(sqlstr, u.FirstName, u.LastName, u.Email, u.Password, u.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, u.FirstName, u.LastName, u.Email, u.Password, u.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -89,16 +88,16 @@ func (u *User) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.users (` +
-		`id, store_id, first_name, last_name, email, password` +
+		`id, first_name, last_name, email, password` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6` +
+		`$1, $2, $3, $4, $5` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`store_id = EXCLUDED.store_id, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, password = EXCLUDED.password `
+		`first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, password = EXCLUDED.password `
 	// run
-	logf(sqlstr, u.ID, u.StoreID, u.FirstName, u.LastName, u.Email, u.Password)
-	if _, err := db.ExecContext(ctx, sqlstr, u.ID, u.StoreID, u.FirstName, u.LastName, u.Email, u.Password); err != nil {
+	logf(sqlstr, u.ID, u.FirstName, u.LastName, u.Email, u.Password)
+	if _, err := db.ExecContext(ctx, sqlstr, u.ID, u.FirstName, u.LastName, u.Email, u.Password); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -133,7 +132,7 @@ func (u *User) Delete(ctx context.Context, db DB) error {
 func UserByEmail(ctx context.Context, db DB, email string) (*User, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, first_name, last_name, email, password ` +
+		`id, first_name, last_name, email, password ` +
 		`FROM public.users ` +
 		`WHERE email = $1`
 	// run
@@ -141,7 +140,7 @@ func UserByEmail(ctx context.Context, db DB, email string) (*User, error) {
 	u := User{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, email).Scan(&u.ID, &u.StoreID, &u.FirstName, &u.LastName, &u.Email, &u.Password); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, email).Scan(&u.ID, &u.FirstName, &u.LastName, &u.Email, &u.Password); err != nil {
 		return nil, logerror(err)
 	}
 	return &u, nil
@@ -153,7 +152,7 @@ func UserByEmail(ctx context.Context, db DB, email string) (*User, error) {
 func UserByID(ctx context.Context, db DB, id int64) (*User, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, first_name, last_name, email, password ` +
+		`id, first_name, last_name, email, password ` +
 		`FROM public.users ` +
 		`WHERE id = $1`
 	// run
@@ -161,7 +160,7 @@ func UserByID(ctx context.Context, db DB, id int64) (*User, error) {
 	u := User{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&u.ID, &u.StoreID, &u.FirstName, &u.LastName, &u.Email, &u.Password); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&u.ID, &u.FirstName, &u.LastName, &u.Email, &u.Password); err != nil {
 		return nil, logerror(err)
 	}
 	return &u, nil

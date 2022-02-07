@@ -89,7 +89,7 @@ Status: OK
    
   
 
-[CreateCategoryResponse](#create-category-response)
+[Category](#category)
 
 ### <span id="create-product"></span> Create Product (*createProduct*)
 
@@ -120,7 +120,7 @@ Status: OK
    
   
 
-[CreateProductResponse](#create-product-response)
+[Product](#product)
 
 ### <span id="delete-category"></span> Delete Category (*deleteCategory*)
 
@@ -198,9 +198,9 @@ returns all categories belonging to a store
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| currentPage | `path` | string | `string` |  | ✓ |  |  |
-| pageSize | `path` | string | `string` |  | ✓ |  |  |
-| storeId | `path` | string | `string` |  | ✓ |  |  |
+| currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
+| pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
+| storeId | `path` | string | `string` |  | ✓ |  | store id |
 | sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
@@ -232,8 +232,8 @@ returns all products belonging to a store
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| currentPage | `path` | string | `string` |  | ✓ |  | current page number |
-| pageSize | `path` | string | `string` |  | ✓ |  | number of records per page |
+| currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
+| pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
 | sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
@@ -265,7 +265,7 @@ returns all categories by id belonging to a store
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| id | `path` | string | `string` |  | ✓ |  | category id |
+| id | `path` | integer | `int64` |  | ✓ |  | category id |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -282,7 +282,7 @@ Status: OK
    
   
 
-[GetCategoryByIDResponse](#get-category-by-id-response)
+[Category](#category)
 
 ### <span id="get-category-by-slug"></span> Get Category By Slug (*getCategoryBySlug*)
 
@@ -313,7 +313,7 @@ Status: OK
    
   
 
-[GetCategoryBySlugResponse](#get-category-by-slug-response)
+[Category](#category)
 
 ### <span id="get-product-by-id"></span> Get Product By Id (*getProductById*)
 
@@ -327,7 +327,7 @@ returns matching product by id
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| id | `path` | string | `string` |  | ✓ |  | product id |
+| id | `path` | integer | `int64` |  | ✓ |  | product id |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -344,7 +344,7 @@ Status: OK
    
   
 
-[GetProductResponse](#get-product-response)
+[Product](#product)
 
 ### <span id="get-product-by-sku"></span> Get Product By Sku (*getProductBySku*)
 
@@ -375,7 +375,7 @@ Status: OK
    
   
 
-[GetProductResponse](#get-product-response)
+[Product](#product)
 
 ### <span id="get-product-by-slug"></span> Get Product By Slug (*getProductBySlug*)
 
@@ -406,7 +406,7 @@ Status: OK
    
   
 
-[GetProductResponse](#get-product-response)
+[Product](#product)
 
 ### <span id="get-products-by-category-id"></span> Get Products By Category Id (*getProductsByCategoryId*)
 
@@ -420,9 +420,9 @@ returns all products by category id belonging to a store
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| categoryId | `path` | string | `string` |  | ✓ |  | category id |
-| currentPage | `path` | string | `string` |  | ✓ |  | current page number |
-| pageSize | `path` | string | `string` |  | ✓ |  | number of records per page |
+| categoryId | `path` | integer | `int64` |  | ✓ |  | category id |
+| currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
+| pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
 | sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
@@ -472,7 +472,7 @@ Status: OK
    
   
 
-[UpdateCategoryResponse](#update-category-response)
+[Category](#category)
 
 ### <span id="update-product"></span> Update Product (*updateProduct*)
 
@@ -504,7 +504,7 @@ Status: OK
    
   
 
-[UpdateProductResponse](#update-product-response)
+[Product](#product)
 
 ## Models
 
@@ -519,16 +519,16 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| depth | int32 (formatted integer)| `int32` | ✓ | | category level depth |  |
-| description | string| `string` | ✓ | | description of category |  |
+| depth | int32 (formatted integer)| `int32` |  | | category level depth |  |
+| description | string| `string` |  | | description of category |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | category id |  |
-| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
-| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
-| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
+| metaDescription | string| `string` |  | | metatag description for SEO |  |
+| metaKeywords | string| `string` |  | | metatag keywords for SEO |  |
+| metaTitle | string| `string` |  | | metatag title for SEO |  |
 | name | string| `string` | ✓ | | name of category |  |
-| parentId | int64 (formatted integer)| `int64` | ✓ | | parent category id. references Category.Id |  |
+| parentId | int64 (formatted integer)| `int64` |  | | parent category id. references Category.Id |  |
 | slug | string| `string` | ✓ | | slug name of the category |  |
-| sortOrder | int32 (formatted integer)| `int32` | ✓ | | sort order of menu items on the same level and same parent id |  |
+| sortOrder | int32 (formatted integer)| `int32` |  | | sort order of menu items on the same level and same parent id |  |
 
 
 
@@ -544,41 +544,10 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
-
-
-
-### <span id="create-category-response"></span> CreateCategoryResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
 
 
 
 ### <span id="create-product-request"></span> CreateProductRequest
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| product | [Product](#product)| `Product` | ✓ | |  |  |
-
-
-
-### <span id="create-product-response"></span> CreateProductResponse
 
 
   
@@ -651,7 +620,6 @@ Status: OK
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | sortOn | string| `string` |  | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -721,21 +689,6 @@ Status: OK
 
 
 
-### <span id="get-category-by-id-response"></span> GetCategoryByIdResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
-
-
-
 ### <span id="get-category-by-slug-request"></span> GetCategoryBySlugRequest
 
 
@@ -748,22 +701,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | slug | string| `string` | ✓ | | slug name of the category |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
-
-
-
-### <span id="get-category-by-slug-response"></span> GetCategoryBySlugResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
 
 
 
@@ -809,21 +746,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | slug | string| `string` | ✓ | | slug name of the category |  |
-
-
-
-### <span id="get-product-response"></span> GetProductResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| product | [Product](#product)| `Product` | ✓ | | slug name of the category |  |
 
 
 
@@ -891,11 +813,11 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | amount | double (formatted number)| `float64` | ✓ | | price amount |  |
-| compareAtAmount | double (formatted number)| `float64` | ✓ | | price compare amount |  |
-| currency | string| `string` | ✓ | | price currency. example: USD, CAN, etc. |  |
+| compareAtAmount | double (formatted number)| `float64` |  | | price compare amount |  |
+| currency | string| `string` |  | | price currency. example: USD, CAN, etc. |  |
 | displayAmount | string| `string` | ✓ | | price display amount |  |
-| displayCompareAtAmount | string| `string` | ✓ | | price display compare amount |  |
-| id | int64 (formatted integer)| `int64` | ✓ | | price id |  |
+| displayCompareAtAmount | string| `string` |  | | price display compare amount |  |
+| id | int64 (formatted integer)| `int64` |  | | price id |  |
 
 
 
@@ -910,15 +832,15 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| description | string| `string` | ✓ | | category description |  |
+| description | string| `string` |  | | category description |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | product id |  |
-| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
-| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
-| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
+| metaDescription | string| `string` |  | | metatag description for SEO |  |
+| metaKeywords | string| `string` |  | | metatag keywords for SEO |  |
+| metaTitle | string| `string` |  | | metatag title for SEO |  |
 | name | string| `string` | ✓ | | product name |  |
-| shortDescription | string| `string` | ✓ | | product short description. used in category pages |  |
+| shortDescription | string| `string` |  | | product short description. used in category pages |  |
 | slug | string| `string` | ✓ | | product slug |  |
-| variants | [][Variant](#variant)| `[]*Variant` | ✓ | | collection of Variant objects |  |
+| variants | [][Variant](#variant)| `[]*Variant` |  | | collection of Variant objects |  |
 
 
 
@@ -951,22 +873,6 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | category | [Category](#category)| `Category` | ✓ | |  |  |
 | id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| storeId | int64 (formatted integer)| `int64` | ✓ | |  |  |
-
-
-
-### <span id="update-category-response"></span> UpdateCategoryResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
 
 
 
@@ -986,21 +892,6 @@ Status: OK
 
 
 
-### <span id="update-product-response"></span> UpdateProductResponse
-
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| product | [Product](#product)| `Product` | ✓ | |  |  |
-
-
-
 ### <span id="variant"></span> Variant
 
 
@@ -1012,13 +903,13 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| depth | double (formatted number)| `float64` | ✓ | | variant depth. used in calculating shipping |  |
-| height | double (formatted number)| `float64` | ✓ | | variant height. used in calculating shipping |  |
+| depth | double (formatted number)| `float64` |  | | variant depth. used in calculating shipping |  |
+| height | double (formatted number)| `float64` |  | | variant height. used in calculating shipping |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | variant id |  |
 | isDefault | boolean (formatted boolean)| `bool` | ✓ | | is default variant. each product must have exactly 1 default variant |  |
-| price | [Price](#price)| `Price` | ✓ | | variant Price object |  |
+| price | [Price](#price)| `Price` |  | | variant Price object |  |
 | sku | string| `string` | ✓ | | variant sku. usually the product sku with appended identification tags |  |
-| weight | double (formatted number)| `float64` | ✓ | | variant weight. used in calculating shipping |  |
-| width | double (formatted number)| `float64` | ✓ | | variant width. used in calculating shipping |  |
+| weight | double (formatted number)| `float64` |  | | variant weight. used in calculating shipping |  |
+| width | double (formatted number)| `float64` |  | | variant width. used in calculating shipping |  |
 
 

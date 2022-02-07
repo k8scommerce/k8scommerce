@@ -1,4 +1,4 @@
-package Categories
+package categories
 
 import (
 	"context"
@@ -23,7 +23,7 @@ func NewCreateCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext) Cre
 	}
 }
 
-func (l *CreateCategoryLogic) CreateCategory(req types.CreateCategoryRequest) (resp *types.CreateCategoryResponse, err error) {
+func (l *CreateCategoryLogic) CreateCategory(req types.CreateCategoryRequest) (resp *types.Category, err error) {
 	// todo: add your logic here and delete this line
 
 	return

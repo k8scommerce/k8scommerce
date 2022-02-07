@@ -87,14 +87,7 @@ func (l *GetCategoryByIdLogic) GetCategoryById(in *catalog.GetCategoryByIdReques
 	if err != nil {
 		return nil, err
 	}
-	res := &catalog.GetCategoryByIdResponse{
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
-	}
+	res := &catalog.GetCategoryByIdResponse{}
 	err = json.Unmarshal(b, res)
-	if err != nil {
-		// res.StatusCode = http.StatusExpectationFailed
-		// res.StatusMessage = err.Error()
-	}
 	return res, err
 }

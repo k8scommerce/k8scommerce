@@ -1,0 +1,13 @@
+Name: catalog.rpc
+ListenOn: 0.0.0.0:65011
+Log:
+  Mode: console
+Etcd:
+  Hosts:
+    - localhost:2379
+  Key: catalog.rpc
+Postgres:
+  Connection: postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable
+  MaxOpenConnections: 10
+  MaxIdleConnections: 2
+  MaxConnectionLifetimeMinutes: 5
