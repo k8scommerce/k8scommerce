@@ -13,14 +13,21 @@ import (
 )
 
 type (
-	CreateUserRequest  = user.CreateUserRequest
-	CreateUserResponse = user.CreateUserResponse
-	Group              = user.Group
-	LoginRequest       = user.LoginRequest
-	LoginResponse      = user.LoginResponse
-	User               = user.User
+	CreateUserRequest              = user.CreateUserRequest
+	CreateUserResponse             = user.CreateUserResponse
+	GetAllPermissionGroupsRequest  = user.GetAllPermissionGroupsRequest
+	GetAllPermissionGroupsResponse = user.GetAllPermissionGroupsResponse
+	GetAllUsersRequest             = user.GetAllUsersRequest
+	GetAllUsersResponse            = user.GetAllUsersResponse
+	LoginRequest                   = user.LoginRequest
+	LoginResponse                  = user.LoginResponse
+	PermissionGroup                = user.PermissionGroup
+	User                           = user.User
+	UsersPermissionGroups          = user.UsersPermissionGroups
 
 	UserClient interface {
+		GetAllUsers(ctx context.Context, in *GetAllUsersRequest, opts ...grpc.CallOption) (*GetAllUsersResponse, error)
+		GetAllPermissionGroups(ctx context.Context, in *GetAllPermissionGroupsRequest, opts ...grpc.CallOption) (*GetAllPermissionGroupsResponse, error)
 		CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	}
@@ -34,6 +41,16 @@ func NewUserClient(cli zrpc.Client) UserClient {
 	return &defaultUserClient{
 		cli: cli,
 	}
+}
+
+func (m *defaultUserClient) GetAllUsers(ctx context.Context, in *GetAllUsersRequest, opts ...grpc.CallOption) (*GetAllUsersResponse, error) {
+	client := user.NewUserClientClient(m.cli.Conn())
+	return client.GetAllUsers(ctx, in, opts...)
+}
+
+func (m *defaultUserClient) GetAllPermissionGroups(ctx context.Context, in *GetAllPermissionGroupsRequest, opts ...grpc.CallOption) (*GetAllPermissionGroupsResponse, error) {
+	client := user.NewUserClientClient(m.cli.Conn())
+	return client.GetAllPermissionGroups(ctx, in, opts...)
 }
 
 func (m *defaultUserClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {

@@ -1,10 +1,10 @@
-package Products
+package products
 
 import (
 	"net/http"
 
 	"github.com/tal-tech/go-zero/rest/httpx"
-	"k8scommerce/services/api/admin/internal/logic/Products"
+	"k8scommerce/services/api/admin/internal/logic/products"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 )
@@ -17,7 +17,7 @@ func CreateProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := Products.NewCreateProductLogic(r.Context(), svcCtx)
+		l := products.NewCreateProductLogic(r.Context(), svcCtx)
 		resp, err := l.CreateProduct(req)
 		if err != nil {
 			httpx.Error(w, err)

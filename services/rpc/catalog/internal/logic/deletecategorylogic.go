@@ -11,13 +11,6 @@ import (
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
-type galaxyDeleteCategoryLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
-
-var entryDeleteCategoryLogic *galaxyDeleteCategoryLogicHelper
-
 type DeleteCategoryLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
@@ -38,10 +31,7 @@ func NewDeleteCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext, uni
 func (l *DeleteCategoryLogic) DeleteCategory(in *catalog.DeleteCategoryRequest) (*catalog.DeleteCategoryResponse, error) {
 	_, err := l.svcCtx.Repo.Category().GetCategoryById(in.Id)
 	if err != nil {
-		return &catalog.DeleteCategoryResponse{
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
-		}, err
+		return &catalog.DeleteCategoryResponse{}, err
 	}
 
 	// delete the Category

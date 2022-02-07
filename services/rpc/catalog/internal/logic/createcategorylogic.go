@@ -34,8 +34,6 @@ func (l *CreateCategoryLogic) CreateCategory(in *catalog.CreateCategoryRequest) 
 		logx.Infof("error: %s", err)
 		return &catalog.CreateCategoryResponse{
 			Category: nil,
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
 		}, err
 	}
 
@@ -46,7 +44,5 @@ func (l *CreateCategoryLogic) CreateCategory(in *catalog.CreateCategoryRequest) 
 	// the response struct
 	return &catalog.CreateCategoryResponse{
 		Category: out,
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
 	}, nil
 }

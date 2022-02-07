@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"net/http"
 
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/utils"
@@ -35,9 +34,7 @@ func (l *CreateUserLogic) CreateUser(in *user.CreateUserRequest) (*user.CreateUs
 	if err := l.svcCtx.Repo.User().Create(&u); err != nil {
 		// logx.Infof("error: %s", err)
 		return &user.CreateUserResponse{
-			User:          nil,
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
+			User: nil,
 		}, nil
 	}
 
@@ -47,8 +44,6 @@ func (l *CreateUserLogic) CreateUser(in *user.CreateUserRequest) (*user.CreateUs
 
 	// the response struct
 	return &user.CreateUserResponse{
-		User:          out,
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		User: out,
 	}, nil
 }

@@ -1,4 +1,4 @@
-package Categories
+package categories
 
 import (
 	"context"
@@ -23,7 +23,7 @@ func NewGetCategoryByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) Ge
 	}
 }
 
-func (l *GetCategoryByIdLogic) GetCategoryById(req types.GetCategoryByIdRequest) (resp *types.GetCategoryByIdResponse, err error) {
+func (l *GetCategoryByIdLogic) GetCategoryById(req types.GetCategoryByIdRequest) (resp *types.Category, err error) {
 	// todo: add your logic here and delete this line
 
 	return

@@ -85,14 +85,7 @@ func (l *GetProductByIdLogic) GetProductById(in *catalog.GetProductByIdRequest) 
 	if err != nil {
 		return nil, err
 	}
-	res := &catalog.GetProductByIdResponse{
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
-	}
+	res := &catalog.GetProductByIdResponse{}
 	err = json.Unmarshal(b, res)
-	if err != nil {
-		// res.StatusCode = http.StatusExpectationFailed
-		// res.StatusMessage = err.Error()
-	}
 	return res, err
 }

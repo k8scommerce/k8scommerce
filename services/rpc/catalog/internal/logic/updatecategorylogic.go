@@ -32,18 +32,13 @@ func NewUpdateCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext, uni
 func (l *UpdateCategoryLogic) UpdateCategory(in *catalog.UpdateCategoryRequest) (*catalog.UpdateCategoryResponse, error) {
 	found, err := l.svcCtx.Repo.Category().GetCategoryById(in.Id)
 	if err != nil {
-		return &catalog.UpdateCategoryResponse{
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
-		}, err
+		return &catalog.UpdateCategoryResponse{}, err
 	}
 
 	if err := l.svcCtx.Repo.Category().Update(found); err != nil {
 		logx.Infof("error: %s", err)
 		return &catalog.UpdateCategoryResponse{
 			Category: nil,
-			// StatusCode:    http.StatusExpectationFailed,
-			// StatusMessage: err.Error(),
 		}, err
 	}
 
@@ -80,8 +75,6 @@ func (l *UpdateCategoryLogic) UpdateCategory(in *catalog.UpdateCategoryRequest) 
 	// the response struct
 	return &catalog.UpdateCategoryResponse{
 		Category: out,
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
 	}, err
 
 }

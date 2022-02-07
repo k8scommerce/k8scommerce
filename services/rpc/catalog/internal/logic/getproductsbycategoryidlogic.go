@@ -4,10 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
 	"sync"
 
+	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
@@ -59,18 +58,13 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 		entryGetProductsByCategoryIdLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductsByCategoryId", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 
-				// split the key and set the variables
-
-				v := strings.Split(key, "|")
-				storeId, _ := strconv.ParseInt(v[0], 10, 64)
-				categoryId, _ := strconv.ParseInt(v[1], 10, 64)
-				currentPage, _ := strconv.ParseInt(v[2], 10, 64)
-				pageSize, _ := strconv.ParseInt(v[3], 10, 64)
-				sortOn := ""
-				if len(v) > 4 {
-					sortOn = v[4]
-				}
-				found, err := l.svcCtx.Repo.Product().GetProductsByCategoryId(storeId, categoryId, currentPage, pageSize, sortOn)
+				found, err := l.svcCtx.Repo.Product().GetProductsByCategoryId(
+					galaxyctx.GetStoreId(ctx),
+					galaxyctx.GetCategoryId(ctx),
+					galaxyctx.GetCurrentPage(ctx),
+					galaxyctx.GetPageSize(ctx),
+					galaxyctx.GetSortOn(ctx),
+				)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -113,6 +107,12 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 	})
 
 	codec := &galaxycache.ByteCodec{}
+
+	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = galaxyctx.SetCategoryId(l.ctx, in.CategoryId)
+	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
+	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
+	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
 
 	key := fmt.Sprintf("%d|%d|%d|%d|%s", in.StoreId, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
 	entryGetProductsByCategoryIdLogic.galaxy.Get(l.ctx, key, codec)

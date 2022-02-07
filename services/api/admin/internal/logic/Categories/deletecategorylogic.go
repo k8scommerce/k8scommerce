@@ -1,4 +1,4 @@
-package Categories
+package categories
 
 import (
 	"context"

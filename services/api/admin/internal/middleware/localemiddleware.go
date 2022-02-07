@@ -1,8 +1,15 @@
 package middleware
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+
+	"k8scommerce/services/api/admin/internal/config"
+	"k8scommerce/services/api/admin/internal/types"
+)
 
 type LocaleMiddleware struct {
+	Config *config.Config
 }
 
 func NewLocaleMiddleware() *LocaleMiddleware {
@@ -11,9 +18,12 @@ func NewLocaleMiddleware() *LocaleMiddleware {
 
 func (m *LocaleMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// TODO generate middleware implement function, delete after code implementation
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, types.Locale, "en")
 
-		// Passthrough to next handler if need
-		next(w, r)
+		if langs, ok := r.Header["Accept-Language"]; ok {
+			ctx = context.WithValue(ctx, types.Locale, langs[0])
+		}
+		next(w, r.WithContext(ctx))
 	}
 }

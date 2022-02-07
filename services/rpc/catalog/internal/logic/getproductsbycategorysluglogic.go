@@ -4,12 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"strconv"
-	"strings"
 	"sync"
 
 	"github.com/localrivet/galaxycache"
@@ -53,24 +52,18 @@ func (l *GetProductsByCategorySlugLogic) GetProductsByCategorySlug(in *catalog.G
 	}
 
 	entryGetProductsByCategorySlugLogic.once.Do(func() {
-		// fmt.Println(`l.entry.Do`)
 
 		// register the galaxy one time
 		entryGetProductsByCategorySlugLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductsByCategorySlug", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
 
-				// split the key and set the variables
-
-				v := strings.Split(key, "|")
-				storeId, _ := strconv.ParseInt(v[0], 10, 64)
-				categorySlug := v[1]
-				currentPage, _ := strconv.ParseInt(v[2], 10, 64)
-				pageSize, _ := strconv.ParseInt(v[3], 10, 64)
-				sortOn := ""
-				if len(v) > 4 {
-					sortOn = v[4]
-				}
-				found, err := l.svcCtx.Repo.Product().GetProductsByCategorySlug(storeId, categorySlug, currentPage, pageSize, sortOn)
+				found, err := l.svcCtx.Repo.Product().GetProductsByCategorySlug(
+					galaxyctx.GetStoreId(ctx),
+					galaxyctx.GetCategorySlug(ctx),
+					galaxyctx.GetCurrentPage(ctx),
+					galaxyctx.GetPageSize(ctx),
+					galaxyctx.GetSortOn(ctx),
+				)
 				if err != nil {
 					logx.Infof("error: %s", err)
 					return err
@@ -113,6 +106,12 @@ func (l *GetProductsByCategorySlugLogic) GetProductsByCategorySlug(in *catalog.G
 	})
 
 	codec := &galaxycache.ByteCodec{}
+
+	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = galaxyctx.SetCategorySlug(l.ctx, in.CategorySlug)
+	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
+	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
+	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
 
 	key := fmt.Sprintf("%d|%s|%d|%d|%s", in.StoreId, in.CategorySlug, in.CurrentPage, in.PageSize, in.SortOn)
 	entryGetProductsByCategorySlugLogic.galaxy.Get(l.ctx, key, codec)

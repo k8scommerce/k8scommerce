@@ -1,19 +1,44 @@
 package middleware
 
-import "net/http"
+import (
+	"context"
+	"k8scommerce/internal/utils"
+	"k8scommerce/services/api/admin/internal/types"
+	"net/http"
+)
 
 type StoreKeyMiddleware struct {
+	hashCoder utils.HashCoder
 }
 
-func NewStoreKeyMiddleware() *StoreKeyMiddleware {
-	return &StoreKeyMiddleware{}
+func NewStoreKeyMiddleware(hashSalt string) *StoreKeyMiddleware {
+	hashCoder := utils.NewHashCoder(hashSalt, utils.Store)
+
+	return &StoreKeyMiddleware{
+		hashCoder: hashCoder,
+	}
 }
 
 func (m *StoreKeyMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// TODO generate middleware implement function, delete after code implementation
+		if result, ok := r.Header["Store-Key"]; ok {
+			if len(result) == 0 {
+				http.Error(w, "error: invalid Store-Key value", http.StatusUnauthorized)
+				return
+			}
 
-		// Passthrough to next handler if need
-		next(w, r)
+			ctx := r.Context()
+			ctx = context.WithValue(ctx, types.StoreKey, int64(1)) // add a default value
+
+			// decode the hashed ID
+			id := m.hashCoder.Decode(result[0])
+			if id != 0 {
+				ctx = context.WithValue(ctx, types.StoreKey, id)
+				next(w, r.WithContext(ctx))
+				return
+			}
+		}
+
+		http.Error(w, "error: missing Store-Key header :: "+m.hashCoder.Encode(1), http.StatusUnauthorized)
 	}
 }

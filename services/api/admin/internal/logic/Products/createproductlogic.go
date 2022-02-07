@@ -1,4 +1,4 @@
-package Products
+package products
 
 import (
 	"context"
@@ -23,7 +23,7 @@ func NewCreateProductLogic(ctx context.Context, svcCtx *svc.ServiceContext) Crea
 	}
 }
 
-func (l *CreateProductLogic) CreateProduct(req types.CreateProductRequest) (resp *types.CreateProductResponse, err error) {
+func (l *CreateProductLogic) CreateProduct(req types.CreateProductRequest) (resp *types.Product, err error) {
 	// todo: add your logic here and delete this line
 
 	return

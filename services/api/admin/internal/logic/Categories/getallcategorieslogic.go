@@ -1,10 +1,13 @@
-package Categories
+package categories
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -24,7 +27,26 @@ func NewGetAllCategoriesLogic(ctx context.Context, svcCtx *svc.ServiceContext) G
 }
 
 func (l *GetAllCategoriesLogic) GetAllCategories(req types.GetAllCategoriesRequest) (resp *types.GetAllCategoriesResponse, err error) {
-	// todo: add your logic here and delete this line
+	resp = &types.GetAllCategoriesResponse{}
+	response, err := l.svcCtx.CatalogRpc.GetAllCategories(l.ctx, &catalogclient.GetAllCategoriesRequest{
+		CurrentPage: req.CurrentPage,
+		PageSize:    req.PageSize,
+		SortOn:      req.SortOn,
+		StoreId:     l.ctx.Value(types.StoreKey).(int64),
+	})
+	fmt.Println(response)
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	fmt.Println(response)
+
+	// convert from one type to another
+	// the structs are identical
+	b, err := json.Marshal(response)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &resp)
+	return resp, err
 }

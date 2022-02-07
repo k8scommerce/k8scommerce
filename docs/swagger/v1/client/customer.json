@@ -39,7 +39,7 @@
           }
         ],
         "tags": [
-          "client"
+          "customers"
         ]
       }
     },
@@ -67,7 +67,7 @@
           }
         ],
         "tags": [
-          "client"
+          "customers"
         ]
       }
     }
@@ -173,8 +173,7 @@
         "id",
         "firstName",
         "lastName",
-        "email",
-        "password"
+        "email"
       ]
     },
     "CustomerAccount": {

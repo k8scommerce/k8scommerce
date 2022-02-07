@@ -30,14 +30,21 @@ Enter JWT Bearer token **_only_**
 
 ## All endpoints
 
-###  client
+###  categories
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
 | GET | /v1/categories | [get all categories](#get-all-categories) | Get All Categories |
-| GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) | Get All Products |
 | GET | /v1/category/{id} | [get category by Id](#get-category-by-id) | Get Category By Id |
 | GET | /v1/category/slug/{slug} | [get category by slug](#get-category-by-slug) | Get Category By Slug |
+  
+
+
+###  products
+
+| Method  | URI     | Name   | Summary |
+|---------|---------|--------|---------|
+| GET | /v1/products/{currentPage}/{pageSize} | [get all products](#get-all-products) | Get All Products |
 | GET | /v1/product/{id} | [get product by Id](#get-product-by-id) | Get Product By Id |
 | GET | /v1/product/sku/{sku} | [get product by sku](#get-product-by-sku) | Get Product By Sku |
 | GET | /v1/product/slug/{slug} | [get product by slug](#get-product-by-slug) | Get Product By Slug |
@@ -84,8 +91,8 @@ returns all products belonging to a store
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| currentPage | `path` | string | `string` |  | ✓ |  | current page number |
-| pageSize | `path` | string | `string` |  | ✓ |  | number of records per page |
+| currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
+| pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
 | sortOn | `query` | string | `string` |  | ✓ |  |  |
 
 #### All responses
@@ -118,7 +125,7 @@ returns all categories by id belonging to a store
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
 | id | `path` | string | `string` |  | ✓ |  | category id |
-| id | `query` | int64 (formatted integer) | `int64` |  | ✓ |  |  |
+| id | `query` | int64 (formatted integer) | `int64` |  |  |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -180,7 +187,7 @@ returns matching product by id
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| id | `path` | string | `string` |  | ✓ |  | product id |
+| id | `path` | integer | `int64` |  | ✓ |  | product id |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -273,9 +280,9 @@ returns all products by category id belonging to a store
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| categoryId | `path` | string | `string` |  | ✓ |  | category id |
-| currentPage | `path` | string | `string` |  | ✓ |  | current page number |
-| pageSize | `path` | string | `string` |  | ✓ |  | number of records per page |
+| categoryId | `path` | integer | `int64` |  | ✓ |  | category id |
+| currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
+| pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
 | sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
@@ -310,9 +317,9 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | description | string| `string` | ✓ | | description of category |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | category id |  |
-| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
-| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
-| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
+| metaDescription | string| `string` |  | | metatag description for SEO |  |
+| metaKeywords | string| `string` |  | | metatag keywords for SEO |  |
+| metaTitle | string| `string` |  | | metatag title for SEO |  |
 | name | string| `string` | ✓ | | name of category |  |
 | parentId | int64 (formatted integer)| `int64` | ✓ | | parent category id. references Category.Id |  |
 | slug | string| `string` | ✓ | | slug name of the category |  |
@@ -331,7 +338,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| categories | [][Category](#category)| `[]*Category` | ✓ | | a collection of Category |  |
+| categories | [][Category](#category)| `[]*Category` |  | | a collection of Category |  |
 | status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
@@ -382,7 +389,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| id | int64 (formatted integer)| `int64` |  | |  |  |
 
 
 
@@ -397,7 +404,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
+| category | [Category](#category)| `Category` |  | |  |  |
 | status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
@@ -428,7 +435,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| category | [Category](#category)| `Category` | ✓ | |  |  |
+| category | [Category](#category)| `Category` |  | |  |  |
 | status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
@@ -558,12 +565,12 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| amount | double (formatted number)| `float64` | ✓ | | price amount |  |
-| compareAtAmount | double (formatted number)| `float64` | ✓ | | price compare amount |  |
-| currency | string| `string` | ✓ | | price currency. example: USD, CAN, etc. |  |
-| displayAmount | string| `string` | ✓ | | price display amount |  |
-| displayCompareAtAmount | string| `string` | ✓ | | price display compare amount |  |
-| id | int64 (formatted integer)| `int64` | ✓ | | price id |  |
+| amount | double (formatted number)| `float64` |  | | price amount |  |
+| compareAtAmount | double (formatted number)| `float64` |  | | price compare amount |  |
+| currency | string| `string` |  | | price currency. example: USD, CAN, etc. |  |
+| displayAmount | string| `string` |  | | price display amount |  |
+| displayCompareAtAmount | string| `string` |  | | price display compare amount |  |
+| id | int64 (formatted integer)| `int64` |  | | price id |  |
 
 
 
@@ -580,13 +587,13 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | description | string| `string` | ✓ | | category description |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | product id |  |
-| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
-| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
-| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
+| metaDescription | string| `string` |  | | metatag description for SEO |  |
+| metaKeywords | string| `string` |  | | metatag keywords for SEO |  |
+| metaTitle | string| `string` |  | | metatag title for SEO |  |
 | name | string| `string` | ✓ | | product name |  |
 | shortDescription | string| `string` | ✓ | | product short description. used in category pages |  |
 | slug | string| `string` | ✓ | | product slug |  |
-| variants | [][Variant](#variant)| `[]*Variant` | ✓ | | collection of Variant objects |  |
+| variants | [][Variant](#variant)| `[]*Variant` |  | | collection of Variant objects |  |
 
 
 
@@ -617,13 +624,13 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| depth | double (formatted number)| `float64` | ✓ | | variant depth. used in calculating shipping |  |
-| height | double (formatted number)| `float64` | ✓ | | variant height. used in calculating shipping |  |
-| id | int64 (formatted integer)| `int64` | ✓ | | variant id |  |
-| isDefault | boolean (formatted boolean)| `bool` | ✓ | | is default variant. each product must have exactly 1 default variant |  |
-| price | [Price](#price)| `Price` | ✓ | | variant Price object |  |
-| sku | string| `string` | ✓ | | variant sku. usually the product sku with appended identification tags |  |
-| weight | double (formatted number)| `float64` | ✓ | | variant weight. used in calculating shipping |  |
-| width | double (formatted number)| `float64` | ✓ | | variant width. used in calculating shipping |  |
+| depth | double (formatted number)| `float64` |  | | variant depth. used in calculating shipping |  |
+| height | double (formatted number)| `float64` |  | | variant height. used in calculating shipping |  |
+| id | int64 (formatted integer)| `int64` |  | | variant id |  |
+| isDefault | boolean (formatted boolean)| `bool` |  | | is default variant. each product must have exactly 1 default variant |  |
+| price | [Price](#price)| `Price` |  | | variant Price object |  |
+| sku | string| `string` |  | | variant sku. usually the product sku with appended identification tags |  |
+| weight | double (formatted number)| `float64` |  | | variant weight. used in calculating shipping |  |
+| width | double (formatted number)| `float64` |  | | variant width. used in calculating shipping |  |
 
 

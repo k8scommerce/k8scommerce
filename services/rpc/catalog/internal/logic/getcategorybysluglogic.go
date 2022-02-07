@@ -92,14 +92,7 @@ func (l *GetCategoryBySlugLogic) GetCategoryBySlug(in *catalog.GetCategoryBySlug
 	if err != nil {
 		return nil, err
 	}
-	res := &catalog.GetCategoryBySlugResponse{
-		// StatusCode:    http.StatusOK,
-		// StatusMessage: "",
-	}
+	res := &catalog.GetCategoryBySlugResponse{}
 	err = json.Unmarshal(b, res)
-	if err != nil {
-		// res.StatusCode = http.StatusExpectationFailed
-		// res.StatusMessage = err.Error()
-	}
 	return res, err
 }

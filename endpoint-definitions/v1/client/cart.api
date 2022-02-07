@@ -87,6 +87,7 @@ type ClearCartResponse {
 @server(
 	jwt: Auth
 	middleware: Locale, StoreKey
+	group: cart
 )
 service client {
 	// get cart

@@ -120,7 +120,7 @@ returns a shopping cart if one exists
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
-| customerId | `path` | string | `string` |  | ✓ |  | a customer's id |
+| customerId | `path` | integer | `int64` |  | ✓ |  | a customer's id |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |

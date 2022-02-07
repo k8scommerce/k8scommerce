@@ -34,11 +34,11 @@
             "description": "a customer's id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       },
       "delete": {
@@ -71,7 +71,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       },
       "post": {
@@ -104,7 +104,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       }
     },
@@ -146,7 +146,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       },
       "put": {
@@ -186,7 +186,7 @@
           }
         ],
         "tags": [
-          "client"
+          "cart"
         ]
       }
     }

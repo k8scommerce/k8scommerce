@@ -1,10 +1,10 @@
-package Users
+package users
 
 import (
 	"net/http"
 
 	"github.com/tal-tech/go-zero/rest/httpx"
-	"k8scommerce/services/api/admin/internal/logic/Users"
+	"k8scommerce/services/api/admin/internal/logic/users"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 )
@@ -17,7 +17,7 @@ func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := Users.NewLoginLogic(r.Context(), svcCtx)
+		l := users.NewLoginLogic(r.Context(), svcCtx)
 		resp, err := l.Login(req)
 		if err != nil {
 			httpx.Error(w, err)
