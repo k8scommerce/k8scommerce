@@ -16,6 +16,24 @@
     "application/json"
   ],
   "paths": {
+    "/v1/api/ping": {
+      "get": {
+        "summary": "Ping",
+        "description": "Ping for API up validation. On valid returns {ping: PONG}",
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PingResponse"
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ]
+      }
+    },
     "/v1/categories/{storeId}/{currentPage}/{pageSize}": {
       "get": {
         "summary": "Get All Categories",
@@ -778,8 +796,7 @@
         "id",
         "firstName",
         "lastName",
-        "email",
-        "password"
+        "email"
       ]
     },
     "CustomerAccount": {
@@ -1213,6 +1230,18 @@
       "required": [
         "id",
         "groupName"
+      ]
+    },
+    "PingResponse": {
+      "type": "object",
+      "properties": {
+        "ping": {
+          "type": "string"
+        }
+      },
+      "title": "PingResponse",
+      "required": [
+        "ping"
       ]
     },
     "Price": {

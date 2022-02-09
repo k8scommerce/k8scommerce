@@ -12,6 +12,10 @@ type ResponseStatus struct {
 	StatusMessage string `json:"statusMessage,omitempty"` // status message
 }
 
+type PingResponse struct {
+	Ping string `json:"ping"`
+}
+
 type Category struct {
 	Id              int64  `json:"id"`                       // category id
 	ParentId        int64  `json:"parentId,optional"`        // parent category id. references Category.Id
@@ -147,11 +151,11 @@ type DeleteProductResponse struct {
 }
 
 type Customer struct {
-	Id        int64  `json:"id"`                 // customer id
-	FirstName string `json:"firstName"`          // first name
-	LastName  string `json:"lastName"`           // last or given name
-	Email     string `json:"email,required"`     // email address
-	Password  string `json:"password,omitempty"` // password
+	Id        int64  `json:"id"`                // customer id
+	FirstName string `json:"firstName"`         // first name
+	LastName  string `json:"lastName"`          // last or given name
+	Email     string `json:"email,required"`    // email address
+	Password  string `json:"password,optional"` // password
 }
 
 type NewCustomer struct {

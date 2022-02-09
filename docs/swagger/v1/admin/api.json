@@ -1,0 +1,105 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/api/ping": {
+      "get": {
+        "summary": "Ping",
+        "description": "Ping for API up validation. On valid returns {ping: PONG}",
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PingResponse"
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "accessExpire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refreshAfter": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "accessToken",
+        "accessExpire",
+        "refreshAfter"
+      ]
+    },
+    "PingResponse": {
+      "type": "object",
+      "properties": {
+        "ping": {
+          "type": "string"
+        }
+      },
+      "title": "PingResponse",
+      "required": [
+        "ping"
+      ]
+    },
+    "ResponseStatus": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int64",
+          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": " status message"
+        }
+      },
+      "title": "ResponseStatus",
+      "required": [
+        "statusCode",
+        "statusMessage"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}
