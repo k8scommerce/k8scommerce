@@ -21,6 +21,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
+	c.Timeout = 0
 	ctx := svc.NewServiceContext(c)
 
 	cors := middleware.NewCORSMiddleware(&middleware.Options{

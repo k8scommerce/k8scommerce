@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	api "k8scommerce/services/api/admin/internal/handler/api"
 	categories "k8scommerce/services/api/admin/internal/handler/categories"
 	customers "k8scommerce/services/api/admin/internal/handler/customers"
 	products "k8scommerce/services/api/admin/internal/handler/products"
@@ -14,6 +15,19 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/api/ping",
+					Handler: api.PingHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
 	server.AddRoutes(
 		rest.WithMiddlewares(
 			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},

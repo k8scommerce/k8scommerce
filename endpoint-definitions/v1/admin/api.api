@@ -1,0 +1,25 @@
+info(
+	title: "User API Endpoints"
+	desc: "admin gateway user api endpoints"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1"
+)
+
+type PingResponse {
+	Ping string `json:"ping"` 
+}
+
+@server(
+	middleware: Locale
+	group: api
+)
+service admin {
+	// ping
+	@doc(
+		summary: "Ping"
+		description: "Ping for API up validation. On valid returns {\"ping\": \"pong\"}"
+	)
+	@handler ping
+	get /v1/api/ping returns (PingResponse)
+}

@@ -171,7 +171,7 @@ Status: OK
 | firstName | string| `string` | ✓ | | first name |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | customer id |  |
 | lastName | string| `string` | ✓ | | last or given name |  |
-| password | string| `string` | ✓ | | password |  |
+| password | string| `string` |  | | password |  |
 
 
 
