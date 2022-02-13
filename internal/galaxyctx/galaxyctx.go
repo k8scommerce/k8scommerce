@@ -11,6 +11,7 @@ const (
 	categoryIdKey   ctxKey = "categoryId"
 	categorySlugKey ctxKey = "categorySlug"
 	currentPageKey  ctxKey = "currentPage"
+	filterKey       ctxKey = "filter"
 	pageSizeKey     ctxKey = "pageSize"
 	sortOnKey       ctxKey = "sortOn"
 )
@@ -76,6 +77,15 @@ func SetPageSize(ctx context.Context, pageSize int64) context.Context {
 
 func GetPageSize(ctx context.Context) int64 {
 	return ctx.Value(pageSizeKey).(int64)
+}
+
+// filter
+func SetFilter(ctx context.Context, filter string) context.Context {
+	return context.WithValue(ctx, filterKey, filter)
+}
+
+func GetFilter(ctx context.Context) string {
+	return ctx.Value(filterKey).(string)
 }
 
 // sort on

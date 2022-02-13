@@ -37,8 +37,9 @@ type UserLoginRequest {
 }
 
 type UserLoginResponse {
-	JwtToken JwtToken `json:"jwt"` // JwtToken object
-	User 	 User 	  `json:"user"` // User object
+	JwtToken JwtToken `json:"jwt,omitempty"`  // JwtToken object
+	User 	 User 	  `json:"user,omitempty"` // User object
+	Success  bool 	  `json:"success"` 		 // success bool
 }
 
 // get all users

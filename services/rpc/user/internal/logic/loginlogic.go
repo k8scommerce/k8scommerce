@@ -29,9 +29,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *ga
 func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 	found, err := l.svcCtx.Repo.User().Login(in.Email, in.Password)
 	if err != nil {
-		return &user.LoginResponse{
-			User: nil,
-		}, nil
+		return &user.LoginResponse{}, nil
 	}
 
 	res := &user.LoginResponse{

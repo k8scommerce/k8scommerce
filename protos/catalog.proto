@@ -177,7 +177,8 @@ message GetProductsByCategoryIdRequest {
   int64 categoryId = 2;
   int64 currentPage = 3;
   int64 pageSize = 4;
-  string sortOn = 5;
+  string filter = 5;
+  string sortOn = 6;
 }
 
 message GetProductsByCategoryIdResponse {
@@ -192,7 +193,7 @@ message GetProductsByCategorySlugRequest {
   string categorySlug = 2;
   int64 currentPage = 3;
   int64 pageSize = 4;
-  string sortOn = 5;
+  string filter = 5;
 }
 
 message GetProductsByCategorySlugResponse {
@@ -206,7 +207,7 @@ message GetAllProductsRequest {
   int64 storeId = 1;
   int64 currentPage = 2;
   int64 pageSize = 3;
-  string sortOn = 4;
+  string filter = 4;
 }
 
 message GetAllProductsResponse {
