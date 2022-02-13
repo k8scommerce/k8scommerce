@@ -237,6 +237,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | jwt | [JwtToken](#jwt-token)| `JwtToken` | ✓ | | JwtToken object |  |
+| success | boolean (formatted boolean)| `bool` | ✓ | | success bool |  |
 | user | [User](#user)| `User` | ✓ | | User object |  |
 
 

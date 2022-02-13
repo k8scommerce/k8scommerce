@@ -252,12 +252,18 @@
         "user": {
           "$ref": "#/definitions/User",
           "description": " User object"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
         }
       },
       "title": "UserLoginResponse",
       "required": [
         "jwt",
-        "user"
+        "user",
+        "success"
       ]
     },
     "UsersPermissionGroups": {

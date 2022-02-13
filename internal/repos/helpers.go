@@ -5,6 +5,49 @@ import (
 	"strings"
 )
 
+func BuildOrderBy(on string, allowedFields map[string]string) (orderBy string, err error) {
+	if on == "" {
+		return "", nil
+	}
+
+	var sb []string
+	fields := strings.Split(strings.ToLower(on), ",")
+
+	// fmt.Println("FIELDS: ", fields)
+
+	for _, field := range fields {
+		field = strings.TrimSpace(field)
+		dir := "ASC"
+		fieldName := field
+		if isDesc := strings.HasPrefix(field, "-"); isDesc {
+			dir = "DESC"
+			fieldName = field[1:]
+		}
+
+		// fmt.Println("fieldName: ", fieldName)
+
+		allowed := false
+		for allowedField, tableName := range allowedFields {
+			if fieldName == allowedField {
+				sb = append(sb, fmt.Sprintf("%s.%s %s", tableName, fieldName, dir))
+				allowed = true
+				break
+			}
+		}
+
+		if !allowed {
+			return "", fmt.Errorf("error: %s is not allowed to be sorted on", fieldName)
+		}
+	}
+
+	if len(sb) == 0 {
+		return orderBy, err
+	}
+
+	orderBy = fmt.Sprintf("ORDER BY %s", strings.Join(sb, ", "))
+	return orderBy, err
+}
+
 // func getWhere(table string, whereMap map[string]interface{}, orderByMap map[string]interface{}, out interface{}) error {
 // 	var where []string
 // 	for item, _ := range whereMap {
@@ -37,44 +80,3 @@ import (
 // 	err = nstmt.Get(out, whereMap)
 // 	return err
 // }
-
-func BuildOrderBy(on string, allowedFields map[string]string) (orderBy string, err error) {
-	if on == "" {
-		return "", nil
-	}
-
-	fmt.Println("ON: ", on)
-
-	var sb []string
-	fields := strings.Split(strings.ToLower(on), ",")
-
-	for _, field := range fields {
-		field = strings.TrimSpace(field)
-		dir := "ASC"
-		fieldName := field
-		if isDesc := strings.HasPrefix(field, "-"); isDesc {
-			dir = "DESC"
-			fieldName = field[1:]
-		}
-
-		allowed := false
-		for allowedField, tableName := range allowedFields {
-			if fieldName == allowedField {
-				sb = append(sb, fmt.Sprintf("%s.%s %s", tableName, fieldName, dir))
-				allowed = true
-				break
-			}
-		}
-
-		if !allowed {
-			return "", fmt.Errorf("error: %s is not allowed to be sorted on", fieldName)
-		}
-	}
-
-	if len(sb) == 0 {
-		return orderBy, err
-	}
-
-	orderBy = fmt.Sprintf("ORDER BY %s", strings.Join(sb, ", "))
-	return orderBy, err
-}

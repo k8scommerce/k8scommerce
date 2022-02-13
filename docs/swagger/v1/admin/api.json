@@ -18,7 +18,7 @@
     "/v1/api/ping": {
       "get": {
         "summary": "Ping",
-        "description": "Ping for API up validation. On valid returns {ping: PONG}",
+        "description": "Ping for API up validation. On valid returns {ping: pong}",
         "operationId": "ping",
         "responses": {
           "200": {
