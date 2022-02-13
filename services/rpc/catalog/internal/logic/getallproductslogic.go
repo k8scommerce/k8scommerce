@@ -62,7 +62,7 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 					galaxyctx.GetStoreId(ctx),
 					galaxyctx.GetCurrentPage(ctx),
 					galaxyctx.GetPageSize(ctx),
-					galaxyctx.GetSortOn(ctx),
+					galaxyctx.GetFilter(ctx),
 				)
 				if err != nil {
 					logx.Infof("error: %s", err)
@@ -112,7 +112,7 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
 	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
 	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
-	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
+	l.ctx = galaxyctx.SetFilter(l.ctx, in.Filter)
 
 	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
 	if err := entryGetAllProductsLogic.galaxy.Get(l.ctx, key, codec); err != nil {

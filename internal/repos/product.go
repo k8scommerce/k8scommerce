@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"k8scommerce/internal/buildsql"
 	"k8scommerce/internal/models"
 
 	"github.com/jmoiron/sqlx"
@@ -36,7 +37,7 @@ type Product interface {
 		res *getProductsByCategoryResponse,
 		err error,
 	)
-	GetAllProducts(storeId, currentPage, pageSize int64, sortOn string) (
+	GetAllProducts(storeId, currentPage, pageSize int64, filter string) (
 		res *getAllProductsResponse,
 		err error,
 	)
@@ -64,10 +65,10 @@ type getByCategoryResults struct {
 }
 
 type getAllProductsResults struct {
-	Product  models.Product
-	Variant  models.Variant
-	Category models.Category
-	Price    models.Price
+	Product models.Product
+	Variant models.Variant
+	// Category models.Category
+	Price models.Price
 }
 
 type getProductsByCategoryResponse struct {
@@ -582,13 +583,12 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 	return nil, err
 }
 
-func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, sortOn string) (res *getAllProductsResponse, err error) {
-	fmt.Println("currentPage", currentPage)
-	fmt.Println("pageSize", pageSize)
-
-	orderBy, err := BuildOrderBy(sortOn, map[string]string{
-		"name":   "p",  // product alias
-		"amount": "pr", // price alias
+func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filter string) (res *getAllProductsResponse, err error) {
+	var builder = buildsql.NewQueryBuilder()
+	where, orderBy, namedParamMap, err := builder.Build(filter, map[string]interface{}{
+		"p":  models.Product{}, // product alias
+		"v":  models.Variant{}, // product alias
+		"pr": models.Price{},   // product alias
 	})
 	if err != nil {
 		return nil, err
@@ -598,7 +598,7 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, sortO
 	if orderBy == "" {
 		orderBy = "ORDER BY p.name ASC"
 	}
-	offset := fmt.Sprintf("OFFSET %d", (currentPage-1)*pageSize)
+	offset := fmt.Sprintf("OFFSET %d", (currentPage)*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
 	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
@@ -641,52 +641,57 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, sortO
 			pr.user_role_id AS "price.user_role_id",
 
 			-- catgory
-			c.id AS "category.id",
-			c.parent_id AS "category.parent_id",
-			c.store_id AS "category.store_id",
-			c.name AS "category.name",
-			c.description AS "category.description",
-			c.meta_title AS "category.meta_title",
-			c.meta_description AS "category.meta_description",
-			c.meta_keywords AS "category.meta_keywords",
-			c.hide_from_nav AS "category.hide_from_nav",
-			c.lft AS "category.lft",
-			c.rgt AS "category.rgt",
-			c.depth AS "category.depth",
-			c.sort_order AS "category.sort_order",
+			-- c.id AS "category.id",
+			-- c.parent_id AS "category.parent_id",
+			-- c.store_id AS "category.store_id",
+			-- c.name AS "category.name",
+			-- c.description AS "category.description",
+			-- c.meta_title AS "category.meta_title",
+			-- c.meta_description AS "category.meta_description",
+			-- c.meta_keywords AS "category.meta_keywords",
+			-- c.hide_from_nav AS "category.hide_from_nav",
+			-- c.lft AS "category.lft",
+			-- c.rgt AS "category.rgt",
+			-- c.depth AS "category.depth",
+			-- c.sort_order AS "category.sort_order",
 
 			-- stats
 			COUNT(p.*) OVER() AS "pagingstats.total_records"
 
 		from product p
-		inner join product_category pc on p.id = pc.product_id
-		inner join category c ON pc.category_id = c.id
+		-- inner join product_category pc on p.id = pc.product_id
+		-- inner join category c ON pc.category_id = c.id
 		inner join variant v on v.product_id = p.id AND v.is_default = true
 		inner join price pr on pr.variant_id = v.id AND pr.user_role_id is null
 		where p.store_id = :store_id
 		%s
 		%s
 		%s
-	`, orderBy, offset, limit))
+		%s
+	`, where, orderBy, offset, limit))
 	if err != nil {
+
+		fmt.Println("where", where)
+		fmt.Println("orderBy", orderBy)
+		fmt.Println("offset", offset)
+		fmt.Println("limit", limit)
+
 		return nil, fmt.Errorf("error::GetAllProducts::%s", err.Error())
 	}
 
 	var result []*struct {
-		Product     models.Product
-		Variant     models.Variant
-		Category    models.Category
+		Product models.Product
+		Variant models.Variant
+		// Category    models.Category
 		Price       models.Price
 		PagingStats PagingStats
 	}
 
-	err = nstmt.Select(&result,
-		map[string]interface{}{
-			"store_id": storeId,
-			"offset":   (currentPage - 1) * pageSize,
-			"limit":    pageSize,
-			"order_by": orderBy,
-		})
+	namedParamMap["store_id"] = storeId
+	namedParamMap["offset"] = (currentPage - 1) * pageSize
+	namedParamMap["limit"] = pageSize
+
+	err = nstmt.Select(&result, namedParamMap)
 
 	results := []getAllProductsResults{}
 
@@ -699,10 +704,10 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, sortO
 				// stats.TotalPages = int64(math.Ceil(totalPages))
 			}
 			results = append(results, getAllProductsResults{
-				Product:  r.Product,
-				Variant:  r.Variant,
-				Price:    r.Price,
-				Category: r.Category,
+				Product: r.Product,
+				Variant: r.Variant,
+				Price:   r.Price,
+				// Category: r.Category,
 			})
 		}
 

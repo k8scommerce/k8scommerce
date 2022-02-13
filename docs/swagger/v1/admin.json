@@ -19,7 +19,7 @@
     "/v1/api/ping": {
       "get": {
         "summary": "Ping",
-        "description": "Ping for API up validation. On valid returns {ping: PONG}",
+        "description": "Ping for API up validation. On valid returns {ping: pong}",
         "operationId": "ping",
         "responses": {
           "200": {
@@ -536,6 +536,12 @@
             "type": "integer"
           },
           {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "sortOn",
             "in": "query",
             "required": false,
@@ -958,6 +964,9 @@
         "pageSize": {
           "type": "integer",
           "format": "int64"
+        },
+        "filter": {
+          "type": "string"
         },
         "sortOn": {
           "type": "string"
@@ -1446,12 +1455,18 @@
         "user": {
           "$ref": "#/definitions/User",
           "description": " User object"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
         }
       },
       "title": "UserLoginResponse",
       "required": [
         "jwt",
-        "user"
+        "user",
+        "success"
       ]
     },
     "UsersPermissionGroups": {

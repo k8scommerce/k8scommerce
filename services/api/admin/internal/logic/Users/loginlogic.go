@@ -27,12 +27,20 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) LoginLogic {
 }
 
 func (l *LoginLogic) Login(req types.UserLoginRequest) (resp *types.UserLoginResponse, err error) {
+	resp = &types.UserLoginResponse{
+		Success: false,
+	}
+
 	res, err := l.svcCtx.UserRpc.Login(l.ctx, &userclient.LoginRequest{
 		Email:    req.Email,
 		Password: req.Password,
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	if res.User == nil {
+		return resp, nil
 	}
 
 	// create the token
@@ -46,10 +54,11 @@ func (l *LoginLogic) Login(req types.UserLoginRequest) (resp *types.UserLoginRes
 	user := types.User{}
 	utils.TransformObj(res.User, &user)
 
-	return &types.UserLoginResponse{
-		JwtToken: *jwtToken,
-		User:     user,
-	}, nil
+	resp.JwtToken = *jwtToken
+	resp.User = user
+	resp.Success = true
+
+	return resp, nil
 }
 
 func (l *LoginLogic) getJwt(payload map[string]interface{}) (*types.JwtToken, error) {
