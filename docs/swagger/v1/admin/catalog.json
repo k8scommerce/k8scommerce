@@ -461,6 +461,12 @@
             "type": "integer"
           },
           {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "sortOn",
             "in": "query",
             "required": false,
@@ -644,6 +650,9 @@
         "pageSize": {
           "type": "integer",
           "format": "int64"
+        },
+        "filter": {
+          "type": "string"
         },
         "sortOn": {
           "type": "string"

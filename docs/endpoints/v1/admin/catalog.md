@@ -234,6 +234,7 @@ returns all products belonging to a store
 |------|--------|------|---------|-----------| :------: |---------|-------------|
 | currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
 | pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
+| filter | `query` | string | `string` |  |  |  |  |
 | sortOn | `query` | string | `string` |  |  |  |  |
 
 #### All responses
@@ -652,6 +653,7 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| filter | string| `string` |  | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | sortOn | string| `string` |  | |  |  |
 

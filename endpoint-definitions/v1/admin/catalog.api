@@ -139,6 +139,7 @@ type GetProductsByCategoryIdResponse {
 type GetAllProductsRequest {
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
+	Filter      string `form:"filter,optional"`
 	SortOn      string `form:"sortOn,optional"`
 }
 
@@ -233,7 +234,7 @@ service admin {
 
 @server(
 	// jwt: Auth
-	middleware: Locale, StoreKey
+	middleware: Locale, Filter, StoreKey
 	group: products
 )
 service admin {

@@ -125,6 +125,7 @@ type GetProductsByCategoryIdResponse struct {
 type GetAllProductsRequest struct {
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
+	Filter      string `form:"filter,optional"`
 	SortOn      string `form:"sortOn,optional"`
 }
 
@@ -226,8 +227,9 @@ type UserLoginRequest struct {
 }
 
 type UserLoginResponse struct {
-	JwtToken JwtToken `json:"jwt"`  // JwtToken object
-	User     User     `json:"user"` // User object
+	JwtToken JwtToken `json:"jwt,omitempty"`  // JwtToken object
+	User     User     `json:"user,omitempty"` // User object
+	Success  bool     `json:"success"`        // success bool
 }
 
 type GetAllUsersRequest struct {

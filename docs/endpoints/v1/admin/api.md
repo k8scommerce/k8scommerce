@@ -46,7 +46,7 @@ Enter JWT Bearer token **_only_**
 GET /v1/api/ping
 ```
 
-Ping for API up validation. On valid returns {ping: PONG}
+Ping for API up validation. On valid returns {ping: pong}
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
