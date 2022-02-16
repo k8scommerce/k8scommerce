@@ -2,7 +2,7 @@ package config
 
 import (
 	"k8scommerce/internal/repos"
-	"k8scommerce/internal/storage"
+	"k8scommerce/internal/storage/config"
 
 	"github.com/tal-tech/go-zero/zrpc"
 )
@@ -10,7 +10,7 @@ import (
 type Config struct {
 	zrpc.RpcServerConf
 	PostgresConfig repos.PostgresConfig
-	UploadConfig   storage.UploadConfig
+	UploadConfig   config.UploadConfig
 }
 
 // type PostgresConfig struct {

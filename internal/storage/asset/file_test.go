@@ -116,7 +116,23 @@ var _ = Describe("Asset", func() {
 		return true
 	}
 
+	fileSize := func(path string) int64 {
+		f, err := os.Stat(path)
+		if err != nil {
+			return 0
+		}
+		return f.Size()
+	}
+
+	deleteTestUploadDirectory := func() error {
+		return os.RemoveAll("./testfiles/uploads")
+	}
+
 	Describe("SaveFile", func() {
+
+		BeforeEach(func() {
+			deleteTestUploadDirectory()
+		})
 
 		Describe("FileSystem", func() {
 
@@ -134,7 +150,6 @@ var _ = Describe("Asset", func() {
 				Expect(err).To(BeNil())
 
 				assetFile.Kind = asset.Image
-
 			})
 
 			It("should have all prerequisites", func() {
@@ -149,7 +164,7 @@ var _ = Describe("Asset", func() {
 				Expect(xType).To(ContainSubstring("transport.fileSystemTransport"))
 			})
 
-			It("should save a file on the local file system", func() {
+			It("should save a file locally", func() {
 				err = assetFile.Open()
 				Expect(err).To(BeNil())
 
@@ -161,6 +176,32 @@ var _ = Describe("Asset", func() {
 
 				exists := fileExists(assetFile.Name)
 				Expect(exists).To(BeTrue())
+
+				size := fileSize(assetFile.Name)
+				Expect(size).To(Not(Equal(0)))
+			})
+
+			It("should save an svg", func() {
+				name := "./testfiles/logo.svg"
+				assetFile, err = asset.MustNewFile(name, *cfg)
+				Expect(err).To(BeNil())
+
+				assetFile.Kind = asset.Image
+
+				err = assetFile.Open()
+				Expect(err).To(BeNil())
+
+				err = bufferAssetFile(assetFile)
+				Expect(err).To(BeNil())
+
+				err = assetFile.Close()
+				Expect(err).To(BeNil())
+
+				exists := fileExists(assetFile.Name)
+				Expect(exists).To(BeTrue())
+
+				size := fileSize(assetFile.Name)
+				Expect(size).To(Not(Equal(0)))
 			})
 		})
 

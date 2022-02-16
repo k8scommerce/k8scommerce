@@ -2,14 +2,14 @@ package svc
 
 import (
 	"k8scommerce/internal/repos"
-	"k8scommerce/internal/storage"
+	storageconfig "k8scommerce/internal/storage/config"
 	"k8scommerce/services/rpc/catalog/internal/config"
 )
 
 type ServiceContext struct {
 	Config       config.Config
 	Repo         repos.Repo
-	UploadConfig storage.UploadConfig
+	UploadConfig storageconfig.UploadConfig
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {

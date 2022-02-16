@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"io"
-	"k8scommerce/internal/storage"
+	"k8scommerce/internal/storage/asset"
 	"k8scommerce/internal/utils/humanizer"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
@@ -37,15 +37,16 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 		return status.Errorf(codes.Unknown, "cannot receive file info")
 	}
 
-	file := storage.NewFile()
-	file.Name = req.GetAsset().Name
-	file.Mime = req.GetAsset().Mime
+	file, err := asset.MustNewFile(req.GetAsset().Name, l.svcCtx.Config.UploadConfig)
+	if err != nil {
+		return status.Errorf(codes.Internal, "file creation error: %s", err.Error())
+	}
 
 	kind, err := l.getAssetKind(req.GetKind())
 	if err != nil {
 		return err
 	}
-	file.AssetKind = kind
+	file.Kind = kind
 
 	maxUploadSize, err := l.getMaxUploadFilesize(req.GetKind())
 	if err != nil {
@@ -62,7 +63,7 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 
 		req, err := stream.Recv()
 		if err == io.EOF {
-			if err := storage.SaveFile(file, l.svcCtx.Config.UploadConfig); err != nil {
+			if err := file.Close(); err != nil {
 				return status.Error(codes.Internal, err.Error())
 			}
 
@@ -80,6 +81,8 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 			return status.Errorf(codes.InvalidArgument, "file is too large: %d > %d", uploadSize, maxUploadSize)
 		}
 
+		// we stream the file to all transports (filesystem, aws, azure, gcp, etc. )
+		// this way we can handle large files if needed
 		if err := file.Write(chunk); err != nil {
 			return status.Error(codes.Internal, err.Error())
 		}
@@ -89,23 +92,23 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 
 }
 
-func (l *UploadAssetLogic) getAssetKind(assetKind catalog.UploadAssetRequest_AssetKind) (storage.AssetKind, error) {
+func (l *UploadAssetLogic) getAssetKind(assetKind catalog.UploadAssetRequest_AssetKind) (asset.Kind, error) {
 
-	var kind storage.AssetKind
+	var kind asset.Kind
 	var isSet = false
 	switch assetKind {
 	case catalog.UploadAssetRequest_Image:
 		isSet = true
-		kind = storage.AssetKind(catalog.UploadAssetRequest_Image.Number())
+		kind = asset.Kind(catalog.UploadAssetRequest_Image.Number())
 	case catalog.UploadAssetRequest_Document:
 		isSet = true
-		kind = storage.AssetKind(catalog.UploadAssetRequest_Document.Number())
+		kind = asset.Kind(catalog.UploadAssetRequest_Document.Number())
 	case catalog.UploadAssetRequest_Audio:
 		isSet = true
-		kind = storage.AssetKind(catalog.UploadAssetRequest_Audio.Number())
+		kind = asset.Kind(catalog.UploadAssetRequest_Audio.Number())
 	case catalog.UploadAssetRequest_Video:
 		isSet = true
-		kind = storage.AssetKind(catalog.UploadAssetRequest_Video.Number())
+		kind = asset.Kind(catalog.UploadAssetRequest_Video.Number())
 	}
 
 	if !isSet {
