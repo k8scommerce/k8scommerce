@@ -1,8 +1,8 @@
-package storage
+package config
 
 type UploadConfig struct {
-	AllowedTypes AllowedTypes
-	Storage      StorageConfig
+	AllowedTypes  AllowedTypes
+	StorageConfig StorageConfig
 }
 
 type AllowedTypes struct {
@@ -33,20 +33,28 @@ type Video struct {
 }
 
 type StorageConfig struct {
+	SubDirectory     string
 	FileSystem       bool
 	FileSystemConfig FileSystemConfig
 	AWS              bool
 	AwsConfig        AwsConfig
+	Azure            bool
+	AzureConfig      AzureConfig
+	Gcp              bool
+	GcpConfig        GcpConfig
 }
 
 type FileSystemConfig struct {
-	SavePath string
+	BasePath string
 }
 
 type AwsConfig struct {
 	AwsRegion          string
 	AwsAccessKeyId     string
 	AwsSecretAccessKey string
-	BucketName         string
-	SavePath           string
+	AwsBucket          string
 }
+
+type AzureConfig struct{}
+
+type GcpConfig struct{}

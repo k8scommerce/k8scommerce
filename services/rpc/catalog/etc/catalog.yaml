@@ -50,10 +50,21 @@ UploadConfig:
         - .3g2
 
   Storage: 
-    FileSystem: false
-    AWS: true
-    AwsRegion:
-    AwsAccessKeyId:
-    AwsSecretAccessKey:
-    BucketName:
+    FileSystem: true
+    FileSystemConfig:
+      SavePath: ~/.k8scommerce/uploads/files
+    AWS: false
+    AwsConfig:
+      AwsRegion:
+      AwsAccessKeyId:
+      AwsSecretAccessKey:
+      BucketName: k8scommerce
+      SavePath: uploads/files
+    Gcp: false
+    GcpConfig:
+      SavePath: uploads/files
+    Azure: false
+    AzureConfig:
+      SavePath: uploads/files
+
 

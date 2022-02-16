@@ -16,7 +16,7 @@ import (
 	"github.com/localrivet/gcache"
 
 	"github.com/iancoleman/strcase"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/tal-tech/go-zero/core/conf"
 	"google.golang.org/protobuf/types/known/timestamppb"
