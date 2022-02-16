@@ -110,13 +110,15 @@ type QueryBuilder struct {
 // }
 
 func (b *QueryBuilder) ParseParamString(paramString string) error {
-	fmt.Println("paramString: ", paramString)
+	// fmt.Println("paramString: ", paramString)
 
 	b.SearchTables = make(map[string]int)
 
 	if strings.Index(paramString, "?") != 0 {
 		pathParts := strings.Split(paramString, "?")
-		if len(pathParts) > 0 {
+
+		// fmt.Println("pathParts", pathParts)
+		if len(pathParts) > 1 {
 			paramString = pathParts[1]
 		}
 	}
@@ -134,7 +136,7 @@ func (b *QueryBuilder) ParseParamString(paramString string) error {
 	q := u.Query()
 	// fmt.Println(q)
 
-	fmt.Println("Q:", q)
+	// fmt.Println("Q:", q)
 
 	// parse filters
 	if filters, ok := q["filter"]; ok {
@@ -198,8 +200,8 @@ func (b *QueryBuilder) ParseParamString(paramString string) error {
 		}
 	}
 
-	fmt.Printf("\n#%+v", b.Filters)
-	fmt.Printf("\n#%+v\n\n", b.Sorts)
+	// fmt.Printf("\n#%+v", b.Filters)
+	// fmt.Printf("\n#%+v\n\n", b.Sorts)
 	return nil
 }
 
@@ -276,7 +278,12 @@ func (b *QueryBuilder) Build(paramString string, allowed map[string]interface{})
 	}
 
 	where = b.AssembledWheres(wheres)
-	orderBy = fmt.Sprintf("ORDER BY %s", strings.Join(sb, ", "))
+	// orderBy = fmt.Sprintf("ORDER BY %s", strings.Join(sb, ", "))
+	orderBy = strings.Join(sb, ", ")
+	if orderBy != "" {
+		orderBy = fmt.Sprintf("ORDER BY %s", orderBy)
+	}
+
 	return where, orderBy, namedParamMap, err
 }
 
@@ -340,7 +347,11 @@ func BuildOrderBy(on string, allowedFields map[string]string) (orderBy string, e
 		return orderBy, err
 	}
 
-	orderBy = fmt.Sprintf("ORDER BY %s", strings.Join(sb, ", "))
+	orderBy = strings.Join(sb, ", ")
+	if orderBy != "" {
+		orderBy = fmt.Sprintf("ORDER BY %s", orderBy)
+	}
+
 	return orderBy, err
 }
 

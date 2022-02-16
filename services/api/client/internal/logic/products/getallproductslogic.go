@@ -30,7 +30,7 @@ func (l *GetAllProductsLogic) GetAllProducts(req types.GetAllProductsRequest) (r
 	response, err := l.svcCtx.CatalogRpc.GetAllProducts(l.ctx, &catalogclient.GetAllProductsRequest{
 		CurrentPage: req.CurrentPage,
 		PageSize:    req.PageSize,
-		SortOn:      req.SortOn,
+		Filter:      l.ctx.Value(types.Filter).(string),
 		StoreId:     l.ctx.Value(types.StoreKey).(int64),
 	})
 	if err != nil {

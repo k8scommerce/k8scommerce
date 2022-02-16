@@ -62,7 +62,7 @@ func (l *GetProductsByCategorySlugLogic) GetProductsByCategorySlug(in *catalog.G
 					galaxyctx.GetCategorySlug(ctx),
 					galaxyctx.GetCurrentPage(ctx),
 					galaxyctx.GetPageSize(ctx),
-					galaxyctx.GetSortOn(ctx),
+					galaxyctx.GetFilter(ctx),
 				)
 				if err != nil {
 					logx.Infof("error: %s", err)
@@ -111,9 +111,9 @@ func (l *GetProductsByCategorySlugLogic) GetProductsByCategorySlug(in *catalog.G
 	l.ctx = galaxyctx.SetCategorySlug(l.ctx, in.CategorySlug)
 	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
 	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
-	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
+	l.ctx = galaxyctx.SetFilter(l.ctx, in.Filter)
 
-	key := fmt.Sprintf("%d|%s|%d|%d|%s", in.StoreId, in.CategorySlug, in.CurrentPage, in.PageSize, in.SortOn)
+	key := fmt.Sprintf("%d|%s|%d|%d|%s", in.StoreId, in.CategorySlug, in.CurrentPage, in.PageSize, in.Filter)
 	entryGetProductsByCategorySlugLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {

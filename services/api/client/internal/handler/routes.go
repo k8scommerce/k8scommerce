@@ -50,7 +50,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.Filter, serverCtx.StoreKey},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
@@ -73,7 +73,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.Filter, serverCtx.StoreKey},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,

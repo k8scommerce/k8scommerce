@@ -6,12 +6,12 @@
 #     Content-Type:application/json
 
 # go install github.com/tsliwowicz/go-wrk@latest
-# go-wrk -c 125 -d 10 -H 'Store-Key: yxvzrvla' http://api.local.k8sly.com:8889/v1/product/slug/ergonomic-steel-hat
+# go-wrk -c 5 -d 10 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8888/v1/product/slug/incredible-steel-hat
 
 # brew install plow
 # https://golangexample.com/a-http-s-benchmarking-tool-written-in-golang/
 # when running open http://127.0.0.1:18888/ to see live stats
-# plow http://api.local.k8sly.com:8889/v1/product/slug/ergonomic-steel-hat -c 50 -d 30s -T 'application/json' -H 'Store-Key: yxvzrvla' -m GET
+# plow http://52.9.133.84:8888/v1/product/slug/incredible-steel-hat -c 500 -d 30s -T 'application/json' -H 'Store-Key:yxvzrvla' -m GET
 
 
 # http -vvv GET http://api.local.k8sly.com:8888/v1/products/0/20?sortOn=-id \
@@ -23,9 +23,13 @@
  
 
 
+
+#   http://52.9.133.84:8888/
+
 http -vvv GET "http://api.local.k8sly.com:8888/v1/products/0/20?filter=p-name-like-practical&sortOn=p-id" Store-Key:yxvzrvla
 
 
+# http -vvv GET "http://52.9.133.84:8888/v1/product/slug/incredible-steel-hat" Store-Key:yxvzrvla
 
 
 #  ?cars[]=Saab&cars[]=Audi

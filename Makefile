@@ -52,7 +52,7 @@ option\
 option_item\
 archetype
 
-apiServices=client
+apiServices=
 
 # cart depends on inventory, othersbought
 
@@ -76,14 +76,15 @@ rpcServices=customer\
 email\
 inventory\
 othersbought\
-cart\
 payment\
 shipping\
 similarproducts\
 store\
 user\
-warehouse \
-catalog
+warehouse
+# catalog
+
+# cart\
 
 
 # define standard colors

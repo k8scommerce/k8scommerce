@@ -6,7 +6,7 @@ Etcd:
   Hosts:
     - etcd-client:2379
   Key: similarproducts.rpc
-Postgres:
+PostgresConfig:
   Connection: postgres://postgres:postgres@k8scommerce-db:5432/k8scommerce?connect_timeout=180&sslmode=disable
   MaxOpenConnections: 10
   MaxIdleConnections: 2

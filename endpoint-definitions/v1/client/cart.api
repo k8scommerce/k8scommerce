@@ -31,7 +31,6 @@ type GetCartRequest {
 
 type GetCartResponse {
 	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // add item to cart
@@ -42,7 +41,6 @@ type AddItemToCartRequest {
 
 type AddItemToCartResponse {
 	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // update cart item quantity
@@ -54,7 +52,6 @@ type UpdateCartItemQuantityRequest {
 
 type UpdateCartItemQuantityResponse {
 	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // remove item
@@ -66,17 +63,14 @@ type RemoveCartItemRequest {
 
 type RemoveCartItemResponse {
 	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // clear cart
 type ClearCartRequest {
 	CustomerId     int64          `path:"customerId"` // a customer's id
-	ResponseStatus ResponseStatus `json:"status"`     // a ResponseStatus object
 }
 
 type ClearCartResponse {
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 //

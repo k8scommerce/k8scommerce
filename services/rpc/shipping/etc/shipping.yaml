@@ -4,7 +4,7 @@ Etcd:
   Hosts:
     - localhost:2379
   Key: shipping.rpc
-Postgres:
+PostgresConfig:
   Connection: postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable
   MaxOpenConnections: 10
   MaxIdleConnections: 2

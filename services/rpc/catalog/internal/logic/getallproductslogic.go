@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/internal/models"
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
@@ -114,10 +115,12 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
 	l.ctx = galaxyctx.SetFilter(l.ctx, in.Filter)
 
-	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
+	key := utils.StringToMD5(fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.Filter))
 	if err := entryGetAllProductsLogic.galaxy.Get(l.ctx, key, codec); err != nil {
 		return res, err
 	}
+
+	entryGetAllProductsLogic.galaxy.Remove(l.ctx, key)
 
 	b, err := codec.MarshalBinary()
 	if err != nil {
