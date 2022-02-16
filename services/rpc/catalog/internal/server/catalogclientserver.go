@@ -101,3 +101,8 @@ func (s *CatalogClientServer) DeleteProduct(ctx context.Context, in *catalog.Del
 	l := logic.NewDeleteProductLogic(ctx, s.svcCtx, s.universe)
 	return l.DeleteProduct(in)
 }
+
+func (s *CatalogClientServer) UploadAsset(stream catalog.CatalogClient_UploadAssetServer) error {
+	l := logic.NewUploadAssetLogic(stream.Context(), s.svcCtx, s.universe)
+	return l.UploadAsset(stream)
+}

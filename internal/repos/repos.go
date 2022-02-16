@@ -18,7 +18,7 @@ var (
 	ErrNotFound = sql.ErrNoRows
 )
 
-func MustNewRepo(c *Config) Repo {
+func MustNewRepo(c *PostgresConfig) Repo {
 	// catch any panics
 	defer func() {
 		if rec := recover(); rec != nil {
@@ -54,7 +54,7 @@ type Repo interface {
 type repo struct {
 	db       *sqlx.DB
 	listener *pq.Listener
-	cfg      *Config
+	cfg      *PostgresConfig
 }
 
 func (r *repo) GetRawDB() *sqlx.DB {

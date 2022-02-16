@@ -23,6 +23,7 @@ import (
 type ServiceContext struct {
 	Config             config.Config
 	Locale             rest.Middleware
+	Filter             rest.Middleware
 	StoreKey           rest.Middleware
 	CartRpc            cartclient.CartClient
 	CatalogRpc         catalogclient.CatalogClient
@@ -42,6 +43,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:             c,
 		Locale:             middleware.NewLocaleMiddleware().Handle,
+		Filter:             middleware.NewFilterMiddleware().Handle,
 		StoreKey:           middleware.NewStoreKeyMiddleware(c.HashSalt).Handle,
 		CartRpc:            cartclient.NewCartClient(zrpc.MustNewClient(c.CartRpc)),
 		CatalogRpc:         catalogclient.NewCatalogClient(zrpc.MustNewClient(c.CatalogRpc)),

@@ -3,11 +3,11 @@ package buildsql_test
 import (
 	"testing"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
-func TestRepos(t *testing.T) {
+func TestBuildSql(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "BuildSql Suite")
 }

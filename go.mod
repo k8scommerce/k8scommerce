@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/bojanz/currency v0.0.0-20211125231711-7deaabae9019
+	github.com/dustin/go-humanize v1.0.0
 	github.com/gobwas/ws v1.1.0
 	github.com/golang-jwt/jwt v3.2.1+incompatible
 	github.com/golang/mock v1.6.0
@@ -17,6 +18,7 @@ require (
 	github.com/localrivet/gcache v0.0.4
 	github.com/muhfajar/go-zero-cors-middleware v0.0.0-20211011142017-8c5bbca6202a
 	github.com/onsi/ginkgo v1.16.5
+	github.com/onsi/ginkgo/v2 v2.1.3
 	github.com/onsi/gomega v1.17.0
 	github.com/rabbitmq/amqp091-go v1.2.0
 	github.com/speps/go-hashids v2.0.0+incompatible

@@ -29,8 +29,7 @@ type GetCartRequest struct {
 }
 
 type GetCartResponse struct {
-	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 type AddItemToCartRequest struct {
@@ -39,8 +38,7 @@ type AddItemToCartRequest struct {
 }
 
 type AddItemToCartResponse struct {
-	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 type UpdateCartItemQuantityRequest struct {
@@ -50,8 +48,7 @@ type UpdateCartItemQuantityRequest struct {
 }
 
 type UpdateCartItemQuantityResponse struct {
-	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 type RemoveCartItemRequest struct {
@@ -61,17 +58,14 @@ type RemoveCartItemRequest struct {
 }
 
 type RemoveCartItemResponse struct {
-	Cart           Cart           `json:"cart"`   // a Cart object
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 type ClearCartRequest struct {
-	CustomerId     int64          `path:"customerId"` // a customer's id
-	ResponseStatus ResponseStatus `json:"status"`     // a ResponseStatus object
+	CustomerId int64 `path:"customerId"` // a customer's id
 }
 
 type ClearCartResponse struct {
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 type Category struct {
@@ -175,7 +169,8 @@ type GetProductsByCategoryIdResponse struct {
 type GetAllProductsRequest struct {
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
-	SortOn      string `form:"sortOn"`
+	Filter      string `form:"filter,optional"`
+	SortOn      string `form:"sortOn,optional"`
 }
 
 type GetAllProductsResponse struct {

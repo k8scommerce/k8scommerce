@@ -1,6 +1,6 @@
 package repos
 
-type Config struct {
+type PostgresConfig struct {
 	Connection                   string
 	MaxOpenConnections           int
 	MaxIdleConnections           int

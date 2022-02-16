@@ -4,10 +4,56 @@ Log:
   Mode: console
 Etcd:
   Hosts:
-    - etcd-client:2379
+    - localhost:2379
   Key: catalog.rpc
-Postgres:
+PostgresConfig:
   Connection: postgres://postgres:postgres@k8scommerce-db:5432/k8scommerce?connect_timeout=180&sslmode=disable
   MaxOpenConnections: 10
   MaxIdleConnections: 2
   MaxConnectionLifetimeMinutes: 5
+
+UploadConfig:
+  AllowedTypes:
+    Images:
+      MaxUploadSize: 25MB
+      MimeTypes:
+        - .jpg
+        - .png
+        - .gif
+        - .jpeg
+        - .ico
+    Documents:
+      MaxUploadSize: 25MB
+      MimeTypes:
+        - .pdf
+        - .doc
+        - .ppt
+        - .odt
+        - .xls
+        - .psd
+    Audio:
+      MaxUploadSize: 25MB
+      MimeTypes:
+        - .mp3
+        - .m4a
+        - .ogg
+        - .wav
+    Video:
+      MaxUploadSize: 25MB
+      MimeTypes:
+        - .mp4
+        - .mov
+        - .avi
+        - .mpg
+        - .ogv
+        - .3gp
+        - .3g2
+
+  Storage: 
+    FileSystem: false
+    AWS: true
+    AwsRegion:
+    AwsAccessKeyId:
+    AwsSecretAccessKey:
+    BucketName:
+
