@@ -50,15 +50,15 @@ UploadConfig:
         - .3g2
   StorageConfig:
     SubDirectory: uploads
-    FileSystem: true
+    FileSystem: ${FILESYSTEM_ENABLED}
     FileSystemConfig:
-      BasePath:
-    AWS: false
+      BasePath: ${FILESYSTEM_BASE_PATH}
+    AWS: ${AWS_ENABLED}
     AWSConfig:
-      Region:
-      AccessKeyId:
-      SecretAccessKey:
-      S3Bucket:
+      Region: ${AWS_DEFAULT_REGION}
+      AccessKeyId: ${AWS_ACCESS_KEY_ID}
+      SecretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+      S3Bucket: ${S3_BUCKET}
     Azure: false
     # AzureConfig: 
     GCP: false
