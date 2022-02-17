@@ -172,13 +172,13 @@ var _ = Describe("UploadAssetLogic", func() {
 				cfg.StorageConfig.SubDirectory = "uploads"
 
 				cfg.StorageConfig.FileSystem = true
-				cfg.StorageConfig.FileSystemConfig.BasePath = "../../../../../internal/storage/asset/testfiles"
+				cfg.StorageConfig.FileSystemConfig.BasePath = testFilesPath
 
 				cfg.StorageConfig.AWS = false
 				cfg.StorageConfig.GCP = false
 				cfg.StorageConfig.Azure = false
 
-				name := "./testfiles/logo.png"
+				name := testFilesPath + "logo.png"
 				assetFile, err = asset.MustNewFile(name, *cfg)
 				Expect(err).To(BeNil())
 
@@ -190,7 +190,7 @@ var _ = Describe("UploadAssetLogic", func() {
 				Expect(assetFile.ContentType).To(Equal(""))
 
 				Expect(assetFile.GetDestinationPath()).To(Not(BeNil()))
-				Expect(assetFile.GetDestinationPath()).To(Equal("testfiles/uploads/1/b/b/"))
+				Expect(assetFile.GetDestinationPath()).To(Equal(testFilesPath + "/uploads/1/b/b/"))
 
 				Expect(assetFile.GetStorageTransport()).To(Not(BeNil()))
 				xType := fmt.Sprintf("%T", assetFile.GetStorageTransport())
@@ -269,7 +269,7 @@ var _ = Describe("UploadAssetLogic", func() {
 				Expect(xType).To(ContainSubstring("transport.awsTransport"))
 			})
 
-			FIt("should save a file on S3", func() {
+			It("should save a file on S3", func() {
 				err = bufferAssetFile(assetFile)
 				Expect(err).To(BeNil())
 

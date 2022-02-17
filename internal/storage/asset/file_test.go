@@ -268,7 +268,7 @@ var _ = Describe("Asset", func() {
 				Expect(xType).To(ContainSubstring("transport.awsTransport"))
 			})
 
-			FIt("should save a file on S3", func() {
+			It("should save a file on S3", func() {
 				err = bufferAssetFile(assetFile)
 				Expect(err).To(BeNil())
 
