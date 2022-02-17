@@ -7,6 +7,7 @@ import (
 	"k8scommerce/internal/utils/humanizer"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"net/http"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/tal-tech/go-zero/core/logx"
@@ -54,7 +55,7 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 	}
 
 	var uploadSize int64 = 0
-
+	partNumber := 1
 	for {
 		err := contextError(stream.Context())
 		if err != nil {
@@ -76,6 +77,16 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 		chunk := req.GetChunk()
 		size := len(chunk)
 
+		if partNumber == 1 {
+			contentType, err := l.getContentType(chunk)
+			if err != nil {
+				return err
+			}
+
+			file.Open(contentType)
+
+		}
+
 		uploadSize += int64(size)
 		if uploadSize > humanizer.HumanToSize(maxUploadSize) {
 			return status.Errorf(codes.InvalidArgument, "file is too large: %d > %d", uploadSize, maxUploadSize)
@@ -83,13 +94,23 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 
 		// we stream the file to all transports (filesystem, aws, azure, gcp, etc. )
 		// this way we can handle large files if needed
-		if err := file.Write(chunk); err != nil {
+		if err := file.Write(chunk, partNumber); err != nil {
 			return status.Error(codes.Internal, err.Error())
 		}
+		partNumber++
 	}
 
 	// the image is uploaded
 
+}
+
+func (l *UploadAssetLogic) getContentType(chunk []byte) (string, error) {
+	if len(chunk) > 1 {
+		fileType := http.DetectContentType(chunk)
+		return fileType, nil
+
+	}
+	return "", status.Error(codes.Internal, "mime type cannot be detected. file buffer length is zero")
 }
 
 func (l *UploadAssetLogic) getAssetKind(assetKind catalog.UploadAssetRequest_AssetKind) (asset.Kind, error) {

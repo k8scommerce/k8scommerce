@@ -11,11 +11,11 @@ func MustNewAzureTransport(cfg config.AzureConfig) (Transport, error) {
 type azureTransport struct {
 }
 
-func (t *azureTransport) Open(destinationPath, fileName string) error {
+func (t *azureTransport) Open(destinationPath, fileName, contentType string) error {
 	return nil
 }
 
-func (t *azureTransport) StreamPut(buffer []byte) error {
+func (t *azureTransport) StreamPut(buffer []byte, partNumber int) error {
 	return nil
 }
 
