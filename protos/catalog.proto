@@ -66,13 +66,22 @@ message Price {
   int64 userRoleId = 7;
 }
 
+enum AssetKind {
+  Image = 0;
+  Document = 1;
+  Audio = 2;
+  Video = 3;
+  Archive = 4;
+}
+
 message Asset {
   int64 id = 1;
   int64 storeId = 2;
   int64 productId = 3;
   int64 variantId = 4;
   string name = 5;
-  string mime = 6;
+  string url = 6;
+  AssetKind kind = 7;
 }
 
 //
@@ -256,16 +265,9 @@ message DeleteProductResponse {}
 
 // images/files/etc
 message UploadAssetRequest {
-  enum AssetKind {
-    Image = 0;
-    Document = 1;
-    Audio = 2;
-    Video = 3;
-  }
   oneof data {
     Asset asset = 1;
     bytes chunk = 2;
-    AssetKind kind = 3;
   };
 }
 
