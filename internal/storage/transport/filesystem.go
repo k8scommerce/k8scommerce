@@ -9,13 +9,16 @@ import (
 )
 
 func MustNewFileSystemTransport(cfg config.FileSystemConfig) (Transport, error) {
-	t := &fileSystemTransport{}
+	t := &fileSystemTransport{
+		cfg: cfg,
+	}
 	err := t.getSession()
 	return t, err
 }
 
 type fileSystemTransport struct {
 	fileHandle *os.File
+	cfg        config.FileSystemConfig
 }
 
 func (t *fileSystemTransport) Open(destinationPath, fileName, contentType string) error {
@@ -35,7 +38,7 @@ func (t *fileSystemTransport) Open(destinationPath, fileName, contentType string
 func (t *fileSystemTransport) StreamPut(buffer []byte, partNumber int) error {
 	n, err := t.fileHandle.Write(buffer)
 	if err != nil {
-		return status.Errorf(codes.Internal, "cannot write to file handle: %s", err.Error())
+		return status.Errorf(codes.Internal, "cannot write to file handle: %s, byte length: %d", err.Error(), len(buffer))
 	}
 	if len(buffer) != n {
 		return status.Errorf(codes.Internal, "byte written not same length as bytes given")

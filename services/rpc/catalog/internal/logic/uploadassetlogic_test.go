@@ -186,8 +186,14 @@ var _ = Describe("UploadAssetLogic", func() {
 			})
 
 			It("should have all prerequisites", func() {
+				name := testFilesPath + "/logo.png"
+				assetFile, err = asset.MustNewFile(name, *cfg)
+				Expect(err).To(BeNil())
+
 				Expect(assetFile.Kind).To(Not(BeNil()))
 				Expect(assetFile.ContentType).To(Equal(""))
+
+				fmt.Println("assetFile.GetDestinationPath()", assetFile.GetDestinationPath())
 
 				Expect(assetFile.GetDestinationPath()).To(Not(BeNil()))
 				Expect(assetFile.GetDestinationPath()).To(Equal(testFilesPath + "/uploads/1/b/b/"))
@@ -198,6 +204,10 @@ var _ = Describe("UploadAssetLogic", func() {
 			})
 
 			It("should save a file locally", func() {
+				name := testFilesPath + "/logo.png"
+				assetFile, err = asset.MustNewFile(name, *cfg)
+				Expect(err).To(BeNil())
+
 				err = bufferAssetFile(assetFile)
 				Expect(err).To(BeNil())
 
@@ -212,7 +222,7 @@ var _ = Describe("UploadAssetLogic", func() {
 			})
 
 			It("should save an svg", func() {
-				name := "./testfiles/logo.svg"
+				name := testFilesPath + "/logo.svg"
 				assetFile, err = asset.MustNewFile(name, *cfg)
 				Expect(err).To(BeNil())
 
@@ -232,51 +242,65 @@ var _ = Describe("UploadAssetLogic", func() {
 			})
 		})
 
-		// Describe("Aws S3", func() {
+		Describe("Aws S3", func() {
 
-		// 	// reset the config
-		// 	cfg := getUploadConfig()
+			// reset the config
+			cfg := getUploadConfig()
 
-		// 	BeforeEach(func() {
-		// 		cfg.StorageConfig.SubDirectory = "uploads"
+			BeforeEach(func() {
+				cfg.StorageConfig.SubDirectory = "uploads"
 
-		// 		cfg.StorageConfig.AWS = true
-		// 		cfg.StorageConfig.AWSConfig.AccessKeyId = os.Getenv("AWS_ACCESS_KEY_ID")
-		// 		cfg.StorageConfig.AWSConfig.SecretAccessKey = os.Getenv("AWS_SECRET_ACCESS_KEY")
-		// 		cfg.StorageConfig.AWSConfig.Region = os.Getenv("AWS_DEFAULT_REGION")
-		// 		cfg.StorageConfig.AWSConfig.S3Bucket = os.Getenv("S3_BUCKET")
+				cfg.StorageConfig.AWS = true
+				cfg.StorageConfig.AWSConfig.AccessKeyId = os.Getenv("AWS_ACCESS_KEY_ID")
+				cfg.StorageConfig.AWSConfig.SecretAccessKey = os.Getenv("AWS_SECRET_ACCESS_KEY")
+				cfg.StorageConfig.AWSConfig.Region = os.Getenv("AWS_DEFAULT_REGION")
+				cfg.StorageConfig.AWSConfig.S3Bucket = os.Getenv("S3_BUCKET")
 
-		// 		cfg.StorageConfig.FileSystem = false
-		// 		cfg.StorageConfig.GCP = false
-		// 		cfg.StorageConfig.Azure = false
+				cfg.StorageConfig.FileSystem = false
+				cfg.StorageConfig.GCP = false
+				cfg.StorageConfig.Azure = false
 
-		// 		name := "./testfiles/Pizigani_1367_Chart_10MB.jpeg"
-		// 		assetFile, err = asset.MustNewFile(name, *cfg)
-		// 		Expect(err).To(BeNil())
+				name := testFilesPath + "/Pizigani_1367_Chart_10MB.jpeg"
+				assetFile, err = asset.MustNewFile(name, *cfg)
+				Expect(err).To(BeNil())
 
-		// 		assetFile.Kind = asset.Image
-		// 	})
+				assetFile.Kind = asset.Image
+			})
 
-		// 	It("should have all prerequisites", func() {
-		// 		Expect(assetFile.Kind).To(Not(BeNil()))
-		// 		Expect(assetFile.ContentType).To(Equal(""))
+			It("should have all prerequisites", func() {
+				Expect(assetFile.Kind).To(Not(BeNil()))
+				Expect(assetFile.ContentType).To(Equal(""))
 
-		// 		Expect(assetFile.GetDestinationPath()).To(Not(BeNil()))
-		// 		Expect(assetFile.GetDestinationPath()).To(Equal("uploads/1/b/b/"))
+				Expect(assetFile.GetDestinationPath()).To(Not(BeNil()))
+				Expect(assetFile.GetDestinationPath()).To(Equal("uploads/d/b/e/"))
 
-		// 		Expect(assetFile.GetStorageTransport()).To(Not(BeNil()))
-		// 		xType := fmt.Sprintf("%T", assetFile.GetStorageTransport())
-		// 		Expect(xType).To(ContainSubstring("transport.awsTransport"))
-		// 	})
+				Expect(assetFile.GetStorageTransport()).To(Not(BeNil()))
+				xType := fmt.Sprintf("%T", assetFile.GetStorageTransport())
+				Expect(xType).To(ContainSubstring("transport.awsTransport"))
+			})
 
-		// 	It("should save a file on S3", func() {
-		// 		err = bufferAssetFile(assetFile)
-		// 		Expect(err).To(BeNil())
+			It("should save a file on S3", func() {
+				err = bufferAssetFile(assetFile)
+				Expect(err).To(BeNil())
 
-		// 		err = assetFile.Close()
-		// 		Expect(err).To(BeNil())
-		// 	})
-		// })
+				err = assetFile.Close()
+				Expect(err).To(BeNil())
+			})
+
+			It("should save a file on S3", func() {
+				name := testFilesPath + "/logo.png"
+				assetFile, err = asset.MustNewFile(name, *cfg)
+				Expect(err).To(BeNil())
+
+				assetFile.Kind = asset.Image
+
+				err = bufferAssetFile(assetFile)
+				Expect(err).To(BeNil())
+
+				err = assetFile.Close()
+				Expect(err).To(BeNil())
+			})
+		})
 
 	})
 })

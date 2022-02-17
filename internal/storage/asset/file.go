@@ -166,7 +166,9 @@ func (f *File) setDestinationPath() {
 	}
 
 	for i := range sections {
-		sections[i] = strings.TrimSpace(sections[i])
+		if val := strings.TrimSpace(sections[i]); val != "" {
+			sections[i] = val
+		}
 	}
 
 	f.destinationPath = "/" + strings.Join(sections, "/") + "/"

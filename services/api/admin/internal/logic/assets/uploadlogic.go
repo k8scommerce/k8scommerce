@@ -58,10 +58,8 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 	}
 
 	startTime := time.Now()
-	log.Print("handling an upload")
 	multipartReader, err := l.r.MultipartReader()
 	if err != nil {
-		log.Printf("failed to get a multipart reader %v", err)
 		return
 	}
 
@@ -133,7 +131,7 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 
 	uploadResponse, err := stream.CloseAndRecv()
 	if err != nil {
-		return resp, fmt.Errorf("cannot receive response: %s", err)
+		return resp, fmt.Errorf("cannot receive response: %s, %#v", err, uploadResponse)
 	}
 
 	stopTime := time.Now()

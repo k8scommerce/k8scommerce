@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"k8scommerce/internal/storage/asset"
 	"k8scommerce/internal/utils/humanizer"
@@ -31,6 +32,12 @@ func NewUploadAssetLogic(ctx context.Context, svcCtx *svc.ServiceContext, univer
 		universe: universe,
 	}
 }
+
+///
+/// The problem seems to be the file losing it's handle
+///
+///
+///
 
 func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetServer) error {
 	req, err := stream.Recv()
@@ -83,18 +90,20 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				return err
 			}
 
-			file.Open(contentType)
+			if err := file.Open(contentType); err != nil {
+				return err
+			}
 		}
 
 		uploadSize += int64(size)
 		if uploadSize > humanizer.HumanToSize(maxUploadSize) {
-			return status.Errorf(codes.InvalidArgument, "file is too large: %d > %d", uploadSize, maxUploadSize)
+			return status.Errorf(codes.InvalidArgument, "file is too large: %d > %s", uploadSize, maxUploadSize)
 		}
 
 		// we stream the file to all transports (filesystem, aws, azure, gcp, etc. )
 		// this way we can handle large files if needed
 		if err := file.Write(chunk, partNumber); err != nil {
-			return status.Error(codes.Internal, err.Error())
+			return fmt.Errorf("chunk write error: %s", err.Error())
 		}
 		partNumber++
 	}
