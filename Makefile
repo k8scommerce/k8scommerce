@@ -81,10 +81,9 @@ shipping\
 similarproducts\
 store\
 user\
-warehouse
+warehouse\
+cart
 # catalog
-
-# cart\
 
 
 # define standard colors

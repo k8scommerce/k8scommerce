@@ -61,6 +61,15 @@ type Price struct {
 	Currency               string  `json:"currency,optional"`               // price currency. example: USD, CAN, etc.
 }
 
+type Asset struct {
+	Id        int64  `json:"id,optional"`
+	ProductId int64  `json:"productId,optional"`
+	VariantId int64  `json:"variantId,optional"`
+	Name      string `json:"name,optional"`
+	Url       string `json:"url,optional"`
+	Kind      string `json:"kind,optional,options=image|document|audio|video|archive"`
+}
+
 type GetAllCategoriesRequest struct {
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
@@ -149,6 +158,11 @@ type DeleteProductRequest struct {
 }
 
 type DeleteProductResponse struct {
+}
+
+type UploadAssetRequest struct {
+	ProductId int64 `path:"productId"`
+	VariantId int64 `path:"variantId"`
 }
 
 type Customer struct {

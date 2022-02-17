@@ -48,23 +48,18 @@ UploadConfig:
         - .ogv
         - .3gp
         - .3g2
-
-  Storage: 
+  StorageConfig:
+    SubDirectory: uploads
     FileSystem: true
     FileSystemConfig:
-      SavePath: ~/.k8scommerce/uploads/files
+      BasePath:
     AWS: false
-    AwsConfig:
-      AwsRegion:
-      AwsAccessKeyId:
-      AwsSecretAccessKey:
-      BucketName: k8scommerce
-      SavePath: uploads/files
-    Gcp: false
-    GcpConfig:
-      SavePath: uploads/files
+    AWSConfig:
+      Region:
+      AccessKeyId:
+      SecretAccessKey:
+      S3Bucket:
     Azure: false
-    AzureConfig:
-      SavePath: uploads/files
-
-
+    # AzureConfig: 
+    GCP: false
+    # GCPConfig: 

@@ -43,13 +43,13 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 		return status.Errorf(codes.Internal, "file creation error: %s", err.Error())
 	}
 
-	kind, err := l.getAssetKind(req.GetKind())
+	kind, err := l.getAssetKind(req.GetAsset().GetKind())
 	if err != nil {
 		return err
 	}
 	file.Kind = kind
 
-	maxUploadSize, err := l.getMaxUploadFilesize(req.GetKind())
+	maxUploadSize, err := l.getMaxUploadFilesize(req.GetAsset().GetKind())
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,6 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 			}
 
 			file.Open(contentType)
-
 		}
 
 		uploadSize += int64(size)
@@ -113,23 +112,23 @@ func (l *UploadAssetLogic) getContentType(chunk []byte) (string, error) {
 	return "", status.Error(codes.Internal, "mime type cannot be detected. file buffer length is zero")
 }
 
-func (l *UploadAssetLogic) getAssetKind(assetKind catalog.UploadAssetRequest_AssetKind) (asset.Kind, error) {
+func (l *UploadAssetLogic) getAssetKind(assetKind catalog.AssetKind) (asset.Kind, error) {
 
 	var kind asset.Kind
 	var isSet = false
 	switch assetKind {
-	case catalog.UploadAssetRequest_Image:
+	case catalog.AssetKind_Image:
 		isSet = true
-		kind = asset.Kind(catalog.UploadAssetRequest_Image.Number())
-	case catalog.UploadAssetRequest_Document:
+		kind = asset.Kind(catalog.AssetKind_Image.Number())
+	case catalog.AssetKind_Document:
 		isSet = true
-		kind = asset.Kind(catalog.UploadAssetRequest_Document.Number())
-	case catalog.UploadAssetRequest_Audio:
+		kind = asset.Kind(catalog.AssetKind_Document.Number())
+	case catalog.AssetKind_Audio:
 		isSet = true
-		kind = asset.Kind(catalog.UploadAssetRequest_Audio.Number())
-	case catalog.UploadAssetRequest_Video:
+		kind = asset.Kind(catalog.AssetKind_Audio.Number())
+	case catalog.AssetKind_Video:
 		isSet = true
-		kind = asset.Kind(catalog.UploadAssetRequest_Video.Number())
+		kind = asset.Kind(catalog.AssetKind_Video.Number())
 	}
 
 	if !isSet {
@@ -138,17 +137,17 @@ func (l *UploadAssetLogic) getAssetKind(assetKind catalog.UploadAssetRequest_Ass
 	return kind, nil
 }
 
-func (l *UploadAssetLogic) getMaxUploadFilesize(assetKind catalog.UploadAssetRequest_AssetKind) (string, error) {
+func (l *UploadAssetLogic) getMaxUploadFilesize(assetKind catalog.AssetKind) (string, error) {
 	var maxUploadSize string
 
 	switch assetKind {
-	case catalog.UploadAssetRequest_Image:
+	case catalog.AssetKind_Image:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Images.MaxUploadSize
-	case catalog.UploadAssetRequest_Document:
+	case catalog.AssetKind_Document:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Documents.MaxUploadSize
-	case catalog.UploadAssetRequest_Audio:
+	case catalog.AssetKind_Audio:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Audio.MaxUploadSize
-	case catalog.UploadAssetRequest_Video:
+	case catalog.AssetKind_Video:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Video.MaxUploadSize
 	}
 

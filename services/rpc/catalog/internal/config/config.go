@@ -12,10 +12,3 @@ type Config struct {
 	PostgresConfig repos.PostgresConfig
 	UploadConfig   config.UploadConfig
 }
-
-// type PostgresConfig struct {
-// 	Connection                   string
-// 	MaxOpenConnections           int
-// 	MaxIdleConnections           int
-// 	MaxConnectionLifetimeMinutes int
-// }
