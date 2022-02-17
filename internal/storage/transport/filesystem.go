@@ -18,7 +18,7 @@ type fileSystemTransport struct {
 	fileHandle *os.File
 }
 
-func (t *fileSystemTransport) Open(destinationPath, fileName string) error {
+func (t *fileSystemTransport) Open(destinationPath, fileName, contentType string) error {
 	if err := os.MkdirAll(destinationPath, os.ModePerm); err != nil {
 		return status.Errorf(codes.Internal, "cannot create directory path %s", destinationPath)
 	}
@@ -32,7 +32,7 @@ func (t *fileSystemTransport) Open(destinationPath, fileName string) error {
 	return nil
 }
 
-func (t *fileSystemTransport) StreamPut(buffer []byte) error {
+func (t *fileSystemTransport) StreamPut(buffer []byte, partNumber int) error {
 	n, err := t.fileHandle.Write(buffer)
 	if err != nil {
 		return status.Errorf(codes.Internal, "cannot write to file handle: %s", err.Error())

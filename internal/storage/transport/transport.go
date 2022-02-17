@@ -1,7 +1,7 @@
 package transport
 
 type Transport interface {
-	Open(destinationPath, fileName string) error
-	StreamPut(buffer []byte) error
+	Open(destinationPath, fileName, contentType string) error
+	StreamPut(buffer []byte, partNumber int) error
 	Close() error
 }

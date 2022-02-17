@@ -2,7 +2,7 @@ package transport
 
 import "k8scommerce/internal/storage/config"
 
-func MustNewGcpTransport(cfg config.GcpConfig) (Transport, error) {
+func MustNewGcpTransport(cfg config.GCPConfig) (Transport, error) {
 	t := &gcpTransport{}
 	err := t.getSession()
 	return t, err
@@ -11,11 +11,11 @@ func MustNewGcpTransport(cfg config.GcpConfig) (Transport, error) {
 type gcpTransport struct {
 }
 
-func (t *gcpTransport) Open(destinationPath, fileName string) error {
+func (t *gcpTransport) Open(destinationPath, fileName, contentType string) error {
 	return nil
 }
 
-func (t *gcpTransport) StreamPut(buffer []byte) error {
+func (t *gcpTransport) StreamPut(buffer []byte, partNumber int) error {
 	return nil
 }
 

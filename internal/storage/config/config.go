@@ -37,24 +37,24 @@ type StorageConfig struct {
 	FileSystem       bool
 	FileSystemConfig FileSystemConfig
 	AWS              bool
-	AwsConfig        AwsConfig
+	AWSConfig        AWSConfig
 	Azure            bool
 	AzureConfig      AzureConfig
-	Gcp              bool
-	GcpConfig        GcpConfig
+	GCP              bool
+	GCPConfig        GCPConfig
 }
 
 type FileSystemConfig struct {
 	BasePath string
 }
 
-type AwsConfig struct {
-	AwsRegion          string
-	AwsAccessKeyId     string
-	AwsSecretAccessKey string
-	AwsBucket          string
+type AWSConfig struct {
+	Region          string
+	AccessKeyId     string
+	SecretAccessKey string
+	S3Bucket        string
 }
 
 type AzureConfig struct{}
 
-type GcpConfig struct{}
+type GCPConfig struct{}

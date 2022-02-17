@@ -1,11 +1,9 @@
 package asset
 
 import (
-	"bytes"
 	"k8scommerce/internal/storage/config"
 	"k8scommerce/internal/storage/transport"
 	"k8scommerce/internal/utils"
-	"net/http"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -24,7 +22,6 @@ const (
 )
 
 type File struct {
-	Buffer      *bytes.Buffer
 	Name        string
 	Kind        Kind
 	ContentType string
@@ -37,9 +34,12 @@ type File struct {
 
 func MustNewFile(name string, cfg config.UploadConfig) (*File, error) {
 	f := &File{
-		cfg:    cfg,
-		Name:   name,
-		Buffer: &bytes.Buffer{},
+		cfg:  cfg,
+		Name: name,
+	}
+
+	if err := f.checkForSingleTransportEnabled(); err != nil {
+		return nil, err
 	}
 
 	if err := f.setStoragetTransport(); err != nil {
@@ -52,69 +52,86 @@ func MustNewFile(name string, cfg config.UploadConfig) (*File, error) {
 	return f, nil
 }
 
-func (f *File) Open() error {
+func (f *File) Open(contentType string) error {
+	f.ContentType = contentType
+
 	// open the stream
-	if err := f.storageTransport.Open(f.destinationPath, f.baseName); err != nil {
+	if err := f.storageTransport.Open(f.destinationPath, f.baseName, f.ContentType); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (f *File) Write(chunk []byte) error {
-	_, err := f.Buffer.Write(chunk)
-	if err != nil {
-		return err
-	}
-
-	// set the mime type
-	// this will only occur on the first chunk
-	if f.ContentType == "" {
-		f.setContentType()
-	}
-
+// Write is a passthru function
+// it sends the raw []byte chunks to the configured
+// storage transport destination
+func (f *File) Write(chunk []byte, partNumber int) error {
 	// stream the content to the destination
-	if err := f.storageTransport.StreamPut(chunk); err != nil {
+	if err := f.storageTransport.StreamPut(chunk, partNumber); err != nil {
 		return err
 	}
 
 	return nil
 }
 
+// close the transport
 func (f *File) Close() error {
-	return nil
+	return f.storageTransport.Close()
 }
 
+// getter for UploadConfig
 func (f *File) Config() config.UploadConfig {
 	return f.cfg
 }
 
+// getter for destination path
 func (f *File) GetDestinationPath() string {
 	return f.destinationPath
 }
 
+// returns a storage object
+// that adheres to the transport.Transport interface
 func (f *File) GetStorageTransport() transport.Transport {
 	return f.storageTransport
 }
 
-func (f *File) setContentType() error {
-	if f.Buffer.Len() > 1 {
-		fileType := http.DetectContentType(f.Buffer.Bytes())
-		f.ContentType = fileType
-		return nil
+func (f *File) checkForSingleTransportEnabled() error {
+	enabled := []string{}
+	cnt := 0
+	if f.cfg.StorageConfig.FileSystem {
+		cnt++
+		enabled = append(enabled, "FileSystem")
 	}
-	return status.Error(codes.Internal, "mime type cannot be detected. file buffer length is zero")
+	if f.cfg.StorageConfig.AWS {
+		cnt++
+		enabled = append(enabled, "AWS")
+	}
+	if f.cfg.StorageConfig.GCP {
+		cnt++
+		enabled = append(enabled, "GCP")
+	}
+	if f.cfg.StorageConfig.Azure {
+		cnt++
+		enabled = append(enabled, "Azure")
+	}
+
+	if cnt > 1 {
+		return status.Errorf(codes.Internal, "only one transport can be enabled at a time. Enabled: %s", strings.Join(enabled, ", "))
+	}
+	return nil
 }
 
+// determine which transport we are configured to use
 func (f *File) setStoragetTransport() (err error) {
 	if f.cfg.StorageConfig.FileSystem {
 		f.storageTransport, err = transport.MustNewFileSystemTransport(f.cfg.StorageConfig.FileSystemConfig)
 		f.cfg.StorageConfig.SubDirectory = f.cfg.StorageConfig.FileSystemConfig.BasePath + "/" + f.cfg.StorageConfig.SubDirectory
 		return err
 	} else if f.cfg.StorageConfig.AWS {
-		f.storageTransport, err = transport.MustNewAwsTransport(f.cfg.StorageConfig.AwsConfig)
+		f.storageTransport, err = transport.MustNewAwsTransport(f.cfg.StorageConfig.AWSConfig)
 		return err
-	} else if f.cfg.StorageConfig.Gcp {
-		f.storageTransport, err = transport.MustNewGcpTransport(f.cfg.StorageConfig.GcpConfig)
+	} else if f.cfg.StorageConfig.GCP {
+		f.storageTransport, err = transport.MustNewGcpTransport(f.cfg.StorageConfig.GCPConfig)
 		return err
 	} else if f.cfg.StorageConfig.Azure {
 		f.storageTransport, err = transport.MustNewAzureTransport(f.cfg.StorageConfig.AzureConfig)
@@ -152,8 +169,12 @@ func (f *File) setDestinationPath() {
 		sections[i] = strings.TrimSpace(sections[i])
 	}
 
+	f.destinationPath = "/" + strings.Join(sections, "/") + "/"
+	if f.destinationPath[:1] == "/" {
+		f.destinationPath = f.destinationPath[1:len(f.destinationPath)]
+	}
 	pattern := regexp.MustCompile(`\/+`)
-	f.destinationPath = pattern.ReplaceAllString(strings.Join(sections, "/")+"/", "/")
+	f.destinationPath = pattern.ReplaceAllString(f.destinationPath, "/")
 }
 
 // func (f *File) setStoragetHandler() error {
