@@ -11,11 +11,7 @@ Auth:
 CartRpc:
   Etcd:
     Hosts:
-<<<<<<< HEAD
       - 127.0.0.1:2379
-=======
-      - localhost:2379
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
     Key: cart.rpc
 CatalogRpc:
   Etcd:
