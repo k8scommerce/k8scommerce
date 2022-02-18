@@ -8,7 +8,7 @@ import (
 	"k8scommerce/services/api/admin/internal/types"
 	"k8scommerce/services/rpc/user/userclient"
 
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetAllUsersLogic struct {

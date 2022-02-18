@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/lib/pq"
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 
 	_ "github.com/jackc/pgx/v4/stdlib" //postgres driver for sqlx
 	"github.com/jmoiron/sqlx"

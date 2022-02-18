@@ -3,9 +3,10 @@ package categories
 import (
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"k8scommerce/services/api/client/internal/logic/categories"
 	"k8scommerce/services/api/client/internal/svc"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func GetAllCategoriesHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

@@ -15,10 +15,9 @@ import (
 	"k8scommerce/services/api/admin/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
+	"google.golang.org/grpc"
 )
-
-const maxFileSize = 1000 << 20 // 1000 MB
 
 type UploadLogic struct {
 	logx.Logger
@@ -80,7 +79,15 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 
 			if len(part.FileName()) > 0 {
 				if partCount == 0 {
-					stream, err = l.svcCtx.CatalogRpc.UploadAsset(l.ctx)
+
+					// size := 1024 * 1024 * 12
+					// opts = append(opts, grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(size)))
+					// conn, err := grpc.Dial(address, opts...)
+
+					stream, err = l.svcCtx.CatalogRpc.UploadAsset(l.ctx,
+						grpc.MaxCallRecvMsgSize(int(l.svcCtx.Config.MaxBytes)),
+						grpc.MaxCallSendMsgSize(int(l.svcCtx.Config.MaxBytes)),
+					)
 					if err != nil {
 						return resp, err
 					}

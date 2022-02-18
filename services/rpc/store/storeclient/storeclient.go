@@ -8,7 +8,7 @@ import (
 
 	"k8scommerce/services/rpc/store/pb/store"
 
-	"github.com/tal-tech/go-zero/zrpc"
+	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 

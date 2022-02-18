@@ -6,7 +6,7 @@ import (
 	"k8scommerce/services/rpc/inventory/inventoryclient"
 	"k8scommerce/services/rpc/othersbought/othersboughtclient"
 
-	"github.com/tal-tech/go-zero/zrpc"
+	"github.com/zeromicro/go-zero/zrpc"
 
 	rabbitmq "github.com/wagslane/go-rabbitmq"
 )

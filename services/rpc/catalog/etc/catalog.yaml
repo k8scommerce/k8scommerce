@@ -1,5 +1,6 @@
 Name: catalog.rpc
 ListenOn: 0.0.0.0:8080
+MaxBytes: 1048576000
 Log:
   Mode: console
 Etcd:
@@ -15,7 +16,7 @@ PostgresConfig:
 UploadConfig:
   AllowedTypes:
     Images:
-      MaxUploadSize: 25MB
+      MaxUploadSize: 250MB
       MimeTypes:
         - .jpg
         - .png
@@ -23,7 +24,7 @@ UploadConfig:
         - .jpeg
         - .ico
     Documents:
-      MaxUploadSize: 25MB
+      MaxUploadSize: 250MB
       MimeTypes:
         - .pdf
         - .doc
@@ -31,15 +32,16 @@ UploadConfig:
         - .odt
         - .xls
         - .psd
+        - .bin
     Audio:
-      MaxUploadSize: 25MB
+      MaxUploadSize: 250MB
       MimeTypes:
         - .mp3
         - .m4a
         - .ogg
         - .wav
     Video:
-      MaxUploadSize: 25MB
+      MaxUploadSize: 250MB
       MimeTypes:
         - .mp4
         - .mov

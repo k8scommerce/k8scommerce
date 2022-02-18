@@ -18,7 +18,7 @@ import (
 	"github.com/iancoleman/strcase"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.com/tal-tech/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/core/conf"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

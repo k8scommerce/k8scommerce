@@ -3,10 +3,11 @@ package users
 import (
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"k8scommerce/services/api/admin/internal/logic/users"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func GetAllUsersHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
