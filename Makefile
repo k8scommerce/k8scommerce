@@ -55,8 +55,12 @@ option\
 option_item\
 archetype
 
+<<<<<<< HEAD
 apiServices=client\
 admin
+=======
+apiServices=
+>>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
 
 # cart depends on inventory, othersbought
 
@@ -86,8 +90,14 @@ similarproducts\
 store\
 user\
 warehouse\
+<<<<<<< HEAD
 catalog\
 cart
+=======
+cart
+# catalog
+
+>>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
@@ -251,6 +261,7 @@ stop:
 	done
 	@killall etcd
 
+<<<<<<< HEAD
 
 .PHONY: build-all
 build-all:
@@ -304,6 +315,8 @@ build-release:
 	(cd ./bin/build/linux/$(VERSION) && tar -C . -czvf k8scommerce-$(VERSION)-linux.tar.gz k8scommerce && mv k8scommerce-$(VERSION)-linux.tar.gz ../../../release/)
 	(cd ./bin/build/windows/$(VERSION) && tar -C . -czvf k8scommerce-$(VERSION)-windows.tar.gz k8scommerce && mv k8scommerce-$(VERSION)-windows.tar.gz ../../../release/)
 
+=======
+>>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
 ##
 ## Admin
 ##

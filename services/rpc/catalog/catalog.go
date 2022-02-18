@@ -22,6 +22,13 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
+func init() {
+	err := godotenv.Load("./../../../.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 var configFile = flag.String("f", "etc/catalog.yaml", "the config file")
 var envFile = flag.String("e", "./.env", "the .env file")
 

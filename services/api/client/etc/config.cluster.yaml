@@ -2,7 +2,7 @@ Name: client
 Host: 0.0.0.0
 Port: 8888
 Log:
-  Mode: file
+  Mode: console
 Timeout: 1500
 HashSalt: MTF)kaA}.5x85SK~J{6gf88_jc;?RH<+
 Auth:
@@ -11,72 +11,60 @@ Auth:
 CartRpc:
   Etcd:
     Hosts:
-<<<<<<< HEAD
-      - 127.0.0.1:2379
-=======
-      - localhost:2379
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
+      - etcd-client:2379
     Key: cart.rpc
 CatalogRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: catalog.rpc
 CustomerRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: customer.rpc
 EmailRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: email.rpc
 InventoryRpc:
   Etcd:
     Hosts:
-<<<<<<< HEAD
-      - 127.0.0.1:2379
-=======
-      - localhost:2379
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
+      - etcd-client:2379
     Key: inventory.rpc
 OthersBoughtRpc:
   Etcd:
     Hosts:
-<<<<<<< HEAD
-      - 127.0.0.1:2379
-=======
-      - localhost:2379
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
+      - etcd-client:2379
     Key: othersbought.rpc
 PaymentRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: payment.rpc
 ShippingRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: shipping.rpc
 SimilarProductsRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: similarproducts.rpc
 StoreRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: store.rpc
 UserRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: user.rpc
 WarehouseRpc:
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd-client:2379
     Key: warehouse.rpc
