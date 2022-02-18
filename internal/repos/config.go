@@ -1,7 +1,7 @@
 package repos
 
 type PostgresConfig struct {
-	Connection                   string
+	DataSourceName               string
 	MaxOpenConnections           int
 	MaxIdleConnections           int
 	MaxConnectionLifetimeMinutes int

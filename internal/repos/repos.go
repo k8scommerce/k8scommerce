@@ -114,11 +114,11 @@ func (r *repo) User() User {
 func (a *repo) mustConnect() (conn *sqlx.DB) {
 	// create the db client
 	once.Do(func() {
-		go a.setDBListener(a.cfg.Connection)
-		logx.Info("DB Connecting", "conn", a.cfg.Connection)
+		go a.setDBListener(a.cfg.DataSourceName)
+		logx.Info("DB Connecting", "conn", a.cfg.DataSourceName)
 
 		var conn *sqlx.DB
-		conn, err := sqlx.Connect("pgx", a.cfg.Connection)
+		conn, err := sqlx.Connect("pgx", a.cfg.DataSourceName)
 		if err != nil {
 			panic(err)
 		}

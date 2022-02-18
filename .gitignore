@@ -7,3 +7,5 @@ default.etcd/
 .data
 tscode/
 testfiles/uploads
+bin
+.assets

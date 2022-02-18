@@ -2,10 +2,10 @@ Name: customer.rpc
 ListenOn: 0.0.0.0:8080
 Etcd:
   Hosts:
-    - localhost:2379
+    - 127.0.0.1:2379
   Key: customer.rpc
 PostgresConfig:
-  Connection: postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable
+  DataSourceName: ${POSTGRES_DSN}
   MaxOpenConnections: 10
   MaxIdleConnections: 2
   MaxConnectionLifetimeMinutes: 5
