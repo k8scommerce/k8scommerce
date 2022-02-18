@@ -11,14 +11,14 @@
 # brew install plow
 # https://golangexample.com/a-http-s-benchmarking-tool-written-in-golang/
 # when running open http://127.0.0.1:18888/ to see live stats
-plow http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants -c 200 -d 30s -T 'application/json' -H 'Store-Key:yxvzrvla' -m GET
+# plow http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants -c 150 -d 30s -T 'application/json' -H 'Store-Key:yxvzrvla' -m GET
 
 
 # https://woocommerce.com/products/woocommerce-api-manager/
 # ab -n 500 -c 1 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
 # ab -n 500 -c 10 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
 # ab -n 500 -c 100 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
-# ab -n 500 -c 200 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
+# ab -n 94212 -c 200 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
 # ab -n 500 -c 300 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
 # ab -n 500 -c 400 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
 # ab -n 100000 -c 2500 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
