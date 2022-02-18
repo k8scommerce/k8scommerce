@@ -7,5 +7,7 @@ default.etcd/
 .data
 tscode/
 testfiles/uploads
-bin
+bin/build/darwin
+bin/build/linux
+bin/build/windows
 .assets
