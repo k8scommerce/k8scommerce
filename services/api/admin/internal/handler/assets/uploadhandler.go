@@ -6,7 +6,7 @@ import (
 	"k8scommerce/services/api/admin/internal/logic/assets"
 	"k8scommerce/services/api/admin/internal/svc"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func UploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

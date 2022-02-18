@@ -19,7 +19,29 @@ const (
 	Document Kind = 1
 	Audio    Kind = 2
 	Video    Kind = 3
+	Archive  Kind = 4
 )
+
+var (
+	Kind_name = map[int32]string{
+		0: "Image",
+		1: "Document",
+		2: "Audio",
+		3: "Video",
+		4: "Archive",
+	}
+	Kind_value = map[string]int32{
+		"Image":    0,
+		"Document": 1,
+		"Audio":    2,
+		"Video":    3,
+		"Archive":  4,
+	}
+)
+
+func (k *Kind) String() string {
+	return Kind_name[int32(*k)]
+}
 
 type File struct {
 	Name        string

@@ -16,8 +16,8 @@ import (
 	"k8scommerce/services/rpc/user/userclient"
 	"k8scommerce/services/rpc/warehouse/warehouseclient"
 
-	"github.com/tal-tech/go-zero/rest"
-	"github.com/tal-tech/go-zero/zrpc"
+	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {

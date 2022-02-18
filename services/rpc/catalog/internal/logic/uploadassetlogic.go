@@ -11,7 +11,7 @@ import (
 	"net/http"
 
 	"github.com/localrivet/galaxycache"
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -38,7 +38,7 @@ func NewUploadAssetLogic(ctx context.Context, svcCtx *svc.ServiceContext, univer
 ///
 ///
 ///
-
+// grpc.MaxCallSendMsgSize(maxFileSize)
 func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetServer) error {
 	req, err := stream.Recv()
 	if err != nil {
@@ -97,7 +97,7 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 
 		uploadSize += int64(size)
 		if uploadSize > humanizer.HumanToSize(maxUploadSize) {
-			return status.Errorf(codes.InvalidArgument, "file is too large: %d > %s", uploadSize, maxUploadSize)
+			return status.Errorf(codes.InvalidArgument, "file is too large: %d > %s. kind: %s", uploadSize, maxUploadSize, file.Kind.String())
 		}
 
 		// we stream the file to all transports (filesystem, aws, azure, gcp, etc. )

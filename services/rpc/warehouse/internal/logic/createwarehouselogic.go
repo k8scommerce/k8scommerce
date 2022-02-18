@@ -7,7 +7,7 @@ import (
 	"k8scommerce/services/rpc/warehouse/pb/warehouse"
 
 	"github.com/localrivet/galaxycache"
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type CreateWarehouseLogic struct {

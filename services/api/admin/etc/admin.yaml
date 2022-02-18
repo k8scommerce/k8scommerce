@@ -1,6 +1,7 @@
 Name: admin
 Host: 0.0.0.0
 Port: 8888
+MaxBytes: 1048576000
 Log:
   Mode: console
 Timeout: 1500
