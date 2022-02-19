@@ -12,3 +12,7 @@ bin/build/linux
 bin/build/windows
 .assets
 logs
+.tar.gz
+.tar
+.gz
+.zip
