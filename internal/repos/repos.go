@@ -37,6 +37,7 @@ func MustNewRepo(c *PostgresConfig) Repo {
 type Repo interface {
 	GetRawDB() *sqlx.DB
 	// Repos
+	Asset() Asset
 	Cart() Cart
 	CartItem() CartItem
 	Category() Category
@@ -49,6 +50,10 @@ type Repo interface {
 	OthersBought() OthersBought
 	SimilarProducts() SimilarProducts
 	User() User
+
+	Begin() (*sql.Tx, error)
+	Rollback(tx *sql.Tx) error
+	Commit(tx *sql.Tx) error
 }
 
 type repo struct {
@@ -61,7 +66,23 @@ func (r *repo) GetRawDB() *sqlx.DB {
 	return r.db
 }
 
+func (r *repo) Begin() (*sql.Tx, error) {
+	return r.db.Begin()
+}
+
+func (r *repo) Rollback(tx *sql.Tx) error {
+	return tx.Rollback()
+}
+
+func (r *repo) Commit(tx *sql.Tx) error {
+	return tx.Commit()
+}
+
 // Repos
+func (r *repo) Asset() Asset {
+	return newAsset(r)
+}
+
 func (r *repo) Cart() Cart {
 	return newCart(r)
 }

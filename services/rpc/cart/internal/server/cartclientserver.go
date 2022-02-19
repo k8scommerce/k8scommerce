@@ -9,43 +9,40 @@ import (
 	"k8scommerce/services/rpc/cart/internal/logic"
 	"k8scommerce/services/rpc/cart/internal/svc"
 	"k8scommerce/services/rpc/cart/pb/cart"
-
-	"github.com/localrivet/galaxycache"
 )
 
 type CartClientServer struct {
-	svcCtx   *svc.ServiceContext
-	universe *galaxycache.Universe
+	svcCtx *svc.ServiceContext
+	cart.UnimplementedCartClientServer
 }
 
-func NewCartClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *CartClientServer {
+func NewCartClientServer(svcCtx *svc.ServiceContext) *CartClientServer {
 	return &CartClientServer{
-		svcCtx:   svcCtx,
-		universe: universe,
+		svcCtx: svcCtx,
 	}
 }
 
 func (s *CartClientServer) GetCart(ctx context.Context, in *cart.GetCartRequest) (*cart.GetCartResponse, error) {
-	l := logic.NewGetCartLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetCartLogic(ctx, s.svcCtx)
 	return l.GetCart(in)
 }
 
 func (s *CartClientServer) ClearCart(ctx context.Context, in *cart.ClearCartRequest) (*cart.ClearCartResponse, error) {
-	l := logic.NewClearCartLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewClearCartLogic(ctx, s.svcCtx)
 	return l.ClearCart(in)
 }
 
 func (s *CartClientServer) AddItemToCart(ctx context.Context, in *cart.AddItemToCartRequest) (*cart.AddItemToCartResponse, error) {
-	l := logic.NewAddItemToCartLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewAddItemToCartLogic(ctx, s.svcCtx)
 	return l.AddItemToCart(in)
 }
 
 func (s *CartClientServer) UpdateItemQuantityInCart(ctx context.Context, in *cart.UpdateItemQuantityInCartRequest) (*cart.UpdateItemQuantityInCartResponse, error) {
-	l := logic.NewUpdateItemQuantityInCartLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewUpdateItemQuantityInCartLogic(ctx, s.svcCtx)
 	return l.UpdateItemQuantityInCart(in)
 }
 
 func (s *CartClientServer) RemoveItemInCart(ctx context.Context, in *cart.RemoveItemInCartRequest) (*cart.RemoveItemInCartResponse, error) {
-	l := logic.NewRemoveItemInCartLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewRemoveItemInCartLogic(ctx, s.svcCtx)
 	return l.RemoveItemInCart(in)
 }

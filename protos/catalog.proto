@@ -67,11 +67,11 @@ message Price {
 }
 
 enum AssetKind {
-  Image = 0;
-  Document = 1;
-  Audio = 2;
-  Video = 3;
-  Archive = 4;
+  image = 0;
+  document = 1;
+  audio = 2;
+  video = 3;
+  archive = 4;
 }
 
 message Asset {

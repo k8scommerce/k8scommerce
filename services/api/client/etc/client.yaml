@@ -31,20 +31,12 @@ EmailRpc:
 InventoryRpc:
   Etcd:
     Hosts:
-<<<<<<< HEAD
       - 127.0.0.1:2379
-=======
-      - localhost:2379
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
     Key: inventory.rpc
 OthersBoughtRpc:
   Etcd:
     Hosts:
-<<<<<<< HEAD
       - 127.0.0.1:2379
-=======
-      - localhost:2379
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
     Key: othersbought.rpc
 PaymentRpc:
   Etcd:

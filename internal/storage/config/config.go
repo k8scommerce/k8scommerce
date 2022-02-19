@@ -10,6 +10,7 @@ type AllowedTypes struct {
 	Documents Documents
 	Audio     Audio
 	Video     Video
+	Archive   Archive
 }
 
 type Images struct {
@@ -28,6 +29,11 @@ type Audio struct {
 }
 
 type Video struct {
+	MaxUploadSize string
+	MimeTypes     []string
+}
+
+type Archive struct {
 	MaxUploadSize string
 	MimeTypes     []string
 }

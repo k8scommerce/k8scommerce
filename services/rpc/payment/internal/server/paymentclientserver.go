@@ -9,38 +9,35 @@ import (
 	"k8scommerce/services/rpc/payment/internal/logic"
 	"k8scommerce/services/rpc/payment/internal/svc"
 	"k8scommerce/services/rpc/payment/pb/payment"
-
-	"github.com/localrivet/galaxycache"
 )
 
 type PaymentClientServer struct {
-	svcCtx   *svc.ServiceContext
-	universe *galaxycache.Universe
+	svcCtx *svc.ServiceContext
+	payment.UnimplementedPaymentClientServer
 }
 
-func NewPaymentClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *PaymentClientServer {
+func NewPaymentClientServer(svcCtx *svc.ServiceContext) *PaymentClientServer {
 	return &PaymentClientServer{
-		svcCtx:   svcCtx,
-		universe: universe,
+		svcCtx: svcCtx,
 	}
 }
 
 func (s *PaymentClientServer) ProcessPayment(ctx context.Context, in *payment.ProcessPaymentRequest) (*payment.ProcessPaymentResponse, error) {
-	l := logic.NewProcessPaymentLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewProcessPaymentLogic(ctx, s.svcCtx)
 	return l.ProcessPayment(in)
 }
 
 func (s *PaymentClientServer) GetTransactions(ctx context.Context, in *payment.ProcessPaymentRequest) (*payment.ProcessPaymentResponse, error) {
-	l := logic.NewGetTransactionsLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetTransactionsLogic(ctx, s.svcCtx)
 	return l.GetTransactions(in)
 }
 
 func (s *PaymentClientServer) GetTranscationById(ctx context.Context, in *payment.GetTranscationByIdRequest) (*payment.GetTranscationByIdResponse, error) {
-	l := logic.NewGetTranscationByIdLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetTranscationByIdLogic(ctx, s.svcCtx)
 	return l.GetTranscationById(in)
 }
 
 func (s *PaymentClientServer) SearchTranscations(ctx context.Context, in *payment.SearchTransactionsRequest) (*payment.SearchTransactionsResponse, error) {
-	l := logic.NewSearchTranscationsLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewSearchTranscationsLogic(ctx, s.svcCtx)
 	return l.SearchTranscations(in)
 }

@@ -3,9 +3,12 @@ package main
 import (
 	"fmt"
 	"k8scommerce/internal/repos"
+	"log"
+	"os"
 
 	"github.com/jmoiron/sqlx"
 
+	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -18,9 +21,13 @@ var (
 )
 
 func init() {
-	// env.Load()
-	repo = repos.MustNewRepo(&repos.Config{
-		Connection:                   "postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable",
+	err := godotenv.Load("./../../.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	repo = repos.MustNewRepo(&repos.PostgresConfig{
+		DataSourceName:               os.Getenv("POSTGRES_DSN"),
 		MaxOpenConnections:           10,
 		MaxIdleConnections:           2,
 		MaxConnectionLifetimeMinutes: 5,

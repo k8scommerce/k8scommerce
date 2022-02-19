@@ -24,18 +24,18 @@ const (
 
 var (
 	Kind_name = map[int32]string{
-		0: "Image",
-		1: "Document",
-		2: "Audio",
-		3: "Video",
-		4: "Archive",
+		0: "image",
+		1: "document",
+		2: "audio",
+		3: "video",
+		4: "archive",
 	}
 	Kind_value = map[string]int32{
-		"Image":    0,
-		"Document": 1,
-		"Audio":    2,
-		"Video":    3,
-		"Archive":  4,
+		"image":    0,
+		"document": 1,
+		"audio":    2,
+		"video":    3,
+		"archive":  4,
 	}
 )
 

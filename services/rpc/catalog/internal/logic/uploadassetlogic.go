@@ -61,6 +61,12 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 		return err
 	}
 
+	// start db insert transaction
+	_, err = l.svcCtx.Repo.Begin()
+	if err != nil {
+		return status.Errorf(codes.Internal, "failed to start a transaction: %s", err.Error())
+	}
+
 	var uploadSize int64 = 0
 	partNumber := 1
 	for {
@@ -126,18 +132,21 @@ func (l *UploadAssetLogic) getAssetKind(assetKind catalog.AssetKind) (asset.Kind
 	var kind asset.Kind
 	var isSet = false
 	switch assetKind {
-	case catalog.AssetKind_Image:
+	case catalog.AssetKind_image:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_Image.Number())
-	case catalog.AssetKind_Document:
+		kind = asset.Kind(catalog.AssetKind_image.Number())
+	case catalog.AssetKind_document:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_Document.Number())
-	case catalog.AssetKind_Audio:
+		kind = asset.Kind(catalog.AssetKind_document.Number())
+	case catalog.AssetKind_audio:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_Audio.Number())
-	case catalog.AssetKind_Video:
+		kind = asset.Kind(catalog.AssetKind_audio.Number())
+	case catalog.AssetKind_video:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_Video.Number())
+		kind = asset.Kind(catalog.AssetKind_video.Number())
+	case catalog.AssetKind_archive:
+		isSet = true
+		kind = asset.Kind(catalog.AssetKind_archive.Number())
 	}
 
 	if !isSet {
@@ -150,14 +159,16 @@ func (l *UploadAssetLogic) getMaxUploadFilesize(assetKind catalog.AssetKind) (st
 	var maxUploadSize string
 
 	switch assetKind {
-	case catalog.AssetKind_Image:
+	case catalog.AssetKind_image:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Images.MaxUploadSize
-	case catalog.AssetKind_Document:
+	case catalog.AssetKind_document:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Documents.MaxUploadSize
-	case catalog.AssetKind_Audio:
+	case catalog.AssetKind_audio:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Audio.MaxUploadSize
-	case catalog.AssetKind_Video:
+	case catalog.AssetKind_video:
 		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Video.MaxUploadSize
+	case catalog.AssetKind_archive:
+		maxUploadSize = l.svcCtx.Config.UploadConfig.AllowedTypes.Archive.MaxUploadSize
 	}
 
 	if maxUploadSize == "" {

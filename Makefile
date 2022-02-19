@@ -53,14 +53,11 @@ price\
 property\
 option\
 option_item\
-archetype
+archetype\
+asset
 
-<<<<<<< HEAD
 apiServices=client\
 admin
-=======
-apiServices=
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
 
 # cart depends on inventory, othersbought
 
@@ -90,14 +87,8 @@ similarproducts\
 store\
 user\
 warehouse\
-<<<<<<< HEAD
 catalog\
 cart
-=======
-cart
-# catalog
-
->>>>>>> df2a4e095213ded75ccb2239165e6ce72d9e1fbf
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
