@@ -11,3 +11,4 @@ bin/build/darwin
 bin/build/linux
 bin/build/windows
 .assets
+logs
