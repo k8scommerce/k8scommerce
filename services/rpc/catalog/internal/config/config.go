@@ -1,15 +1,15 @@
 package config
 
-import "github.com/tal-tech/go-zero/zrpc"
+import (
+	"k8scommerce/internal/repos"
+	"k8scommerce/internal/storage/config"
+
+	"github.com/zeromicro/go-zero/zrpc"
+)
 
 type Config struct {
 	zrpc.RpcServerConf
-	Postgres PostgresConfig
-}
-
-type PostgresConfig struct {
-	Connection                   string
-	MaxOpenConnections           int
-	MaxIdleConnections           int
-	MaxConnectionLifetimeMinutes int
+	PostgresConfig repos.PostgresConfig
+	UploadConfig   config.UploadConfig
+	MaxBytes       int
 }

@@ -10,7 +10,7 @@ import (
 	products "k8scommerce/services/api/client/internal/handler/products"
 	"k8scommerce/services/api/client/internal/svc"
 
-	"github.com/tal-tech/go-zero/rest"
+	"github.com/zeromicro/go-zero/rest"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
@@ -50,7 +50,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.Filter, serverCtx.StoreKey},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
@@ -73,7 +73,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.Filter, serverCtx.StoreKey},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,

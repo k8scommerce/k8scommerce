@@ -142,7 +142,7 @@ func (m *categoryRepo) Create(cat *models.Category) error {
 
 func (m *categoryRepo) Update(cat *models.Category) error {
 	if cat.ID == 0 {
-		return fmt.Errorf("error: can't update cateogry, missing cateogry ID")
+		return fmt.Errorf("error: can't update category, missing category ID")
 	}
 	if err := cat.Update(m.ctx, m.db); err != nil {
 		return err

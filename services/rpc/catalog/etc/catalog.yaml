@@ -1,13 +1,74 @@
 Name: catalog.rpc
 ListenOn: 0.0.0.0:8080
+MaxBytes: 1048576000
 Log:
-  Mode: console
+  Mode: file
 Etcd:
   Hosts:
-    - localhost:2379
+    - 127.0.0.1:2379
   Key: catalog.rpc
-Postgres:
-  Connection: postgres://postgres:postgres@localhost:5432/k8scommerce?connect_timeout=180&sslmode=disable
+PostgresConfig:
+  DataSourceName: ${POSTGRES_DSN}
   MaxOpenConnections: 10
   MaxIdleConnections: 2
   MaxConnectionLifetimeMinutes: 5
+
+UploadConfig:
+  AllowedTypes:
+    Images:
+      MaxUploadSize: 250MB
+      MimeTypes:
+        - .jpg
+        - .png
+        - .gif
+        - .jpeg
+        - .ico
+    Documents:
+      MaxUploadSize: 250MB
+      MimeTypes:
+        - .pdf
+        - .doc
+        - .ppt
+        - .odt
+        - .xls
+        - .psd
+        - .bin
+    Audio:
+      MaxUploadSize: 250MB
+      MimeTypes:
+        - .mp3
+        - .m4a
+        - .ogg
+        - .wav
+    Video:
+      MaxUploadSize: 250MB
+      MimeTypes:
+        - .mp4
+        - .mov
+        - .avi
+        - .mpg
+        - .ogv
+        - .3gp
+        - .3g2
+    Archive:
+      MaxUploadSize: 1GB
+      MimeTypes:
+        - .tar
+        - .gz
+        - .zip
+  StorageConfig:
+    CdnURL: ${CDN_URL}
+    BasePath: ${BASE_PATH}
+    FileSystem: ${FILESYSTEM_ENABLED}
+    FileSystemConfig:
+      BasePath: ${FILESYSTEM_BASE_PATH}
+    AWS: ${AWS_ENABLED}
+    AWSConfig:
+      Region: ${AWS_DEFAULT_REGION}
+      AccessKeyId: ${AWS_ACCESS_KEY_ID}
+      SecretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+      S3Bucket: ${S3_BUCKET}
+    Azure: false
+    # AzureConfig: 
+    GCP: false
+    # GCPConfig: 

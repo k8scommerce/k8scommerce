@@ -127,7 +127,8 @@ type GetProductsByCategoryIdResponse {
 type GetAllProductsRequest {
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
-	SortOn      string `form:"sortOn"`
+	Filter      string `form:"filter,optional"`
+	SortOn      string `form:"sortOn,optional"`
 }
 
 type GetAllProductsResponse {
@@ -142,7 +143,7 @@ type GetAllProductsResponse {
 //
 
 @server(
-	middleware: Locale, StoreKey
+	middleware: Locale, Filter, StoreKey
 	group: categories
 )
 service client {
@@ -173,7 +174,7 @@ service client {
 }
 
 @server(
-	middleware: Locale, StoreKey
+	middleware: Locale, Filter, StoreKey
 	group: products
 )
 service client {

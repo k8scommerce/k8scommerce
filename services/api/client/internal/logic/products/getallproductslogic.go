@@ -9,7 +9,7 @@ import (
 	"k8scommerce/services/api/client/internal/types"
 	"k8scommerce/services/rpc/catalog/catalogclient"
 
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetAllProductsLogic struct {
@@ -30,7 +30,7 @@ func (l *GetAllProductsLogic) GetAllProducts(req types.GetAllProductsRequest) (r
 	response, err := l.svcCtx.CatalogRpc.GetAllProducts(l.ctx, &catalogclient.GetAllProductsRequest{
 		CurrentPage: req.CurrentPage,
 		PageSize:    req.PageSize,
-		SortOn:      req.SortOn,
+		Filter:      l.ctx.Value(types.Filter).(string),
 		StoreId:     l.ctx.Value(types.StoreKey).(int64),
 	})
 	if err != nil {

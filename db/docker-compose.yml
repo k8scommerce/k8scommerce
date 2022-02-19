@@ -34,7 +34,7 @@ services:
   # https://www.pgadmin.org/
   pgadmin:
     container_name: pgadmin
-    image: dpage/pgadmin4:6.3
+    image: dpage/pgadmin4:6.4
     depends_on:
       - postgres
     ports:

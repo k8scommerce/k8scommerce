@@ -16,6 +16,7 @@ import (
 type SimilarProductsClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	similarproducts.UnimplementedSimilarProductsClientServer
 }
 
 func NewSimilarProductsClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *SimilarProductsClientServer {

@@ -584,6 +584,7 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 }
 
 func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filter string) (res *getAllProductsResponse, err error) {
+
 	var builder = buildsql.NewQueryBuilder()
 	where, orderBy, namedParamMap, err := builder.Build(filter, map[string]interface{}{
 		"p":  models.Product{}, // product alias
@@ -601,7 +602,7 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 	offset := fmt.Sprintf("OFFSET %d", (currentPage)*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
-	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
+	sql := fmt.Sprintf(`
 		select 
 			-- product
 			p.id AS "product.id",
@@ -668,7 +669,10 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 		%s
 		%s
 		%s
-	`, where, orderBy, offset, limit))
+	`, where, orderBy, offset, limit)
+	fmt.Println(sql)
+
+	nstmt, err := m.db.PrepareNamed(sql)
 	if err != nil {
 
 		fmt.Println("where", where)

@@ -16,6 +16,7 @@ import (
 type PaymentClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	payment.UnimplementedPaymentClientServer
 }
 
 func NewPaymentClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *PaymentClientServer {

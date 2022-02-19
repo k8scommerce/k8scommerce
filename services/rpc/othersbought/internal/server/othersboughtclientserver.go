@@ -16,6 +16,7 @@ import (
 type OthersBoughtClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	othersbought.UnimplementedOthersBoughtClientServer
 }
 
 func NewOthersBoughtClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *OthersBoughtClientServer {

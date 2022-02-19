@@ -16,6 +16,7 @@ import (
 type CatalogClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	catalog.UnimplementedCatalogClientServer
 }
 
 func NewCatalogClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *CatalogClientServer {
@@ -100,4 +101,9 @@ func (s *CatalogClientServer) UpdateProduct(ctx context.Context, in *catalog.Upd
 func (s *CatalogClientServer) DeleteProduct(ctx context.Context, in *catalog.DeleteProductRequest) (*catalog.DeleteProductResponse, error) {
 	l := logic.NewDeleteProductLogic(ctx, s.svcCtx, s.universe)
 	return l.DeleteProduct(in)
+}
+
+func (s *CatalogClientServer) UploadAsset(stream catalog.CatalogClient_UploadAssetServer) error {
+	l := logic.NewUploadAssetLogic(stream.Context(), s.svcCtx, s.universe)
+	return l.UploadAsset(stream)
 }

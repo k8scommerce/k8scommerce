@@ -16,6 +16,7 @@ import (
 type InventoryClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	inventory.UnimplementedInventoryClientServer
 }
 
 func NewInventoryClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *InventoryClientServer {

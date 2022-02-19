@@ -13,7 +13,7 @@ import (
 
 	"github.com/localrivet/galaxycache"
 	"github.com/localrivet/gcache"
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type galaxyGetCategoryBySlugLogicHelper struct {

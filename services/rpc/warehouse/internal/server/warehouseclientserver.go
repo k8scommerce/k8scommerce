@@ -16,6 +16,7 @@ import (
 type WarehouseClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	warehouse.UnimplementedWarehouseClientServer
 }
 
 func NewWarehouseClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *WarehouseClientServer {

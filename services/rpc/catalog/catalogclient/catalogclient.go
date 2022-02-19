@@ -8,11 +8,12 @@ import (
 
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
-	"github.com/tal-tech/go-zero/zrpc"
+	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
+	Asset                             = catalog.Asset
 	Category                          = catalog.Category
 	CreateCategoryRequest             = catalog.CreateCategoryRequest
 	CreateCategoryResponse            = catalog.CreateCategoryResponse
@@ -46,6 +47,7 @@ type (
 	UpdateCategoryResponse            = catalog.UpdateCategoryResponse
 	UpdateProductRequest              = catalog.UpdateProductRequest
 	UpdateProductResponse             = catalog.UpdateProductResponse
+	UploadAssetRequest                = catalog.UploadAssetRequest
 	Variant                           = catalog.Variant
 
 	CatalogClient interface {
@@ -66,6 +68,7 @@ type (
 		CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
 		UpdateProduct(ctx context.Context, in *UpdateProductRequest, opts ...grpc.CallOption) (*UpdateProductResponse, error)
 		DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*DeleteProductResponse, error)
+		UploadAsset(ctx context.Context, opts ...grpc.CallOption) (catalog.CatalogClient_UploadAssetClient, error)
 	}
 
 	defaultCatalogClient struct {
@@ -154,4 +157,9 @@ func (m *defaultCatalogClient) UpdateProduct(ctx context.Context, in *UpdateProd
 func (m *defaultCatalogClient) DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*DeleteProductResponse, error) {
 	client := catalog.NewCatalogClientClient(m.cli.Conn())
 	return client.DeleteProduct(ctx, in, opts...)
+}
+
+func (m *defaultCatalogClient) UploadAsset(ctx context.Context, opts ...grpc.CallOption) (catalog.CatalogClient_UploadAssetClient, error) {
+	client := catalog.NewCatalogClientClient(m.cli.Conn())
+	return client.UploadAsset(ctx, opts...)
 }

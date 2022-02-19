@@ -5,13 +5,14 @@ import (
 	"net/http"
 
 	api "k8scommerce/services/api/admin/internal/handler/api"
+	assets "k8scommerce/services/api/admin/internal/handler/assets"
 	categories "k8scommerce/services/api/admin/internal/handler/categories"
 	customers "k8scommerce/services/api/admin/internal/handler/customers"
 	products "k8scommerce/services/api/admin/internal/handler/products"
 	users "k8scommerce/services/api/admin/internal/handler/users"
 	"k8scommerce/services/api/admin/internal/svc"
 
-	"github.com/tal-tech/go-zero/rest"
+	"github.com/zeromicro/go-zero/rest"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
@@ -109,6 +110,19 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodDelete,
 					Path:    "/v1/product/:id",
 					Handler: products.DeleteProductHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale, serverCtx.Filter, serverCtx.StoreKey},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/asset/:productId/:variantId",
+					Handler: assets.UploadHandler(serverCtx),
 				},
 			}...,
 		),

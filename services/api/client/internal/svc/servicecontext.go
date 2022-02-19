@@ -16,13 +16,14 @@ import (
 	"k8scommerce/services/rpc/user/userclient"
 	"k8scommerce/services/rpc/warehouse/warehouseclient"
 
-	"github.com/tal-tech/go-zero/rest"
-	"github.com/tal-tech/go-zero/zrpc"
+	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
 	Config             config.Config
 	Locale             rest.Middleware
+	Filter             rest.Middleware
 	StoreKey           rest.Middleware
 	CartRpc            cartclient.CartClient
 	CatalogRpc         catalogclient.CatalogClient
@@ -42,6 +43,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:             c,
 		Locale:             middleware.NewLocaleMiddleware().Handle,
+		Filter:             middleware.NewFilterMiddleware().Handle,
 		StoreKey:           middleware.NewStoreKeyMiddleware(c.HashSalt).Handle,
 		CartRpc:            cartclient.NewCartClient(zrpc.MustNewClient(c.CartRpc)),
 		CatalogRpc:         catalogclient.NewCatalogClient(zrpc.MustNewClient(c.CatalogRpc)),

@@ -30,6 +30,14 @@ Enter JWT Bearer token **_only_**
 
 ## All endpoints
 
+###  assets
+
+| Method  | URI     | Name   | Summary |
+|---------|---------|--------|---------|
+| POST | /v1/asset/{productId}/{variantId} | [upload](#upload) | Upload Asset |
+  
+
+
 ###  categories
 
 | Method  | URI     | Name   | Summary |
@@ -507,7 +515,60 @@ Status: OK
 
 [Product](#product)
 
+### <span id="upload"></span> Upload Asset (*upload*)
+
+```
+POST /v1/asset/{productId}/{variantId}
+```
+
+uploads an image, document, audio, video or archive asset
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| productId | `path` | string | `string` |  | ✓ |  | product id |
+| variantId | `path` | string | `string` |  | ✓ |  | variant id |
+| body | `body` | [UploadAssetRequest](#upload-asset-request) | `models.UploadAssetRequest` | | ✓ | |  |
+
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#upload-200) | OK | A successful response. |  | [schema](#upload-200-schema) |
+
+#### Responses
+
+
+##### <span id="upload-200"></span> 200 - A successful response.
+Status: OK
+
+###### <span id="upload-200-schema"></span> Schema
+   
+  
+
+[Asset](#asset)
+
 ## Models
+
+### <span id="asset"></span> Asset
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| id | int64 (formatted integer)| `int64` |  | |  |  |
+| kind | string| `string` | ✓ | |  |  |
+| name | string| `string` |  | |  |  |
+| productId | int64 (formatted integer)| `int64` |  | |  |  |
+| url | string| `string` |  | |  |  |
+| variantId | int64 (formatted integer)| `int64` |  | |  |  |
+
+
 
 ### <span id="category"></span> Category
 
@@ -891,6 +952,22 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | path | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | product | [Product](#product)| `Product` | ✓ | |  |  |
+
+
+
+### <span id="upload-asset-request"></span> UploadAssetRequest
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| productId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| variantId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 

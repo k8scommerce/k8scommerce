@@ -20,6 +20,9 @@ TAG := $(shell echo $(HASH))
 
 # TS = $$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
+VERSION=0.0.1
+
+
 $(call check_defined, BRANCH HASH TAG)
 
 # if the release branch is main push to prod
@@ -50,9 +53,11 @@ price\
 property\
 option\
 option_item\
-archetype
+archetype\
+asset
 
-apiServices=client
+apiServices=client\
+admin
 
 # cart depends on inventory, othersbought
 
@@ -76,15 +81,14 @@ rpcServices=customer\
 email\
 inventory\
 othersbought\
-cart\
 payment\
 shipping\
 similarproducts\
 store\
 user\
-warehouse \
-catalog
-
+warehouse\
+catalog\
+cart
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
@@ -150,7 +154,7 @@ cleanup:
 	done
 .PHONY: generate-xo
 generate-xo:
-	@xo schema 'pgsql://${DB_CONN_STR}' \
+	@xo schema '${POSTGRES_DSN}' \
 	--go-field-tag='`json:"{{ .SQLName }}" db:"{{ .SQLName }}"`' \
 	-o ./internal/models \
 	-e *.created_at \
@@ -174,7 +178,7 @@ model-gen:
 		else \
 			printf "$(YELLOW)$$filename already exists, ignored.$(RESET)\n"; \
 		fi; \
-		goctl model pg datasource r --url='postgres://${DB_CONN_STR}' --table=$$table --dir=./internal/repos -style=go_zero; \
+		goctl model pg datasource r --url='postgres://${POSTGRES_DSN}' --table=$$table --dir=./internal/repos -style=go_zero; \
 		echo ""; \
 	done
 
@@ -213,7 +217,7 @@ start:
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sleep 0.1); \
 		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
-		(go run . -f etc/local-$$service.yaml &); \
+		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
 		cd ../../../; \
 		echo ""; \
 		port=$$((port+1)); \
@@ -226,7 +230,7 @@ start:
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sleep 0.1); \
 		(sed -i '' -e "s/: 8888/: $$port/g" etc/local-$$service.yaml &); \
-		(go run . -f etc/local-$$service.yaml &); \
+		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
 		cd ../../../; \
 		echo ""; \
 		port=$$((port+1)); \
@@ -247,6 +251,59 @@ stop:
 		echo ""; \
 	done
 	@killall etcd
+
+
+.PHONY: build-all
+build-all:
+	@port=65000; \
+	for service in $(rpcServices); do \
+		printf "$(BLUE)Building RPC Service: $(WHITE)$$service::$$port$(RESET)\n"; \
+		cd ./services/rpc/$$service; \
+		(mkdir -p ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc > /dev/null 2>&1); \
+		(mkdir -p ../../../bin/build/linux/$(VERSION)/k8scommerce/etc > /dev/null 2>&1); \
+		(mkdir -p ../../../bin/build/windows/$(VERSION)/k8scommerce/etc > /dev/null 2>&1); \
+		(cp ./etc/$$service.yaml ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/ &); \
+		(sleep 0.1); \
+		(sed -i '' -e "s/:8080/:$$port/g" ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(cp ./etc/$$service.yaml ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/ &); \
+		(sleep 0.1); \
+		(sed -i '' -e "s/:8080/:$$port/g" ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(cp ./etc/$$service.yaml ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/ &); \
+		(sleep 0.1); \
+		(sed -i '' -e "s/:8080/:$$port/g" ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(GOARCH=amd64 GOOS=darwin go build -o ../../../bin/build/darwin/$(VERSION)/k8scommerce/$$service); \
+		(GOARCH=amd64 GOOS=linux go build -o ../../../bin/build/linux/$(VERSION)/k8scommerce/$$service); \
+		(GOARCH=amd64 GOOS=windows go build -o ../../../bin/build/windows/$(VERSION)/k8scommerce/$$service.exe); \
+		cd ../../../; \
+		echo ""; \
+		port=$$((port+1)); \
+	done
+	@port=80; \
+	for service in $(apiServices); do \
+		printf "$(BLUE)Building API Service: $(WHITE)$$service::$$port$(RESET)\n"; \
+		cd ./services/api/$$service; \
+		(cp ./etc/$$service.yaml ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/ &); \
+		(sleep 0.1); \
+		(sed -i '' -e "s/: 8888/: $$port/g" ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(cp ./etc/$$service.yaml ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/ &); \
+		(sleep 0.1); \
+		(sed -i '' -e "s/: 8888/: $$port/g" ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(cp ./etc/$$service.yaml ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/ &); \
+		(sleep 0.1); \
+		(sed -i '' -e "s/: 8888/: $$port/g" ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(GOARCH=amd64 GOOS=darwin go build -o ../../../bin/build/darwin/$(VERSION)/k8scommerce/$$service .); \
+		(GOARCH=amd64 GOOS=linux go build -o ../../../bin/build/linux/$(VERSION)/k8scommerce/$$service .); \
+		(GOARCH=amd64 GOOS=windows go build -o ../../../bin/build/windows/$(VERSION)/k8scommerce/$$service.exe .); \
+		cd ../../../; \
+		echo ""; \
+		port=$$((port+8000)); \
+	done
+
+.PHONY: build-release
+build-release:
+	(cd ./bin/build/darwin/$(VERSION) && tar -C . -czvf k8scommerce-$(VERSION)-darwin.tar.gz k8scommerce && mv k8scommerce-$(VERSION)-darwin.tar.gz ../../../release/)
+	(cd ./bin/build/linux/$(VERSION) && tar -C . -czvf k8scommerce-$(VERSION)-linux.tar.gz k8scommerce && mv k8scommerce-$(VERSION)-linux.tar.gz ../../../release/)
+	(cd ./bin/build/windows/$(VERSION) && tar -C . -czvf k8scommerce-$(VERSION)-windows.tar.gz k8scommerce && mv k8scommerce-$(VERSION)-windows.tar.gz ../../../release/)
 
 ##
 ## Admin

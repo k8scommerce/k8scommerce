@@ -16,6 +16,7 @@ import (
 type EmailClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	email.UnimplementedEmailClientServer
 }
 
 func NewEmailClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *EmailClientServer {

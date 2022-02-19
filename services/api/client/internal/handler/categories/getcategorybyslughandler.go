@@ -3,10 +3,11 @@ package categories
 import (
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"k8scommerce/services/api/client/internal/logic/categories"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func GetCategoryBySlugHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

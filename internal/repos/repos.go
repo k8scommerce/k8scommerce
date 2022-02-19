@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/lib/pq"
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 
 	_ "github.com/jackc/pgx/v4/stdlib" //postgres driver for sqlx
 	"github.com/jmoiron/sqlx"
@@ -18,7 +18,7 @@ var (
 	ErrNotFound = sql.ErrNoRows
 )
 
-func MustNewRepo(c *Config) Repo {
+func MustNewRepo(c *PostgresConfig) Repo {
 	// catch any panics
 	defer func() {
 		if rec := recover(); rec != nil {
@@ -37,6 +37,7 @@ func MustNewRepo(c *Config) Repo {
 type Repo interface {
 	GetRawDB() *sqlx.DB
 	// Repos
+	Asset() Asset
 	Cart() Cart
 	CartItem() CartItem
 	Category() Category
@@ -49,19 +50,39 @@ type Repo interface {
 	OthersBought() OthersBought
 	SimilarProducts() SimilarProducts
 	User() User
+
+	Begin() (*sql.Tx, error)
+	Rollback(tx *sql.Tx) error
+	Commit(tx *sql.Tx) error
 }
 
 type repo struct {
 	db       *sqlx.DB
 	listener *pq.Listener
-	cfg      *Config
+	cfg      *PostgresConfig
 }
 
 func (r *repo) GetRawDB() *sqlx.DB {
 	return r.db
 }
 
+func (r *repo) Begin() (*sql.Tx, error) {
+	return r.db.Begin()
+}
+
+func (r *repo) Rollback(tx *sql.Tx) error {
+	return tx.Rollback()
+}
+
+func (r *repo) Commit(tx *sql.Tx) error {
+	return tx.Commit()
+}
+
 // Repos
+func (r *repo) Asset() Asset {
+	return newAsset(r)
+}
+
 func (r *repo) Cart() Cart {
 	return newCart(r)
 }
@@ -114,11 +135,11 @@ func (r *repo) User() User {
 func (a *repo) mustConnect() (conn *sqlx.DB) {
 	// create the db client
 	once.Do(func() {
-		go a.setDBListener(a.cfg.Connection)
-		logx.Info("DB Connecting", "conn", a.cfg.Connection)
+		go a.setDBListener(a.cfg.DataSourceName)
+		logx.Info("DB Connecting", "conn", a.cfg.DataSourceName)
 
 		var conn *sqlx.DB
-		conn, err := sqlx.Connect("pgx", a.cfg.Connection)
+		conn, err := sqlx.Connect("pgx", a.cfg.DataSourceName)
 		if err != nil {
 			panic(err)
 		}

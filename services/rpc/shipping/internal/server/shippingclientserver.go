@@ -16,6 +16,7 @@ import (
 type ShippingClientServer struct {
 	svcCtx   *svc.ServiceContext
 	universe *galaxycache.Universe
+	shipping.UnimplementedShippingClientServer
 }
 
 func NewShippingClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *ShippingClientServer {

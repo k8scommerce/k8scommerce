@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strings"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
@@ -113,7 +113,7 @@ var _ = Describe("Helpers", func() {
 			// fmt.Println("where:", where)
 		})
 
-		FIt("should parse raw url ", func() {
+		It("should parse raw url ", func() {
 
 			// on := "/v1/products/0/20?filter=p-name-like-practical&sortOn=p-id"
 			on := "http://api.local.k8sly.com:8888/v1/products/0/20?filter=p-name-like-cotton&sortOn=p-id"

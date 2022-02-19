@@ -52,6 +52,18 @@ type Price {
 	Currency               string  `json:"currency,optional"`               // price currency. example: USD, CAN, etc.
 }
 
+type Asset {
+	Id          int64  `json:"id,optional"`
+	ProductId   int64  `json:"productId,optional"`
+	VariantId   int64  `json:"variantId,optional"`
+	Name        string `json:"name,optional"`
+	DisplayName string `json:"displayName,optional"`
+	Url         string `json:"url,optional"`
+	Kind        string `json:"kind,optional,options=image|document|audio|video|archive"`
+	ContentType string `json:"contentType,optional"`
+	SortOrder   int32  `json:"sortOrder,optional"`
+}
+
 //
 // requests & responses
 //
@@ -168,6 +180,16 @@ type DeleteProductRequest {
 
 type DeleteProductResponse {
 	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+}
+
+//
+//
+// Assets
+//
+//
+type UploadAssetRequest {
+	ProductId int64 `path:"productId"`
+	VariantId int64 `path:"variantId"`
 }
 
 //
@@ -305,4 +327,20 @@ service admin {
 	)
 	@handler deleteProduct
 	delete /v1/product/:id(DeleteProductRequest) returns (DeleteProductResponse)
+}
+
+@server(
+	// jwt: Auth
+	middleware: Locale, Filter, StoreKey
+	group: assets
+)
+service admin {
+	@doc(
+		summary: "Upload Asset"
+		description: "uploads an image, document, audio, video or archive asset"
+		productId: "product id"
+		variantId: "variant id"
+	)
+	@handler upload
+	post /v1/asset/:productId/:variantId(UploadAssetRequest) returns (Asset)
 }

@@ -6,3 +6,9 @@ default.etcd/
 .vscode
 .data
 tscode/
+testfiles/uploads
+bin/build/darwin
+bin/build/linux
+bin/build/windows
+.assets
+logs
