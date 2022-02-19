@@ -9,25 +9,29 @@ import (
 	"k8scommerce/services/rpc/customer/internal/logic"
 	"k8scommerce/services/rpc/customer/internal/svc"
 	"k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/localrivet/galaxycache"
 )
 
 type CustomerClientServer struct {
-	svcCtx *svc.ServiceContext
+	svcCtx   *svc.ServiceContext
+	universe *galaxycache.Universe
 	customer.UnimplementedCustomerClientServer
 }
 
-func NewCustomerClientServer(svcCtx *svc.ServiceContext) *CustomerClientServer {
+func NewCustomerClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *CustomerClientServer {
 	return &CustomerClientServer{
-		svcCtx: svcCtx,
+		svcCtx:   svcCtx,
+		universe: universe,
 	}
 }
 
 func (s *CustomerClientServer) CreateCustomer(ctx context.Context, in *customer.CreateCustomerRequest) (*customer.CreateCustomerResponse, error) {
-	l := logic.NewCreateCustomerLogic(ctx, s.svcCtx)
+	l := logic.NewCreateCustomerLogic(ctx, s.svcCtx, s.universe)
 	return l.CreateCustomer(in)
 }
 
 func (s *CustomerClientServer) Login(ctx context.Context, in *customer.LoginRequest) (*customer.LoginResponse, error) {
-	l := logic.NewLoginLogic(ctx, s.svcCtx)
+	l := logic.NewLoginLogic(ctx, s.svcCtx, s.universe)
 	return l.Login(in)
 }

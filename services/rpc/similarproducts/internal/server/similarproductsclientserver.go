@@ -9,20 +9,24 @@ import (
 	"k8scommerce/services/rpc/similarproducts/internal/logic"
 	"k8scommerce/services/rpc/similarproducts/internal/svc"
 	"k8scommerce/services/rpc/similarproducts/pb/similarproducts"
+
+	"github.com/localrivet/galaxycache"
 )
 
 type SimilarProductsClientServer struct {
-	svcCtx *svc.ServiceContext
+	svcCtx   *svc.ServiceContext
+	universe *galaxycache.Universe
 	similarproducts.UnimplementedSimilarProductsClientServer
 }
 
-func NewSimilarProductsClientServer(svcCtx *svc.ServiceContext) *SimilarProductsClientServer {
+func NewSimilarProductsClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *SimilarProductsClientServer {
 	return &SimilarProductsClientServer{
-		svcCtx: svcCtx,
+		svcCtx:   svcCtx,
+		universe: universe,
 	}
 }
 
 func (s *SimilarProductsClientServer) GetSimilarProductsBySku(ctx context.Context, in *similarproducts.GetSimilarProductsBySkuRequest) (*similarproducts.GetSimilarProductsBySkuResponse, error) {
-	l := logic.NewGetSimilarProductsBySkuLogic(ctx, s.svcCtx)
+	l := logic.NewGetSimilarProductsBySkuLogic(ctx, s.svcCtx, s.universe)
 	return l.GetSimilarProductsBySku(in)
 }

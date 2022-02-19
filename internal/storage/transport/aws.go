@@ -64,6 +64,7 @@ func (t *awsTransport) createMultipartUpload() error {
 		Bucket:      aws.String(t.cfg.S3Bucket),
 		Key:         aws.String(t.putPath),
 		ContentType: aws.String(t.contentType),
+		ACL:         aws.String("public-read"),
 	}
 
 	resp, err := t.svc.CreateMultipartUpload(input)

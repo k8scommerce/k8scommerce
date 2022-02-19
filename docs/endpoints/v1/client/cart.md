@@ -235,7 +235,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | cart | [Cart](#cart)| `Cart` | ✓ | | a Cart object |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -267,7 +266,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | customerId | int64 (formatted integer)| `int64` | ✓ | | a customer's id |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -276,15 +274,7 @@ Status: OK
 
   
 
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
-
-
+[interface{}](#interface)
 
 ### <span id="get-cart-request"></span> GetCartRequest
 
@@ -313,7 +303,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | cart | [Cart](#cart)| `Cart` | ✓ | | a Cart object |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -381,7 +370,6 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | cart | [Cart](#cart)| `Cart` | ✓ | | a Cart object |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 
 
@@ -430,6 +418,5 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | cart | [Cart](#cart)| `Cart` | ✓ | | a Cart object |  |
-| status | [ResponseStatus](#response-status)| `ResponseStatus` | ✓ | | a ResponseStatus object |  |
 
 

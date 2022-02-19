@@ -251,9 +251,15 @@
             "type": "integer"
           },
           {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "sortOn",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           }
         ],
@@ -348,6 +354,9 @@
           "type": "integer",
           "format": "int64"
         },
+        "filter": {
+          "type": "string"
+        },
         "sortOn": {
           "type": "string"
         }
@@ -355,8 +364,7 @@
       "title": "GetAllProductsRequest",
       "required": [
         "currentPage",
-        "pageSize",
-        "sortOn"
+        "pageSize"
       ]
     },
     "GetAllProductsResponse": {

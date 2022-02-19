@@ -45,13 +45,14 @@ func (k *Kind) String() string {
 
 type File struct {
 	Name        string
+	BaseName    string
 	Kind        Kind
 	ContentType string
+	URL         string
 
 	cfg              config.UploadConfig
 	storageTransport transport.Transport
 	destinationPath  string
-	baseName         string
 }
 
 func MustNewFile(name string, cfg config.UploadConfig) (*File, error) {
@@ -71,6 +72,9 @@ func MustNewFile(name string, cfg config.UploadConfig) (*File, error) {
 	// set the folder path, i.e. /base/1/b/c/
 	f.setDestinationPath()
 
+	// set the asset public URL
+	f.setURL()
+
 	return f, nil
 }
 
@@ -78,7 +82,7 @@ func (f *File) Open(contentType string) error {
 	f.ContentType = contentType
 
 	// open the stream
-	if err := f.storageTransport.Open(f.destinationPath, f.baseName, f.ContentType); err != nil {
+	if err := f.storageTransport.Open(f.destinationPath, f.BaseName, f.ContentType); err != nil {
 		return err
 	}
 	return nil
@@ -147,7 +151,8 @@ func (f *File) checkForSingleTransportEnabled() error {
 func (f *File) setStoragetTransport() (err error) {
 	if f.cfg.StorageConfig.FileSystem {
 		f.storageTransport, err = transport.MustNewFileSystemTransport(f.cfg.StorageConfig.FileSystemConfig)
-		f.cfg.StorageConfig.SubDirectory = f.cfg.StorageConfig.FileSystemConfig.BasePath + "/" + f.cfg.StorageConfig.SubDirectory
+		f.cfg.StorageConfig.BasePath = f.cfg.StorageConfig.FileSystemConfig.BasePath + "/" + f.cfg.StorageConfig.BasePath
+
 		return err
 	} else if f.cfg.StorageConfig.AWS {
 		f.storageTransport, err = transport.MustNewAwsTransport(f.cfg.StorageConfig.AWSConfig)
@@ -168,12 +173,12 @@ func (f *File) setStoragetTransport() (err error) {
 // 1/b/b
 func (f *File) setDestinationPath() {
 	// get the raw filename
-	f.baseName = filepath.Base(f.Name)
+	f.BaseName = filepath.Base(f.Name)
 
 	// turn it into an md 5. this ensures that
 	// if we have a filename with one letter or number we
 	// don't have an issue creating the directory structure
-	md5 := utils.StringToMD5(f.baseName)
+	md5 := utils.StringToMD5(f.BaseName)
 
 	r := []rune(md5)
 	base := string(r[0:1])
@@ -181,7 +186,7 @@ func (f *File) setDestinationPath() {
 	subplus := string(r[2])
 
 	sections := []string{
-		f.cfg.StorageConfig.SubDirectory,
+		f.cfg.StorageConfig.BasePath,
 		base,
 		sub,
 		subplus,
@@ -201,21 +206,10 @@ func (f *File) setDestinationPath() {
 	f.destinationPath = pattern.ReplaceAllString(f.destinationPath, "/")
 }
 
-// func (f *File) setStoragetHandler() error {
-// 	switch h.File.Kind {
-// 	case asset.Image:
-// 		h.StorageHandler = handler.NewImageHandler(h.File)
-// 		return nil
-// 	case asset.Document:
-// 		h.StorageHandler = handler.NewDocumentHandler(h.File)
-// 		return nil
-// 	case asset.Audio:
-// 		h.StorageHandler = handler.NewAudioHandler(h.File)
-// 		return nil
-// 	case asset.Video:
-// 		h.StorageHandler = handler.NewVideoHandler(h.File)
-// 		return nil
-// 	}
-
-// 	return status.Error(codes.Internal, "unknown storage handler")
-// }
+func (f *File) setURL() {
+	cdnURL := f.cfg.StorageConfig.CdnURL
+	if cdnURL[len(cdnURL)-1:] == "/" {
+		cdnURL = cdnURL[0 : len(cdnURL)-1]
+	}
+	f.URL = cdnURL + f.destinationPath + f.Name
+}

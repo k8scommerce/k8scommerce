@@ -9,20 +9,24 @@ import (
 	"k8scommerce/services/rpc/inventory/internal/logic"
 	"k8scommerce/services/rpc/inventory/internal/svc"
 	"k8scommerce/services/rpc/inventory/pb/inventory"
+
+	"github.com/localrivet/galaxycache"
 )
 
 type InventoryClientServer struct {
-	svcCtx *svc.ServiceContext
+	svcCtx   *svc.ServiceContext
+	universe *galaxycache.Universe
 	inventory.UnimplementedInventoryClientServer
 }
 
-func NewInventoryClientServer(svcCtx *svc.ServiceContext) *InventoryClientServer {
+func NewInventoryClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *InventoryClientServer {
 	return &InventoryClientServer{
-		svcCtx: svcCtx,
+		svcCtx:   svcCtx,
+		universe: universe,
 	}
 }
 
 func (s *InventoryClientServer) GetItemQuantity(ctx context.Context, in *inventory.GetItemQuantityRequest) (*inventory.GetItemQuantityResponse, error) {
-	l := logic.NewGetItemQuantityLogic(ctx, s.svcCtx)
+	l := logic.NewGetItemQuantityLogic(ctx, s.svcCtx, s.universe)
 	return l.GetItemQuantity(in)
 }

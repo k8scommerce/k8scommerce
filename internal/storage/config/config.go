@@ -39,7 +39,8 @@ type Archive struct {
 }
 
 type StorageConfig struct {
-	SubDirectory     string
+	CdnURL           string
+	BasePath         string
 	FileSystem       bool
 	FileSystemConfig FileSystemConfig
 	AWS              bool

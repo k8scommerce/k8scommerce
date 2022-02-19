@@ -15,6 +15,48 @@
     "application/json"
   ],
   "paths": {
+    "/v1/asset/{productId}/{variantId}": {
+      "post": {
+        "summary": "Upload Asset",
+        "description": "uploads an image, document, audio, video or archive asset",
+        "operationId": "upload",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Asset"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "productId",
+            "description": "product id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "variantId",
+            "description": "variant id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadAssetRequest"
+            }
+          }
+        ],
+        "tags": [
+          "assets"
+        ]
+      }
+    },
     "/v1/categories/{storeId}/{currentPage}/{pageSize}": {
       "get": {
         "summary": "Get All Categories",
@@ -480,6 +522,36 @@
     }
   },
   "definitions": {
+    "Asset": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "variantId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        }
+      },
+      "title": "Asset",
+      "required": [
+        "kind"
+      ]
+    },
     "Category": {
       "type": "object",
       "properties": {
@@ -965,6 +1037,24 @@
       "required": [
         "path",
         "product"
+      ]
+    },
+    "UploadAssetRequest": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "variantId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "UploadAssetRequest",
+      "required": [
+        "productId",
+        "variantId"
       ]
     },
     "Variant": {

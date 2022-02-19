@@ -53,12 +53,15 @@ type Price {
 }
 
 type Asset {
-	Id        int64  `json:"id,optional"`
-	ProductId int64  `json:"productId,optional"`
-	VariantId int64  `json:"variantId,optional"`
-	Name      string `json:"name,optional"`
-	Url       string `json:"url,optional"`
-	Kind      string `json:"kind,optional,options=image|document|audio|video|archive"`
+	Id          int64  `json:"id,optional"`
+	ProductId   int64  `json:"productId,optional"`
+	VariantId   int64  `json:"variantId,optional"`
+	Name        string `json:"name,optional"`
+	DisplayName string `json:"displayName,optional"`
+	Url         string `json:"url,optional"`
+	Kind        string `json:"kind,optional,options=image|document|audio|video|archive"`
+	ContentType string `json:"contentType,optional"`
+	SortOrder   int32  `json:"sortOrder,optional"`
 }
 
 //

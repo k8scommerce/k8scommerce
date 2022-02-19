@@ -5,11 +5,9 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
@@ -56,15 +54,24 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 		VariantId: variantId,
 	}
 
-	startTime := time.Now()
+	// startTime := time.Now()
 	multipartReader, err := l.r.MultipartReader()
 	if err != nil {
 		return
 	}
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 
-	var stream catalog.CatalogClient_UploadAssetClient
+	stream, err := l.svcCtx.CatalogRpc.UploadAsset(ctx,
+		grpc.MaxCallRecvMsgSize(int(l.svcCtx.Config.MaxBytes)),
+		grpc.MaxCallSendMsgSize(int(l.svcCtx.Config.MaxBytes)),
+	)
+	if err != nil {
+		return resp, err
+	}
 
-	partBytes := int64(0)
+	// partBytes := int64(0)
 	partCount := int64(0)
 	for {
 		//DOS problem .... what if this header is very large?  (Intentionally)
@@ -76,22 +83,8 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 				return resp, fmt.Errorf("error getting a part %v", partErr)
 			}
 		} else {
-
 			if len(part.FileName()) > 0 {
 				if partCount == 0 {
-
-					// size := 1024 * 1024 * 12
-					// opts = append(opts, grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(size)))
-					// conn, err := grpc.Dial(address, opts...)
-
-					stream, err = l.svcCtx.CatalogRpc.UploadAsset(l.ctx,
-						grpc.MaxCallRecvMsgSize(int(l.svcCtx.Config.MaxBytes)),
-						grpc.MaxCallSendMsgSize(int(l.svcCtx.Config.MaxBytes)),
-					)
-					if err != nil {
-						return resp, err
-					}
-
 					streamReq := &catalog.UploadAssetRequest{
 						Data: &catalog.UploadAssetRequest_Asset{
 							Asset: &catalog.Asset{
@@ -104,7 +97,7 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 					}
 					err = stream.Send(streamReq)
 					if err != nil {
-						return resp, fmt.Errorf("cannot send image info to server: %s, %#v", err, stream.RecvMsg(nil))
+						return resp, fmt.Errorf("cannot send image info to server: %s", err)
 					}
 				}
 
@@ -123,7 +116,7 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 
 				err = stream.Send(chunkReq)
 				if err != nil {
-					return resp, fmt.Errorf("cannot send chunk to server: %s, %#v", err, stream.RecvMsg(nil))
+					break
 				}
 
 				//Could take an *indefinite* amount of time!!
@@ -141,18 +134,27 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 		return resp, fmt.Errorf("cannot receive response: %s, %#v", err, uploadResponse)
 	}
 
-	stopTime := time.Now()
-	timeDiff := (stopTime.UnixNano()-startTime.UnixNano())/(1000*1000) + 1
-	throughput := (1000 * partBytes) / timeDiff
-	partSize := int64(0)
-	if partCount <= 0 {
-		partSize = 0
-	} else {
-		partSize = partBytes / partCount
-	}
-	log.Printf("Upload: time = %dms, size = %d B, throughput = %d B/s, partSize = %d B", timeDiff, partBytes, throughput, partSize)
+	resp.Id = uploadResponse.Id
+	resp.Kind = uploadResponse.Kind.String()
+	resp.Name = uploadResponse.Name
+	resp.ProductId = uploadResponse.ProductId
+	resp.VariantId = uploadResponse.VariantId
+	resp.Url = uploadResponse.Url
+	resp.ContentType = uploadResponse.ContentType
+	resp.DisplayName = uploadResponse.DisplayName
+	resp.SortOrder = uploadResponse.SortOrder
 
-	log.Printf("#%v", uploadResponse)
+	// stopTime := time.Now()
+	// timeDiff := (stopTime.UnixNano()-startTime.UnixNano())/(1000*1000) + 1
+	// throughput := (1000 * partBytes) / timeDiff
+	// partSize := int64(0)
+	// if partCount <= 0 {
+	// 	partSize = 0
+	// } else {
+	// 	partSize = partBytes / partCount
+	// }
+	// log.Printf("Upload: time = %dms, size = %d B, throughput = %d B/s, partSize = %d B", timeDiff, partBytes, throughput, partSize)
 
+	// log.Printf("#%v", uploadResponse
 	return resp, nil
 }

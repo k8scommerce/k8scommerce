@@ -80,8 +80,11 @@ message Asset {
   int64 productId = 3;
   int64 variantId = 4;
   string name = 5;
-  string url = 6;
-  AssetKind kind = 7;
+  string displayName = 6;
+  string url = 7;
+  AssetKind kind = 8;
+  string contentType = 9;
+  int32 sortOrder = 10;
 }
 
 //
@@ -271,13 +274,6 @@ message UploadAssetRequest {
   };
 }
 
-message UploadAssetResponse {
-  int64 id = 1;
-  string location = 2;
-  uint32 size = 3;
-  string name = 4;
-}
-
 // client
 service CatalogClient {
   // categories
@@ -305,5 +301,5 @@ service CatalogClient {
   rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
   rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
 
-  rpc UploadAsset(stream UploadAssetRequest) returns (UploadAssetResponse);
+  rpc UploadAsset(stream UploadAssetRequest) returns (Asset);
 }

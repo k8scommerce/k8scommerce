@@ -2,7 +2,6 @@ package buildsql
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"reflect"
 	"strings"
@@ -131,7 +130,7 @@ func (b *QueryBuilder) ParseParamString(paramString string) error {
 	// let's let the url parser do the work
 	u, err := url.Parse(paramString)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	q := u.Query()
 	// fmt.Println(q)

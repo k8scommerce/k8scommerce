@@ -50,8 +50,15 @@ UploadConfig:
         - .ogv
         - .3gp
         - .3g2
+    Archive:
+      MaxUploadSize: 1GB
+      MimeTypes:
+        - .tar
+        - .gz
+        - .zip
   StorageConfig:
-    SubDirectory: uploads
+    CdnURL: ${CDN_URL}
+    BasePath: ${BASE_PATH}
     FileSystem: ${FILESYSTEM_ENABLED}
     FileSystemConfig:
       BasePath: ${FILESYSTEM_BASE_PATH}

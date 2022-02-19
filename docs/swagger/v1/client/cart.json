@@ -217,16 +217,11 @@
         "cart": {
           "$ref": "#/definitions/Cart",
           "description": " a Cart object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "AddItemToCartResponse",
       "required": [
-        "cart",
-        "status"
+        "cart"
       ]
     },
     "Cart": {
@@ -258,30 +253,16 @@
           "type": "integer",
           "format": "int64",
           "description": " a customer's id"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "ClearCartRequest",
       "required": [
-        "customerId",
-        "status"
+        "customerId"
       ]
     },
     "ClearCartResponse": {
       "type": "object",
-      "properties": {
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
-        }
-      },
-      "title": "ClearCartResponse",
-      "required": [
-        "status"
-      ]
+      "title": "ClearCartResponse"
     },
     "GetCartRequest": {
       "type": "object",
@@ -303,16 +284,11 @@
         "cart": {
           "$ref": "#/definitions/Cart",
           "description": " a Cart object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "GetCartResponse",
       "required": [
-        "cart",
-        "status"
+        "cart"
       ]
     },
     "Item": {
@@ -398,16 +374,11 @@
         "cart": {
           "$ref": "#/definitions/Cart",
           "description": " a Cart object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "RemoveCartItemResponse",
       "required": [
-        "cart",
-        "status"
+        "cart"
       ]
     },
     "ResponseStatus": {
@@ -460,16 +431,11 @@
         "cart": {
           "$ref": "#/definitions/Cart",
           "description": " a Cart object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "UpdateCartItemQuantityResponse",
       "required": [
-        "cart",
-        "status"
+        "cart"
       ]
     }
   },

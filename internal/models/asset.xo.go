@@ -18,6 +18,7 @@ type Asset struct {
 	DisplayName sql.NullString `json:"display_name" db:"display_name"` // display_name
 	Kind        AssetKind      `json:"kind" db:"kind"`                 // kind
 	ContentType string         `json:"content_type" db:"content_type"` // content_type
+	SortOrder   sql.NullInt64  `json:"sort_order" db:"sort_order"`     // sort_order
 	// xo fields
 	_exists, _deleted bool
 }
@@ -43,13 +44,13 @@ func (a *Asset) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.asset (` +
-		`store_id, product_id, variant_id, name, url, display_name, kind, content_type` +
+		`store_id, product_id, variant_id, name, url, display_name, kind, content_type, sort_order` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType)
-	if err := db.QueryRowContext(ctx, sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType).Scan(&a.ID); err != nil {
+	logf(sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.SortOrder)
+	if err := db.QueryRowContext(ctx, sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.SortOrder).Scan(&a.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -67,11 +68,11 @@ func (a *Asset) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.asset SET ` +
-		`store_id = $1, product_id = $2, variant_id = $3, name = $4, url = $5, display_name = $6, kind = $7, content_type = $8 ` +
-		`WHERE id = $9`
+		`store_id = $1, product_id = $2, variant_id = $3, name = $4, url = $5, display_name = $6, kind = $7, content_type = $8, sort_order = $9 ` +
+		`WHERE id = $10`
 	// run
-	logf(sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.ID); err != nil {
+	logf(sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.SortOrder, a.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.SortOrder, a.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -93,16 +94,16 @@ func (a *Asset) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.asset (` +
-		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type, sort_order` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`store_id = EXCLUDED.store_id, product_id = EXCLUDED.product_id, variant_id = EXCLUDED.variant_id, name = EXCLUDED.name, url = EXCLUDED.url, display_name = EXCLUDED.display_name, kind = EXCLUDED.kind, content_type = EXCLUDED.content_type `
+		`store_id = EXCLUDED.store_id, product_id = EXCLUDED.product_id, variant_id = EXCLUDED.variant_id, name = EXCLUDED.name, url = EXCLUDED.url, display_name = EXCLUDED.display_name, kind = EXCLUDED.kind, content_type = EXCLUDED.content_type, sort_order = EXCLUDED.sort_order `
 	// run
-	logf(sqlstr, a.ID, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType)
-	if _, err := db.ExecContext(ctx, sqlstr, a.ID, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType); err != nil {
+	logf(sqlstr, a.ID, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.SortOrder)
+	if _, err := db.ExecContext(ctx, sqlstr, a.ID, a.StoreID, a.ProductID, a.VariantID, a.Name, a.URL, a.DisplayName, a.Kind, a.ContentType, a.SortOrder); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -137,7 +138,7 @@ func (a *Asset) Delete(ctx context.Context, db DB) error {
 func AssetByID(ctx context.Context, db DB, id int64) (*Asset, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type, sort_order ` +
 		`FROM public.asset ` +
 		`WHERE id = $1`
 	// run
@@ -145,7 +146,7 @@ func AssetByID(ctx context.Context, db DB, id int64) (*Asset, error) {
 	a := Asset{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType, &a.SortOrder); err != nil {
 		return nil, logerror(err)
 	}
 	return &a, nil
@@ -157,7 +158,7 @@ func AssetByID(ctx context.Context, db DB, id int64) (*Asset, error) {
 func AssetByStoreIDName(ctx context.Context, db DB, storeID int64, name string) (*Asset, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type, sort_order ` +
 		`FROM public.asset ` +
 		`WHERE store_id = $1 AND name = $2`
 	// run
@@ -165,7 +166,7 @@ func AssetByStoreIDName(ctx context.Context, db DB, storeID int64, name string) 
 	a := Asset{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, storeID, name).Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, storeID, name).Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType, &a.SortOrder); err != nil {
 		return nil, logerror(err)
 	}
 	return &a, nil
@@ -177,7 +178,7 @@ func AssetByStoreIDName(ctx context.Context, db DB, storeID int64, name string) 
 func AssetByProductID(ctx context.Context, db DB, productID int64) ([]*Asset, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type, sort_order ` +
 		`FROM public.asset ` +
 		`WHERE product_id = $1`
 	// run
@@ -194,7 +195,7 @@ func AssetByProductID(ctx context.Context, db DB, productID int64) ([]*Asset, er
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType, &a.SortOrder); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &a)
@@ -211,7 +212,7 @@ func AssetByProductID(ctx context.Context, db DB, productID int64) ([]*Asset, er
 func AssetByVariantID(ctx context.Context, db DB, variantID int64) ([]*Asset, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type, sort_order ` +
 		`FROM public.asset ` +
 		`WHERE variant_id = $1`
 	// run
@@ -228,7 +229,7 @@ func AssetByVariantID(ctx context.Context, db DB, variantID int64) ([]*Asset, er
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType, &a.SortOrder); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &a)
@@ -245,7 +246,7 @@ func AssetByVariantID(ctx context.Context, db DB, variantID int64) ([]*Asset, er
 func AssetByVariantIDKind(ctx context.Context, db DB, variantID int64, kind AssetKind) ([]*Asset, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type, sort_order ` +
 		`FROM public.asset ` +
 		`WHERE variant_id = $1 AND kind = $2`
 	// run
@@ -262,7 +263,7 @@ func AssetByVariantIDKind(ctx context.Context, db DB, variantID int64, kind Asse
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType, &a.SortOrder); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &a)

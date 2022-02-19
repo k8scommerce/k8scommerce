@@ -1,0 +1,11 @@
+{"@timestamp":"2022-02-19T00:37:36.849-07","level":"info","content":"DB LISTENER ERROR: pq: terminating connection due to administrator command"}
+{"@timestamp":"2022-02-19T00:37:36.891-07","level":"info","content":"DB LISTENER ERROR: pq: the database system is shutting down"}
+{"@timestamp":"2022-02-19T00:37:41.131-07","level":"info","content":"DB Ping failed: driver: bad connection"}
+{"@timestamp":"2022-02-19T00:37:46.894-07","level":"info","content":"DB LISTENER ERROR: EOF"}
+{"@timestamp":"2022-02-19T00:37:51.107-07","level":"info","content":"DB LISTENER ERROR: no connection"}
+{"@timestamp":"2022-02-19T00:37:51.136-07","level":"info","content":"DB Ping failed: failed to connect to `host=localhost user=postgres database=k8scommerce`: failed to receive message (unexpected EOF)"}
+{"@timestamp":"2022-02-19T00:38:01.141-07","level":"info","content":"DB Ping failed: failed to connect to `host=localhost user=postgres database=k8scommerce`: failed to receive message (unexpected EOF)"}
+{"@timestamp":"2022-02-19T00:38:06.108-07","level":"info","content":"DB LISTENER ERROR: no connection"}
+{"@timestamp":"2022-02-19T00:38:06.898-07","level":"info","content":"DB LISTENER ERROR: EOF"}
+{"@timestamp":"2022-02-19T00:38:21.108-07","level":"info","content":"DB LISTENER ERROR: no connection"}
+{"@timestamp":"2022-02-19T00:38:36.109-07","level":"info","content":"DB LISTENER ERROR: no connection"}

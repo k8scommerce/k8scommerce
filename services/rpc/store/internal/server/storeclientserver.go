@@ -9,30 +9,34 @@ import (
 	"k8scommerce/services/rpc/store/internal/logic"
 	"k8scommerce/services/rpc/store/internal/svc"
 	"k8scommerce/services/rpc/store/pb/store"
+
+	"github.com/localrivet/galaxycache"
 )
 
 type StoreClientServer struct {
-	svcCtx *svc.ServiceContext
+	svcCtx   *svc.ServiceContext
+	universe *galaxycache.Universe
 	store.UnimplementedStoreClientServer
 }
 
-func NewStoreClientServer(svcCtx *svc.ServiceContext) *StoreClientServer {
+func NewStoreClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *StoreClientServer {
 	return &StoreClientServer{
-		svcCtx: svcCtx,
+		svcCtx:   svcCtx,
+		universe: universe,
 	}
 }
 
 func (s *StoreClientServer) CreateStore(ctx context.Context, in *store.CreateStoreRequest) (*store.CreateStoreResponse, error) {
-	l := logic.NewCreateStoreLogic(ctx, s.svcCtx)
+	l := logic.NewCreateStoreLogic(ctx, s.svcCtx, s.universe)
 	return l.CreateStore(in)
 }
 
 func (s *StoreClientServer) GetStoreById(ctx context.Context, in *store.GetStoreByIdRequest) (*store.GetStoreByIdResponse, error) {
-	l := logic.NewGetStoreByIdLogic(ctx, s.svcCtx)
+	l := logic.NewGetStoreByIdLogic(ctx, s.svcCtx, s.universe)
 	return l.GetStoreById(in)
 }
 
 func (s *StoreClientServer) GetAllStores(ctx context.Context, in *store.GetAllStoresRequest) (*store.GetAllStoresResponse, error) {
-	l := logic.NewGetAllStoresLogic(ctx, s.svcCtx)
+	l := logic.NewGetAllStoresLogic(ctx, s.svcCtx, s.universe)
 	return l.GetAllStores(in)
 }

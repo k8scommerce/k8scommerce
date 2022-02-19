@@ -9,20 +9,24 @@ import (
 	"k8scommerce/services/rpc/email/internal/logic"
 	"k8scommerce/services/rpc/email/internal/svc"
 	"k8scommerce/services/rpc/email/pb/email"
+
+	"github.com/localrivet/galaxycache"
 )
 
 type EmailClientServer struct {
-	svcCtx *svc.ServiceContext
+	svcCtx   *svc.ServiceContext
+	universe *galaxycache.Universe
 	email.UnimplementedEmailClientServer
 }
 
-func NewEmailClientServer(svcCtx *svc.ServiceContext) *EmailClientServer {
+func NewEmailClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *EmailClientServer {
 	return &EmailClientServer{
-		svcCtx: svcCtx,
+		svcCtx:   svcCtx,
+		universe: universe,
 	}
 }
 
 func (s *EmailClientServer) SendOrderConfirmation(ctx context.Context, in *email.SendOrderConfirmationRequest) (*email.Empty, error) {
-	l := logic.NewSendOrderConfirmationLogic(ctx, s.svcCtx)
+	l := logic.NewSendOrderConfirmationLogic(ctx, s.svcCtx, s.universe)
 	return l.SendOrderConfirmation(in)
 }

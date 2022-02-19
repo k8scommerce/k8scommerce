@@ -48,7 +48,6 @@ type (
 	UpdateProductRequest              = catalog.UpdateProductRequest
 	UpdateProductResponse             = catalog.UpdateProductResponse
 	UploadAssetRequest                = catalog.UploadAssetRequest
-	UploadAssetResponse               = catalog.UploadAssetResponse
 	Variant                           = catalog.Variant
 
 	CatalogClient interface {

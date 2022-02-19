@@ -1,0 +1,3 @@
+{"@timestamp":"2022-02-18T23:59:21.296-07","level":"stat","content":"CPU: 0m, MEMORY: Alloc=4.9Mi, TotalAlloc=8.8Mi, Sys=22.1Mi, NumGC=4"}
+{"@timestamp":"2022-02-18T23:59:21.319-07","level":"stat","content":"(api) shedding_stat [1m], cpu: 0, total: 0, pass: 0, drop: 0"}
+{"@timestamp":"2022-02-18T23:59:39.595-07","level":"stat","content":"p2c - conn: 192.168.1.117:65010, load: 30993, reqs: 1"}

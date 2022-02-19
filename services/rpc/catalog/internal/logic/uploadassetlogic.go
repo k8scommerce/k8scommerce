@@ -2,8 +2,10 @@ package logic
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"io"
+	"k8scommerce/internal/models"
 	"k8scommerce/internal/storage/asset"
 	"k8scommerce/internal/utils/humanizer"
 	"k8scommerce/services/rpc/catalog/internal/svc"
@@ -56,13 +58,25 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 	}
 	file.Kind = kind
 
+	storeId := req.GetAsset().GetStoreId()
+	productId := req.GetAsset().GetProductId()
+	variantId := req.GetAsset().GetVariantId()
+
+	// let's check for an existing file of the same name/variant id
+	if exists, err := l.svcCtx.Repo.Asset().AssetExists(storeId, req.GetAsset().Name); err != nil || exists {
+		if err != nil {
+			return status.Errorf(codes.Internal, "error checking for existing asset: %s", err.Error())
+		}
+		return status.Errorf(codes.Internal, "asset already exists for this store: %s: ", req.GetAsset().Name)
+	}
+
 	maxUploadSize, err := l.getMaxUploadFilesize(req.GetAsset().GetKind())
 	if err != nil {
 		return err
 	}
 
 	// start db insert transaction
-	_, err = l.svcCtx.Repo.Begin()
+	tx, err := l.svcCtx.Repo.Begin()
 	if err != nil {
 		return status.Errorf(codes.Internal, "failed to start a transaction: %s", err.Error())
 	}
@@ -81,7 +95,41 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				return status.Error(codes.Internal, err.Error())
 			}
 
-			return stream.SendAndClose(&catalog.UploadAssetResponse{})
+			asset := &models.Asset{
+				StoreID:     storeId,
+				ProductID:   productId,
+				VariantID:   variantId,
+				Kind:        models.AssetKind(file.Kind + 1), // asset kind in database is not zerobased
+				Name:        file.BaseName,
+				DisplayName: sql.NullString{Valid: true, String: file.BaseName},
+				ContentType: file.ContentType,
+				URL:         file.URL,
+				SortOrder:   sql.NullInt64{Valid: true, Int64: 100},
+			}
+
+			// save the asset to the database
+			if err := l.svcCtx.Repo.Asset().CreateTx(asset, tx); err != nil {
+				l.svcCtx.Repo.Rollback(tx)
+				return status.Errorf(codes.Internal, "saving asset to database failed: %s", err.Error())
+			}
+
+			// commit the transaction
+			if err := l.svcCtx.Repo.Commit(tx); err != nil {
+				return status.Errorf(codes.Internal, "saving asset db commit failed: %s", err.Error())
+			}
+
+			return stream.SendAndClose(&catalog.Asset{
+				Id:          asset.ID,
+				StoreId:     asset.StoreID,
+				ProductId:   asset.ProductID,
+				VariantId:   asset.VariantID,
+				Kind:        catalog.AssetKind(asset.Kind - 1), // catelog kind is zero based
+				DisplayName: asset.DisplayName.String,
+				Name:        asset.Name,
+				Url:         asset.URL,
+				ContentType: asset.ContentType,
+				SortOrder:   int32(asset.SortOrder.Int64),
+			})
 		}
 		if err != nil {
 			return status.Error(codes.Internal, err.Error())
