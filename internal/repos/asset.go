@@ -27,7 +27,7 @@ type Asset interface {
 	Upsert() error
 	Delete(id int64) error
 	GetAssetById(id int64) (res *models.Asset, err error)
-	GetAssetsByVariantId(customerId int64) (res []*models.Asset, err error)
+	GetAssetsByVariantId(variantId int64, kind models.AssetKind) (res []*models.Asset, err error)
 }
 
 type assetRepo struct {
@@ -83,25 +83,6 @@ func (m *assetRepo) GetAssetById(id int64) (res *models.Asset, err error) {
 	return models.AssetByID(m.ctx, m.db, id)
 }
 
-func (m *assetRepo) GetAssetsByVariantId(variantId int64) (res []*models.Asset, err error) {
-	nstmt, err := m.db.PrepareNamed(`
-		SELECT 
-			*
-		FROM asset
-		WHERE variant_id = :variant_id
-	`)
-	if err != nil {
-		return nil, fmt.Errorf("error::GetAssetsByVariantId::%s", err.Error())
-	}
-
-	var assets []*models.Asset
-	err = nstmt.Select(&assets,
-		map[string]interface{}{
-			"variant_id": variantId,
-		})
-	if err != nil {
-		return nil, err
-	}
-
-	return assets, nil
+func (m *assetRepo) GetAssetsByVariantId(variantId int64, kind models.AssetKind) (res []*models.Asset, err error) {
+	return models.AssetByVariantIDKind(m.ctx, m.db, variantId, kind)
 }

@@ -24,6 +24,7 @@ CREATE TABLE asset (
 
 CREATE INDEX IF NOT EXISTS idx_asset_product_id ON asset USING btree (product_id);
 CREATE INDEX IF NOT EXISTS idx_asset_variant_id ON asset USING btree (variant_id);
+CREATE INDEX IF NOT EXISTS idx_asset_variant_id_kind ON asset USING btree (variant_id, kind);
 
 -- +goose StatementEnd
 -- +goose Down

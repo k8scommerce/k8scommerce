@@ -131,26 +131,6 @@ func (a *Asset) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
-// AssetByName retrieves a row from 'public.asset' as a Asset.
-//
-// Generated from index 'asset_name_key'.
-func AssetByName(ctx context.Context, db DB, name string) (*Asset, error) {
-	// query
-	const sqlstr = `SELECT ` +
-		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
-		`FROM public.asset ` +
-		`WHERE name = $1`
-	// run
-	logf(sqlstr, name)
-	a := Asset{
-		_exists: true,
-	}
-	if err := db.QueryRowContext(ctx, sqlstr, name).Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
-		return nil, logerror(err)
-	}
-	return &a, nil
-}
-
 // AssetByID retrieves a row from 'public.asset' as a Asset.
 //
 // Generated from index 'asset_pkey'.
@@ -169,4 +149,126 @@ func AssetByID(ctx context.Context, db DB, id int64) (*Asset, error) {
 		return nil, logerror(err)
 	}
 	return &a, nil
+}
+
+// AssetByStoreIDName retrieves a row from 'public.asset' as a Asset.
+//
+// Generated from index 'asset_store_id_name_key'.
+func AssetByStoreIDName(ctx context.Context, db DB, storeID int64, name string) (*Asset, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`FROM public.asset ` +
+		`WHERE store_id = $1 AND name = $2`
+	// run
+	logf(sqlstr, storeID, name)
+	a := Asset{
+		_exists: true,
+	}
+	if err := db.QueryRowContext(ctx, sqlstr, storeID, name).Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+		return nil, logerror(err)
+	}
+	return &a, nil
+}
+
+// AssetByProductID retrieves a row from 'public.asset' as a Asset.
+//
+// Generated from index 'idx_asset_product_id'.
+func AssetByProductID(ctx context.Context, db DB, productID int64) ([]*Asset, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`FROM public.asset ` +
+		`WHERE product_id = $1`
+	// run
+	logf(sqlstr, productID)
+	rows, err := db.QueryContext(ctx, sqlstr, productID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Asset
+	for rows.Next() {
+		a := Asset{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &a)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// AssetByVariantID retrieves a row from 'public.asset' as a Asset.
+//
+// Generated from index 'idx_asset_variant_id'.
+func AssetByVariantID(ctx context.Context, db DB, variantID int64) ([]*Asset, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`FROM public.asset ` +
+		`WHERE variant_id = $1`
+	// run
+	logf(sqlstr, variantID)
+	rows, err := db.QueryContext(ctx, sqlstr, variantID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Asset
+	for rows.Next() {
+		a := Asset{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &a)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// AssetByVariantIDKind retrieves a row from 'public.asset' as a Asset.
+//
+// Generated from index 'idx_asset_variant_id_kind'.
+func AssetByVariantIDKind(ctx context.Context, db DB, variantID int64, kind AssetKind) ([]*Asset, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, product_id, variant_id, name, url, display_name, kind, content_type ` +
+		`FROM public.asset ` +
+		`WHERE variant_id = $1 AND kind = $2`
+	// run
+	logf(sqlstr, variantID, kind)
+	rows, err := db.QueryContext(ctx, sqlstr, variantID, kind)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Asset
+	for rows.Next() {
+		a := Asset{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&a.ID, &a.StoreID, &a.ProductID, &a.VariantID, &a.Name, &a.URL, &a.DisplayName, &a.Kind, &a.ContentType); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &a)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
 }
