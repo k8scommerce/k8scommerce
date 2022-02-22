@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"io"
+	"k8scommerce/internal/events/eventkey"
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/storage/asset"
 	"k8scommerce/internal/utils/humanizer"
@@ -95,20 +96,21 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				return status.Error(codes.Internal, err.Error())
 			}
 
-			asset := &models.Asset{
+			modelAsset := &models.Asset{
 				StoreID:     storeId,
 				ProductID:   productId,
 				VariantID:   variantId,
-				Kind:        models.AssetKind(file.Kind + 1), // asset kind in database is not zerobased
+				Kind:        file.Kind.String(), // asset kind in database is not zerobased
 				Name:        file.BaseName,
 				DisplayName: sql.NullString{Valid: true, String: file.BaseName},
 				ContentType: file.ContentType,
 				URL:         file.URL,
 				SortOrder:   sql.NullInt64{Valid: true, Int64: 100},
+				Sizes:       []byte("[]"),
 			}
 
 			// save the asset to the database
-			if err := l.svcCtx.Repo.Asset().CreateTx(asset, tx); err != nil {
+			if err := l.svcCtx.Repo.Asset().CreateTx(modelAsset, tx); err != nil {
 				l.svcCtx.Repo.Rollback(tx)
 				return status.Errorf(codes.Internal, "saving asset to database failed: %s", err.Error())
 			}
@@ -118,17 +120,28 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				return status.Errorf(codes.Internal, "saving asset db commit failed: %s", err.Error())
 			}
 
+			if bytes, err := eventkey.CatalogImageUploaded.Marshal(modelAsset); err != nil {
+				logx.Infof("%d: marshaling event %s failed: %s", codes.Internal, eventkey.CatalogImageUploaded, err.Error())
+			} else {
+				// publish event
+				err = l.svcCtx.EventManager.Publish(eventkey.CatalogImageUploaded.AsKey(), bytes)
+				if err != nil {
+					logx.Infof("%d: publishing event %s failed: %s", codes.Internal, eventkey.CatalogImageUploaded, err.Error())
+				}
+			}
+
+			// return it
 			return stream.SendAndClose(&catalog.Asset{
-				Id:          asset.ID,
-				StoreId:     asset.StoreID,
-				ProductId:   asset.ProductID,
-				VariantId:   asset.VariantID,
-				Kind:        catalog.AssetKind(asset.Kind - 1), // catelog kind is zero based
-				DisplayName: asset.DisplayName.String,
-				Name:        asset.Name,
-				Url:         asset.URL,
-				ContentType: asset.ContentType,
-				SortOrder:   int32(asset.SortOrder.Int64),
+				Id:          modelAsset.ID,
+				StoreId:     modelAsset.StoreID,
+				ProductId:   modelAsset.ProductID,
+				VariantId:   modelAsset.VariantID,
+				Kind:        catalog.AssetKind(file.Kind.Int32()), // catelog kind is zero based
+				DisplayName: modelAsset.DisplayName.String,
+				Name:        modelAsset.Name,
+				Url:         modelAsset.URL,
+				ContentType: modelAsset.ContentType,
+				SortOrder:   int32(modelAsset.SortOrder.Int64),
 			})
 		}
 		if err != nil {
@@ -176,29 +189,31 @@ func (l *UploadAssetLogic) getContentType(chunk []byte) (string, error) {
 }
 
 func (l *UploadAssetLogic) getAssetKind(assetKind catalog.AssetKind) (asset.Kind, error) {
-
 	var kind asset.Kind
 	var isSet = false
 	switch assetKind {
+	case catalog.AssetKind_unknown:
+		isSet = true
+		kind = asset.Kind(catalog.AssetKind_unknown.String())
 	case catalog.AssetKind_image:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_image.Number())
+		kind = asset.Kind(catalog.AssetKind_image.String())
 	case catalog.AssetKind_document:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_document.Number())
+		kind = asset.Kind(catalog.AssetKind_document.String())
 	case catalog.AssetKind_audio:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_audio.Number())
+		kind = asset.Kind(catalog.AssetKind_audio.String())
 	case catalog.AssetKind_video:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_video.Number())
+		kind = asset.Kind(catalog.AssetKind_video.String())
 	case catalog.AssetKind_archive:
 		isSet = true
-		kind = asset.Kind(catalog.AssetKind_archive.Number())
+		kind = asset.Kind(catalog.AssetKind_archive.String())
 	}
 
 	if !isSet {
-		return -1, status.Error(codes.FailedPrecondition, "unknown asset kind. must be one of image, document, audio or video")
+		return asset.Kind(catalog.AssetKind_unknown.String()), status.Error(codes.FailedPrecondition, "unknown asset kind. must be one of image, document, audio or video")
 	}
 	return kind, nil
 }

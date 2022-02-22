@@ -90,6 +90,8 @@ warehouse\
 catalog\
 cart
 
+consumerServices=imageresizer
+
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
 	BLACK        := $(shell tput -Txterm setaf 0)
@@ -222,6 +224,15 @@ start:
 		echo ""; \
 		port=$$((port+1)); \
 	done
+	@for service in $(consumerServices); do \
+		printf "$(BLUE)Starting Consumer Service: $(WHITE)$$service$(RESET)\n"; \
+		cd ./services/consumer/$$service; \
+		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
+		(sleep 0.1); \
+		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
+		cd ../../../; \
+		echo ""; \
+	done
 	@sleep 15
 	@port=64000; \
 	for service in $(apiServices); do \
@@ -235,13 +246,18 @@ start:
 		echo ""; \
 		port=$$((port+1)); \
 	done
-
 .PHONY: stop
 stop:
 	@for service in $(rpcServices); do \
 		printf "$(BLUE)Stopping RPC Service: $(WHITE)$$service$(RESET)\n"; \
 		pkill -9 -f $$service.yaml; \
 		rm ./services/rpc/$$service/etc/local-$$service.yaml; \
+		echo ""; \
+	done
+	@for service in $(consumerServices); do \
+		printf "$(BLUE)Stopping Consumer Service: $(WHITE)$$service$(RESET)\n"; \
+		pkill -9 -f $$service.yaml; \
+		rm ./services/consumer/$$service/etc/local-$$service.yaml; \
 		echo ""; \
 	done
 	@for service in $(apiServices); do \

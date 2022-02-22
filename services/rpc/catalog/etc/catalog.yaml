@@ -12,7 +12,6 @@ PostgresConfig:
   MaxOpenConnections: 10
   MaxIdleConnections: 2
   MaxConnectionLifetimeMinutes: 5
-
 UploadConfig:
   AllowedTypes:
     Images:
@@ -69,6 +68,11 @@ UploadConfig:
       SecretAccessKey: ${AWS_SECRET_ACCESS_KEY}
       S3Bucket: ${S3_BUCKET}
     Azure: false
-    # AzureConfig: 
+    # AzureConfig:
     GCP: false
-    # GCPConfig: 
+    # GCPConfig:
+EventsConfig:
+  Enabled: ${EVENTS_ENABLED}
+  RabbitMQ: ${RABBITMQ_ENABLED}
+  RabbitMQConfig:
+    Url: ${RABBITMQ_URL}

@@ -1,0 +1,213 @@
+version: '3.9'
+
+services:
+
+  ###################
+  # Micro-Services
+  ###################
+
+  similarproducts:
+    container_name: similarproducts
+    hostname: similarproducts
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - postgres
+      - etcd1
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/services/rpc/similarproducts
+
+  othersbought:
+    container_name: othersbought
+    hostname: othersbought
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - postgres
+      - etcd1
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/services/rpc/othersbought
+
+  inventory:
+    container_name: inventory
+    hostname: inventory
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - postgres
+      - etcd1
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/services/rpc/inventory
+
+  cart:
+    container_name: cart
+    hostname: cart
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - postgres
+      - etcd1
+      - inventory
+      - othersbought
+      - similarproducts
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/services/rpc/cart
+
+  product:
+    container_name: product
+    hostname: product
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - postgres
+      - etcd1
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/services/rpc/product
+
+  user:
+    container_name: user
+    hostname: user
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - postgres
+      - etcd1
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/services/rpc/user
+
+  client:
+    container_name: client
+    hostname: client
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - cart
+      - inventory
+      - othersbought
+      - product
+      - similarproducts
+      - user
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/services/api/client
+    ports:
+      - "8888:8888"
+
+  #
+  #
+
+  ###################
+  # Support Services
+  ###################
+
+  postgres:
+    image: postgis/postgis:12-master
+    hostname: postgres
+    ports:
+      - "54322:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: k8scommerce
+    volumes:
+      - $HOME/docker/volumes/k8scommerce:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  migrations:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: k8scommerce
+      PGHOST: postgres
+      PGSSLMODE: disable
+    command: [ "/wait-for-postgres.sh", "/run-migrations.sh" ]
+
+  seedata:
+    container_name: seedata
+    hostname: seedata
+    restart: unless-stopped
+    build:
+      dockerfile: ./Dockerfile.local
+      context: .
+    depends_on:
+      - postgres
+      - migrations
+    environment:
+      - ECOMM_CONFIG=/app/env/config.dc.yaml
+    volumes:
+      - .:/app
+      - ${HOME}/go/pkg/mod:/go/pkg/mod
+    working_dir: /app/db/tools
+
+  pgadmin:
+    image: dpage/pgadmin4:6.3
+    depends_on:
+      - postgres
+      - migrations
+      - seedata
+    ports:
+      - "54288:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@foo.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    restart: unless-stopped
+
+  etcd1:
+    image: docker.io/bitnami/etcd:3
+    hostname: etcd1
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_NAME=etcd1
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd1:2380
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0127.0.0.1:2379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd1127.0.0.1:2379
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER=etcd1=http://etcd1:2380
+      - ETCD_INITIAL_CLUSTER_STATE=new

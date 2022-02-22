@@ -121,7 +121,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
-					Path:    "/v1/asset/:productId/:variantId",
+					Path:    "/v1/asset/:productId/:variantId/:kind",
 					Handler: assets.UploadHandler(serverCtx),
 				},
 			}...,

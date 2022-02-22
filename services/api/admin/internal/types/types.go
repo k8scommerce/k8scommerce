@@ -164,8 +164,9 @@ type DeleteProductResponse struct {
 }
 
 type UploadAssetRequest struct {
-	ProductId int64 `path:"productId"`
-	VariantId int64 `path:"variantId"`
+	ProductId int64  `path:"productId"`
+	VariantId int64  `path:"variantId"`
+	Kind      string `path:"kind"`
 }
 
 type Customer struct {

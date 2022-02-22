@@ -188,8 +188,9 @@ type DeleteProductResponse {
 //
 //
 type UploadAssetRequest {
-	ProductId int64 `path:"productId"`
-	VariantId int64 `path:"variantId"`
+	ProductId int64  `path:"productId"`
+	VariantId int64  `path:"variantId"`
+	Kind      string `path:"kind"`
 }
 
 //
@@ -342,5 +343,5 @@ service admin {
 		variantId: "variant id"
 	)
 	@handler upload
-	post /v1/asset/:productId/:variantId(UploadAssetRequest) returns (Asset)
+	post /v1/asset/:productId/:variantId/:kind(UploadAssetRequest) returns (Asset)
 }
