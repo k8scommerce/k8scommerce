@@ -18,6 +18,7 @@ func newInventoryItem(repo *repo) InventoryItem {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/InventoryItem.go -package=mock_repos k8scommerce/internal/repos InventoryItem
 type InventoryItem interface {
 	Exists() bool
 	Deleted() bool

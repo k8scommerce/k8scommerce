@@ -10,6 +10,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+//go:generate mockgen -destination=./mocks/EventManager.go -package=mock_events k8scommerce/internal/events EventManager
 type EventManager interface {
 	Publish(key eventkey.EventKey, content []byte) error
 	Consume(key eventkey.EventKey, consumerName string, handler rabbitmq.Handler) error

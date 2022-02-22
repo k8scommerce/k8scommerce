@@ -17,6 +17,7 @@ func newSimilarProducts(repo *repo) SimilarProducts {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/SimilarProducts.go -package=mock_repos k8scommerce/internal/repos SimilarProducts
 type SimilarProducts interface {
 	Exists() bool
 	Deleted() bool

@@ -18,6 +18,7 @@ func newUser(repo *repo) User {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/User.go -package=mock_repos k8scommerce/internal/repos User
 type User interface {
 	Exists() bool
 	Deleted() bool

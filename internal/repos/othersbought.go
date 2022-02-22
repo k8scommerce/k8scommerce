@@ -17,6 +17,7 @@ func newOthersBought(repo *repo) OthersBought {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/OthersBought.go -package=mock_repos k8scommerce/internal/repos OthersBought
 type OthersBought interface {
 	Exists() bool
 	Deleted() bool

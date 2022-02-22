@@ -18,6 +18,7 @@ func newCustomer(repo *repo) Customer {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/Customer.go -package=mock_repos k8scommerce/internal/repos Customer
 type Customer interface {
 	Exists() bool
 	Deleted() bool

@@ -18,6 +18,7 @@ func newProduct(repo *repo) Product {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/Product.go -package=mock_repos k8scommerce/internal/repos Product
 type Product interface {
 	Exists() bool
 	Deleted() bool

@@ -18,6 +18,7 @@ func newInventorySupplier(repo *repo) InventorySupplier {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/InventorySupplier.go -package=mock_repos k8scommerce/internal/repos InventorySupplier
 type InventorySupplier interface {
 	Exists() bool
 	Deleted() bool
