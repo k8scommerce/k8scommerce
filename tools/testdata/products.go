@@ -11,6 +11,8 @@ import (
 
 	"github.com/iancoleman/strcase"
 	"github.com/icrowley/fake"
+
+	// ifaker "github.com/jaswdr/faker"
 	"syreclabs.com/go/faker"
 )
 
@@ -161,6 +163,25 @@ func (a *prod) addVariant(productID int64, isDefault bool, sku string, sortOrder
 
 	a.addVariantPriceRelation(record)
 }
+
+// func (a *prod) images(productId, variantId int64) {
+// 	f := ifaker.New()
+// 	image := f.LoremFlickr().Image(1000, 1000, []string{}, "", false)
+
+// 	file, err := asset.MustNewFile(fileName, l.svcCtx.Config.UploadConfig)
+// 	if err != nil {
+// 		return nil, status.Errorf(codes.Internal, "file creation error: %s", err.Error())
+// 	}
+
+// 	file.Kind = asset.Kind(in.Kind)
+// 	f := models.Asset{}
+
+// 	fmt.Println(image.Name())
+// 	if err := assset.Insert(context.Background(), db); err != nil {
+// 		fmt.Printf("PRODUCT: %#v\n\n", product)
+// 		panic(err)
+// 	}
+// }
 
 func (a *prod) validatePropertyIdx(idx string) string {
 	if _, ok := a.selectedPropertiesMap[idx]; ok {

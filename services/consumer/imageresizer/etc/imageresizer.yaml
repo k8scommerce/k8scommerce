@@ -13,6 +13,7 @@ EventsConfig:
   RabbitMQConfig:
     Url: ${RABBITMQ_URL}
 ImageResizeConfig:
+  ImaginaryURL: ${IMAGINARY_URL}
   EnableResizer: true
   WatermarkConfig:
     Margin: 20
