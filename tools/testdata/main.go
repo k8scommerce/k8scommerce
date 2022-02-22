@@ -42,6 +42,8 @@ func main() {
 	createArchetypes()
 	createProducts()
 	createUsers()
+	createImages()
+
 }
 
 func truncateAll() {
@@ -56,6 +58,7 @@ func truncateAll() {
 		"archetype_property",
 		"product",
 		"users",
+		"asset",
 	}
 	for _, table := range tables {
 		db.MustExec(fmt.Sprintf("truncate %s RESTART IDENTITY CASCADE;", table))
