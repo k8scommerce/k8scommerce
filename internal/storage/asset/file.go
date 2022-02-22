@@ -12,37 +12,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type Kind int
-
-const (
-	Image    Kind = 0
-	Document Kind = 1
-	Audio    Kind = 2
-	Video    Kind = 3
-	Archive  Kind = 4
-)
-
-var (
-	Kind_name = map[int32]string{
-		0: "image",
-		1: "document",
-		2: "audio",
-		3: "video",
-		4: "archive",
-	}
-	Kind_value = map[string]int32{
-		"image":    0,
-		"document": 1,
-		"audio":    2,
-		"video":    3,
-		"archive":  4,
-	}
-)
-
-func (k *Kind) String() string {
-	return Kind_name[int32(*k)]
-}
-
 type File struct {
 	Name        string
 	BaseName    string

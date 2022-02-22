@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"k8scommerce/internal/storage/asset"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
@@ -39,12 +40,24 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 	// we can't use the standard parser
 	// as it will cause the MultipartReader to fail
 	// so we need to parse the params ourselves
+	// path looks like this /v1/asset/:productId/:variantId/:kind
+	// fwe pop them off in reverse
+	// image first
+	// variantId second
+	// productId third
 	pathParts := strings.Split(l.r.URL.Path, "/")
-	productId, err := strconv.ParseInt(pathParts[len(pathParts)-1], 10, 64)
+
+	kind := pathParts[len(pathParts)-1]
 	if err != nil {
 		return
 	}
+
 	variantId, err := strconv.ParseInt(pathParts[len(pathParts)-2], 10, 64)
+	if err != nil {
+		return
+	}
+
+	productId, err := strconv.ParseInt(pathParts[len(pathParts)-3], 10, 64)
 	if err != nil {
 		return
 	}
@@ -52,6 +65,7 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 	req := types.UploadAssetRequest{
 		ProductId: productId,
 		VariantId: variantId,
+		Kind:      kind,
 	}
 
 	// startTime := time.Now()
@@ -71,20 +85,20 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 		return resp, err
 	}
 
-	// partBytes := int64(0)
 	partCount := int64(0)
 	for {
-		//DOS problem .... what if this header is very large?  (Intentionally)
 		part, partErr := multipartReader.NextPart()
 		if partErr != nil {
 			if partErr == io.EOF {
-				break //just an eof...not an error
+				break
 			} else {
 				return resp, fmt.Errorf("error getting a part %v", partErr)
 			}
 		} else {
 			if len(part.FileName()) > 0 {
 				if partCount == 0 {
+					kind := asset.Kind(req.Kind)
+
 					streamReq := &catalog.UploadAssetRequest{
 						Data: &catalog.UploadAssetRequest_Asset{
 							Asset: &catalog.Asset{
@@ -92,6 +106,7 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 								Name:      part.FileName(),
 								ProductId: req.ProductId,
 								VariantId: req.VariantId,
+								Kind:      catalog.AssetKind(kind.Int32()),
 							},
 						},
 					}
@@ -118,11 +133,6 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 				if err != nil {
 					break
 				}
-
-				//Could take an *indefinite* amount of time!!
-				// partBytesIncr, partCountIncr := h.serveHTTPUploadPOSTDrain(fileName, w, part)
-				// partBytes += partBytesIncr
-				// partCount += partCountIncr
 
 				partCount++
 			}

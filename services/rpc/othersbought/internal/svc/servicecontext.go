@@ -13,6 +13,6 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
-		Repo:   repos.MustNewRepo(&c.PostgresConfig),
+		Repo:   repos.NewRepo(&c.PostgresConfig),
 	}
 }

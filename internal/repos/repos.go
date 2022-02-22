@@ -18,11 +18,11 @@ var (
 	ErrNotFound = sql.ErrNoRows
 )
 
-func MustNewRepo(c *PostgresConfig) Repo {
+func NewRepo(c *PostgresConfig) Repo {
 	// catch any panics
 	defer func() {
 		if rec := recover(); rec != nil {
-			fmt.Println("Panic Recovered in MustNewRepo:", rec)
+			fmt.Println("Panic Recovered in NewRepo:", rec)
 		}
 	}()
 

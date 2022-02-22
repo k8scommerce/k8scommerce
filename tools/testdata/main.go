@@ -26,7 +26,7 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 
-	repo = repos.MustNewRepo(&repos.PostgresConfig{
+	repo = repos.NewRepo(&repos.PostgresConfig{
 		DataSourceName:               os.Getenv("POSTGRES_DSN"),
 		MaxOpenConnections:           10,
 		MaxIdleConnections:           2,

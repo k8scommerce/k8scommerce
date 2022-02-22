@@ -24,7 +24,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	return &ServiceContext{
 		Config: c,
-		Repo:   repos.MustNewRepo(&c.PostgresConfig),
+		Repo:   repos.NewRepo(&c.PostgresConfig),
 		// Publisher:          InitRabbitMQPublisher(&c),
 		InventoryRpc:   inventoryclient.NewInventoryClient(zrpc.MustNewClient(c.InventoryRpc)),
 		OtherBoughtRpc: othersboughtclient.NewOthersBoughtClient(zrpc.MustNewClient(c.OthersBoughtRpc)),

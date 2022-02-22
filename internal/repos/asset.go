@@ -28,7 +28,7 @@ type Asset interface {
 	Upsert() error
 	Delete(id int64) error
 	GetAssetById(id int64) (res *models.Asset, err error)
-	GetAssetsByVariantId(variantId int64, kind models.AssetKind) (res []*models.Asset, err error)
+	GetAssetsByVariantId(variantId int64, kind string) (res []*models.Asset, err error)
 	AssetExists(storeId int64, name string) (res bool, err error)
 }
 
@@ -86,7 +86,7 @@ func (m *assetRepo) GetAssetById(id int64) (res *models.Asset, err error) {
 	return models.AssetByID(m.ctx, m.db, id)
 }
 
-func (m *assetRepo) GetAssetsByVariantId(variantId int64, kind models.AssetKind) (res []*models.Asset, err error) {
+func (m *assetRepo) GetAssetsByVariantId(variantId int64, kind string) (res []*models.Asset, err error) {
 	return models.AssetByVariantIDKind(m.ctx, m.db, variantId, kind)
 }
 

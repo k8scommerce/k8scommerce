@@ -1,8 +1,9 @@
 package config
 
 import (
+	eventsconfig "k8scommerce/internal/events/config"
 	"k8scommerce/internal/repos"
-	"k8scommerce/internal/storage/config"
+	storageconfig "k8scommerce/internal/storage/config"
 
 	"github.com/zeromicro/go-zero/zrpc"
 )
@@ -10,6 +11,7 @@ import (
 type Config struct {
 	zrpc.RpcServerConf
 	PostgresConfig repos.PostgresConfig
-	UploadConfig   config.UploadConfig
+	UploadConfig   storageconfig.UploadConfig
+	EventsConfig   eventsconfig.EventsConfig
 	MaxBytes       int
 }
