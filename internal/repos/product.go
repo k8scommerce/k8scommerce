@@ -670,15 +670,14 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 		%s
 		%s
 	`, where, orderBy, offset, limit)
-	fmt.Println(sql)
 
 	nstmt, err := m.db.PrepareNamed(sql)
 	if err != nil {
 
-		fmt.Println("where", where)
-		fmt.Println("orderBy", orderBy)
-		fmt.Println("offset", offset)
-		fmt.Println("limit", limit)
+		// fmt.Println("where", where)
+		// fmt.Println("orderBy", orderBy)
+		// fmt.Println("offset", offset)
+		// fmt.Println("limit", limit)
 
 		return nil, fmt.Errorf("error::GetAllProducts::%s", err.Error())
 	}

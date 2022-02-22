@@ -109,6 +109,9 @@ type QueryBuilder struct {
 // }
 
 func (b *QueryBuilder) ParseParamString(paramString string) error {
+	if paramString == "" {
+		paramString = "?"
+	}
 	// fmt.Println("paramString: ", paramString)
 
 	b.SearchTables = make(map[string]int)

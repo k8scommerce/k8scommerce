@@ -78,7 +78,10 @@ func (l *ProcessImageLogic) ProcessImage(in *models.Asset) error {
 
 	imageSizes := storagetypes.ImageSizes{}
 	for i := 0; i < totalTasks; i++ {
-		imageSizes.Sizes = append(imageSizes.Sizes, <-imageSizesC)
+		size := <-imageSizesC
+		if size.Tag != "" {
+			imageSizes.Sizes = append(imageSizes.Sizes, size)
+		}
 	}
 
 	if sizes, err := imageSizes.Marshal(); err != nil {
@@ -93,40 +96,41 @@ func (l *ProcessImageLogic) ProcessImage(in *models.Asset) error {
 	return nil
 }
 
-func (l *ProcessImageLogic) resizeAndSave(URL, tag, fileName string, in models.Asset) (*storagetypes.ImageSize, error) {
+func (l *ProcessImageLogic) resizeAndSave(URL, tag, fileName string, in models.Asset) (imageSize *storagetypes.ImageSize, err error) {
+	imageSize = &storagetypes.ImageSize{}
 
 	file, err := asset.MustNewFile(fileName, l.svcCtx.Config.UploadConfig)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "file creation error: %s", err.Error())
+		return imageSize, status.Errorf(codes.Internal, "file creation error: %s", err.Error())
 	}
 
 	file.Kind = asset.Kind(in.Kind)
 
 	if err := file.Open(in.ContentType); err != nil {
-		return nil, err
+		return imageSize, err
 	}
 
 	response, err := http.Get(URL)
 	if err != nil {
-		return nil, err
+		return imageSize, err
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		return nil, errors.New("received non 200 response code")
+		return imageSize, errors.New("received non 200 response code")
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return nil, fmt.Errorf("could not read image body: %s", err.Error())
+		return imageSize, fmt.Errorf("could not read image body: %s", err.Error())
 	}
 
 	if err := file.Write(body, 1); err != nil {
-		return nil, fmt.Errorf("chunk write error: %s", err.Error())
+		return imageSize, fmt.Errorf("chunk write error: %s", err.Error())
 	}
 
 	if err := file.Close(); err != nil {
-		return nil, fmt.Errorf("error closing file: %s", err.Error())
+		return imageSize, fmt.Errorf("error closing file: %s", err.Error())
 	}
 
 	return &storagetypes.ImageSize{
