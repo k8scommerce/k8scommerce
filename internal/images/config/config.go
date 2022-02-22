@@ -18,6 +18,7 @@ const (
 
 type ImageResizeConfig struct {
 	EnableResizer   bool
+	ImaginaryURL    string
 	ImageSettings   []ImageSetting
 	WatermarkConfig WatermarkConfig
 }

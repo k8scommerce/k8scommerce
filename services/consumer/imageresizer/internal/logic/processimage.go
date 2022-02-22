@@ -36,7 +36,7 @@ func NewProcessImageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Proc
 
 // http://localhost:8088/resize?nocrop=true&type=jpeg&url=https://k8scommerce.s3.us-west-1.amazonaws.com/uploads/d/b/e/Pizigani_1367_Chart_10MB.jpeg&width=800&height=800&quality=80&extend=white
 func (l *ProcessImageLogic) ProcessImage(in *models.Asset) error {
-	const baseUrl = "http://localhost:8088/resize?"
+	var baseUrl = fmt.Sprintf("%s/resize?", l.svcCtx.Config.ImageResizeConfig.ImaginaryURL)
 
 	assetModel, err := l.svcCtx.Repo.Asset().GetAssetById(in.ID)
 	if err != nil {
