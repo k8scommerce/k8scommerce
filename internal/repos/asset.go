@@ -18,6 +18,7 @@ func newAsset(repo *repo) Asset {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/Asset.go -package=mock_repos k8scommerce/internal/repos Asset
 type Asset interface {
 	Exists() bool
 	Deleted() bool

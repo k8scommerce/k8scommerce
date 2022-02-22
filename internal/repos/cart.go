@@ -17,6 +17,7 @@ func newCart(repo *repo) Cart {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/Cart.go -package=mock_repos k8scommerce/internal/repos Cart
 type Cart interface {
 	SetCart(cart *models.Cart)
 	Exists() bool

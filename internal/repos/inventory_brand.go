@@ -18,6 +18,7 @@ func newInventoryBrand(repo *repo) InventoryBrand {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/InventoryBrand.go -package=mock_repos k8scommerce/internal/repos InventoryBrand
 type InventoryBrand interface {
 	Exists() bool
 	Deleted() bool

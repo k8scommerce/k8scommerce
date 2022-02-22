@@ -17,6 +17,7 @@ func newCategory(repo *repo) Category {
 	}
 }
 
+//go:generate mockgen -destination=./mocks/Category.go -package=mock_repos k8scommerce/internal/repos Category
 type Category interface {
 	Exists() bool
 	Deleted() bool

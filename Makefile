@@ -568,3 +568,8 @@ docker-build: docker-build-admin docker-build-client docker-build-cart docker-bu
 
 .PHONY: docker-push
 docker-push: docker-push-admin docker-push-client docker-push-cart docker-push-catalog docker-push-customer docker-push-email docker-push-inventory docker-push-othersbought docker-push-payment docker-push-shipping docker-push-similarproducts docker-push-store docker-push-user docker-push-warehouse
+
+## Mocks
+.PHONY: generate-mocks
+generate-mocks:
+	go generate ./...

@@ -34,6 +34,7 @@ func NewRepo(c *PostgresConfig) Repo {
 	return r
 }
 
+//go:generate mockgen -destination=./mocks/Repo.go -package=mock_repos k8scommerce/internal/repos Repo
 type Repo interface {
 	GetRawDB() *sqlx.DB
 	// Repos
