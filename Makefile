@@ -115,6 +115,20 @@ else
 	RESET        := ""
 endif
 
+
+# determine the platform
+# ifeq ($(OS),Windows_NT)
+   
+# else
+#     UNAME_S := $(shell uname -s)
+#     ifeq ($(UNAME_S),Linux)
+       
+#     endif
+#     ifeq ($(UNAME_S),Darwin)
+    
+#     endif
+# endif
+
 .PHONY: prereq
 prereq:
 	brew install etcd
