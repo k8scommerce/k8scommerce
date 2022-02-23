@@ -218,7 +218,7 @@ start:
 		cd ./services/rpc/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
+		(sed -i -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
 		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
 		cd ../../../; \
 		echo ""; \
@@ -240,7 +240,7 @@ start:
 		cd ./services/api/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/: 8888/: $$port/g" etc/local-$$service.yaml &); \
+		(sed -i -e "s/: 8888/: $$port/g" etc/local-$$service.yaml &); \
 		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
 		cd ../../../; \
 		echo ""; \
@@ -280,13 +280,13 @@ build-all:
 		(mkdir -p ../../../bin/build/windows/$(VERSION)/k8scommerce/etc > /dev/null 2>&1); \
 		(cp ./etc/$$service.yaml ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/ &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/:8080/:$$port/g" ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(sed -i -e "s/:8080/:$$port/g" ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
 		(cp ./etc/$$service.yaml ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/ &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/:8080/:$$port/g" ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(sed -i -e "s/:8080/:$$port/g" ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
 		(cp ./etc/$$service.yaml ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/ &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/:8080/:$$port/g" ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(sed -i -e "s/:8080/:$$port/g" ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
 		(GOARCH=amd64 GOOS=darwin go build -o ../../../bin/build/darwin/$(VERSION)/k8scommerce/$$service); \
 		(GOARCH=amd64 GOOS=linux go build -o ../../../bin/build/linux/$(VERSION)/k8scommerce/$$service); \
 		(GOARCH=amd64 GOOS=windows go build -o ../../../bin/build/windows/$(VERSION)/k8scommerce/$$service.exe); \
@@ -300,13 +300,13 @@ build-all:
 		cd ./services/api/$$service; \
 		(cp ./etc/$$service.yaml ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/ &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/: 8888/: $$port/g" ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(sed -i -e "s/: 8888/: $$port/g" ../../../bin/build/darwin/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
 		(cp ./etc/$$service.yaml ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/ &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/: 8888/: $$port/g" ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(sed -i -e "s/: 8888/: $$port/g" ../../../bin/build/linux/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
 		(cp ./etc/$$service.yaml ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/ &); \
 		(sleep 0.1); \
-		(sed -i '' -e "s/: 8888/: $$port/g" ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
+		(sed -i -e "s/: 8888/: $$port/g" ../../../bin/build/windows/$(VERSION)/k8scommerce/etc/$$service.yaml &); \
 		(GOARCH=amd64 GOOS=darwin go build -o ../../../bin/build/darwin/$(VERSION)/k8scommerce/$$service .); \
 		(GOARCH=amd64 GOOS=linux go build -o ../../../bin/build/linux/$(VERSION)/k8scommerce/$$service .); \
 		(GOARCH=amd64 GOOS=windows go build -o ../../../bin/build/windows/$(VERSION)/k8scommerce/$$service.exe .); \
