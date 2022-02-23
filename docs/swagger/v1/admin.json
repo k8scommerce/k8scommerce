@@ -34,7 +34,7 @@
         ]
       }
     },
-    "/v1/asset/{productId}/{variantId}": {
+    "/v1/asset/{productId}/{variantId}/{kind}": {
       "post": {
         "summary": "Upload Asset",
         "description": "uploads an image, document, audio, video or archive asset",
@@ -58,6 +58,12 @@
           {
             "name": "variantId",
             "description": "variant id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "kind",
             "in": "path",
             "required": true,
             "type": "string"
@@ -722,11 +728,21 @@
         "name": {
           "type": "string"
         },
+        "displayName": {
+          "type": "string"
+        },
         "url": {
           "type": "string"
         },
         "kind": {
           "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
         }
       },
       "title": "Asset",
@@ -1476,12 +1492,16 @@
         "variantId": {
           "type": "integer",
           "format": "int64"
+        },
+        "kind": {
+          "type": "string"
         }
       },
       "title": "UploadAssetRequest",
       "required": [
         "productId",
-        "variantId"
+        "variantId",
+        "kind"
       ]
     },
     "User": {

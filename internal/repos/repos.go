@@ -138,19 +138,7 @@ func (a *repo) mustConnect() (conn *sqlx.DB) {
 		go a.setDBListener(a.cfg.DataSourceName)
 		logx.Info("DB Connecting", "conn", a.cfg.DataSourceName)
 
-		var conn *sqlx.DB
-		conn, err := sqlx.Connect("pgx", a.cfg.DataSourceName)
-		if err != nil {
-			panic(err)
-		}
-		a.db = conn
-		a.db.SetMaxOpenConns(a.cfg.MaxOpenConnections)
-		a.db.SetMaxIdleConns(a.cfg.MaxIdleConnections)
-		a.db.SetConnMaxLifetime(time.Minute * time.Duration(a.cfg.MaxConnectionLifetimeMinutes))
-		logx.Info("DB status:", "CONNECTED")
-
-		// "kick" the channel to ensure it checks for records on startup
-		a.kickDBChannel()
+		a.dbConnect()
 
 		go func() {
 			for {
@@ -158,7 +146,7 @@ func (a *repo) mustConnect() (conn *sqlx.DB) {
 				if err != nil {
 					logx.Info("DB Ping failed: ", err)
 				} else {
-					// logx.Info("Pinged successfully")
+					logx.Info("Pinged successfully")
 				}
 
 				time.Sleep(10 * time.Second)
@@ -167,6 +155,22 @@ func (a *repo) mustConnect() (conn *sqlx.DB) {
 	})
 
 	return a.db
+}
+
+func (a *repo) dbConnect() {
+	var conn *sqlx.DB
+	conn, err := sqlx.Connect("pgx", a.cfg.DataSourceName)
+	if err != nil {
+		panic(err)
+	}
+	a.db = conn
+	a.db.SetMaxOpenConns(a.cfg.MaxOpenConnections)
+	a.db.SetMaxIdleConns(a.cfg.MaxIdleConnections)
+	a.db.SetConnMaxLifetime(time.Minute * time.Duration(a.cfg.MaxConnectionLifetimeMinutes))
+	logx.Info("DB status:", "CONNECTED")
+
+	// "kick" the channel to ensure it checks for records on startup
+	go a.kickDBChannel()
 }
 
 func (a *repo) setDBListener(dburl string) {

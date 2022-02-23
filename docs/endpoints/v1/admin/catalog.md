@@ -34,7 +34,7 @@ Enter JWT Bearer token **_only_**
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
-| POST | /v1/asset/{productId}/{variantId} | [upload](#upload) | Upload Asset |
+| POST | /v1/asset/{productId}/{variantId}/{kind} | [upload](#upload) | Upload Asset |
   
 
 
@@ -518,7 +518,7 @@ Status: OK
 ### <span id="upload"></span> Upload Asset (*upload*)
 
 ```
-POST /v1/asset/{productId}/{variantId}
+POST /v1/asset/{productId}/{variantId}/{kind}
 ```
 
 uploads an image, document, audio, video or archive asset
@@ -527,6 +527,7 @@ uploads an image, document, audio, video or archive asset
 
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
+| kind | `path` | string | `string` |  | ✓ |  |  |
 | productId | `path` | string | `string` |  | ✓ |  | product id |
 | variantId | `path` | string | `string` |  | ✓ |  | variant id |
 | body | `body` | [UploadAssetRequest](#upload-asset-request) | `models.UploadAssetRequest` | | ✓ | |  |
@@ -561,10 +562,13 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
+| contentType | string| `string` |  | |  |  |
+| displayName | string| `string` |  | |  |  |
 | id | int64 (formatted integer)| `int64` |  | |  |  |
 | kind | string| `string` | ✓ | |  |  |
 | name | string| `string` |  | |  |  |
 | productId | int64 (formatted integer)| `int64` |  | |  |  |
+| sortOrder | int32 (formatted integer)| `int32` |  | |  |  |
 | url | string| `string` |  | |  |  |
 | variantId | int64 (formatted integer)| `int64` |  | |  |  |
 
@@ -966,6 +970,7 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
+| kind | string| `string` | ✓ | |  |  |
 | productId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | variantId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
