@@ -16,3 +16,4 @@ logs
 .tar
 .gz
 .zip
+**/etc/local-*.yaml
