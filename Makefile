@@ -116,18 +116,19 @@ else
 endif
 
 
+SED_QUOTE = 
 # determine the platform
-# ifeq ($(OS),Windows_NT)
+ifeq ($(OS),Windows_NT)
    
-# else
-#     UNAME_S := $(shell uname -s)
-#     ifeq ($(UNAME_S),Linux)
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
        
-#     endif
-#     ifeq ($(UNAME_S),Darwin)
-    
-#     endif
-# endif
+    endif
+    ifeq ($(UNAME_S),Darwin)
+		SED_QUOTE = '' -e
+    endif
+endif
 
 .PHONY: prereq
 prereq:
@@ -232,7 +233,7 @@ start:
 		cd ./services/rpc/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sleep 0.1); \
-		(sed -i -e "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
+		(sed -i $(SED_QUOTE) "s/:8080/:$$port/g" etc/local-$$service.yaml &); \
 		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
 		cd ../../../; \
 		echo ""; \
@@ -254,7 +255,7 @@ start:
 		cd ./services/api/$$service; \
 		(cp ./etc/$$service.yaml ./etc/local-$$service.yaml &); \
 		(sleep 0.1); \
-		(sed -i -e "s/: 8888/: $$port/g" etc/local-$$service.yaml &); \
+		(sed -i $(SED_QUOTE) "s/: 8888/: $$port/g" etc/local-$$service.yaml &); \
 		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
 		cd ../../../; \
 		echo ""; \
