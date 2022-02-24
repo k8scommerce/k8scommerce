@@ -146,7 +146,7 @@ func (a *repo) mustConnect() (conn *sqlx.DB) {
 				if err != nil {
 					logx.Info("DB Ping failed: ", err)
 				} else {
-					logx.Info("Pinged successfully")
+					// logx.Info("Pinged successfully")
 				}
 
 				time.Sleep(10 * time.Second)

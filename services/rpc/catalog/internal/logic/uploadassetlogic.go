@@ -141,7 +141,7 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				Name:        modelAsset.Name,
 				Url:         modelAsset.URL,
 				ContentType: modelAsset.ContentType,
-				SortOrder:   int32(modelAsset.SortOrder.Int64),
+				SortOrder:   modelAsset.SortOrder.Int64,
 			})
 		}
 		if err != nil {

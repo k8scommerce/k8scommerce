@@ -120,7 +120,7 @@
           {
             "name": "sortOn",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           }
         ],
@@ -546,7 +546,7 @@
           {
             "name": "sortOn",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           }
         ],
@@ -586,13 +586,13 @@
           {
             "name": "filter",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           },
           {
             "name": "sortOn",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           }
         ],
@@ -742,12 +742,27 @@
         },
         "sortOrder": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
+        },
+        "sizes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImageSize"
+          }
         }
       },
       "title": "Asset",
       "required": [
-        "kind"
+        "id",
+        "productId",
+        "variantId",
+        "name",
+        "displayName",
+        "url",
+        "kind",
+        "contentType",
+        "sortOrder",
+        "sizes"
       ]
     },
     "Category": {
@@ -801,8 +816,15 @@
       "title": "Category",
       "required": [
         "id",
+        "parentId",
         "slug",
-        "name"
+        "name",
+        "description",
+        "metaTitle",
+        "metaDescription",
+        "metaKeywords",
+        "depth",
+        "sortOrder"
       ]
     },
     "CreateCategoryRequest": {
@@ -1013,7 +1035,8 @@
       "title": "GetAllCategoriesRequest",
       "required": [
         "currentPage",
-        "pageSize"
+        "pageSize",
+        "sortOn"
       ]
     },
     "GetAllCategoriesResponse": {
@@ -1063,7 +1086,9 @@
       "title": "GetAllProductsRequest",
       "required": [
         "currentPage",
-        "pageSize"
+        "pageSize",
+        "filter",
+        "sortOn"
       ]
     },
     "GetAllProductsResponse": {
@@ -1224,7 +1249,8 @@
       "required": [
         "categoryId",
         "currentPage",
-        "pageSize"
+        "pageSize",
+        "sortOn"
       ]
     },
     "GetProductsByCategoryIdResponse": {
@@ -1250,6 +1276,22 @@
         "products",
         "totalRecords",
         "totalPages"
+      ]
+    },
+    "ImageSize": {
+      "type": "object",
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "title": "ImageSize",
+      "required": [
+        "tag",
+        "url"
       ]
     },
     "JwtToken": {
@@ -1374,8 +1416,12 @@
       },
       "title": "Price",
       "required": [
+        "id",
         "amount",
-        "displayAmount"
+        "displayAmount",
+        "compareAtAmount",
+        "displayCompareAtAmount",
+        "currency"
       ]
     },
     "Product": {
@@ -1420,13 +1466,32 @@
             "$ref": "#/definitions/Variant"
           },
           "description": " collection of Variant objects"
+        },
+        "defaultImage": {
+          "$ref": "#/definitions/Asset",
+          "description": " default Asset object of image type"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Asset"
+          },
+          "description": " array of Asset objects of image type"
         }
       },
       "title": "Product",
       "required": [
         "id",
         "slug",
-        "name"
+        "name",
+        "shortDescription",
+        "description",
+        "metaTitle",
+        "metaDescription",
+        "metaKeywords",
+        "variants",
+        "defaultImage",
+        "images"
       ]
     },
     "ResponseStatus": {
@@ -1645,7 +1710,12 @@
       "required": [
         "id",
         "isDefault",
-        "sku"
+        "sku",
+        "weight",
+        "height",
+        "width",
+        "depth",
+        "price"
       ]
     }
   },

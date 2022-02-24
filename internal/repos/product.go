@@ -67,8 +67,8 @@ type getByCategoryResults struct {
 type getAllProductsResults struct {
 	Product models.Product
 	Variant models.Variant
-	// Category models.Category
-	Price models.Price
+	Price   models.Price
+	Asset   models.Asset
 }
 
 type getProductsByCategoryResponse struct {
@@ -603,6 +603,10 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
 	sql := fmt.Sprintf(`
+		with a as (
+			select * from asset
+
+		)
 		select 
 			-- product
 			p.id AS "product.id",
@@ -641,29 +645,25 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 			pr.currency AS "price.currency",
 			pr.user_role_id AS "price.user_role_id",
 
-			-- catgory
-			-- c.id AS "category.id",
-			-- c.parent_id AS "category.parent_id",
-			-- c.store_id AS "category.store_id",
-			-- c.name AS "category.name",
-			-- c.description AS "category.description",
-			-- c.meta_title AS "category.meta_title",
-			-- c.meta_description AS "category.meta_description",
-			-- c.meta_keywords AS "category.meta_keywords",
-			-- c.hide_from_nav AS "category.hide_from_nav",
-			-- c.lft AS "category.lft",
-			-- c.rgt AS "category.rgt",
-			-- c.depth AS "category.depth",
-			-- c.sort_order AS "category.sort_order",
+			-- asset
+			COALESCE(a.display_name,'') AS "asset.display_name",
+			COALESCE(a.url,'') AS "asset.url",
+			COALESCE(a.name,'') AS "asset.name",
+			COALESCE(a.sizes,'[]') AS "asset.sizes",
 
 			-- stats
 			COUNT(p.*) OVER() AS "pagingstats.total_records"
 
 		from product p
-		-- inner join product_category pc on p.id = pc.product_id
-		-- inner join category c ON pc.category_id = c.id
 		inner join variant v on v.product_id = p.id AND v.is_default = true
 		inner join price pr on pr.variant_id = v.id AND pr.user_role_id is null
+		left join lateral (
+			select * from asset
+			where asset.product_id = p.id
+			and asset.kind = 'image'
+			order by asset.sort_order ASC
+			limit 1
+		) a on a.product_id = p.id 
 		where p.store_id = :store_id
 		%s
 		%s
@@ -683,10 +683,10 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 	}
 
 	var result []*struct {
-		Product models.Product
-		Variant models.Variant
-		// Category    models.Category
+		Product     models.Product
+		Variant     models.Variant
 		Price       models.Price
+		Asset       models.Asset
 		PagingStats PagingStats
 	}
 
@@ -710,7 +710,7 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 				Product: r.Product,
 				Variant: r.Variant,
 				Price:   r.Price,
-				// Category: r.Category,
+				Asset:   r.Asset,
 			})
 		}
 

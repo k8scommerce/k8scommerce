@@ -81,6 +81,13 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 
 					for _, f := range found.Results {
 						prod := catalog.Product{}
+						defaultImage := []models.Asset{}
+						defaultImage = append(defaultImage, f.Asset)
+
+						convertedImages := types.ConvertModelAssetToProtoAsset(&defaultImage)
+						if len(convertedImages) > 0 {
+							prod.DefaultImage = convertedImages[0]
+						}
 
 						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
 							f.Variant,

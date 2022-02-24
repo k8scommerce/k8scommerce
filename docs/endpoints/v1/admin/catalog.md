@@ -209,7 +209,7 @@ returns all categories belonging to a store
 | currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
 | pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
 | storeId | `path` | string | `string` |  | ✓ |  | store id |
-| sortOn | `query` | string | `string` |  |  |  |  |
+| sortOn | `query` | string | `string` |  | ✓ |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -242,8 +242,8 @@ returns all products belonging to a store
 |------|--------|------|---------|-----------| :------: |---------|-------------|
 | currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
 | pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
-| filter | `query` | string | `string` |  |  |  |  |
-| sortOn | `query` | string | `string` |  |  |  |  |
+| filter | `query` | string | `string` |  | ✓ |  |  |
+| sortOn | `query` | string | `string` |  | ✓ |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -432,7 +432,7 @@ returns all products by category id belonging to a store
 | categoryId | `path` | integer | `int64` |  | ✓ |  | category id |
 | currentPage | `path` | integer | `int64` |  | ✓ |  | current page number |
 | pageSize | `path` | integer | `int64` |  | ✓ |  | number of records per page |
-| sortOn | `query` | string | `string` |  |  |  |  |
+| sortOn | `query` | string | `string` |  | ✓ |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
@@ -562,15 +562,16 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| contentType | string| `string` |  | |  |  |
-| displayName | string| `string` |  | |  |  |
-| id | int64 (formatted integer)| `int64` |  | |  |  |
+| contentType | string| `string` | ✓ | |  |  |
+| displayName | string| `string` | ✓ | |  |  |
+| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | kind | string| `string` | ✓ | |  |  |
-| name | string| `string` |  | |  |  |
-| productId | int64 (formatted integer)| `int64` |  | |  |  |
-| sortOrder | int32 (formatted integer)| `int32` |  | |  |  |
-| url | string| `string` |  | |  |  |
-| variantId | int64 (formatted integer)| `int64` |  | |  |  |
+| name | string| `string` | ✓ | |  |  |
+| productId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| sizes | [][ImageSize](#image-size)| `[]*ImageSize` | ✓ | |  |  |
+| sortOrder | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| url | string| `string` | ✓ | |  |  |
+| variantId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 
 
 
@@ -585,16 +586,16 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| depth | int32 (formatted integer)| `int32` |  | | category level depth |  |
-| description | string| `string` |  | | description of category |  |
+| depth | int32 (formatted integer)| `int32` | ✓ | | category level depth |  |
+| description | string| `string` | ✓ | | description of category |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | category id |  |
-| metaDescription | string| `string` |  | | metatag description for SEO |  |
-| metaKeywords | string| `string` |  | | metatag keywords for SEO |  |
-| metaTitle | string| `string` |  | | metatag title for SEO |  |
+| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
+| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
+| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
 | name | string| `string` | ✓ | | name of category |  |
-| parentId | int64 (formatted integer)| `int64` |  | | parent category id. references Category.Id |  |
+| parentId | int64 (formatted integer)| `int64` | ✓ | | parent category id. references Category.Id |  |
 | slug | string| `string` | ✓ | | slug name of the category |  |
-| sortOrder | int32 (formatted integer)| `int32` |  | | sort order of menu items on the same level and same parent id |  |
+| sortOrder | int32 (formatted integer)| `int32` | ✓ | | sort order of menu items on the same level and same parent id |  |
 
 
 
@@ -685,7 +686,7 @@ Status: OK
 |------|------|---------|:--------:| ------- |-------------|---------|
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| sortOn | string| `string` |  | |  |  |
+| sortOn | string| `string` | ✓ | |  |  |
 
 
 
@@ -718,9 +719,9 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| filter | string| `string` |  | |  |  |
+| filter | string| `string` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| sortOn | string| `string` |  | |  |  |
+| sortOn | string| `string` | ✓ | |  |  |
 
 
 
@@ -830,7 +831,7 @@ Status: OK
 | categoryId | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | currentPage | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | pageSize | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| sortOn | string| `string` |  | |  |  |
+| sortOn | string| `string` | ✓ | |  |  |
 
 
 
@@ -848,6 +849,22 @@ Status: OK
 | products | [][Product](#product)| `[]*Product` | ✓ | |  |  |
 | totalPages | int64 (formatted integer)| `int64` | ✓ | |  |  |
 | totalRecords | int64 (formatted integer)| `int64` | ✓ | |  |  |
+
+
+
+### <span id="image-size"></span> ImageSize
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| tag | string| `string` | ✓ | |  |  |
+| url | string| `string` | ✓ | |  |  |
 
 
 
@@ -880,11 +897,11 @@ Status: OK
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | amount | double (formatted number)| `float64` | ✓ | | price amount |  |
-| compareAtAmount | double (formatted number)| `float64` |  | | price compare amount |  |
-| currency | string| `string` |  | | price currency. example: USD, CAN, etc. |  |
+| compareAtAmount | double (formatted number)| `float64` | ✓ | | price compare amount |  |
+| currency | string| `string` | ✓ | | price currency. example: USD, CAN, etc. |  |
 | displayAmount | string| `string` | ✓ | | price display amount |  |
-| displayCompareAtAmount | string| `string` |  | | price display compare amount |  |
-| id | int64 (formatted integer)| `int64` |  | | price id |  |
+| displayCompareAtAmount | string| `string` | ✓ | | price display compare amount |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | price id |  |
 
 
 
@@ -899,15 +916,17 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| description | string| `string` |  | | category description |  |
+| defaultImage | [Asset](#asset)| `Asset` | ✓ | | default Asset object of image type |  |
+| description | string| `string` | ✓ | | category description |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | product id |  |
-| metaDescription | string| `string` |  | | metatag description for SEO |  |
-| metaKeywords | string| `string` |  | | metatag keywords for SEO |  |
-| metaTitle | string| `string` |  | | metatag title for SEO |  |
+| images | [][Asset](#asset)| `[]*Asset` | ✓ | | array of Asset objects of image type |  |
+| metaDescription | string| `string` | ✓ | | metatag description for SEO |  |
+| metaKeywords | string| `string` | ✓ | | metatag keywords for SEO |  |
+| metaTitle | string| `string` | ✓ | | metatag title for SEO |  |
 | name | string| `string` | ✓ | | product name |  |
-| shortDescription | string| `string` |  | | product short description. used in category pages |  |
+| shortDescription | string| `string` | ✓ | | product short description. used in category pages |  |
 | slug | string| `string` | ✓ | | product slug |  |
-| variants | [][Variant](#variant)| `[]*Variant` |  | | collection of Variant objects |  |
+| variants | [][Variant](#variant)| `[]*Variant` | ✓ | | collection of Variant objects |  |
 
 
 
@@ -987,13 +1006,13 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| depth | double (formatted number)| `float64` |  | | variant depth. used in calculating shipping |  |
-| height | double (formatted number)| `float64` |  | | variant height. used in calculating shipping |  |
+| depth | double (formatted number)| `float64` | ✓ | | variant depth. used in calculating shipping |  |
+| height | double (formatted number)| `float64` | ✓ | | variant height. used in calculating shipping |  |
 | id | int64 (formatted integer)| `int64` | ✓ | | variant id |  |
 | isDefault | boolean (formatted boolean)| `bool` | ✓ | | is default variant. each product must have exactly 1 default variant |  |
-| price | [Price](#price)| `Price` |  | | variant Price object |  |
+| price | [Price](#price)| `Price` | ✓ | | variant Price object |  |
 | sku | string| `string` | ✓ | | variant sku. usually the product sku with appended identification tags |  |
-| weight | double (formatted number)| `float64` |  | | variant weight. used in calculating shipping |  |
-| width | double (formatted number)| `float64` |  | | variant width. used in calculating shipping |  |
+| weight | double (formatted number)| `float64` | ✓ | | variant weight. used in calculating shipping |  |
+| width | double (formatted number)| `float64` | ✓ | | variant width. used in calculating shipping |  |
 
 

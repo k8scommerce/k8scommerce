@@ -34,6 +34,8 @@ message Product {
   string availableOn = 11;
   string discontinueOn = 12;
   repeated Variant variants = 13;
+  Asset defaultImage = 14;
+  repeated Asset images = 15;
 }
 
 message Variant {
@@ -85,7 +87,13 @@ message Asset {
   string url = 7;
   AssetKind kind = 8;
   string contentType = 9;
-  int32 sortOrder = 10;
+  int64 sortOrder = 10;
+  repeated ImageSize sizes = 11;
+}
+
+message ImageSize {
+  string Tag = 1;
+  string URL = 2;
 }
 
 //

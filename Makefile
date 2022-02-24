@@ -56,8 +56,7 @@ option_item\
 archetype\
 asset
 
-apiServices=client\
-admin
+apiServices=client
 
 # cart depends on inventory, othersbought
 
