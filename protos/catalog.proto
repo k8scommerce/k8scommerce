@@ -88,12 +88,7 @@ message Asset {
   AssetKind kind = 8;
   string contentType = 9;
   int64 sortOrder = 10;
-  repeated ImageSize sizes = 11;
-}
-
-message ImageSize {
-  string Tag = 1;
-  string URL = 2;
+  map<string, string> sizes = 11;
 }
 
 //
@@ -105,15 +100,10 @@ message ImageSize {
 // get all categories
 message GetAllCategoriesRequest {
   int64 storeId = 1;
-  int64 currentPage = 2;
-  int64 pageSize = 3;
-  string sortOn = 4;
 }
 
 message GetAllCategoriesResponse {
   repeated Category categories = 1;
-  int64 totalRecords = 2;
-  int64 totalPages = 3;
 }
 
 // get category by slug

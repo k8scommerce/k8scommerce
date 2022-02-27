@@ -57,6 +57,7 @@ archetype\
 asset
 
 apiServices=client
+# admin
 
 # cart depends on inventory, othersbought
 
@@ -86,10 +87,12 @@ similarproducts\
 store\
 user\
 warehouse\
-catalog\
 cart
+# catalog
 
-consumerServices=imageresizer
+
+consumerServices=
+# imageresizer
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))

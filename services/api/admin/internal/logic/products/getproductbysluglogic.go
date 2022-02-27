@@ -3,6 +3,7 @@ package products
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"k8scommerce/services/api/admin/internal/helpers"
 	"k8scommerce/services/api/admin/internal/svc"
@@ -36,6 +37,8 @@ func (l *GetProductBySlugLogic) GetProductBySlug(req types.GetProductBySlugReque
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Printf("%#v", response)
 
 	// convert from one type to another
 	// the structs are identical

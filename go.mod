@@ -50,6 +50,8 @@ require (
 	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/googleapis/gnostic v0.4.1 // indirect
+	github.com/gosimple/slug v1.12.0 // indirect
+	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
 	github.com/icrowley/fake v0.0.0-20180203215853-4178557ae428 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect

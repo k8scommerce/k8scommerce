@@ -69,6 +69,16 @@ func (l *GetProductBySlugLogic) GetProductBySlug(in *catalog.GetProductBySlugReq
 					types.ConvertModelProductToProtoProduct(&found.Product, &found.Variants, &found.Prices, &prod)
 				}
 
+				// get the images
+				images, err := l.svcCtx.Repo.Asset().GetAssetByProductIDKind(prod.Id, int(catalog.AssetKind_image))
+				if err != nil {
+					logx.Infof("error: %s", err)
+					return err
+				}
+				if images != nil {
+					prod.Images = types.ConvertModelAssetToProtoAsset(images)
+				}
+
 				// the response struct
 				item := &catalog.GetProductBySlugResponse{
 					Product: &prod,
@@ -76,6 +86,7 @@ func (l *GetProductBySlugLogic) GetProductBySlug(in *catalog.GetProductBySlugReq
 
 				out, err := json.Marshal(item)
 				if err != nil {
+					logx.Infof("error: %s", err)
 					return err
 				}
 				return dest.UnmarshalBinary(out)
@@ -91,9 +102,15 @@ func (l *GetProductBySlugLogic) GetProductBySlug(in *catalog.GetProductBySlugReq
 	entryGetProductBySlugLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
+		logx.Infof("error: %s", err)
 		return nil, err
 	}
-	res := &catalog.GetProductBySlugResponse{}
+
+	entryGetProductBySlugLogic.galaxy.Remove(l.ctx, key)
+
+	res := &catalog.GetProductBySlugResponse{
+		Product: &catalog.Product{},
+	}
 	err = json.Unmarshal(b, res)
 	return res, err
 }

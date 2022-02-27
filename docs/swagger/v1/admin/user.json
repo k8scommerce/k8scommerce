@@ -31,6 +31,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": ", requests \u0026 responses,, login",
             "in": "body",
             "required": true,
             "schema": {
@@ -38,6 +39,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "users"
         ]
@@ -78,6 +80,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "users"
         ]
@@ -187,8 +190,7 @@
       },
       "title": "ResponseStatus",
       "required": [
-        "statusCode",
-        "statusMessage"
+        "statusCode"
       ]
     },
     "User": {
@@ -261,8 +263,6 @@
       },
       "title": "UserLoginResponse",
       "required": [
-        "jwt",
-        "user",
         "success"
       ]
     },

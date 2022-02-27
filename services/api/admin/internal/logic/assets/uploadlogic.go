@@ -145,7 +145,7 @@ func (l *UploadLogic) Upload() (resp *types.Asset, err error) {
 	}
 
 	resp.Id = uploadResponse.Id
-	resp.Kind = uploadResponse.Kind.String()
+	resp.Kind = int(uploadResponse.Kind.Number())
 	resp.Name = uploadResponse.Name
 	resp.ProductId = uploadResponse.ProductId
 	resp.VariantId = uploadResponse.VariantId

@@ -100,7 +100,7 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				StoreID:     storeId,
 				ProductID:   productId,
 				VariantID:   variantId,
-				Kind:        file.Kind.String(), // asset kind in database is not zerobased
+				Kind:        file.Kind.Int(),
 				Name:        file.BaseName,
 				DisplayName: sql.NullString{Valid: true, String: file.BaseName},
 				ContentType: file.ContentType,

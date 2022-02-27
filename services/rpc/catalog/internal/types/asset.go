@@ -8,54 +8,43 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-func ConvertModelAssetToProtoAsset(modelAssets *[]models.Asset) (protoAssets []*catalog.Asset) {
-	if modelAssets != nil {
-		for _, v := range *modelAssets {
-			imageSizes := &types.ImageSizes{}
-			is, err := imageSizes.Unmarshal(v.Sizes)
-			if err != nil {
-				logx.Errorf("error unmarshalling image sizes", err.Error())
-			}
+func ConvertModelAssetToProtoAsset(modelAssets []*models.Asset) (protoAssets []*catalog.Asset) {
 
-			asset := &catalog.Asset{
-				Id:          v.ID,
-				StoreId:     v.StoreID,
-				ProductId:   v.ProductID,
-				VariantId:   v.VariantID,
-				Name:        v.Name,
-				DisplayName: v.DisplayName.String,
-				Url:         v.URL,
-				ContentType: v.ContentType,
-				SortOrder:   v.SortOrder.Int64,
-				Kind:        stringToProtoAssetKind(v.Kind),
-			}
+	for _, m := range modelAssets {
+		var err error
+		var sizes *types.ImageSizes
 
-			for _, size := range is.Sizes {
-				asset.Sizes = append(asset.Sizes, &catalog.ImageSize{
-					Tag: size.Tag,
-					URL: size.URL,
-				})
-			}
-
-			protoAssets = append(protoAssets, asset)
+		imageSizes := &types.ImageSizes{}
+		sizes, err = imageSizes.Unmarshal(m.Sizes)
+		if err != nil {
+			logx.Errorf("error unmarshalling image sizes", err.Error())
 		}
-	}
-	return protoAssets
-}
 
-func stringToProtoAssetKind(assetKind string) catalog.AssetKind {
-	switch assetKind {
-	case catalog.AssetKind_image.String():
-		return catalog.AssetKind_image
-	case catalog.AssetKind_document.String():
-		return catalog.AssetKind_document
-	case catalog.AssetKind_audio.String():
-		return catalog.AssetKind_audio
-	case catalog.AssetKind_video.String():
-		return catalog.AssetKind_video
-	case catalog.AssetKind_archive.String():
-		return catalog.AssetKind_archive
-	default:
-		return catalog.AssetKind_unknown
+		asset := &catalog.Asset{
+			Id:          m.ID,
+			StoreId:     m.StoreID,
+			ProductId:   m.ProductID,
+			VariantId:   m.VariantID,
+			Name:        m.Name,
+			Url:         m.URL,
+			ContentType: m.ContentType,
+			Kind:        catalog.AssetKind(m.Kind),
+		}
+
+		if m.DisplayName.Valid {
+			asset.DisplayName = m.DisplayName.String
+		}
+
+		if m.SortOrder.Valid {
+			asset.SortOrder = m.SortOrder.Int64
+		}
+
+		if sizes != nil {
+			asset.Sizes = *sizes
+		}
+
+		protoAssets = append(protoAssets, asset)
 	}
+
+	return protoAssets
 }

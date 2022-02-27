@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	totalProducts int              = 100
+	totalProducts int              = 20
 	categories    map[string]int64 = make(map[string]int64)
 	storeID       int64
 	db            *sqlx.DB

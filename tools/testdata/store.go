@@ -19,7 +19,7 @@ func createStore() {
 	store := &models.Store{
 		Name:        "Demo Store",
 		Description: toNullString("My Demo Store"),
-		URL:         "http://localhost:4500/",
+		URL:         "http://localhost:4200/",
 		IsDefault:   true,
 	}
 	if err := store.Insert(context.Background(), db); err != nil {

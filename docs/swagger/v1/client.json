@@ -38,6 +38,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "cart"
         ]
@@ -64,6 +65,7 @@
           },
           {
             "name": "body",
+            "description": " clear cart",
             "in": "body",
             "required": true,
             "schema": {
@@ -71,6 +73,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "cart"
         ]
@@ -97,6 +100,7 @@
           },
           {
             "name": "body",
+            "description": " add item to cart",
             "in": "body",
             "required": true,
             "schema": {
@@ -104,6 +108,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "cart"
         ]
@@ -139,6 +144,7 @@
           },
           {
             "name": "body",
+            "description": " remove item",
             "in": "body",
             "required": true,
             "schema": {
@@ -146,6 +152,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "cart"
         ]
@@ -179,6 +186,7 @@
           },
           {
             "name": "body",
+            "description": " update cart item quantity",
             "in": "body",
             "required": true,
             "schema": {
@@ -186,6 +194,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "cart"
         ]
@@ -204,6 +213,7 @@
             }
           }
         },
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -231,6 +241,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -265,6 +276,7 @@
             "format": "int64"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -286,6 +298,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": " create customer",
             "in": "body",
             "required": true,
             "schema": {
@@ -293,6 +306,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "customers"
         ]
@@ -314,6 +328,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": ", requests \u0026 responses,, login",
             "in": "body",
             "required": true,
             "schema": {
@@ -321,6 +336,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "customers"
         ]
@@ -348,6 +364,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -375,6 +392,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -402,6 +420,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -449,6 +468,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -495,6 +515,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -1293,8 +1314,7 @@
       },
       "title": "ResponseStatus",
       "required": [
-        "statusCode",
-        "statusMessage"
+        "statusCode"
       ]
     },
     "UpdateCartItemQuantityRequest": {

@@ -562,16 +562,16 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| contentType | string| `string` | ✓ | |  |  |
-| displayName | string| `string` | ✓ | |  |  |
-| id | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| kind | string| `string` | ✓ | |  |  |
-| name | string| `string` | ✓ | |  |  |
-| productId | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| sizes | [][ImageSize](#image-size)| `[]*ImageSize` | ✓ | |  |  |
-| sortOrder | int64 (formatted integer)| `int64` | ✓ | |  |  |
-| url | string| `string` | ✓ | |  |  |
-| variantId | int64 (formatted integer)| `int64` | ✓ | |  |  |
+| contentType | string| `string` | ✓ | | content type (mime type) |  |
+| displayName | string| `string` | ✓ | | display name |  |
+| id | int64 (formatted integer)| `int64` | ✓ | | asset id |  |
+| kind | string| `string` | ✓ | | asset kind (image|document|audio|video|archive) |  |
+| name | string| `string` | ✓ | | asset name |  |
+| productId | int64 (formatted integer)| `int64` | ✓ | | product id |  |
+| sizes | [][ImageSize](#image-size)| `[]*ImageSize` | ✓ | | ImageSize object |  |
+| sortOrder | int64 (formatted integer)| `int64` | ✓ | | sort order |  |
+| url | string| `string` | ✓ | | full, public access url |  |
+| variantId | int64 (formatted integer)| `int64` | ✓ | | variant id |  |
 
 
 
@@ -863,8 +863,8 @@ Status: OK
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| tag | string| `string` | ✓ | |  |  |
-| url | string| `string` | ✓ | |  |  |
+| tag | string| `string` | ✓ | | image tag (indicates which size the image and platform is for) |  |
+| url | string| `string` | ✓ | | the full public url of the optimezed image |  |
 
 
 

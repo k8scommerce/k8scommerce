@@ -28,6 +28,7 @@
             }
           }
         },
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -55,6 +56,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -89,6 +91,7 @@
             "format": "int64"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -116,6 +119,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -143,6 +147,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -170,6 +175,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -217,6 +223,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -263,6 +270,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -687,8 +695,7 @@
       },
       "title": "ResponseStatus",
       "required": [
-        "statusCode",
-        "statusMessage"
+        "statusCode"
       ]
     },
     "Variant": {

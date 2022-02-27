@@ -18,7 +18,7 @@ type PingResponse struct {
 
 type Category struct {
 	Id              int64  `json:"id"`                                 // category id
-	ParentId        int64  `json:"parentId,optional,omitempty"`        // parent category id. references Category.Id
+	ParentId        int64  `json:"parentId"`                           // parent category id. references Category.Id
 	Slug            string `json:"slug"`                               // slug name of the category
 	Name            string `json:"name"`                               // name of category
 	Description     string `json:"description,optional,omitempty"`     // description of category
@@ -64,33 +64,20 @@ type Price struct {
 }
 
 type Asset struct {
-	Id          int64       `json:"id,optional,omitempty"`
-	ProductId   int64       `json:"productId,optional,omitempty"`
-	VariantId   int64       `json:"variantId,optional,omitempty"`
-	Name        string      `json:"name,optional,omitempty"`
-	DisplayName string      `json:"displayName,optional,omitempty"`
-	Url         string      `json:"url,optional,omitempty"`
-	Kind        string      `json:"kind,optional,omitempty,options=image|document|audio|video|archive"`
-	ContentType string      `json:"contentType,optional,omitempty"`
-	SortOrder   int64       `json:"sortOrder,optional,omitempty"`
-	Sizes       []ImageSize `json:"sizes,optional,omitempty"`
-}
-
-type ImageSize struct {
-	Tag string `json:"tag,optional,omitempty"`
-	URL string `json:"url,optional,omitempty"`
-}
-
-type GetAllCategoriesRequest struct {
-	CurrentPage int64  `path:"currentPage"`
-	PageSize    int64  `path:"pageSize"`
-	SortOn      string `form:"sortOn,optional,omitempty"`
+	Id          int64             `json:"id,optional,omitempty"`                       // asset id
+	ProductId   int64             `json:"productId,optional,omitempty"`                // product id
+	VariantId   int64             `json:"variantId,optional,omitempty"`                // variant id
+	Name        string            `json:"name,optional,omitempty"`                     // asset name
+	DisplayName string            `json:"displayName,optional,omitempty"`              // display name
+	Url         string            `json:"url,optional,omitempty"`                      // full, public access url
+	Kind        int               `json:"kind,optional,omitempty,options=0|1|2|3|4|5"` // asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)
+	ContentType string            `json:"contentType,optional,omitempty"`              // content type (mime type)
+	SortOrder   int64             `json:"sortOrder,optional,omitempty"`                // sort order
+	Sizes       map[string]string `json:"sizes,optional,omitempty"`                    // map[tag:string]url:string
 }
 
 type GetAllCategoriesResponse struct {
-	Categories   []Category `json:"categories"` // a collection of Category
-	TotalRecords int64      `json:"totalRecords"`
-	TotalPages   int64      `json:"totalPages"`
+	Categories []Category `json:"categories"` // a collection of Category
 }
 
 type GetCategoryBySlugRequest struct {

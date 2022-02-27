@@ -29,6 +29,7 @@
             }
           }
         },
+        "requestBody": {},
         "tags": [
           "api"
         ]
@@ -70,6 +71,7 @@
           },
           {
             "name": "body",
+            "description": ",, Assets,,",
             "in": "body",
             "required": true,
             "schema": {
@@ -77,12 +79,13 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "assets"
         ]
       }
     },
-    "/v1/categories/{storeId}/{currentPage}/{pageSize}": {
+    "/v1/categories": {
       "get": {
         "summary": "Get All Categories",
         "description": "returns all categories belonging to a store",
@@ -95,35 +98,7 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "storeId",
-            "description": "store id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "currentPage",
-            "description": "current page number",
-            "in": "path",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "name": "pageSize",
-            "description": "number of records per page",
-            "in": "path",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "name": "sortOn",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -145,6 +120,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": " create category",
             "in": "body",
             "required": true,
             "schema": {
@@ -152,6 +128,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -179,6 +156,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -206,6 +184,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -232,6 +211,7 @@
           },
           {
             "name": "body",
+            "description": " delete category",
             "in": "body",
             "required": true,
             "schema": {
@@ -239,6 +219,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -265,6 +246,7 @@
           },
           {
             "name": "body",
+            "description": " update category",
             "in": "body",
             "required": true,
             "schema": {
@@ -272,6 +254,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -293,6 +276,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": " create customer",
             "in": "body",
             "required": true,
             "schema": {
@@ -300,6 +284,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "customers"
         ]
@@ -321,6 +306,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": ", requests \u0026 responses,, login",
             "in": "body",
             "required": true,
             "schema": {
@@ -328,6 +314,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "customers"
         ]
@@ -349,6 +336,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": " create product",
             "in": "body",
             "required": true,
             "schema": {
@@ -356,6 +344,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -383,6 +372,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -410,6 +400,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -437,6 +428,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -463,6 +455,7 @@
           },
           {
             "name": "body",
+            "description": " delete product",
             "in": "body",
             "required": true,
             "schema": {
@@ -470,6 +463,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -496,6 +490,7 @@
           },
           {
             "name": "body",
+            "description": " update product",
             "in": "body",
             "required": true,
             "schema": {
@@ -503,6 +498,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -546,10 +542,11 @@
           {
             "name": "sortOn",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -586,16 +583,17 @@
           {
             "name": "filter",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "sortOn",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -617,6 +615,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": ", requests \u0026 responses,, login",
             "in": "body",
             "required": true,
             "schema": {
@@ -624,6 +623,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "users"
         ]
@@ -664,6 +664,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "users"
         ]
@@ -715,55 +716,51 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " asset id"
         },
         "productId": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " product id"
         },
         "variantId": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " variant id"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": " asset name"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": " display name"
         },
         "url": {
-          "type": "string"
+          "type": "string",
+          "description": " full, public access url"
         },
         "kind": {
-          "type": "string"
+          "type": "integer",
+          "format": "int32",
+          "description": " asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)"
         },
         "contentType": {
-          "type": "string"
+          "type": "string",
+          "description": " content type (mime type)"
         },
         "sortOrder": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " sort order"
         },
         "sizes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ImageSize"
-          }
+          "type": "object",
+          "description": " map[tag:string]url:string"
         }
       },
-      "title": "Asset",
-      "required": [
-        "id",
-        "productId",
-        "variantId",
-        "name",
-        "displayName",
-        "url",
-        "kind",
-        "contentType",
-        "sortOrder",
-        "sizes"
-      ]
+      "title": "Asset"
     },
     "Category": {
       "type": "object",
@@ -818,13 +815,7 @@
         "id",
         "parentId",
         "slug",
-        "name",
-        "description",
-        "metaTitle",
-        "metaDescription",
-        "metaKeywords",
-        "depth",
-        "sortOrder"
+        "name"
       ]
     },
     "CreateCategoryRequest": {
@@ -1017,28 +1008,6 @@
       "type": "object",
       "title": "DeleteProductResponse"
     },
-    "GetAllCategoriesRequest": {
-      "type": "object",
-      "properties": {
-        "currentPage": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "pageSize": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "sortOn": {
-          "type": "string"
-        }
-      },
-      "title": "GetAllCategoriesRequest",
-      "required": [
-        "currentPage",
-        "pageSize",
-        "sortOn"
-      ]
-    },
     "GetAllCategoriesResponse": {
       "type": "object",
       "properties": {
@@ -1048,21 +1017,11 @@
             "$ref": "#/definitions/Category"
           },
           "description": " a collection of Category"
-        },
-        "totalRecords": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "totalPages": {
-          "type": "integer",
-          "format": "int64"
         }
       },
       "title": "GetAllCategoriesResponse",
       "required": [
-        "categories",
-        "totalRecords",
-        "totalPages"
+        "categories"
       ]
     },
     "GetAllProductsRequest": {
@@ -1086,9 +1045,7 @@
       "title": "GetAllProductsRequest",
       "required": [
         "currentPage",
-        "pageSize",
-        "filter",
-        "sortOn"
+        "pageSize"
       ]
     },
     "GetAllProductsResponse": {
@@ -1249,8 +1206,7 @@
       "required": [
         "categoryId",
         "currentPage",
-        "pageSize",
-        "sortOn"
+        "pageSize"
       ]
     },
     "GetProductsByCategoryIdResponse": {
@@ -1276,22 +1232,6 @@
         "products",
         "totalRecords",
         "totalPages"
-      ]
-    },
-    "ImageSize": {
-      "type": "object",
-      "properties": {
-        "tag": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        }
-      },
-      "title": "ImageSize",
-      "required": [
-        "tag",
-        "url"
       ]
     },
     "JwtToken": {
@@ -1416,12 +1356,8 @@
       },
       "title": "Price",
       "required": [
-        "id",
         "amount",
-        "displayAmount",
-        "compareAtAmount",
-        "displayCompareAtAmount",
-        "currency"
+        "displayAmount"
       ]
     },
     "Product": {
@@ -1483,15 +1419,7 @@
       "required": [
         "id",
         "slug",
-        "name",
-        "shortDescription",
-        "description",
-        "metaTitle",
-        "metaDescription",
-        "metaKeywords",
-        "variants",
-        "defaultImage",
-        "images"
+        "name"
       ]
     },
     "ResponseStatus": {
@@ -1509,8 +1437,7 @@
       },
       "title": "ResponseStatus",
       "required": [
-        "statusCode",
-        "statusMessage"
+        "statusCode"
       ]
     },
     "UpdateCategoryRequest": {
@@ -1639,8 +1566,6 @@
       },
       "title": "UserLoginResponse",
       "required": [
-        "jwt",
-        "user",
         "success"
       ]
     },
@@ -1710,12 +1635,7 @@
       "required": [
         "id",
         "isDefault",
-        "sku",
-        "weight",
-        "height",
-        "width",
-        "depth",
-        "price"
+        "sku"
       ]
     }
   },

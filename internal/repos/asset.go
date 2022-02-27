@@ -28,7 +28,7 @@ type Asset interface {
 	Upsert() error
 	Delete(id int64) error
 	GetAssetById(id int64) (res *models.Asset, err error)
-	GetAssetsByVariantId(variantId int64, kind string) (res []*models.Asset, err error)
+	GetAssetByProductIDKind(productId int64, kind int) (res []*models.Asset, err error)
 	AssetExists(storeId int64, name string) (res bool, err error)
 }
 
@@ -86,8 +86,38 @@ func (m *assetRepo) GetAssetById(id int64) (res *models.Asset, err error) {
 	return models.AssetByID(m.ctx, m.db, id)
 }
 
-func (m *assetRepo) GetAssetsByVariantId(variantId int64, kind string) (res []*models.Asset, err error) {
-	return models.AssetByVariantIDKind(m.ctx, m.db, variantId, kind)
+func (m *assetRepo) GetAssetByProductIDKind(productId int64, kind int) (res []*models.Asset, err error) {
+
+	nstmt, err := m.db.PrepareNamed(`
+		SELECT 
+			COALESCE(display_name,'') AS "asset.display_name",
+			COALESCE(sizes,'[]') AS "asset.sizes"
+		FROM asset
+		WHERE product_id = :product_id
+		AND kind = :kind
+		ORDER BY sort_order ASC
+	`)
+	if err != nil {
+		return res, fmt.Errorf("error::GetAssetByProductIDKind::%s", err.Error())
+	}
+
+	var results []*struct {
+		Asset models.Asset
+	}
+	err = nstmt.Select(&results,
+		map[string]interface{}{
+			"product_id": productId,
+			"kind":       kind,
+		})
+	if err != nil {
+		return res, fmt.Errorf("error::GetAssetByProductIDKind::Query::%s", err.Error())
+	}
+
+	for _, result := range results {
+		res = append(res, &result.Asset)
+	}
+
+	return res, nil
 }
 
 func (m *assetRepo) AssetExists(storeId int64, name string) (res bool, err error) {

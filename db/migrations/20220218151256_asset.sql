@@ -2,11 +2,6 @@
 --
 --
 -- +goose StatementBegin
--- CREATE TYPE asset_kind AS ENUM ('image', 'document', 'audio', 'video', 'archive');
--- +goose StatementEnd
---
---
--- +goose StatementBegin
 CREATE TABLE asset (
     id bigserial PRIMARY KEY,
     store_id bigint NOT NULL,
@@ -15,7 +10,7 @@ CREATE TABLE asset (
     name character varying NOT NULL,
     url character varying NOT NULL,
     display_name character varying,
-    kind character varying NOT NULL,
+    kind integer NOT NULL,
     content_type character varying NOT NULL,
     sort_order integer default 100,
     sizes JSONB,
@@ -25,11 +20,10 @@ CREATE TABLE asset (
 );
 CREATE INDEX IF NOT EXISTS idx_asset_product_id ON asset USING btree (product_id);
 CREATE INDEX IF NOT EXISTS idx_asset_variant_id ON asset USING btree (variant_id);
-CREATE INDEX IF NOT EXISTS idx_asset_variant_id_kind ON asset USING btree (variant_id, kind);
+CREATE INDEX IF NOT EXISTS idx_asset_product_id_kind ON asset USING btree (product_id, kind);
 CREATE INDEX IF NOT EXISTS idx_asset_sizes ON asset USING gin(sizes);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
--- DROP TYPE IF EXISTS asset_kind;
 DROP TABLE IF EXISTS asset;
 -- +goose StatementEnd

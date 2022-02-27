@@ -14,13 +14,7 @@ const (
 	HandlerCtx HandlerKey = "handler"
 )
 
-type ImageSize struct {
-	Tag string `json:"tag"`
-	URL string `json:"url"`
-}
-type ImageSizes struct {
-	Sizes []ImageSize `json:"sizes"`
-}
+type ImageSizes map[string]string
 
 func (s *ImageSizes) Marshal() ([]byte, error) {
 	bytes, err := json.Marshal(s)

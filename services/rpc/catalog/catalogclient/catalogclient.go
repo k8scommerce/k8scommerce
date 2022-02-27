@@ -41,7 +41,6 @@ type (
 	GetProductsByCategoryIdResponse   = catalog.GetProductsByCategoryIdResponse
 	GetProductsByCategorySlugRequest  = catalog.GetProductsByCategorySlugRequest
 	GetProductsByCategorySlugResponse = catalog.GetProductsByCategorySlugResponse
-	ImageSize                         = catalog.ImageSize
 	Price                             = catalog.Price
 	Product                           = catalog.Product
 	UpdateCategoryRequest             = catalog.UpdateCategoryRequest
