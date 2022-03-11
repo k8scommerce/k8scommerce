@@ -1,6 +1,6 @@
 info(
 	title: "Catalog API Endpoints"
-	desc: "admin gateway catalog api endpoints"
+	desc: "client gateway catalog api endpoints"
 	author: "localrivet"
 	email: "localrivet"
 	version: "1"
@@ -8,38 +8,47 @@ info(
 
 // objects
 type Category {
-	Id              int64  `json:"id"`                        // category id
-	ParentId        int64  `json:"parentId"`                  // parent category id. references Category.Id
-	Slug            string `json:"slug"`                      // slug name of the category
-	Name            string `json:"name"`                      // name of category
-	Description     string `json:"description"`               // description of category
-	MetaTitle       string `json:"metaTitle,optional"`       // metatag title for SEO
-	MetaDescription string `json:"metaDescription,optional"` // metatag description for SEO
-	MetaKeywords    string `json:"metaKeywords,optional"`    // metatag keywords for SEO
-	SortOrder       int32  `json:"sortOrder"`                 // sort order of menu items on the same level and same parent id
+	Id              int64  `json:"id"`                                 // category id
+	ParentId        int64  `json:"parentId"`                           // parent category id. references Category.Id
+	Slug            string `json:"slug"`                               // slug name of the category
+	Name            string `json:"name"`                               // name of category
+	Description     string `json:"description,optional,omitempty"`     // description of category
+	MetaTitle       string `json:"metaTitle,optional,omitempty"`       // metatag title for SEO
+	MetaDescription string `json:"metaDescription,optional,omitempty"` // metatag description for SEO
+	MetaKeywords    string `json:"metaKeywords,optional,omitempty"`    // metatag keywords for SEO
+	Depth           int32  `json:"depth,optional,omitempty"`           // category level depth
+	SortOrder       int32  `json:"sortOrder,optional,omitempty"`       // sort order of menu items on the same level and same parent id
+}
+
+type CategoryPair {
+	Slug string `json:"slug"` // slug name of the category
+	Name string `json:"name"` // name of category
 }
 
 type Product {
-	Id               int64     `json:"id"`                        // product id
-	Slug             string    `json:"slug"`                      // product slug
-	Name             string    `json:"name"`                      // product name
-	ShortDescription string    `json:"shortDescription"`          // product short description. used in category pages
-	Description      string    `json:"description"`               // category description
-	MetaTitle        string    `json:"metaTitle,optional"`       // metatag title for SEO
-	MetaDescription  string    `json:"metaDescription,optional"` // metatag description for SEO
-	MetaKeywords     string    `json:"metaKeywords,optional"`    // metatag keywords for SEO
-	Variants         []Variant `json:"variants,optional"`        // collection of Variant objects
+	Id               int64          `json:"id"`                                  // product id
+	Slug             string         `json:"slug"`                                // product slug
+	Name             string         `json:"name"`                                // product name
+	ShortDescription string         `json:"shortDescription,optional,omitempty"` // product short description. used in category pages
+	Description      string         `json:"description,optional,omitempty"`      // category description
+	MetaTitle        string         `json:"metaTitle,optional,omitempty"`        // metatag title for SEO
+	MetaDescription  string         `json:"metaDescription,optional,omitempty"`  // metatag description for SEO
+	MetaKeywords     string         `json:"metaKeywords,optional,omitempty"`     // metatag keywords for SEO
+	Variants         []Variant      `json:"variants,optional,omitempty"`         // collection of Variant objects
+	DefaultImage     Asset          `json:"defaultImage,optional,omitempty"`     // default Asset object of image type
+	Images           []Asset        `json:"images,optional,omitempty"`           // array of Asset objects of image type
+	Categories       []CategoryPair `json:"categories,optional,omitempty"`       // array of Asset objects of image type
 }
 
 type Variant {
-	Id        int64   `json:"id,optional"`        // variant id
-	IsDefault bool    `json:"isDefault,optional"` // is default variant. each product must have exactly 1 default variant
-	Sku       string  `json:"sku,optional"`       // variant sku. usually the product sku with appended identification tags
-	Weight    float64 `json:"weight,optional"`    // variant weight. used in calculating shipping
-	Height    float64 `json:"height,optional"`    // variant height. used in calculating shipping
-	Width     float64 `json:"width,optional"`     // variant width. used in calculating shipping
-	Depth     float64 `json:"depth,optional"`     // variant depth. used in calculating shipping
-	Price     Price   `json:"price,optional"`     // variant Price object
+	Id        int64   `json:"id"`                        // variant id
+	IsDefault bool    `json:"isDefault"`                 // is default variant. each product must have exactly 1 default variant
+	Sku       string  `json:"sku"`                       // variant sku. usually the product sku with appended identification tags
+	Weight    float64 `json:"weight,optional,omitempty"` // variant weight. used in calculating shipping
+	Height    float64 `json:"height,optional,omitempty"` // variant height. used in calculating shipping
+	Width     float64 `json:"width,optional,omitempty"`  // variant width. used in calculating shipping
+	Depth     float64 `json:"depth,optional,omitempty"`  // variant depth. used in calculating shipping
+	Price     Price   `json:"price,optional,omitempty"`  // variant Price object
 }
 
 type Price {
@@ -51,15 +60,25 @@ type Price {
 	Currency             string  `json:"currency,optional,omitempty"`             // currency. example: USD, CAN, etc.
 }
 
+type Asset {
+	Id          int64             `json:"id,optional,omitempty"`                       // asset id
+	ProductId   int64             `json:"productId,optional,omitempty"`                // product id
+	VariantId   int64             `json:"variantId,optional,omitempty"`                // variant id
+	Name        string            `json:"name,optional,omitempty"`                     // asset name
+	DisplayName string            `json:"displayName,optional,omitempty"`              // display name
+	Url         string            `json:"url,optional,omitempty"`                      // full, public access url
+	Kind        int               `json:"kind,optional,omitempty,options=0|1|2|3|4|5"` // asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)
+	ContentType string            `json:"contentType,optional,omitempty"`              // content type (mime type)
+	SortOrder   int64             `json:"sortOrder,optional,omitempty"`                // sort order
+	Sizes       map[string]string `json:"sizes,optional,omitempty"`                    // map[tag:string]url:string
+}
+
 //
 // requests & responses
 //
 // get all categories
-// type GetAllCategoriesRequest {}
-
 type GetAllCategoriesResponse {
-	Categories    []Category `json:"categories,optional"` // a collection of Category
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Categories []Category `json:"categories"` // a collection of Category
 }
 
 // get category by slug
@@ -67,19 +86,9 @@ type GetCategoryBySlugRequest {
 	Slug string `path:"slug"` // slug name of the category
 }
 
-type GetCategoryBySlugResponse {
-	Category      Category `json:"category,optional"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
-}
-
 // get category by id
 type GetCategoryByIdRequest {
-	Id int64 `json:"id,optional"`
-}
-
-type GetCategoryByIdResponse {
-	Category      Category `json:"category,optional"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	Id int64 `path:"id"`
 }
 
 //
@@ -98,11 +107,6 @@ type GetProductBySlugRequest {
 	Slug string `path:"slug"` // slug name of the category
 }
 
-type GetProductResponse {
-	Product Product `json:"product"` // slug name of the category
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
-}
-
 // get product by id
 type GetProductByIdRequest {
 	Id int64 `path:"id"`
@@ -113,29 +117,30 @@ type GetProductsByCategoryIdRequest {
 	CategoryId  int64  `path:"categoryId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
-	SortOn      string `form:"sortOn,optional"`
+	Filter      string `form:"filter,optional,omitempty"`
+	SortOn      string `form:"sortOn,optional,omitempty"`
 }
 
 type GetProductsByCategoryIdResponse {
 	Products     []Product `json:"products"`
 	TotalRecords int64     `json:"totalRecords"`
 	TotalPages   int64     `json:"totalPages"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 // get all products
 type GetAllProductsRequest {
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
-	Filter      string `form:"filter,optional"`
-	SortOn      string `form:"sortOn,optional"`
+	Filter      string `form:"filter,optional,omitempty"`
+	SortOn      string `form:"sortOn,optional,omitempty"`
 }
 
 type GetAllProductsResponse {
 	Products     []Product `json:"products"`
 	TotalRecords int64     `json:"totalRecords"`
 	TotalPages   int64     `json:"totalPages"`
-	ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
+	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 //
@@ -143,12 +148,12 @@ type GetAllProductsResponse {
 //
 
 @server(
-	middleware: Locale, Filter, StoreKey
+	middleware: Locale, StoreKey
 	group: categories
 )
 service client {
 	// categories
-
+	
 	@doc(
 		summary: "Get All Categories"
 		description: "returns all categories belonging to a store"
@@ -162,7 +167,7 @@ service client {
 		slug: "category slug"
 	)
 	@handler getCategoryBySlug
-	get /v1/category/slug/:slug(GetCategoryBySlugRequest) returns (GetCategoryBySlugResponse)
+	get /v1/category/slug/:slug(GetCategoryBySlugRequest) returns (Category)
 	
 	@doc(
 		summary: "Get Category By Id"
@@ -170,23 +175,24 @@ service client {
 		id: "category id"
 	)
 	@handler getCategoryById
-	get /v1/category/:id(GetCategoryByIdRequest) returns (GetCategoryByIdResponse)
+	get /v1/category/:id(GetCategoryByIdRequest) returns (Category)
 }
 
 @server(
+	// jwt: Auth
 	middleware: Locale, Filter, StoreKey
 	group: products
 )
 service client {
 	// products
-
+	
 	@doc(
 		summary: "Get Product By Sku"
 		description: "returns all products by sku belonging to a store"
 		sku: "product sku"
 	)
 	@handler getProductBySku
-	get /v1/product/sku/:sku(GetProductBySkuRequest) returns (GetProductResponse)
+	get /v1/product/sku/:sku(GetProductBySkuRequest) returns (Product)
 	
 	@doc(
 		summary: "Get Product By Slug"
@@ -194,7 +200,7 @@ service client {
 		slug: "product slug"
 	)
 	@handler getProductBySlug
-	get /v1/product/slug/:slug(GetProductBySlugRequest) returns (GetProductResponse)
+	get /v1/product/slug/:slug(GetProductBySlugRequest) returns (Product)
 	
 	@doc(
 		summary: "Get Product By Id"
@@ -202,7 +208,7 @@ service client {
 		id: "product id"
 	)
 	@handler getProductById
-	get /v1/product/:id(GetProductByIdRequest) returns (GetProductResponse)
+	get /v1/product/:id(GetProductByIdRequest) returns (Product)
 	
 	@doc(
 		summary: "Get Products By Category Id"

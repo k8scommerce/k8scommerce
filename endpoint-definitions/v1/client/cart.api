@@ -30,7 +30,7 @@ type GetCartRequest {
 }
 
 type GetCartResponse {
-	Cart           Cart           `json:"cart"`   // a Cart object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 // add item to cart
@@ -40,7 +40,7 @@ type AddItemToCartRequest {
 }
 
 type AddItemToCartResponse {
-	Cart           Cart           `json:"cart"`   // a Cart object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 // update cart item quantity
@@ -51,7 +51,7 @@ type UpdateCartItemQuantityRequest {
 }
 
 type UpdateCartItemQuantityResponse {
-	Cart           Cart           `json:"cart"`   // a Cart object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 // remove item
@@ -62,15 +62,16 @@ type RemoveCartItemRequest {
 }
 
 type RemoveCartItemResponse {
-	Cart           Cart           `json:"cart"`   // a Cart object
+	Cart Cart `json:"cart"` // a Cart object
 }
 
 // clear cart
 type ClearCartRequest {
-	CustomerId     int64          `path:"customerId"` // a customer's id
+	CustomerId int64 `path:"customerId"` // a customer's id
 }
 
 type ClearCartResponse {
+	Deleted bool `json:"deleted"` // a boolean true/false if successful
 }
 
 //

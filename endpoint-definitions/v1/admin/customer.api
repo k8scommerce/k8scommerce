@@ -52,7 +52,6 @@ type CustomerLoginRequest {
 type CustomerLoginResponse {
 	JwtToken       JwtToken       `json:"jwt"`      // jwt token
 	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
 }
 
 // create customer
@@ -62,7 +61,6 @@ type CreateCustomerRequest {
 
 type CreateCustomerResponse {
 	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
 }
 
 //

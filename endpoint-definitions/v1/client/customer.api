@@ -8,10 +8,10 @@ info(
 
 // objects
 type Customer {
-	Id        int64  `json:"id"`                 // customer id
-	FirstName string `json:"firstName"`          // first name
-	LastName  string `json:"lastName"`           // last or given name
-	Email     string `json:"email,required"`     // email address
+	Id        int64  `json:"id"`                // customer id
+	FirstName string `json:"firstName"`         // first name
+	LastName  string `json:"lastName"`          // last or given name
+	Email     string `json:"email,required"`    // email address
 	Password  string `json:"password,optional"` // password
 }
 
@@ -50,9 +50,8 @@ type CustomerLoginRequest {
 }
 
 type CustomerLoginResponse {
-	JwtToken       JwtToken       `json:"jwt"`      // jwt token
-	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
+	// JwtToken       JwtToken       `json:"jwt"`      // jwt token
+	Customer Customer `json:"customer"` // Customer object
 }
 
 // create customer
@@ -61,8 +60,21 @@ type CreateCustomerRequest {
 }
 
 type CreateCustomerResponse {
-	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
+	Customer Customer `json:"customer"` // Customer object
+}
+
+// email
+type CheckForExistingEmailRequest {
+	Email string `json:"email"` // Customer object
+}
+
+type CheckForExistingEmailResponse {
+	Exists bool `json:"exists"` // boolean true/false if email exists or not
+}
+
+// get customer
+type GetCustomerResponse {
+	Customer Customer `json:"customer"` // Customer object
 }
 
 //
@@ -75,16 +87,38 @@ type CreateCustomerResponse {
 )
 service client {
 	@doc(
+		summary: "Login"
+		description: "login for customers"
+	)
+	@handler customerLogin
+	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
+	
+	@doc(
+		summary: "Check for Existing Email"
+		description: "verifies the email address is unique"
+	)
+	@handler checkForExistingEmail
+	post /v1/customer/email(CheckForExistingEmailRequest) returns (CheckForExistingEmailResponse)
+	
+	@doc(
 		summary: "Create Customer"
 		description: "creates a new customer"
 	)
 	@handler createCustomer
 	post /v1/customer(CreateCustomerRequest) returns (CreateCustomerResponse)
 	
+}
+
+@server(
+	jwt: Auth
+	middleware: Locale, StoreKey
+	group: customers
+)
+service client {
 	@doc(
 		summary: "Login"
 		description: "login for customers"
 	)
-	@handler customerLogin
-	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
+	@handler getCustomer
+	get /v1/customer returns (GetCustomerResponse)
 }
