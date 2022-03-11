@@ -17,6 +17,7 @@ func ConvertModelAssetToProtoAsset(modelAssets []*models.Asset) (protoAssets []*
 		imageSizes := &types.ImageSizes{}
 		sizes, err = imageSizes.Unmarshal(m.Sizes)
 		if err != nil {
+			logx.Infof("m.Sizes: %s", string(m.Sizes))
 			logx.Errorf("error unmarshalling image sizes", err.Error())
 		}
 

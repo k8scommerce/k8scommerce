@@ -460,6 +460,12 @@
             "type": "integer"
           },
           {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "sortOn",
             "in": "query",
             "required": false,
@@ -624,6 +630,24 @@
       "required": [
         "id",
         "parentId",
+        "slug",
+        "name"
+      ]
+    },
+    "CategoryPair": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "description": " slug name of the category"
+        },
+        "name": {
+          "type": "string",
+          "description": " name of category"
+        }
+      },
+      "title": "CategoryPair",
+      "required": [
         "slug",
         "name"
       ]
@@ -830,6 +854,9 @@
           "type": "integer",
           "format": "int64"
         },
+        "filter": {
+          "type": "string"
+        },
         "sortOn": {
           "type": "string"
         }
@@ -896,33 +923,33 @@
           "format": "int64",
           "description": " price id"
         },
-        "amount": {
+        "salePrice": {
           "type": "number",
           "format": "double",
-          "description": " price amount"
+          "description": " sale price"
         },
-        "displayAmount": {
+        "formattedSalePrice": {
           "type": "string",
-          "description": " price display amount"
+          "description": " formatted sale price"
         },
-        "compareAtAmount": {
+        "retailPrice": {
           "type": "number",
           "format": "double",
-          "description": " price compare amount"
+          "description": " retail price"
         },
-        "displayCompareAtAmount": {
+        "formattedRetailPrice": {
           "type": "string",
-          "description": " price display compare amount"
+          "description": " formatted retail price"
         },
         "currency": {
           "type": "string",
-          "description": " price currency. example: USD, CAN, etc."
+          "description": " currency. example: USD, CAN, etc."
         }
       },
       "title": "Price",
       "required": [
-        "amount",
-        "displayAmount"
+        "salePrice",
+        "formattedSalePrice"
       ]
     },
     "Product": {
@@ -976,6 +1003,13 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/Asset"
+          },
+          "description": " array of Asset objects of image type"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CategoryPair"
           },
           "description": " array of Asset objects of image type"
         }

@@ -1,0 +1,389 @@
+id,parent_id,slug,name,sort_order
+1,,root,Root,1
+2,1,men,Men,1
+3,2,men/whats-new,What's New,1
+4,3,men/whats-new/new-arrivals,New Arrivals,2
+5,3,men/whats-new/the-resort-collection,The Resort Collection,3
+6,3,men/whats-new/polo-sport,Polo Sport,4
+7,3,men/whats-new/team-usa-collection,Team USA Collection,5
+8,3,men/whats-new/heritage-icons,Heritage Icons,6
+9,3,men/whats-new/ralph-lauren-vintage,Ralph Lauren Vintage,7
+10,3,men/whats-new/the-polo-bear-shop,The Polo Bear Shop,8
+11,3,men/whats-new/pin-of-solidarity,Pin of Solidarity,9
+12,2,men/clothing,Clothing,2
+13,12,men/clothing/all-mens-clothing,All Men's Clothing,2
+14,12,men/clothing/polo-shirts,Polo Shirts,3
+15,12,men/clothing/t-shirts-and-rugby-shirts,T-Shirts & Rugby Shirts,4
+16,12,men/clothing/casual-shirts-and-dress-shirts,Casual Shirts & Dress Shirts,5
+17,12,men/clothing/sweatshirts-and-sweatpants,Sweatshirts & Sweatpants,6
+18,12,men/clothing/shorts-and-swim-trunks,Shorts & Swim Trunks,7
+19,12,men/clothing/jeans-and-denim,Jeans & Denim,8
+20,12,men/clothing/pants-and-chinos,Pants & Chinos,9
+21,12,men/clothing/sweaters,Sweaters,10
+22,12,men/clothing/jackets-coats-and-vests,"Jackets, Coats & Vests",11
+23,12,men/clothing/activewear,Activewear,12
+24,12,men/clothing/sport-coats-and-blazers,Sport Coats & Blazers,13
+25,12,men/clothing/suits-and-tuxedos,Suits & Tuxedos,14
+26,12,men/clothing/pajamas-and-robes,Pajamas & Robes,15
+27,12,men/clothing/underwear-and-undershirts,Underwear & Undershirts,16
+28,2,men/shoes,Shoes,3
+29,28,men/shoes/all-mens-shoes,All Men's Shoes,2
+30,28,men/shoes/sneakers,Sneakers,3
+31,28,men/shoes/slides-and-slippers,Slides & Slippers,4
+32,28,men/shoes/casual-shoes,Casual Shoes,5
+33,28,men/shoes/dress-shoes,Dress Shoes,6
+34,28,men/shoes/boots,Boots,7
+35,2,men/accessories,Accessories,4
+36,35,men/accessories/all-mens-accessories,All Men's Accessories,2
+37,35,men/accessories/hats-scarves-and-gloves,"Hats, Scarves & Gloves",3
+38,35,men/accessories/belts-and-suspenders,Belts & Suspenders,4
+39,35,men/accessories/bags,Bags,5
+40,35,men/accessories/wallets-and-accessories,Wallets & Accessories,6
+41,35,men/accessories/socks,Socks,7
+42,35,men/accessories/ties-bow-ties-and-pocket-squares,"Ties, Bow Ties & Pocket Squares",8
+43,35,men/accessories/fragrance,Fragrance,9
+44,35,men/accessories/sunglasses-and-eyewear,Sunglasses & Eyewear,10
+45,2,men/create-your-own,Create Your Own,5
+46,45,men/create-your-own/clothing,Clothing,2
+47,45,men/create-your-own/accessories,Accessories,3
+48,45,men/create-your-own/custom-outerwear,Custom Outerwear,4
+49,45,men/create-your-own/the-custom-polo-made-to-order,"The Custom Polo, Made to Order",5
+50,2,men/our-brands,Our Brands,6
+51,50,men/our-brands/polo-ralph-lauren,Polo Ralph Lauren,2
+52,50,men/our-brands/purple-label,Purple Label,3
+53,50,men/our-brands/double-rl,Double RL,4
+54,50,men/our-brands/pink-pony,Pink Pony,5
+55,50,men/our-brands/golf,Golf,6
+56,2,men/sale,Sale,7
+57,56,men/sale/all-mens-sale,All Men's Sale,2
+58,56,men/sale/clothing,Clothing,3
+59,56,men/sale/shoes,Shoes,4
+60,56,men/sale/accessories,Accessories,5
+61,56,men/sale/purple-label-enjoy-up-to-30-off,Purple Label: Enjoy Up to 30% Off,6
+62,56,men/sale/double-rl-enjoy-up-to-30-off,Double RL: Enjoy Up to 30% Off,7
+63,1,women,Women,2
+64,63,women/whats-new,What's New,1
+65,64,women/whats-new/new-arrivals,New Arrivals,2
+66,64,women/whats-new/rlx,RLX,3
+67,64,women/whats-new/natural-ease,Natural Ease,4
+68,64,women/whats-new/polo-accessories-shop,Polo Accessories Shop,5
+69,64,women/whats-new/polo-dress-shop,Polo Dress Shop,6
+70,64,women/whats-new/collection-spring,Collection Spring,7
+71,64,women/whats-new/welington-collection,Welington Collection,8
+72,64,women/whats-new/team-usa-collection,Team USA Collection,9
+73,64,women/whats-new/ralph-lauren-vintage,Ralph Lauren Vintage,10
+74,64,women/whats-new/the-polo-bear-shop,The Polo Bear Shop,11
+75,64,women/whats-new/pin-of-solidarity,Pin of Solidarity,12
+76,63,women/clothing,Clothing,2
+77,76,women/clothing/all-womens-clothing,All Women's Clothing,2
+78,76,women/clothing/dresses-and-jumpsuits,Dresses & Jumpsuits,3
+79,76,women/clothing/shirts-and-blouses,Shirts & Blouses,4
+80,76,women/clothing/sweaters,Sweaters,5
+81,76,women/clothing/polo-shirts,Polo Shirts,6
+82,76,women/clothing/t-shirts,T-Shirts,7
+83,76,women/clothing/sweatshirts-and-sweatpants,Sweatshirts & Sweatpants,8
+84,76,women/clothing/jackets-and-blazers,Jackets & Blazers,9
+85,76,women/clothing/outerwear-and-vests,Outerwear & Vests,10
+86,76,women/clothing/pants,Pants,11
+87,76,women/clothing/jeans,Jeans,12
+88,76,women/clothing/skirts,Skirts,13
+89,76,women/clothing/shorts,Shorts,14
+90,76,women/clothing/activewear,Activewear,15
+91,76,women/clothing/swimsuits-and-cover-ups,Swimsuits & Cover-Ups,16
+92,76,women/clothing/sleepwear,Sleepwear,17
+93,63,women/shoes,Shoes,3
+94,93,women/shoes/all-womens-shoes,All Women's Shoes,2
+95,93,women/shoes/sandals-and-wedges,Sandals & Wedges,3
+96,93,women/shoes/flats-and-sneakers,Flats & Sneakers,4
+97,93,women/shoes/heels-and-pumps,Heels & Pumps,5
+98,93,women/shoes/boots,Boots,6
+99,63,women/accessories,Accessories,4
+100,99,women/accessories/all-womens-accessories,All Women's Accessories,2
+101,99,women/accessories/handbags,Handbags,3
+102,99,women/accessories/belts,Belts,4
+103,99,women/accessories/hats-scarves-and-gloves,"Hats, Scarves & Gloves",5
+104,99,women/accessories/jewelry,Jewelry,6
+105,99,women/accessories/wallets-and-accessories,Wallets & Accessories,7
+106,99,women/accessories/socks,Socks,8
+107,99,women/accessories/sunglasses,Sunglasses,9
+108,99,women/accessories/fragrance,Fragrance,10
+109,63,women/create-your-own,Create Your Own,5
+110,109,women/create-your-own/clothing,Clothing,2
+111,109,women/create-your-own/accessories,Accessories,3
+112,109,women/create-your-own/custom-outerwear,Custom Outerwear,4
+113,109,women/create-your-own/the-custom-polo-made-to-order,"The Custom Polo, Made to Order",5
+114,63,women/our-brands,Our Brands,6
+115,114,women/our-brands/polo-ralph-lauren,Polo Ralph Lauren,2
+116,114,women/our-brands/rlx,RLX,3
+117,114,women/our-brands/collection,Collection,4
+118,114,women/our-brands/double-rl,Double RL,5
+119,114,women/our-brands/lauren,Lauren,6
+120,114,women/our-brands/pink-pony,Pink Pony,7
+121,114,women/our-brands/golf,Golf,8
+122,63,women/sale,Sale,7
+123,122,women/sale/all-womens-sale,All Women's Sale,2
+124,122,women/sale/clothing,Clothing,3
+125,122,women/sale/shoes,Shoes,4
+126,122,women/sale/accessories,Accessories,5
+127,122,women/sale/collection-enjoy-up-to-30-off,Collection: Enjoy Up to 30% Off,6
+128,122,women/sale/double-rl-enjoy-up-to-30-off,Double RL: Enjoy Up to 30% Off,7
+129,1,kids-and-baby,Kids & Baby,3
+130,129,kids-and-baby/whats-new,What's New,1
+131,130,kids-and-baby/whats-new/boys-new-arrivals,Boys: New Arrivals,2
+132,130,kids-and-baby/whats-new/girls-new-arrivals,Girls: New Arrivals,3
+133,130,kids-and-baby/whats-new/newborn-gifting,Newborn Gifting,4
+134,130,kids-and-baby/whats-new/boys-new-originals,Boys: New Originals,5
+135,130,kids-and-baby/whats-new/girls-new-originals,Girls: New Originals,6
+136,130,kids-and-baby/whats-new/boys-wellness-club,Boys: Wellness Club,7
+137,130,kids-and-baby/whats-new/girls-wellness-club,Girls: Wellness Club,8
+138,130,kids-and-baby/whats-new/team-usa-collection,Team USA Collection,9
+139,130,kids-and-baby/whats-new/boys-polo-sport,Boys: Polo Sport,10
+140,130,kids-and-baby/whats-new/girls-polo-sport,Girls: Polo Sport,11
+141,130,kids-and-baby/whats-new/girls-bold-neutrals,Girls: Bold Neutrals,12
+142,130,kids-and-baby/whats-new/teen-shop,Teen Shop,13
+143,130,kids-and-baby/whats-new/matching-family-style,Matching Family Style,14
+144,130,kids-and-baby/whats-new/the-polo-bear-shop,The Polo Bear Shop,15
+145,129,kids-and-baby/boys,Boys,2
+146,145,kids-and-baby/boys/boys-sizes-2t-7,Boys (Sizes 2T–7),2
+147,145,kids-and-baby/boys/boys-sizes-8-20,Boys (Sizes 8–20),3
+148,145,kids-and-baby/boys/polo-shirts,Polo Shirts,4
+149,145,kids-and-baby/boys/t-shirts-and-rugby-shirts,T-Shirts & Rugby Shirts,5
+150,145,kids-and-baby/boys/sweatshirts-and-sweatpants,Sweatshirts & Sweatpants,6
+151,145,kids-and-baby/boys/casual-shirts-and-dress-shirts,Casual Shirts & Dress Shirts,7
+152,145,kids-and-baby/boys/shorts-and-swim-trunks,Shorts & Swim Trunks,8
+153,145,kids-and-baby/boys/jeans-and-pants,Jeans & Pants,9
+154,145,kids-and-baby/boys/jackets-coats-and-vests,"Jackets, Coats, & Vests",10
+155,145,kids-and-baby/boys/sweaters,Sweaters,11
+156,145,kids-and-baby/boys/suits-and-separates,Suits & Separates,12
+157,145,kids-and-baby/boys/underwear-and-pajamas,Underwear & Pajamas,13
+158,145,kids-and-baby/boys/activewear,Activewear,14
+159,145,kids-and-baby/boys/shoes,Shoes,15
+160,145,kids-and-baby/boys/accessories,Accessories,16
+161,129,kids-and-baby/girls,Girls,3
+162,161,kids-and-baby/girls/girls-sizes-2t-6x,Girls (Sizes 2T–6X),2
+163,161,kids-and-baby/girls/girls-sizes-7-16,Girls (Sizes 7–16),3
+164,161,kids-and-baby/girls/dresses-and-rompers,Dresses & Rompers,4
+165,161,kids-and-baby/girls/t-shirts-and-tops,T-Shirts & Tops,5
+166,161,kids-and-baby/girls/sweatshirts-and-sweatpants,Sweatshirts & Sweatpants,6
+167,161,kids-and-baby/girls/polo-shirts,Polo Shirts,7
+168,161,kids-and-baby/girls/shorts-and-skirts,Shorts & Skirts,8
+169,161,kids-and-baby/girls/jeans-and-pants,Jeans & Pants,9
+170,161,kids-and-baby/girls/sweaters,Sweaters,10
+171,161,kids-and-baby/girls/jackets-coats-and-vests,"Jackets, Coats, & Vests",11
+172,161,kids-and-baby/girls/swimsuits-and-cover-ups,Swimsuits & Cover-Ups,12
+173,161,kids-and-baby/girls/pajamas,Pajamas,13
+174,161,kids-and-baby/girls/activewear,Activewear,14
+175,161,kids-and-baby/girls/shoes,Shoes,15
+176,161,kids-and-baby/girls/accessories,Accessories,16
+177,129,kids-and-baby/baby,Baby,4
+178,177,kids-and-baby/baby/baby-boy-sizes-0-24m,Baby Boy (Sizes 0–24M),2
+179,177,kids-and-baby/baby/baby-girl-sizes-0-24m,Baby Girl (Sizes 0–24M),3
+180,177,kids-and-baby/baby/baby-unisex-sizes-0-24m,Baby Unisex (Sizes 0-24M),4
+181,177,kids-and-baby/baby/baby-collection,Baby Collection,5
+182,177,kids-and-baby/baby/baby-essentials,Baby Essentials,6
+183,129,kids-and-baby/create-your-own,Create Your Own,5
+184,183,kids-and-baby/create-your-own/boys,Boys,2
+185,183,kids-and-baby/create-your-own/girls,Girls,3
+186,183,kids-and-baby/create-your-own/baby,Baby,4
+187,183,kids-and-baby/create-your-own/custom-outerwear,Custom Outerwear,5
+188,129,kids-and-baby/sale,Sale,6
+189,188,kids-and-baby/sale/all-kids-sale,All Kids' Sale,2
+190,188,kids-and-baby/sale/boys-sizes-2t-7,Boys (Sizes 2T–7),3
+191,188,kids-and-baby/sale/boys-sizes-8-20,Boys (Sizes 8–20),4
+192,188,kids-and-baby/sale/girls-sizes-2t-6x,Girls (Sizes 2T–6X),5
+193,188,kids-and-baby/sale/girls-sizes-7-16,Girls (Sizes 7–16),6
+194,188,kids-and-baby/sale/baby-boy-sizes-0-24m,Baby Boy (Sizes 0–24M),7
+195,188,kids-and-baby/sale/baby-girl-sizes-0-24m,Baby Girl (Sizes 0–24M),8
+196,1,home,Home,4
+197,196,home/whats-new,What's New,1
+198,197,home/whats-new/new-arrivals,New Arrivals,2
+199,197,home/whats-new/gifts-for-the-host,Gifts for the Host,3
+200,197,home/whats-new/bedding-shop,Bedding Shop,4
+201,197,home/whats-new/seasonal-entertaining,Seasonal Entertaining,5
+202,197,home/whats-new/home-office,Home Office,6
+203,197,home/whats-new/home-comforts,Home Comforts,7
+204,197,home/whats-new/monogram-shop,Monogram Shop,8
+205,196,home/bedding,Bedding,2
+206,205,home/bedding/all-bedding,All Bedding,2
+207,205,home/bedding/bedding-collections,Bedding Collections,3
+208,205,home/bedding/sheets-and-pillowcases,Sheets & Pillowcases,4
+209,205,home/bedding/duvets-and-comforters,Duvets & Comforters,5
+210,205,home/bedding/bed-blankets-and-coverlets,Bed Blankets & Coverlets,6
+211,205,home/bedding/throw-blankets,Throw Blankets,7
+212,205,home/bedding/throw-pillows,Throw Pillows,8
+213,205,home/bedding/shams,Shams,9
+214,205,home/bedding/bedding-basics,Bedding Basics,10
+215,196,home/towels-and-robes,Towels & Robes,3
+216,215,home/towels-and-robes/all-towels-and-robes,All Towels & Robes,2
+217,215,home/towels-and-robes/bath-towels-and-mats,Bath Towels & Mats,3
+218,215,home/towels-and-robes/beach-towels,Beach Towels,4
+219,215,home/towels-and-robes/bath-robes,Bath Robes,5
+220,196,home/decor,Décor,4
+221,220,home/decor/all-decor,All Décor,2
+222,220,home/decor/decorative-accessories,Decorative Accessories,3
+223,220,home/decor/frames,Frames,4
+224,220,home/decor/throw-pillows,Throw Pillows,5
+225,220,home/decor/candles-and-hurricanes,Candles & Hurricanes,6
+226,220,home/decor/games-and-books,Games & Books,7
+227,196,home/dining,Dining,5
+228,227,home/dining/all-dining,All Dining,2
+229,227,home/dining/dinnerware-and-flatware,Dinnerware & Flatware,3
+230,227,home/dining/serveware,Serveware,4
+231,227,home/dining/glassware-and-drinkware,Glassware & Drinkware,5
+232,227,home/dining/bar-tools-and-accessories,Bar Tools & Accessories,6
+233,196,home/lighting,Lighting,6
+234,233,home/lighting/all-lighting,All Lighting,2
+235,233,home/lighting/table-and-floor-lamps,Table & Floor Lamps,3
+236,233,home/lighting/chandeliers-and-ceiling-lights,Chandeliers & Ceiling Lights,4
+237,233,home/lighting/wall-lighting,Wall Lighting,5
+238,196,home/furniture,Furniture,7
+239,238,home/furniture/all-furniture,All Furniture,2
+240,238,home/furniture/sofas-and-sectionals,Sofas & Sectionals,3
+241,238,home/furniture/chairs,Chairs,4
+242,238,home/furniture/benches-and-ottomans,Benches & Ottomans,5
+243,238,home/furniture/desks-bookcases-and-shelves,"Desks, Bookcases, & Shelves",6
+244,238,home/furniture/tables,Tables,7
+245,238,home/furniture/bar-carts-and-bar-cabinets,Bar Carts & Bar Cabinets,8
+246,238,home/furniture/beds,Beds,9
+247,238,home/furniture/dressers-and-nightstands,Dressers & Nightstands,10
+248,238,home/furniture/mirrors,Mirrors,11
+249,196,home/rugs,Rugs,8
+250,249,home/rugs/all-rugs,All Rugs,2
+251,196,home/more-to-explore,More to Explore,9
+252,251,home/more-to-explore/the-icons,The Icons,2
+253,251,home/more-to-explore/about-ralph-lauren-home,About Ralph Lauren Home,3
+254,251,home/more-to-explore/building-a-flagship,Building a Flagship,4
+255,251,home/more-to-explore/trade-professionals,Trade Professionals,5
+256,251,home/more-to-explore/furniture-and-rug-care,Furniture & Rug Care,6
+257,251,home/more-to-explore/shop-all-swatches,Shop All Swatches,7
+258,196,home/sale,Sale,10
+259,258,home/sale/all-home-sale,All Home Sale,2
+260,258,home/sale/bedding,Bedding,3
+261,258,home/sale/towels-and-robes,Towels & Robes,4
+262,258,home/sale/decor,Décor,5
+263,258,home/sale/dining,Dining,6
+264,258,home/sale/rl-home-enjoy-up-to-30-off,RL Home: Enjoy Up to 30% Off,7
+265,1,gifts,Gifts,5
+266,265,gifts/gift-shops,Gift Shops,1
+267,266,gifts/gift-shops/for-the-host,For the Host,2
+268,266,gifts/gift-shops/for-him,For Him,3
+269,266,gifts/gift-shops/for-her,For Her,4
+270,266,gifts/gift-shops/for-boys,For Boys,5
+271,266,gifts/gift-shops/for-girls,For Girls,6
+272,266,gifts/gift-shops/for-baby,For Baby,7
+273,266,gifts/gift-shops/for-the-pup,For the Pup,8
+274,266,gifts/gift-shops/womens-objects-of-desire,Women's Objects of Desire,9
+275,266,gifts/gift-shops/mens-objects-of-desire,Men's Objects of Desire,10
+276,266,gifts/gift-shops/home-objects-of-desire,Home Objects of Desire,11
+277,265,gifts/gifts-that-give-back,Gifts That Give Back,2
+278,277,gifts/gifts-that-give-back/for-him,For Him,2
+279,277,gifts/gifts-that-give-back/for-her,For Her,3
+280,277,gifts/gifts-that-give-back/for-boys,For Boys,4
+281,277,gifts/gifts-that-give-back/for-girls,For Girls,5
+282,265,gifts/customize-it,Customize It,3
+283,282,gifts/customize-it/for-him,For Him,2
+284,282,gifts/customize-it/for-her,For Her,3
+285,282,gifts/customize-it/for-boys,For Boys,4
+286,282,gifts/customize-it/for-girls,For Girls,5
+287,282,gifts/customize-it/for-baby,For Baby,6
+288,282,gifts/customize-it/for-the-home,For the Home,7
+289,265,gifts/other-ways-to-give,Other Ways to Give,4
+290,289,gifts/other-ways-to-give/find-a-store,Find a Store,2
+291,289,gifts/other-ways-to-give/gift-services,Gift Services,3
+292,289,gifts/other-ways-to-give/private-shopping-appointments,Private Shopping Appointments,4
+293,289,gifts/other-ways-to-give/the-lauren-look,The Lauren Look,5
+294,1,world-of-rl,World of RL,6
+295,294,world-of-rl/stories,Stories,1
+296,295,world-of-rl/stories/rl-at-home,RL at Home,2
+297,295,world-of-rl/stories/rl-gives-back,RL Gives Back,3
+298,295,world-of-rl/stories/the-polo-watch,The Polo Watch,4
+299,295,world-of-rl/stories/team-usa-collection,Team USA Collection,5
+300,295,world-of-rl/stories/welington-collection,Welington Collection,6
+301,295,world-of-rl/stories/the-polo-shirt-shop,The Polo Shirt Shop,7
+302,295,world-of-rl/stories/the-custom-polo-made-to-order,"The Custom Polo, Made to Order",8
+303,295,world-of-rl/stories/the-sporting-life,The Sporting Life,9
+304,294,world-of-rl/polo-with-a-purpose,Polo with a Purpose,2
+305,304,world-of-rl/polo-with-a-purpose/pink-pony,Pink Pony,2
+306,304,world-of-rl/polo-with-a-purpose/design-the-change,Design The Change,3
+307,304,world-of-rl/polo-with-a-purpose/earth-polo,Earth Polo,4
+308,304,world-of-rl/polo-with-a-purpose/pride,Pride,5
+309,304,world-of-rl/polo-with-a-purpose/givemetap,GiveMeTap,6
+310,304,world-of-rl/polo-with-a-purpose/design-for-good,Design for Good,7
+311,304,world-of-rl/polo-with-a-purpose/pin-of-solidarity,Pin of Solidarity,8
+312,294,world-of-rl/discover,Discover,3
+313,312,world-of-rl/discover/the-ralph-lauren-app,The Ralph Lauren App,2
+314,312,world-of-rl/discover/the-polo-app,The Polo App,3
+315,312,world-of-rl/discover/create-your-own,Create Your Own,4
+316,312,world-of-rl/discover/custom-outerwear,Custom Outerwear,5
+317,312,world-of-rl/discover/rl-mag,RL Mag,6
+318,312,world-of-rl/discover/ralph-lauren-the-man,Ralph Lauren: The Man,7
+319,312,world-of-rl/discover/ralph-lauren-vintage,Ralph Lauren Vintage,8
+320,294,world-of-rl/mens-brands,Men's Brands,4
+321,320,world-of-rl/mens-brands/purple-label,Purple Label,2
+322,320,world-of-rl/mens-brands/polo-ralph-lauren,Polo Ralph Lauren,3
+323,320,world-of-rl/mens-brands/double-rl,Double RL,4
+324,320,world-of-rl/mens-brands/golf,Golf,5
+325,320,world-of-rl/mens-brands/fragrance,Fragrance,6
+326,320,world-of-rl/mens-brands/watches,Watches,7
+327,294,world-of-rl/womens-brands,Women's Brands,5
+328,327,world-of-rl/womens-brands/collection,Collection,2
+329,327,world-of-rl/womens-brands/polo-ralph-lauren,Polo Ralph Lauren,3
+330,327,world-of-rl/womens-brands/rlx,RLX,4
+331,327,world-of-rl/womens-brands/double-rl,Double RL,5
+332,327,world-of-rl/womens-brands/lauren,Lauren,6
+333,327,world-of-rl/womens-brands/golf,Golf,7
+334,327,world-of-rl/womens-brands/fragrance,Fragrance,8
+335,327,world-of-rl/womens-brands/watches,Watches,9
+336,294,world-of-rl/home-brands,Home Brands,6
+337,336,world-of-rl/home-brands/ralph-lauren-home,Ralph Lauren Home,2
+338,336,world-of-rl/home-brands/lauren-home,Lauren Home,3
+339,336,world-of-rl/home-brands/polo-ralph-lauren-home,Polo Ralph Lauren Home,4
+340,336,world-of-rl/home-brands/double-rl,Double RL,5
+341,336,world-of-rl/home-brands/ralphs-coffee,Ralph's Coffee,6
+342,294,world-of-rl/our-stores,Our Stores,7
+343,342,world-of-rl/our-stores/flagship-stores,Flagship Stores,2
+344,342,world-of-rl/our-stores/find-a-store,Find a Store,3
+345,342,world-of-rl/our-stores/rl-virtual-experience,RL Virtual Experience,4
+346,342,world-of-rl/our-stores/store-services,Store Services,5
+347,342,world-of-rl/our-stores/book-an-appointment,Book an Appointment,6
+348,342,world-of-rl/our-stores/made-to-measure,Made to Measure,7
+349,342,world-of-rl/our-stores/building-a-flagship,Building a Flagship,8
+350,294,world-of-rl/restaurants,Restaurants,8
+351,350,world-of-rl/restaurants/new-york-city,New York City,2
+352,350,world-of-rl/restaurants/chicago,Chicago,3
+353,350,world-of-rl/restaurants/milan,Milan,4
+354,350,world-of-rl/restaurants/paris,Paris,5
+355,350,world-of-rl/restaurants/ralphs-coffee-shop,Ralph's Coffee Shop,6
+356,1,sale,Sale,7
+357,356,sale/men,Men,1
+358,357,sale/men/all-mens-sale,All Men's Sale,2
+359,357,sale/men/new-to-sale,New to Sale,3
+360,357,sale/men/clothing,Clothing,4
+361,357,sale/men/shoes,Shoes,5
+362,357,sale/men/accessories,Accessories,6
+363,357,sale/men/purple-label-enjoy-up-to-40-off,Purple Label: Enjoy Up to 40% Off,7
+364,357,sale/men/double-rl-enjoy-up-to-40-off,Double RL: Enjoy Up to 40% Off,8
+365,356,sale/women,Women,2
+366,365,sale/women/all-womens-sale,All Women's Sale,2
+367,365,sale/women/new-to-sale,New to Sale,3
+368,365,sale/women/clothing,Clothing,4
+369,365,sale/women/shoes,Shoes,5
+370,365,sale/women/accessories,Accessories,6
+371,365,sale/women/collection-enjoy-up-to-40-off,Collection: Enjoy Up to 40% Off,7
+372,365,sale/women/double-rl-enjoy-up-to-40-off,Double RL: Enjoy Up to 40% Off,8
+373,356,sale/kids-and-baby,Kids & Baby,3
+374,373,sale/kids-and-baby/all-kids-sale,All Kids' Sale,2
+375,373,sale/kids-and-baby/new-to-sale,New to Sale,3
+376,373,sale/kids-and-baby/boys-sizes-2t-7,Boys (Sizes 2T-7),4
+377,373,sale/kids-and-baby/boys-sizes-8-20,Boys (Sizes 8-20),5
+378,373,sale/kids-and-baby/girls-sizes-2t-6x,Girls (Sizes 2T-6X),6
+379,373,sale/kids-and-baby/girls-sizes-7-16,Girls (Sizes 7-16),7
+380,373,sale/kids-and-baby/baby-boy-sizes-0-24m,Baby Boy (Sizes 0–24M),8
+381,373,sale/kids-and-baby/baby-girl-sizes-0-24m,Baby Girl (Sizes 0–24M),9
+382,356,sale/home,Home,4
+383,382,sale/home/all-home-sale,All Home Sale,2
+384,382,sale/home/bedding,Bedding,3
+385,382,sale/home/towels-and-robes,Towels & Robes,4
+386,382,sale/home/decor,Décor,5
+387,382,sale/home/dining,Dining,6
+388,382,sale/home/rl-home-enjoy-up-to-40-off,RL Home: Enjoy Up to 40% Off,7

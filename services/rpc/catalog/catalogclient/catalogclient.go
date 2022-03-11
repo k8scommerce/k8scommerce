@@ -15,6 +15,7 @@ import (
 type (
 	Asset                             = catalog.Asset
 	Category                          = catalog.Category
+	CategoryPair                      = catalog.CategoryPair
 	CreateCategoryRequest             = catalog.CreateCategoryRequest
 	CreateCategoryResponse            = catalog.CreateCategoryResponse
 	CreateProductRequest              = catalog.CreateProductRequest

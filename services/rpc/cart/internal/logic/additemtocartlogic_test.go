@@ -76,10 +76,10 @@ var _ = Describe("CartLogic", func() {
 			money2 := float64(testVariant.CostAmount.Int64) * utils.RandFloat(3, 3.4)
 
 			testPrice = &models.Price{
-				VariantID:       testVariant.ID,
-				Amount:          int64(money1 * 100),
-				Currency:        testVariant.CostCurrency,
-				CompareAtAmount: sql.NullInt64{Int64: int64(money2 * 100), Valid: true},
+				VariantID:   testVariant.ID,
+				SalePrice:   int64(money1 * 100),
+				Currency:    testVariant.CostCurrency,
+				RetailPrice: sql.NullInt64{Int64: int64(money2 * 100), Valid: true},
 			}
 			if err := testPrice.Insert(context.Background(), svcCtx.Repo.GetRawDB()); err == nil {
 			} else {
@@ -144,7 +144,7 @@ var _ = Describe("CartLogic", func() {
 						CustomerId: int64(customerId),
 						Sku:        testVariant.Sku,
 						Quantity:   1,
-						Price:      testPrice.Amount,
+						Price:      testPrice.SalePrice,
 						ExpiresAt:  timestamppb.New(expires),
 					},
 				}

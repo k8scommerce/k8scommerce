@@ -22,7 +22,7 @@ import (
 )
 
 var (
-	totalWorkers int = 7
+	totalWorkers int = 10
 	wp           workerpool.WorkerPool
 )
 

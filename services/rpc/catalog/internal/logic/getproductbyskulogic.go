@@ -67,6 +67,13 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 				prod := catalog.Product{}
 				if found != nil {
 					types.ConvertModelProductToProtoProduct(&found.Product, &found.Variants, &found.Prices, &prod)
+
+					for _, pair := range found.Categories {
+						prod.Categories = append(prod.Categories, &catalog.CategoryPair{
+							Slug: pair.Slug,
+							Name: pair.Name,
+						})
+					}
 				}
 
 				// the response struct

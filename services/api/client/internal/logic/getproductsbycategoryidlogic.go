@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"k8scommerce/services/api/client/helpers"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
 	"k8scommerce/services/rpc/catalog/catalogclient"
@@ -50,7 +51,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(req types.GetProd
 	for i := 0; i < len(res.Products); i++ {
 		for x := 0; x < len(res.Products[i].Variants); x++ {
 			if res.Products[i].Variants[x].Price != (types.Price{}) {
-				convertOutgoingPrices(l.ctx, &res.Products[i].Variants[x].Price)
+				helpers.ConvertOutgoingPrices(l.ctx, &res.Products[i].Variants[x].Price)
 			}
 		}
 	}

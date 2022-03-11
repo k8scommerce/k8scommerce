@@ -20,6 +20,11 @@ message Category {
   int64 depth = 11;
 }
 
+message CategoryPair {
+  string slug = 1;
+  string name = 2;
+}
+
 message Product {
   int64 id = 1;
   int64 storeId = 2;
@@ -36,6 +41,7 @@ message Product {
   repeated Variant variants = 13;
   Asset defaultImage = 14;
   repeated Asset images = 15;
+  repeated CategoryPair categories = 16;
 }
 
 message Variant {
@@ -62,10 +68,9 @@ message Price {
   int64 id = 1;
   int64 storeId = 2;
   int64 variantId = 3;
-  int64 amount = 4;
-  int64 compareAtAmount = 5;
+  int64 salePrice = 4;
+  int64 retailPrice = 5;
   string currency = 6;
-  int64 userRoleId = 7;
 }
 
 enum AssetKind {

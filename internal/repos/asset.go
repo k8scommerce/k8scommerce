@@ -91,7 +91,7 @@ func (m *assetRepo) GetAssetByProductIDKind(productId int64, kind int) (res []*m
 	nstmt, err := m.db.PrepareNamed(`
 		SELECT 
 			COALESCE(display_name,'') AS "asset.display_name",
-			COALESCE(sizes,'[]') AS "asset.sizes"
+			COALESCE(sizes,'{}') AS "asset.sizes"
 		FROM asset
 		WHERE product_id = :product_id
 		AND kind = :kind

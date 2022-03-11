@@ -78,8 +78,8 @@ var _ = Describe("UploadAssetLogic", func() {
 				},
 			},
 			StorageConfig: config.StorageConfig{
-				SubDirectory: "",
-				FileSystem:   true,
+				BasePath:   "",
+				FileSystem: true,
 				FileSystemConfig: config.FileSystemConfig{
 					BasePath: "",
 				},
@@ -169,7 +169,7 @@ var _ = Describe("UploadAssetLogic", func() {
 			cfg := getUploadConfig()
 
 			BeforeEach(func() {
-				cfg.StorageConfig.SubDirectory = "uploads"
+				cfg.StorageConfig.BasePath = "uploads"
 
 				cfg.StorageConfig.FileSystem = true
 				cfg.StorageConfig.FileSystemConfig.BasePath = testFilesPath
@@ -248,7 +248,7 @@ var _ = Describe("UploadAssetLogic", func() {
 			cfg := getUploadConfig()
 
 			BeforeEach(func() {
-				cfg.StorageConfig.SubDirectory = "uploads"
+				cfg.StorageConfig.BasePath = "uploads"
 
 				cfg.StorageConfig.AWS = true
 				cfg.StorageConfig.AWSConfig.AccessKeyId = os.Getenv("AWS_ACCESS_KEY_ID")

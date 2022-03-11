@@ -106,7 +106,7 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				ContentType: file.ContentType,
 				URL:         file.URL,
 				SortOrder:   sql.NullInt64{Valid: true, Int64: 100},
-				Sizes:       []byte("[]"),
+				Sizes:       []byte("{}"),
 			}
 
 			// save the asset to the database

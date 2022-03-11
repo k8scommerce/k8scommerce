@@ -63,7 +63,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 					galaxyctx.GetCategoryId(ctx),
 					galaxyctx.GetCurrentPage(ctx),
 					galaxyctx.GetPageSize(ctx),
-					galaxyctx.GetSortOn(ctx),
+					galaxyctx.GetFilter(ctx),
 				)
 				if err != nil {
 					logx.Infof("error: %s", err)
@@ -112,9 +112,9 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 	l.ctx = galaxyctx.SetCategoryId(l.ctx, in.CategoryId)
 	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
 	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
-	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
+	l.ctx = galaxyctx.SetFilter(l.ctx, in.Filter)
 
-	key := fmt.Sprintf("%d|%d|%d|%d|%s", in.StoreId, in.CategoryId, in.CurrentPage, in.PageSize, in.SortOn)
+	key := fmt.Sprintf("%d|%d|%d|%d|%s", in.StoreId, in.CategoryId, in.CurrentPage, in.PageSize, in.Filter)
 	entryGetProductsByCategoryIdLogic.galaxy.Get(l.ctx, key, codec)
 	b, err := codec.MarshalBinary()
 	if err != nil {
@@ -124,7 +124,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 	err = json.Unmarshal(b, res)
 
 	// remove it for right now
-	// entryGetProductsByCategoryIdLogic.galaxy.Remove(l.ctx, key)
+	entryGetProductsByCategoryIdLogic.galaxy.Remove(l.ctx, key)
 
 	return res, err
 }

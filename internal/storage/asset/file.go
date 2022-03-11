@@ -62,10 +62,11 @@ func (f *File) Open(contentType string) error {
 // storage transport destination
 func (f *File) Write(chunk []byte, partNumber int) error {
 	// stream the content to the destination
-	if err := f.storageTransport.StreamPut(chunk, partNumber); err != nil {
-		return err
+	if chunk != nil {
+		if err := f.storageTransport.StreamPut(chunk, partNumber); err != nil {
+			return err
+		}
 	}
-
 	return nil
 }
 

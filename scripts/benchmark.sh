@@ -27,7 +27,7 @@
 # ab -n 2000 -c 2000 -H 'Store-Key:yxvzrvla' http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants
 
 
-# http GET http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants Store-Key:yxvzrvla
+# http -v GET http://52.9.133.84:8080/v1/product/slug/awesome-cotton-pants Store-Key:yxvzrvla
 # http GET http://localhost:64001/v1/product/slug/awesome-cotton-pants Store-Key:yxvzrvla
 
 
@@ -47,6 +47,8 @@
 
 
 # http -vvv GET "http://52.9.133.84:8888/v1/product/slug/incredible-steel-hat" Store-Key:yxvzrvla
+
+http -vvv GET "http://localhost:64001/v1/product/slug/antelopealpine-wizardarrow-rabbitmalachite" Store-Key:yxvzrvla
 
 
 #  ?cars[]=Saab&cars[]=Audi

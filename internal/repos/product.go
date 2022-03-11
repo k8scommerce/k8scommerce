@@ -30,11 +30,11 @@ type Product interface {
 	GetProductById(productID int64) (res *productResponse, err error)
 	GetProductBySku(storeId int64, sku string) (res *productResponse, err error)
 	GetProductBySlug(storeId int64, slug string) (res *productResponse, err error)
-	GetProductsByCategoryId(storeId, categoryID, currentPage, pageSize int64, sortOn string) (
+	GetProductsByCategoryId(storeId, categoryID, currentPage, pageSize int64, filter string) (
 		res *getProductsByCategoryResponse,
 		err error,
 	)
-	GetProductsByCategorySlug(storeId int64, categorySlug string, currentPage, pageSize int64, sortOn string) (
+	GetProductsByCategorySlug(storeId int64, categorySlug string, currentPage, pageSize int64, filter string) (
 		res *getProductsByCategoryResponse,
 		err error,
 	)
@@ -51,19 +51,11 @@ type productRepo struct {
 
 	*models.Product
 }
-
 type productResponse struct {
-	Product  models.Product
-	Variants []models.Variant
-	Prices   []models.Price
-	// Assets   []models.Asset
-}
-
-type getByCategoryResults struct {
-	Product  models.Product
-	Variant  models.Variant
-	Category models.Category
-	Price    models.Price
+	Product    models.Product
+	Variants   []models.Variant
+	Prices     []models.Price
+	Categories []CategoryPair
 }
 
 type getAllProductsResults struct {
@@ -75,7 +67,7 @@ type getAllProductsResults struct {
 
 type getProductsByCategoryResponse struct {
 	PagingStats PagingStats
-	Results     []getByCategoryResults
+	Results     []getAllProductsResults
 }
 
 type getAllProductsResponse struct {
@@ -119,25 +111,40 @@ func (m *productRepo) GetProductBySku(storeId int64, sku string) (res *productRe
 
 			-- price
 			pr.variant_id AS "price.variant_id",
-			pr.amount AS "price.amount",
-			pr.compare_at_amount AS "price.compare_at_amount",
+			pr.sale_price AS "price.sale_price",
+			pr.retail_price AS "price.retail_price",
 			pr.currency AS "price.currency",
-			pr.user_role_id AS "price.user_role_id"
+
+			-- categories
+			array_to_json(c.categories) AS "categories"
 
 		FROM product p
 		INNER JOIN variant v ON p.id = v.product_id
-		INNER JOIN price pr ON pr.variant_id = v.id AND pr.user_role_id IS NULL
+		INNER JOIN price pr ON pr.variant_id = v.id
+		CROSS JOIN LATERAL (
+			SELECT ARRAY (
+				select 
+					json_build_object(
+						'slug', c.slug,
+						'name', c.name
+					)
+				from product_category pc
+				inner join category c ON pc.category_id = c.id
+				where p.id = pc.product_id
+			) as categories
+		) c
 		WHERE v.sku = :sku 
-			AND p.store_id = :store_id;
+		AND p.store_id = :store_id;
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("error::GetProductBySku::%s", err.Error())
 	}
 
 	var result []*struct {
-		Product models.Product `db:"product"`
-		Variant models.Variant `db:"variant"`
-		Price   models.Price   `db:"price"`
+		Product    models.Product `db:"product"`
+		Variant    models.Variant `db:"variant"`
+		Price      models.Price   `db:"price"`
+		Categories CategoryPairs  `db:"categories"`
 	}
 	err = nstmt.Select(&result,
 		map[string]interface{}{
@@ -150,6 +157,7 @@ func (m *productRepo) GetProductBySku(storeId int64, sku string) (res *productRe
 		out.Product = result[0].Product
 		out.Variants = []models.Variant{}
 		out.Prices = []models.Price{}
+		out.Categories = result[0].Categories.Pairs
 		for _, r := range result {
 			out.Variants = append(out.Variants, r.Variant)
 			out.Prices = append(out.Prices, r.Price)
@@ -200,14 +208,28 @@ func (m *productRepo) GetProductBySlug(storeId int64, slug string) (res *product
 
 			-- price
 			pr.variant_id AS "price.variant_id",
-			pr.amount AS "price.amount",
-			pr.compare_at_amount AS "price.compare_at_amount",
+			pr.sale_price AS "price.sale_price",
+			pr.retail_price AS "price.retail_price",
 			pr.currency AS "price.currency",
-			pr.user_role_id AS "price.user_role_id"
+
+			-- categories
+			array_to_json(c.categories) AS "categories"
 
 		FROM p
 		INNER JOIN variant v ON p.id = v.product_id
-		INNER JOIN price pr ON pr.variant_id = v.id AND pr.user_role_id IS NULL
+		INNER JOIN price pr ON pr.variant_id = v.id
+		CROSS JOIN LATERAL (
+			SELECT ARRAY (
+				select 
+					json_build_object(
+						'slug', c.slug,
+						'name', c.name
+					)
+				from product_category pc
+				inner join category c ON pc.category_id = c.id
+				where p.id = pc.product_id
+			) as categories
+		) c
 		WHERE p.store_id = :store_id;
 	`)
 	if err != nil {
@@ -215,10 +237,12 @@ func (m *productRepo) GetProductBySlug(storeId int64, slug string) (res *product
 	}
 
 	var result []*struct {
-		Product models.Product `db:"product"`
-		Variant models.Variant `db:"variant"`
-		Price   models.Price   `db:"price"`
+		Product    models.Product `db:"product"`
+		Variant    models.Variant `db:"variant"`
+		Price      models.Price   `db:"price"`
+		Categories CategoryPairs  `db:"categories"`
 	}
+
 	err = nstmt.Select(&result,
 		map[string]interface{}{
 			"store_id": storeId,
@@ -230,6 +254,7 @@ func (m *productRepo) GetProductBySlug(storeId int64, slug string) (res *product
 		out.Product = result[0].Product
 		out.Variants = []models.Variant{}
 		out.Prices = []models.Price{}
+		out.Categories = result[0].Categories.Pairs
 		for _, r := range result {
 			out.Variants = append(out.Variants, r.Variant)
 			out.Prices = append(out.Prices, r.Price)
@@ -280,23 +305,38 @@ func (m *productRepo) GetProductById(productID int64) (res *productResponse, err
 
 			-- price
 			pr.variant_id AS "price.variant_id",
-			pr.amount AS "price.amount",
-			pr.compare_at_amount AS "price.compare_at_amount",
+			pr.sale_price AS "price.sale_price",
+			pr.retail_price AS "price.retail_price",
 			pr.currency AS "price.currency",
-			pr.user_role_id AS "price.user_role_id"
+	
+			-- categories
+			array_to_json(c.categories) AS "categories"
 
 		FROM p
 		INNER JOIN variant v ON p.id = v.product_id
-		INNER JOIN price pr ON pr.variant_id = v.id AND pr.user_role_id IS NULL;
+		INNER JOIN price pr ON pr.variant_id = v.id 
+		CROSS JOIN LATERAL (
+			SELECT ARRAY (
+				select 
+					json_build_object(
+						'slug', c.slug,
+						'name', c.name
+					)
+				from product_category pc
+				inner join category c ON pc.category_id = c.id
+				where p.id = pc.product_id
+			) as categories
+		) c;
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("error::GetProductById::%s", err.Error())
 	}
 
 	var result []*struct {
-		Product models.Product `db:"product"`
-		Variant models.Variant `db:"variant"`
-		Price   models.Price   `db:"price"`
+		Product    models.Product `db:"product"`
+		Variant    models.Variant `db:"variant"`
+		Price      models.Price   `db:"price"`
+		Categories CategoryPairs  `db:"categories"`
 	}
 	err = nstmt.Select(&result,
 		map[string]interface{}{
@@ -308,6 +348,7 @@ func (m *productRepo) GetProductById(productID int64) (res *productResponse, err
 		out.Product = result[0].Product
 		out.Variants = []models.Variant{}
 		out.Prices = []models.Price{}
+		out.Categories = result[0].Categories.Pairs
 		for _, r := range result {
 			out.Variants = append(out.Variants, r.Variant)
 			out.Prices = append(out.Prices, r.Price)
@@ -317,11 +358,13 @@ func (m *productRepo) GetProductById(productID int64) (res *productResponse, err
 	return nil, err
 }
 
-func (m *productRepo) GetProductsByCategoryId(storeId, categoryId, currentPage, pageSize int64, sortOn string) (res *getProductsByCategoryResponse, err error) {
+func (m *productRepo) GetProductsByCategoryId(storeId, categoryId, currentPage, pageSize int64, filter string) (res *getProductsByCategoryResponse, err error) {
 
-	orderBy, err := BuildOrderBy(sortOn, map[string]string{
-		"name":   "p",  // product alias
-		"amount": "pr", // price alias
+	var builder = buildsql.NewQueryBuilder()
+	where, orderBy, namedParamMap, err := builder.Build(filter, map[string]interface{}{
+		"p":  models.Product{}, // product alias
+		"v":  models.Variant{}, // product alias
+		"pr": models.Price{},   // product alias
 	})
 	if err != nil {
 		return nil, err
@@ -331,10 +374,10 @@ func (m *productRepo) GetProductsByCategoryId(storeId, categoryId, currentPage, 
 	if orderBy == "" {
 		orderBy = "ORDER BY p.name ASC"
 	}
-	offset := fmt.Sprintf("OFFSET %d", (currentPage-1)*pageSize)
+	offset := fmt.Sprintf("OFFSET %d", currentPage*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
-	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
+	sql := fmt.Sprintf(`
 		select 
 			-- product
 			p.id AS "product.id",
@@ -368,25 +411,14 @@ func (m *productRepo) GetProductsByCategoryId(storeId, categoryId, currentPage, 
 
 			-- price
 			pr.variant_id AS "price.variant_id",
-			pr.amount AS "price.amount",
-			pr.compare_at_amount AS "price.compare_at_amount",
+			pr.sale_price AS "price.sale_price",
+			pr.retail_price AS "price.retail_price",
 			pr.currency AS "price.currency",
-			pr.user_role_id AS "price.user_role_id",
 
-			-- catgory
-			c.id AS "category.id",
-			c.parent_id AS "category.parent_id",
-			c.store_id AS "category.store_id",
-			c.name AS "category.name",
-			c.description AS "category.description",
-			c.meta_title AS "category.meta_title",
-			c.meta_description AS "category.meta_description",
-			c.meta_keywords AS "category.meta_keywords",
-			c.hide_from_nav AS "category.hide_from_nav",
-			c.lft AS "category.lft",
-			c.rgt AS "category.rgt",
-			c.depth AS "category.depth",
-			c.sort_order AS "category.sort_order",
+			-- asset
+			-- COALESCE(a.url,'') AS "asset.url", -- we don't need to give the fill size image away
+			COALESCE(a.display_name,'') AS "asset.display_name",
+			COALESCE(a.sizes,'{}') AS "asset.sizes",
 
 			-- stats
 			COUNT(p.*) OVER() AS "pagingstats.total_records"
@@ -395,49 +427,68 @@ func (m *productRepo) GetProductsByCategoryId(storeId, categoryId, currentPage, 
 		inner join product_category pc on p.id = pc.product_id
 		inner join category c ON pc.category_id = c.id
 		inner join variant v on v.product_id = p.id AND v.is_default = true
-		inner join price pr ON pr.variant_id = v.id AND pr.user_role_id IS NULL
-		WHERE pc.category_id = :category_id
-			AND p.store_id = :store_id
+		inner join price pr ON pr.variant_id = v.id
+		LEFT JOIN LATERAL (
+			SELECT * FROM asset
+			WHERE asset.product_id = p.id
+			AND asset.variant_id = v.id
+			AND asset.kind = :asset_kind
+			ORDER BY asset.sort_order ASC
+			LIMIT 1
+		) a ON a.product_id = p.id 
+		where p.store_id = :store_id
+		and c.id = :category_id
 		%s
 		%s
 		%s
-	`, orderBy, offset, limit))
+		%s
+	`, where, orderBy, offset, limit)
+
+	fmt.Println(sql)
+
+	nstmt, err := m.db.PrepareNamed(sql)
 	if err != nil {
+
+		// fmt.Println("where", where)
+		// fmt.Println("orderBy", orderBy)
+		// fmt.Println("offset", offset)
+		// fmt.Println("limit", limit)
+
 		return nil, fmt.Errorf("error::GetProductsByCategoryId::%s", err.Error())
 	}
 
 	var result []*struct {
 		Product     models.Product
 		Variant     models.Variant
-		Category    models.Category
 		Price       models.Price
+		Asset       models.Asset
 		PagingStats PagingStats
 	}
 
-	err = nstmt.Select(&result,
-		map[string]interface{}{
-			"store_id":    storeId,
-			"category_id": categoryId,
-			"offset":      (currentPage - 1) * pageSize,
-			"limit":       pageSize,
-			"order_by":    orderBy,
-		})
+	namedParamMap["store_id"] = storeId
+	namedParamMap["category_id"] = categoryId
+	namedParamMap["offset"] = currentPage * pageSize
+	namedParamMap["limit"] = pageSize
 
-	results := []getByCategoryResults{}
+	// intentionally hardcode the asset kind
+	namedParamMap["asset_kind"] = catalog.AssetKind_image.Number()
+
+	err = nstmt.Select(&result, namedParamMap)
+
+	results := []getAllProductsResults{}
 
 	if len(result) > 0 {
 		var stats *PagingStats
 		for i, r := range result {
 			if i == 0 {
 				stats = r.PagingStats.Calc(pageSize)
-				// totalPages := float64(stats.TotalRecords) / float64(pageSize)
-				// stats.TotalPages = int64(math.Ceil(totalPages))
 			}
-			results = append(results, getByCategoryResults{
-				Product:  r.Product,
-				Variant:  r.Variant,
-				Price:    r.Price,
-				Category: r.Category,
+
+			results = append(results, getAllProductsResults{
+				Product: r.Product,
+				Variant: r.Variant,
+				Price:   r.Price,
+				Asset:   r.Asset,
 			})
 		}
 
@@ -467,7 +518,7 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 	if orderBy == "" {
 		orderBy = "ORDER BY p.name ASC"
 	}
-	offset := fmt.Sprintf("OFFSET %d", (currentPage)*pageSize)
+	offset := fmt.Sprintf("OFFSET %d", currentPage*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
 	sql := fmt.Sprintf(`
@@ -504,15 +555,14 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 
 			-- price
 			pr.variant_id AS "price.variant_id",
-			pr.amount AS "price.amount",
-			pr.compare_at_amount AS "price.compare_at_amount",
+			pr.sale_price AS "price.retail_price",
+			pr.retail_price AS "price.compare_at_amount",
 			pr.currency AS "price.currency",
-			pr.user_role_id AS "price.user_role_id",
 
 			-- asset
 			-- COALESCE(a.url,'') AS "asset.url", -- we don't need to give the fill size image away
 			COALESCE(a.display_name,'') AS "asset.display_name",
-			COALESCE(a.sizes,'[]') AS "asset.sizes",
+			COALESCE(a.sizes,'{}') AS "asset.sizes",
 
 			-- stats
 			COUNT(p.*) OVER() AS "pagingstats.total_records"
@@ -521,7 +571,7 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 		inner join product_category pc on p.id = pc.product_id
 		inner join category c ON pc.category_id = c.id
 		inner join variant v on v.product_id = p.id AND v.is_default = true
-		inner join price pr ON pr.variant_id = v.id AND pr.user_role_id IS NULL
+		inner join price pr ON pr.variant_id = v.id
 		LEFT JOIN LATERAL (
 			SELECT * FROM asset
 			WHERE asset.product_id = p.id
@@ -537,13 +587,10 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 		%s
 	`, where, orderBy, offset, limit)
 
+	fmt.Println(sql)
+
 	nstmt, err := m.db.PrepareNamed(sql)
 	if err != nil {
-
-		// fmt.Println("where", where)
-		// fmt.Println("orderBy", orderBy)
-		// fmt.Println("offset", offset)
-		// fmt.Println("limit", limit)
 
 		return nil, fmt.Errorf("error::GetAllProducts::%s", err.Error())
 	}
@@ -557,7 +604,7 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 	}
 
 	namedParamMap["store_id"] = storeId
-	namedParamMap["offset"] = (currentPage - 1) * pageSize
+	namedParamMap["offset"] = currentPage * pageSize
 	namedParamMap["limit"] = pageSize
 
 	// intentionally hardcode the asset kind
@@ -565,21 +612,20 @@ func (m *productRepo) GetProductsByCategorySlug(storeId int64, categorySlug stri
 
 	err = nstmt.Select(&result, namedParamMap)
 
-	results := []getByCategoryResults{}
+	results := []getAllProductsResults{}
 
 	if len(result) > 0 {
 		var stats *PagingStats
 		for i, r := range result {
 			if i == 0 {
 				stats = r.PagingStats.Calc(pageSize)
-				// totalPages := float64(stats.TotalRecords) / float64(pageSize)
-				// stats.TotalPages = int64(math.Ceil(totalPages))
 			}
-			results = append(results, getByCategoryResults{
+
+			results = append(results, getAllProductsResults{
 				Product: r.Product,
 				Variant: r.Variant,
 				Price:   r.Price,
-				// Category: r.Category,
+				Asset:   r.Asset,
 			})
 		}
 
@@ -609,7 +655,7 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 	if orderBy == "" {
 		orderBy = "ORDER BY p.name ASC"
 	}
-	offset := fmt.Sprintf("OFFSET %d", (currentPage)*pageSize)
+	offset := fmt.Sprintf("OFFSET %d", currentPage*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
 	sql := fmt.Sprintf(`
@@ -646,30 +692,28 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 
 			-- price
 			pr.variant_id AS "price.variant_id",
-			pr.amount AS "price.amount",
-			pr.compare_at_amount AS "price.compare_at_amount",
+			pr.sale_price AS "price.sale_price",
+			pr.retail_price AS "price.retail_price",
 			pr.currency AS "price.currency",
-			pr.user_role_id AS "price.user_role_id",
 
 			-- asset
 			-- COALESCE(a.url,'') AS "asset.url", -- we don't need to give the fill size image away
 			COALESCE(a.display_name,'') AS "asset.display_name",
-			COALESCE(a.sizes,'[]') AS "asset.sizes",
+			COALESCE(a.sizes,'{}') AS "asset.sizes",
 
 			-- stats
 			COUNT(p.*) OVER() AS "pagingstats.total_records"
 
 		from product p
 		inner join variant v on v.product_id = p.id AND v.is_default = true
-		inner join price pr ON pr.variant_id = v.id AND pr.user_role_id IS NULL
+		inner join price pr ON pr.variant_id = v.id
 		LEFT JOIN LATERAL (
-			SELECT * FROM asset
-			WHERE asset.product_id = p.id
-			AND asset.variant_id = v.id
-			AND asset.kind = :asset_kind
+			SELECT display_name, sizes FROM asset
+			WHERE asset.variant_id = v.id
+			AND asset.kind = 1
 			ORDER BY asset.sort_order ASC
 			LIMIT 1
-		) a ON a.product_id = p.id 
+   		) a on 1 = 1
 		where p.store_id = :store_id
 		%s
 		%s
@@ -697,7 +741,7 @@ func (m *productRepo) GetAllProducts(storeId, currentPage, pageSize int64, filte
 	}
 
 	namedParamMap["store_id"] = storeId
-	namedParamMap["offset"] = (currentPage - 1) * pageSize
+	namedParamMap["offset"] = currentPage * pageSize
 	namedParamMap["limit"] = pageSize
 
 	// intentionally hardcode the asset kind

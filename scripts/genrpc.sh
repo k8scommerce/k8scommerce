@@ -14,7 +14,7 @@ services='cart catalog customer email inventory othersbought payment shipping si
 # define the proto import paths
 go_opts=''
 for service in $services; do
-  go_opts="${go_opts}-go_opt=M${service}.proto=k8scommerce/services/rpc/${service}/pb/${service} "
+  go_opts="${go_opts}--go_opt=M${service}.proto=k8scommerce/services/rpc/${service}/pb/${service} "
 done
 
 for service in $services; do
@@ -26,4 +26,14 @@ for service in $services; do
     -dir "${out_dir}/${service}" \
     $go_opts \
     "${service}.proto"
+
+
+
+  # $go_opts
+  # goctl rpc protoc \
+  #   "${protos_dir}/${service}.proto" \
+  #   $go_opts \
+  #   --proto_path=$protos_dir \
+  #   --go_out=plugins=grpc:"${out_dir}/${service}" \
+  #   --zrpc_out="${out_dir}/${service}"
 done

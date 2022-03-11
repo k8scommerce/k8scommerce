@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"k8scommerce/services/api/client/helpers"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
 	"k8scommerce/services/rpc/catalog/catalogclient"
@@ -46,7 +47,7 @@ func (l *GetProductBySkuLogic) GetProductBySku(req types.GetProductBySkuRequest)
 	// format the currency to the locale and language
 	for x := 0; x < len(res.Variants); x++ {
 		if res.Variants[x].Price != (types.Price{}) {
-			convertOutgoingPrices(l.ctx, &res.Variants[x].Price)
+			helpers.ConvertOutgoingPrices(l.ctx, &res.Variants[x].Price)
 		}
 	}
 	return res, err

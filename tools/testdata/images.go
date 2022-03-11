@@ -115,7 +115,7 @@ func createImages() {
 					ContentType: file.ContentType,
 					URL:         file.URL,
 					SortOrder:   sql.NullInt64{Valid: true, Int64: sortOrder},
-					Sizes:       []byte("[]"),
+					Sizes:       []byte("{}"),
 				}
 
 				sortOrder++

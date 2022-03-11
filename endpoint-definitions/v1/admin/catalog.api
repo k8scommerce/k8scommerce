@@ -20,18 +20,24 @@ type Category {
 	SortOrder       int32  `json:"sortOrder,optional,omitempty"`       // sort order of menu items on the same level and same parent id
 }
 
+type CategoryPair {
+	Slug string `json:"slug"` // slug name of the category
+	Name string `json:"name"` // name of category
+}
+
 type Product {
-	Id               int64     `json:"id"`                                  // product id
-	Slug             string    `json:"slug"`                                // product slug
-	Name             string    `json:"name"`                                // product name
-	ShortDescription string    `json:"shortDescription,optional,omitempty"` // product short description. used in category pages
-	Description      string    `json:"description,optional,omitempty"`      // category description
-	MetaTitle        string    `json:"metaTitle,optional,omitempty"`        // metatag title for SEO
-	MetaDescription  string    `json:"metaDescription,optional,omitempty"`  // metatag description for SEO
-	MetaKeywords     string    `json:"metaKeywords,optional,omitempty"`     // metatag keywords for SEO
-	Variants         []Variant `json:"variants,optional,omitempty"`         // collection of Variant objects
-	DefaultImage     Asset     `json:"defaultImage,optional,omitempty"`     // default Asset object of image type
-	Images           []Asset   `json:"images,optional,omitempty"`           // array of Asset objects of image type
+	Id               int64          `json:"id"`                                  // product id
+	Slug             string         `json:"slug"`                                // product slug
+	Name             string         `json:"name"`                                // product name
+	ShortDescription string         `json:"shortDescription,optional,omitempty"` // product short description. used in category pages
+	Description      string         `json:"description,optional,omitempty"`      // category description
+	MetaTitle        string         `json:"metaTitle,optional,omitempty"`        // metatag title for SEO
+	MetaDescription  string         `json:"metaDescription,optional,omitempty"`  // metatag description for SEO
+	MetaKeywords     string         `json:"metaKeywords,optional,omitempty"`     // metatag keywords for SEO
+	Variants         []Variant      `json:"variants,optional,omitempty"`         // collection of Variant objects
+	DefaultImage     Asset          `json:"defaultImage,optional,omitempty"`     // default Asset object of image type
+	Images           []Asset        `json:"images,optional,omitempty"`           // array of Asset objects of image type
+	Categories       []CategoryPair `json:"categories,optional,omitempty"`       // array of Asset objects of image type
 }
 
 type Variant {
@@ -46,12 +52,12 @@ type Variant {
 }
 
 type Price {
-	Id                     int64   `json:"id,optional,omitempty"`                     // price id
-	Amount                 float64 `json:"amount"`                                    // price amount
-	DisplayAmount          string  `json:"displayAmount"`                             // price display amount
-	CompareAtAmount        float64 `json:"compareAtAmount,optional,omitempty"`        // price compare amount
-	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,optional,omitempty"` // price display compare amount
-	Currency               string  `json:"currency,optional,omitempty"`               // price currency. example: USD, CAN, etc.
+	Id                   int64   `json:"id,optional,omitempty"`                   // price id
+	SalePrice            float64 `json:"salePrice"`                               // sale price
+	FormattedSalePrice   string  `json:"formattedSalePrice"`                      // formatted sale price
+	RetailPrice          float64 `json:"retailPrice,optional,omitempty"`          // retail price
+	FormattedRetailPrice string  `json:"formattedRetailPrice,optional,omitempty"` // formatted retail price
+	Currency             string  `json:"currency,optional,omitempty"`             // currency. example: USD, CAN, etc.
 }
 
 type Asset {
@@ -131,6 +137,7 @@ type GetProductsByCategoryIdRequest {
 	CategoryId  int64  `path:"categoryId"`
 	CurrentPage int64  `path:"currentPage"`
 	PageSize    int64  `path:"pageSize"`
+	Filter      string `form:"filter,optional,omitempty"`
 	SortOn      string `form:"sortOn,optional,omitempty"`
 }
 

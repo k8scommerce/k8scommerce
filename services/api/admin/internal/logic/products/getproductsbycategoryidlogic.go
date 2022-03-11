@@ -28,11 +28,11 @@ func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceCon
 
 func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(req types.GetProductsByCategoryIdRequest) (resp *types.GetProductsByCategoryIdResponse, err error) {
 	response, err := l.svcCtx.CatalogRpc.GetProductsByCategoryId(l.ctx, &catalogclient.GetProductsByCategoryIdRequest{
+		StoreId:     l.ctx.Value(types.StoreKey).(int64),
 		CategoryId:  req.CategoryId,
 		CurrentPage: req.CurrentPage,
 		PageSize:    req.PageSize,
 		Filter:      l.ctx.Value(types.Filter).(string),
-		StoreId:     l.ctx.Value(types.StoreKey).(int64),
 	})
 	if err != nil {
 		return nil, err

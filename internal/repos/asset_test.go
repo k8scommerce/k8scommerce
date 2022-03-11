@@ -4,11 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"k8scommerce/internal/models"
-	"k8scommerce/internal/repos"
-	"log"
-	"os"
 
-	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -16,21 +12,21 @@ import (
 var _ = Describe("Asset", func() {
 	defer GinkgoRecover()
 
-	var err error
+	// var err error
 
-	err = godotenv.Load("../../.env")
-	Expect(err).To(BeNil())
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// err = godotenv.Load("../../.env")
+	// Expect(err).To(BeNil())
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
-	getPostgresConfig := func() *repos.PostgresConfig {
-		return &repos.PostgresConfig{
-			DataSourceName: os.Getenv("POSTGRES_DSN"),
-		}
-	}
+	// getPostgresConfig := func() *repos.PostgresConfig {
+	// 	return &repos.PostgresConfig{
+	// 		DataSourceName: os.Getenv("POSTGRES_DSN"),
+	// 	}
+	// }
 
-	repo := repos.NewRepo(getPostgresConfig())
+	// repo := repos.NewRepo(getPostgresConfig())
 
 	asset := &models.Asset{
 		StoreID:     1,
@@ -38,11 +34,11 @@ var _ = Describe("Asset", func() {
 		VariantID:   1,
 		Name:        "Pizigani_1367_Chart_10MB.jpeg",
 		DisplayName: sql.NullString{String: "Pizigani 1367 Chart 10MB", Valid: true},
-		Kind:        "image",
+		Kind:        1,
 		ContentType: "image/jpeg",
 		URL:         "https://k8scommerce.s3.us-west-1.amazonaws.com/uploads/d/b/e/Pizigani_1367_Chart_10MB.jpeg",
 		SortOrder:   sql.NullInt64{Int64: 100, Valid: true},
-		Sizes:       []byte("[]"),
+		Sizes:       []byte("{}"),
 	}
 
 	Describe("Create", func() {
@@ -53,12 +49,12 @@ var _ = Describe("Asset", func() {
 		})
 
 		It("should create an asset using", func() {
-			err = repo.Asset().Create(asset)
+			err := repo.Asset().Create(asset)
 			Expect(err).To(BeNil())
 		})
 	})
 
-	FDescribe("GetById", func() {
+	Describe("GetById", func() {
 		BeforeEach(func() {
 			_, err := repo.GetRawDB().Exec("delete from asset where name = $1", asset.Name)
 			Expect(err).To(BeNil())
