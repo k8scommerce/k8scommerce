@@ -35,7 +35,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/categories/:storeId/:currentPage/:pageSize",
+					Path:    "/v1/categories",
 					Handler: categories.GetAllCategoriesHandler(serverCtx),
 				},
 				{

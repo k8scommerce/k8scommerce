@@ -262,11 +262,13 @@ func (a *archetype) addArchetypePropertyRelation(archetypeID, propertyID int64) 
 }
 
 func (a *archetype) addArchetypeCategoryRelation(archetypeID, categoryID int64) {
-	record := &models.ArchetypeCategory{
-		ArchetypeID: archetypeID,
-		CategoryID:  categoryID,
-	}
-	if err := record.Insert(context.Background(), db); err != nil {
-		panic(err)
+	if archetypeID != 0 && categoryID != 0 {
+		record := &models.ArchetypeCategory{
+			ArchetypeID: archetypeID,
+			CategoryID:  categoryID,
+		}
+		if err := record.Insert(context.Background(), db); err != nil {
+			panic(err)
+		}
 	}
 }

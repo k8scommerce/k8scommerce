@@ -10,6 +10,7 @@ import (
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/storage/asset"
 	storageconfig "k8scommerce/internal/storage/config"
+	"k8scommerce/internal/workerpool"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -20,6 +21,16 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
+
+var (
+	totalWorkers int = 7
+	wp           workerpool.WorkerPool
+)
+
+func init() {
+	wp = workerpool.NewWorkerPool(totalWorkers)
+	wp.StartWorkers()
+}
 
 func createImages() {
 
@@ -51,9 +62,26 @@ func createImages() {
 		return
 	}
 
+	var totalTasks int64
+	row := repo.GetRawDB().QueryRow("select count(*) as totalTasks from variant")
+	row.Scan(&totalTasks)
+	doneC := make(chan bool, totalTasks)
+	fmt.Println("totalTasks", totalTasks)
+
 	for _, prod := range res.Results {
-		for i := 0; i < 3; i++ {
-			go func(variant models.Variant) {
+		prod := prod // https://stackoverflow.com/a/10117080
+
+		wp.AddTask(func() {
+			pRes, err := repo.Product().GetProductById(prod.Product.ID)
+			if err != nil {
+				fmt.Println("ERROR", err.Error())
+				doneC <- true
+				return
+			}
+
+			sortOrder := int64(1)
+			for _, variant := range pRes.Variants {
+				variant := variant
 				tx, err := repo.Begin()
 				if err != nil {
 					fmt.Printf("failed to start a transaction: %s", err.Error())
@@ -74,21 +102,23 @@ func createImages() {
 
 				if err := bufferAssetFile(image.Name(), file); err != nil {
 					fmt.Println(err.Error())
-					return
+					// return
 				}
 
 				modelAsset := &models.Asset{
 					StoreID:     storeId,
 					ProductID:   variant.ProductID,
 					VariantID:   variant.ID,
-					Kind:        file.Kind.String(), // asset kind in database is not zerobased
+					Kind:        file.Kind.Int(),
 					Name:        file.BaseName,
 					DisplayName: sql.NullString{Valid: true, String: file.BaseName},
 					ContentType: file.ContentType,
 					URL:         file.URL,
-					SortOrder:   sql.NullInt64{Valid: true, Int64: 100},
-					Sizes:       []byte("[]"),
+					SortOrder:   sql.NullInt64{Valid: true, Int64: sortOrder},
+					Sizes:       []byte("{}"),
 				}
+
+				sortOrder++
 
 				// save the asset to the database
 				if err := repo.Asset().CreateTx(modelAsset, tx); err != nil {
@@ -115,10 +145,20 @@ func createImages() {
 				if err := os.Remove(image.Name()); err != nil {
 					fmt.Printf("could not remove image: %s", image.Name())
 				}
-			}(prod.Variant)
-			time.Sleep(250 * time.Millisecond)
+
+				time.Sleep(100 * time.Microsecond)
+				doneC <- true
+			}
+		})
+
+	}
+
+	for i := int64(1); i <= totalTasks; i++ {
+		if <-doneC {
+			fmt.Printf("finished processing %d images", i)
 		}
 	}
+
 }
 
 func getContentType(chunk []byte) string {

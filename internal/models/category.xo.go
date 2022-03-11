@@ -312,6 +312,40 @@ func CategoryByRgt(ctx context.Context, db DB, rgt sql.NullInt64) ([]*Category, 
 	return res, nil
 }
 
+// CategoryByStoreID retrieves a row from 'public.category' as a Category.
+//
+// Generated from index 'idx_category_store_id'.
+func CategoryByStoreID(ctx context.Context, db DB, storeID int64) ([]*Category, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, parent_id, store_id, slug, name, description, meta_title, meta_description, meta_keywords, hide_from_nav, lft, rgt, depth, sort_order ` +
+		`FROM public.category ` +
+		`WHERE store_id = $1`
+	// run
+	logf(sqlstr, storeID)
+	rows, err := db.QueryContext(ctx, sqlstr, storeID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Category
+	for rows.Next() {
+		c := Category{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&c.ID, &c.ParentID, &c.StoreID, &c.Slug, &c.Name, &c.Description, &c.MetaTitle, &c.MetaDescription, &c.MetaKeywords, &c.HideFromNav, &c.Lft, &c.Rgt, &c.Depth, &c.SortOrder); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &c)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
 // Category returns the Category associated with the Category's (ParentID).
 //
 // Generated from foreign key 'category_parent_id_fkey'.

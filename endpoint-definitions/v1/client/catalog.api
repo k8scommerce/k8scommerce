@@ -43,12 +43,12 @@ type Variant {
 }
 
 type Price {
-	Id                     int64   `json:"id,optional"` // price id
-	Amount                 float64 `json:"amount,optional"` // price amount
-	DisplayAmount          string  `json:"displayAmount,optional"` // price display amount
-	CompareAtAmount        float64 `json:"compareAtAmount,optional"` // price compare amount
-	DisplayCompareAtAmount string  `json:"displayCompareAtAmount,optional"` // price display compare amount
-	Currency               string  `json:"currency,optional"` // price currency. example: USD, CAN, etc.
+	Id                   int64   `json:"id,optional,omitempty"`                   // price id
+	SalePrice            float64 `json:"salePrice"`                               // sale price
+	FormattedSalePrice   string  `json:"formattedSalePrice"`                      // formatted sale price
+	RetailPrice          float64 `json:"retailPrice,optional,omitempty"`          // retail price
+	FormattedRetailPrice string  `json:"formattedRetailPrice,optional,omitempty"` // formatted retail price
+	Currency             string  `json:"currency,optional,omitempty"`             // currency. example: USD, CAN, etc.
 }
 
 //

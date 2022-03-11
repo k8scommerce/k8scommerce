@@ -12,7 +12,7 @@ const (
 )
 
 var (
-	Kind_name = map[int32]Kind{
+	Kind_name = map[int]Kind{
 		0: Unknown,
 		1: Image,
 		2: Document,
@@ -20,7 +20,7 @@ var (
 		4: Video,
 		5: Archive,
 	}
-	Kind_value = map[Kind]int32{
+	Kind_value = map[Kind]int{
 		Unknown:  0,
 		Image:    1,
 		Document: 2,
@@ -35,11 +35,9 @@ func (k *Kind) String() string {
 }
 
 func (k *Kind) Int32() int32 {
-	return Kind_value[*k]
+	return int32(Kind_value[*k])
 }
 
-// kind, err := l.getAssetKind(req.GetAsset().GetKind())
-// if err != nil {
-// 	return err
-// }
-// file.Kind = kind
+func (k *Kind) Int() int {
+	return Kind_value[*k]
+}

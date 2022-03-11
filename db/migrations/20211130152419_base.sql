@@ -94,6 +94,19 @@ CREATE EXTENSION pgcrypto;
 -- +goose StatementEnd
 --
 --
+--
+-- +goose StatementBegin
+CREATE OR REPLACE FUNCTION random_between(low INT ,high INT) 
+   RETURNS INT AS
+$$
+BEGIN
+   RETURN floor(random()* (high-low + 1) + low);
+END;
+$$ language 'plpgsql' STRICT;
+-- +goose StatementEnd
+--
+--
+--
 -- +goose Down
 DROP EXTENSION IF EXISTS citext;
 DROP EXTENSION IF EXISTS pgcrypto;
@@ -101,3 +114,4 @@ DROP FUNCTION IF EXISTS empty;
 DROP FUNCTION IF EXISTS get_max_bigint_value;
 DROP FUNCTION IF EXISTS get_min_bigint_value;
 DROP TYPE IF EXISTS address_kind;
+DROP FUNCTION IF EXISTS random_between;

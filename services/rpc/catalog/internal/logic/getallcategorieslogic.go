@@ -45,7 +45,6 @@ func NewGetAllCategoriesLogic(ctx context.Context, svcCtx *svc.ServiceContext, u
 
 //  categories
 func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesRequest) (*catalog.GetAllCategoriesResponse, error) {
-
 	// caching goes logic here
 	if entryGetAllCategoriesLogic == nil {
 		l.mu.Lock()
@@ -56,7 +55,6 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 	}
 
 	entryGetAllCategoriesLogic.once.Do(func() {
-		fmt.Println(`l.entryGetAllCategoriesLogic.Do`)
 
 		// register the galaxy one time
 		entryGetAllCategoriesLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllCategories", l.universe, galaxycache.GetterFunc(
@@ -64,9 +62,6 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 
 				found, err := l.svcCtx.Repo.Category().GetAllCategories(
 					galaxyctx.GetStoreId(ctx),
-					galaxyctx.GetCurrentPage(ctx),
-					galaxyctx.GetPageSize(ctx),
-					galaxyctx.GetSortOn(ctx),
 				)
 				if err != nil {
 					logx.Infof("error: %s", err)
@@ -75,13 +70,7 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 
 				cats := []*catalog.Category{}
 
-				var totalRecords int64 = 0
-				var totalPages int64 = 0
-
 				if found != nil {
-					totalRecords = found.PagingStats.TotalRecords
-					totalPages = found.PagingStats.TotalPages
-
 					for _, f := range found.Categories {
 						cat := catalog.Category{}
 						types.ConvertModelCategoryToProtoCategory(&f, &cat)
@@ -91,9 +80,7 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 
 				// the response struct
 				item := &catalog.GetAllCategoriesResponse{
-					Categories:   cats,
-					TotalRecords: totalRecords,
-					TotalPages:   totalPages,
+					Categories: cats,
 				}
 
 				out, err := json.Marshal(item)
@@ -109,21 +96,14 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 	codec := &galaxycache.ByteCodec{}
 
 	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
-	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
-	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
-	l.ctx = galaxyctx.SetSortOn(l.ctx, in.SortOn)
 
-	key := fmt.Sprintf("%d|%d|%d|%s", in.StoreId, in.CurrentPage, in.PageSize, in.SortOn)
+	key := fmt.Sprintf("categories-getall-%d", in.StoreId)
 	if err := entryGetAllCategoriesLogic.galaxy.Get(l.ctx, key, codec); err != nil {
-		// res.StatusCode = http.StatusNoContent
-		// res.StatusMessage = "ERROR 2: " + err.Error()
 		return res, err
 	}
 
 	b, err := codec.MarshalBinary()
 	if err != nil {
-		// res.StatusCode = http.StatusInternalServerError
-		// res.StatusMessage = "ERROR 2: " + err.Error()
 		return res, err
 	}
 

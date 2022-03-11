@@ -3,7 +3,6 @@ package categories
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
@@ -26,20 +25,13 @@ func NewGetAllCategoriesLogic(ctx context.Context, svcCtx *svc.ServiceContext) G
 	}
 }
 
-func (l *GetAllCategoriesLogic) GetAllCategories(req types.GetAllCategoriesRequest) (resp *types.GetAllCategoriesResponse, err error) {
-	resp = &types.GetAllCategoriesResponse{}
+func (l *GetAllCategoriesLogic) GetAllCategories() (resp *types.GetAllCategoriesResponse, err error) {
 	response, err := l.svcCtx.CatalogRpc.GetAllCategories(l.ctx, &catalogclient.GetAllCategoriesRequest{
-		CurrentPage: req.CurrentPage,
-		PageSize:    req.PageSize,
-		SortOn:      req.SortOn,
-		StoreId:     l.ctx.Value(types.StoreKey).(int64),
+		StoreId: l.ctx.Value(types.StoreKey).(int64),
 	})
-	fmt.Println(response)
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(response)
 
 	// convert from one type to another
 	// the structs are identical

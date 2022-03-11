@@ -15,7 +15,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/asset/{productId}/{variantId}": {
+    "/v1/asset/{productId}/{variantId}/{kind}": {
       "post": {
         "summary": "Upload Asset",
         "description": "uploads an image, document, audio, video or archive asset",
@@ -44,7 +44,14 @@
             "type": "string"
           },
           {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
+            "description": ",, Assets,,",
             "in": "body",
             "required": true,
             "schema": {
@@ -52,12 +59,13 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "assets"
         ]
       }
     },
-    "/v1/categories/{storeId}/{currentPage}/{pageSize}": {
+    "/v1/categories": {
       "get": {
         "summary": "Get All Categories",
         "description": "returns all categories belonging to a store",
@@ -70,35 +78,7 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "storeId",
-            "description": "store id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "currentPage",
-            "description": "current page number",
-            "in": "path",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "name": "pageSize",
-            "description": "number of records per page",
-            "in": "path",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "name": "sortOn",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -120,6 +100,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": " create category",
             "in": "body",
             "required": true,
             "schema": {
@@ -127,6 +108,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -154,6 +136,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -181,6 +164,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -207,6 +191,7 @@
           },
           {
             "name": "body",
+            "description": " delete category",
             "in": "body",
             "required": true,
             "schema": {
@@ -214,6 +199,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -240,6 +226,7 @@
           },
           {
             "name": "body",
+            "description": " update category",
             "in": "body",
             "required": true,
             "schema": {
@@ -247,6 +234,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "categories"
         ]
@@ -268,6 +256,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": " create product",
             "in": "body",
             "required": true,
             "schema": {
@@ -275,6 +264,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -302,6 +292,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -329,6 +320,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -356,6 +348,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -382,6 +375,7 @@
           },
           {
             "name": "body",
+            "description": " delete product",
             "in": "body",
             "required": true,
             "schema": {
@@ -389,6 +383,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -415,6 +410,7 @@
           },
           {
             "name": "body",
+            "description": " update product",
             "in": "body",
             "required": true,
             "schema": {
@@ -422,6 +418,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -463,12 +460,19 @@
             "type": "integer"
           },
           {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "sortOn",
             "in": "query",
             "required": false,
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -515,6 +519,7 @@
             "type": "string"
           }
         ],
+        "requestBody": {},
         "tags": [
           "products"
         ]
@@ -527,30 +532,51 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " asset id"
         },
         "productId": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " product id"
         },
         "variantId": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " variant id"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": " asset name"
+        },
+        "displayName": {
+          "type": "string",
+          "description": " display name"
         },
         "url": {
-          "type": "string"
+          "type": "string",
+          "description": " full, public access url"
         },
         "kind": {
-          "type": "string"
+          "type": "integer",
+          "format": "int32",
+          "description": " asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)"
+        },
+        "contentType": {
+          "type": "string",
+          "description": " content type (mime type)"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int64",
+          "description": " sort order"
+        },
+        "sizes": {
+          "type": "object",
+          "description": " map[tag:string]url:string"
         }
       },
-      "title": "Asset",
-      "required": [
-        "kind"
-      ]
+      "title": "Asset"
     },
     "Category": {
       "type": "object",
@@ -603,6 +629,25 @@
       "title": "Category",
       "required": [
         "id",
+        "parentId",
+        "slug",
+        "name"
+      ]
+    },
+    "CategoryPair": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "description": " slug name of the category"
+        },
+        "name": {
+          "type": "string",
+          "description": " name of category"
+        }
+      },
+      "title": "CategoryPair",
+      "required": [
         "slug",
         "name"
       ]
@@ -665,27 +710,6 @@
       "type": "object",
       "title": "DeleteProductResponse"
     },
-    "GetAllCategoriesRequest": {
-      "type": "object",
-      "properties": {
-        "currentPage": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "pageSize": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "sortOn": {
-          "type": "string"
-        }
-      },
-      "title": "GetAllCategoriesRequest",
-      "required": [
-        "currentPage",
-        "pageSize"
-      ]
-    },
     "GetAllCategoriesResponse": {
       "type": "object",
       "properties": {
@@ -695,21 +719,11 @@
             "$ref": "#/definitions/Category"
           },
           "description": " a collection of Category"
-        },
-        "totalRecords": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "totalPages": {
-          "type": "integer",
-          "format": "int64"
         }
       },
       "title": "GetAllCategoriesResponse",
       "required": [
-        "categories",
-        "totalRecords",
-        "totalPages"
+        "categories"
       ]
     },
     "GetAllProductsRequest": {
@@ -840,6 +854,9 @@
           "type": "integer",
           "format": "int64"
         },
+        "filter": {
+          "type": "string"
+        },
         "sortOn": {
           "type": "string"
         }
@@ -906,33 +923,33 @@
           "format": "int64",
           "description": " price id"
         },
-        "amount": {
+        "salePrice": {
           "type": "number",
           "format": "double",
-          "description": " price amount"
+          "description": " sale price"
         },
-        "displayAmount": {
+        "formattedSalePrice": {
           "type": "string",
-          "description": " price display amount"
+          "description": " formatted sale price"
         },
-        "compareAtAmount": {
+        "retailPrice": {
           "type": "number",
           "format": "double",
-          "description": " price compare amount"
+          "description": " retail price"
         },
-        "displayCompareAtAmount": {
+        "formattedRetailPrice": {
           "type": "string",
-          "description": " price display compare amount"
+          "description": " formatted retail price"
         },
         "currency": {
           "type": "string",
-          "description": " price currency. example: USD, CAN, etc."
+          "description": " currency. example: USD, CAN, etc."
         }
       },
       "title": "Price",
       "required": [
-        "amount",
-        "displayAmount"
+        "salePrice",
+        "formattedSalePrice"
       ]
     },
     "Product": {
@@ -977,6 +994,24 @@
             "$ref": "#/definitions/Variant"
           },
           "description": " collection of Variant objects"
+        },
+        "defaultImage": {
+          "$ref": "#/definitions/Asset",
+          "description": " default Asset object of image type"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Asset"
+          },
+          "description": " array of Asset objects of image type"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CategoryPair"
+          },
+          "description": " array of Asset objects of image type"
         }
       },
       "title": "Product",
@@ -1001,8 +1036,7 @@
       },
       "title": "ResponseStatus",
       "required": [
-        "statusCode",
-        "statusMessage"
+        "statusCode"
       ]
     },
     "UpdateCategoryRequest": {
@@ -1049,12 +1083,16 @@
         "variantId": {
           "type": "integer",
           "format": "int64"
+        },
+        "kind": {
+          "type": "string"
         }
       },
       "title": "UploadAssetRequest",
       "required": [
         "productId",
-        "variantId"
+        "variantId",
+        "kind"
       ]
     },
     "Variant": {

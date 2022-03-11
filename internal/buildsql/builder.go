@@ -148,7 +148,8 @@ func (b *QueryBuilder) ParseParamString(paramString string) error {
 			parts := strings.Split(filter, Delimiter)
 
 			if len(parts) < 3 {
-				return fmt.Errorf("filter: %s has too few params", filter)
+				return nil
+				// return fmt.Errorf("filter: %s has too few params", filter)
 			}
 
 			// we don't care if the parts len is longer,

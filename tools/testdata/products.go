@@ -28,6 +28,18 @@ func createProducts() {
 		p.addProductCategories(product)
 		p.createVariants(product)
 	}
+
+	repo.GetRawDB().Exec(`
+		with cte as (
+			select * from product
+			order by random()
+			limit 9
+		)
+		update product p 
+		set featured = true
+		from cte
+		where p.id = cte.id`,
+	)
 }
 
 func validateUniqueName(name string) string {
@@ -74,7 +86,7 @@ func (a *prod) newProduct() *models.Product {
 
 func (a *prod) pick(m map[string]int64) string {
 	k := rand.Intn(len(m))
-	for x, _ := range m {
+	for x := range m {
 		if k == 0 {
 			return x
 		}
@@ -100,7 +112,7 @@ func (a *prod) createVariants(product *models.Product) {
 	// reset the selectedOptionsMap
 	a.selectedOptionsMap = make(map[string]bool)
 
-	// start with geting 1 or more random options
+	// start with getting 1 or more random options
 	// used to generate the skus
 	cartesianProductGroups := [][]string{}
 	// optionNames := []string{}
@@ -116,8 +128,8 @@ func (a *prod) createVariants(product *models.Product) {
 			start = start - (totalItems / 2)
 		}
 		end := utils.RandInt(start+1, totalItems)
-		if end-start >= 8 {
-			end = start + 8
+		if end-start >= 4 {
+			end = start + 4
 		}
 
 		itemSelection := items[start:end]
@@ -163,25 +175,6 @@ func (a *prod) addVariant(productID int64, isDefault bool, sku string, sortOrder
 
 	a.addVariantPriceRelation(record)
 }
-
-// func (a *prod) images(productId, variantId int64) {
-// 	f := ifaker.New()
-// 	image := f.LoremFlickr().Image(1000, 1000, []string{}, "", false)
-
-// 	file, err := asset.MustNewFile(fileName, l.svcCtx.Config.UploadConfig)
-// 	if err != nil {
-// 		return nil, status.Errorf(codes.Internal, "file creation error: %s", err.Error())
-// 	}
-
-// 	file.Kind = asset.Kind(in.Kind)
-// 	f := models.Asset{}
-
-// 	fmt.Println(image.Name())
-// 	if err := assset.Insert(context.Background(), db); err != nil {
-// 		fmt.Printf("PRODUCT: %#v\n\n", product)
-// 		panic(err)
-// 	}
-// }
 
 func (a *prod) validatePropertyIdx(idx string) string {
 	if _, ok := a.selectedPropertiesMap[idx]; ok {
@@ -250,10 +243,10 @@ func (a *prod) validateCategoryIdx(idx string) string {
 }
 
 func (a *prod) addProductCategories(product *models.Product) {
-	randCategoryCount := utils.RandInt(1, len(categories))
+	// randCategoryCount := utils.RandInt(1, len(categories))
 	// reset the selectedCategoriesMap
 	a.selectedCategoriesMap = make(map[string]bool)
-	for i := 0; i < int(randCategoryCount)/2; i++ {
+	for i := 0; i < len(categories); i++ {
 		selectedIdx := a.validateCategoryIdx(a.pick(categories))
 		categoryID := categories[selectedIdx]
 		if categoryID > 0 {

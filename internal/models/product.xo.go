@@ -135,6 +135,40 @@ func (p *Product) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
+// ProductByStoreID retrieves a row from 'public.product' as a Product.
+//
+// Generated from index 'idx_product_store_id'.
+func ProductByStoreID(ctx context.Context, db DB, storeID int64) ([]*Product, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, slug, name, short_description, description, meta_title, meta_description, meta_keywords, promotionable, featured, available_on, discontinue_on ` +
+		`FROM public.product ` +
+		`WHERE store_id = $1`
+	// run
+	logf(sqlstr, storeID)
+	rows, err := db.QueryContext(ctx, sqlstr, storeID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Product
+	for rows.Next() {
+		p := Product{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&p.ID, &p.StoreID, &p.Slug, &p.Name, &p.ShortDescription, &p.Description, &p.MetaTitle, &p.MetaDescription, &p.MetaKeywords, &p.Promotionable, &p.Featured, &p.AvailableOn, &p.DiscontinueOn); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &p)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
 // ProductByID retrieves a row from 'public.product' as a Product.
 //
 // Generated from index 'product_pkey'.

@@ -9,12 +9,11 @@ import (
 
 // Price represents a row from 'public.price'.
 type Price struct {
-	ID              int64          `json:"id" db:"id"`                               // id
-	VariantID       int64          `json:"variant_id" db:"variant_id"`               // variant_id
-	Amount          int64          `json:"amount" db:"amount"`                       // amount
-	CompareAtAmount sql.NullInt64  `json:"compare_at_amount" db:"compare_at_amount"` // compare_at_amount
-	Currency        sql.NullString `json:"currency" db:"currency"`                   // currency
-	UserRoleID      sql.NullInt64  `json:"user_role_id" db:"user_role_id"`           // user_role_id
+	ID          int64          `json:"id" db:"id"`                     // id
+	VariantID   int64          `json:"variant_id" db:"variant_id"`     // variant_id
+	SalePrice   int64          `json:"sale_price" db:"sale_price"`     // sale_price
+	RetailPrice sql.NullInt64  `json:"retail_price" db:"retail_price"` // retail_price
+	Currency    sql.NullString `json:"currency" db:"currency"`         // currency
 	// xo fields
 	_exists, _deleted bool
 }
@@ -40,13 +39,13 @@ func (p *Price) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.price (` +
-		`variant_id, amount, compare_at_amount, currency, user_role_id` +
+		`variant_id, sale_price, retail_price, currency` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5` +
+		`$1, $2, $3, $4` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, p.VariantID, p.Amount, p.CompareAtAmount, p.Currency, p.UserRoleID)
-	if err := db.QueryRowContext(ctx, sqlstr, p.VariantID, p.Amount, p.CompareAtAmount, p.Currency, p.UserRoleID).Scan(&p.ID); err != nil {
+	logf(sqlstr, p.VariantID, p.SalePrice, p.RetailPrice, p.Currency)
+	if err := db.QueryRowContext(ctx, sqlstr, p.VariantID, p.SalePrice, p.RetailPrice, p.Currency).Scan(&p.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -64,11 +63,11 @@ func (p *Price) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.price SET ` +
-		`variant_id = $1, amount = $2, compare_at_amount = $3, currency = $4, user_role_id = $5 ` +
-		`WHERE id = $6`
+		`variant_id = $1, sale_price = $2, retail_price = $3, currency = $4 ` +
+		`WHERE id = $5`
 	// run
-	logf(sqlstr, p.VariantID, p.Amount, p.CompareAtAmount, p.Currency, p.UserRoleID, p.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, p.VariantID, p.Amount, p.CompareAtAmount, p.Currency, p.UserRoleID, p.ID); err != nil {
+	logf(sqlstr, p.VariantID, p.SalePrice, p.RetailPrice, p.Currency, p.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, p.VariantID, p.SalePrice, p.RetailPrice, p.Currency, p.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -90,16 +89,16 @@ func (p *Price) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.price (` +
-		`id, variant_id, amount, compare_at_amount, currency, user_role_id` +
+		`id, variant_id, sale_price, retail_price, currency` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6` +
+		`$1, $2, $3, $4, $5` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`variant_id = EXCLUDED.variant_id, amount = EXCLUDED.amount, compare_at_amount = EXCLUDED.compare_at_amount, currency = EXCLUDED.currency, user_role_id = EXCLUDED.user_role_id `
+		`variant_id = EXCLUDED.variant_id, sale_price = EXCLUDED.sale_price, retail_price = EXCLUDED.retail_price, currency = EXCLUDED.currency `
 	// run
-	logf(sqlstr, p.ID, p.VariantID, p.Amount, p.CompareAtAmount, p.Currency, p.UserRoleID)
-	if _, err := db.ExecContext(ctx, sqlstr, p.ID, p.VariantID, p.Amount, p.CompareAtAmount, p.Currency, p.UserRoleID); err != nil {
+	logf(sqlstr, p.ID, p.VariantID, p.SalePrice, p.RetailPrice, p.Currency)
+	if _, err := db.ExecContext(ctx, sqlstr, p.ID, p.VariantID, p.SalePrice, p.RetailPrice, p.Currency); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -128,13 +127,47 @@ func (p *Price) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
+// PriceByVariantID retrieves a row from 'public.price' as a Price.
+//
+// Generated from index 'idx_price_variant_id'.
+func PriceByVariantID(ctx context.Context, db DB, variantID int64) ([]*Price, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, variant_id, sale_price, retail_price, currency ` +
+		`FROM public.price ` +
+		`WHERE variant_id = $1`
+	// run
+	logf(sqlstr, variantID)
+	rows, err := db.QueryContext(ctx, sqlstr, variantID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Price
+	for rows.Next() {
+		p := Price{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&p.ID, &p.VariantID, &p.SalePrice, &p.RetailPrice, &p.Currency); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &p)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
 // PriceByID retrieves a row from 'public.price' as a Price.
 //
 // Generated from index 'price_pkey'.
 func PriceByID(ctx context.Context, db DB, id int64) (*Price, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, variant_id, amount, compare_at_amount, currency, user_role_id ` +
+		`id, variant_id, sale_price, retail_price, currency ` +
 		`FROM public.price ` +
 		`WHERE id = $1`
 	// run
@@ -142,7 +175,7 @@ func PriceByID(ctx context.Context, db DB, id int64) (*Price, error) {
 	p := Price{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&p.ID, &p.VariantID, &p.Amount, &p.CompareAtAmount, &p.Currency, &p.UserRoleID); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&p.ID, &p.VariantID, &p.SalePrice, &p.RetailPrice, &p.Currency); err != nil {
 		return nil, logerror(err)
 	}
 	return &p, nil

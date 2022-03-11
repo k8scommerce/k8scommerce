@@ -100,13 +100,13 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				StoreID:     storeId,
 				ProductID:   productId,
 				VariantID:   variantId,
-				Kind:        file.Kind.String(), // asset kind in database is not zerobased
+				Kind:        file.Kind.Int(),
 				Name:        file.BaseName,
 				DisplayName: sql.NullString{Valid: true, String: file.BaseName},
 				ContentType: file.ContentType,
 				URL:         file.URL,
 				SortOrder:   sql.NullInt64{Valid: true, Int64: 100},
-				Sizes:       []byte("[]"),
+				Sizes:       []byte("{}"),
 			}
 
 			// save the asset to the database
@@ -141,7 +141,7 @@ func (l *UploadAssetLogic) UploadAsset(stream catalog.CatalogClient_UploadAssetS
 				Name:        modelAsset.Name,
 				Url:         modelAsset.URL,
 				ContentType: modelAsset.ContentType,
-				SortOrder:   int32(modelAsset.SortOrder.Int64),
+				SortOrder:   modelAsset.SortOrder.Int64,
 			})
 		}
 		if err != nil {

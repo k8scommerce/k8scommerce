@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
+	rand.Seed(time.Now().UnixNano())
 }
 
 func RandInt(min int, max int) int {
@@ -14,6 +14,5 @@ func RandInt(min int, max int) int {
 }
 
 func RandFloat(min, max float64) float64 {
-	rand.Seed(time.Now().UnixNano())
 	return min + rand.Float64()*(max-min)
 }

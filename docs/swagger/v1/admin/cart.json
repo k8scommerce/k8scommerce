@@ -37,6 +37,7 @@
             "type": "integer"
           }
         ],
+        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -63,6 +64,7 @@
           },
           {
             "name": "body",
+            "description": " clear cart",
             "in": "body",
             "required": true,
             "schema": {
@@ -70,6 +72,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -96,6 +99,7 @@
           },
           {
             "name": "body",
+            "description": " add item to cart",
             "in": "body",
             "required": true,
             "schema": {
@@ -103,6 +107,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -138,6 +143,7 @@
           },
           {
             "name": "body",
+            "description": " remove item",
             "in": "body",
             "required": true,
             "schema": {
@@ -145,6 +151,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -178,6 +185,7 @@
           },
           {
             "name": "body",
+            "description": " update cart item quantity",
             "in": "body",
             "required": true,
             "schema": {
@@ -185,6 +193,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -425,8 +434,7 @@
       },
       "title": "ResponseStatus",
       "required": [
-        "statusCode",
-        "statusMessage"
+        "statusCode"
       ]
     },
     "UpdateCartItemQuantityRequest": {

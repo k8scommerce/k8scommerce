@@ -53,8 +53,6 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 	}
 
 	entryGetAllProductsLogic.once.Do(func() {
-		fmt.Println(`l.entryGetAllProductsLogic.Do`)
-
 		// register the galaxy one time
 		entryGetAllProductsLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllProducts", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
@@ -81,6 +79,13 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 
 					for _, f := range found.Results {
 						prod := catalog.Product{}
+						defaultImage := []*models.Asset{}
+						defaultImage = append(defaultImage, &f.Asset)
+
+						convertedImages := types.ConvertModelAssetToProtoAsset(defaultImage)
+						if len(convertedImages) > 0 {
+							prod.DefaultImage = convertedImages[0]
+						}
 
 						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
 							f.Variant,

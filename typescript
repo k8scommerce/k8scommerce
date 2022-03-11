@@ -1,343 +1,0 @@
-Script started on Sat Jan 22 12:32:54 2022
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce]1;..e/k8scommerce[0m[27m[24m[J[01;32m➜  [36mk8scommerce[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hccd ../   c  ccd scripts[1m/[0m[0m [?1l>[?2004l
-]2;cd scripts]1;cdl[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hlll[?1l>[?2004l
-]2;ls -G -lh]1;lltotal 48
--rwxr-xr-x  1 almatuck  staff   644B Jan 18 00:14 [31mbenchmark.sh[39;49m[0m
--rwxr-xr-x  1 almatuck  staff   484B Jan 19 13:19 [31mgenapi.sh[39;49m[0m
--rwxr-xr-x  1 almatuck  staff   938B Jan 19 16:18 [31mgenrpc.sh[39;49m[0m
--rwxr-xr-x  1 almatuck  staff   3.8K Jan 19 14:44 [31mgenswagger.sh[39;49m[0m
--rwxr-xr-x  1 almatuck  staff   2.0K Jan 19 13:21 [31mgitpush.sh[39;49m[0m
--rwxr-xr-x  1 almatuck  staff   289B Jan 18 00:14 [31mkube.sh[39;49m[0m
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004h,,.ge  ,  ../gen
-[J[1;32mgenapi.sh[0m*      [J[1;32mgenrpc.sh[0m*      [J[1;32mgenswagger.sh[0m*[J[A[0m[27m[24m[24C./gen[Kswagger.sh[1m [0m[0m           api.sh[1m [0m[0m [?1l>[?2004l
-[J]2;./genapi.sh]1;./genapi.sh/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/etc/admin.yaml exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/config/config.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/admin.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/svc/servicecontext.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getallcategorieshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getcategorybyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getcategorybyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createcategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/updatecategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/deletecategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyskuhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductsbycategoryidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getallproductshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/updateproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/deleteproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createcustomerhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/customerloginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/loginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getallcategorieslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getcategorybysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getcategorybyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createcategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/updatecategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/deletecategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbyskulogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductsbycategoryidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getallproductslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/updateproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/deleteproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createcustomerlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/customerloginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/loginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/middleware/localemiddleware.go exists, ignored generation
-[32mDone.[0m
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/etc/client.yaml exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/config/config.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/client.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/svc/servicecontext.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/additemtocarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/updatecartitemquantityhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/removecartitemhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/clearcarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getallcategorieshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcategorybyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcategorybyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyskuhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductsbycategoryidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getallproductshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/createcustomerhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/customerloginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/additemtocartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/updatecartitemquantitylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/removecartitemlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/clearcartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getallcategorieslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcategorybysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcategorybyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbyskulogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductsbycategoryidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getallproductslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/createcustomerlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/customerloginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/middleware/localemiddleware.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/middleware/storekeymiddleware.go exists, ignored generation
-[32mDone.[0m
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hmmake stop      m  ../s
-[1;32mbenchmark.sh[0m*   [1;32mgenrpc.sh[0m*      [1;32mgitpush.sh[0m*                                 
-[J[1;32mgenapi.sh[0m*      [J[1;32mgenswagger.sh[0m*  [J[1;32mkube.sh[0m*        [J                            [A[A[0m[27m[24m[24C./s[K .  ../gen
-[J[J[1;32mgenapi.sh[0m*      [J[1;32mgenrpc.sh[0m*      [J[1;32mgenswagger.sh[0m*[J[A[0m[27m[24m[24C./gen[Kapi.sh[1m [0m[0m [?1l>[?2004l
-[J]2;./genapi.sh]1;./genapi.sh/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/etc/admin.yaml exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/config/config.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/admin.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/svc/servicecontext.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getallcategorieshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getcategorybyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getcategorybyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createcategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/updatecategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/deletecategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyskuhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductsbycategoryidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getallproductshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/updateproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/deleteproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createcustomerhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/customerloginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/loginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getallcategorieslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getcategorybysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getcategorybyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createcategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/updatecategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/deletecategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbyskulogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductsbycategoryidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getallproductslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/updateproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/deleteproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createcustomerlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/customerloginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/loginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/middleware/localemiddleware.go exists, ignored generation
-[32mDone.[0m
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/etc/client.yaml exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/config/config.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/client.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/svc/servicecontext.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/additemtocarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/updatecartitemquantityhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/removecartitemhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/clearcarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getallcategorieshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcategorybyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcategorybyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyskuhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductsbycategoryidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getallproductshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/createcustomerhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/customerloginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/additemtocartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/updatecartitemquantitylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/removecartitemlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/clearcartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getallcategorieslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcategorybysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcategorybyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbyskulogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductsbycategoryidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getallproductslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/createcustomerlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/customerloginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/middleware/localemiddleware.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/middleware/storekeymiddleware.go exists, ignored generation
-[32mDone.[0m
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004h[7mhttp -v get http://localhost:8888/v1/categories/1/1/100[27m[55D[27mh[27mt[27mt[27mp[27m [27m-[27mv[27m [27mg[27me[27mt[27m [27mh[27mt[27mt[27mp[27m:[27m/[27m/[27ml[27mo[27mc[27ma[27ml[27mh[27mo[27ms[27mt[27m:[27m8[27m8[27m8[27m8[27m/[27mv[27m1[27m/[27mc[27ma[27mt[27me[27mg[27mo[27mr[27mi[27me[27ms[27m/[27m1[27m/[27m1[27m/[27m1[27m0[27m0[?1l>[?2004l
-]2;http -v get http://localhost:8888/v1/categories/1/1/100]1;http[32mGET[39;49;00m [04m[36m/v1/categories/1/1/100[39;49;00m [34mHTTP[39;49;00m/[34m1.1[39;49;00m
-[36mAccept[39;49;00m: */*
-[36mAccept-Encoding[39;49;00m: gzip, deflate
-[36mConnection[39;49;00m: keep-alive
-[36mHost[39;49;00m: localhost:8888
-[36mUser-Agent[39;49;00m: HTTPie/2.6.0
-
-
-
-[34mHTTP[39;49;00m/[34m1.1[39;49;00m [34m404[39;49;00m [36mNot Found[39;49;00m
-[36mContent-Length[39;49;00m: 19
-[36mContent-Type[39;49;00m: text/plain; charset=utf-8
-[36mDate[39;49;00m: Sat, 22 Jan 2022 19:35:05 GMT
-[36mX-Content-Type-Options[39;49;00m: nosniff
-
-404 page not found
-
-
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hhttp -v get http://localhost:8888/v1/categories/1/1/100      [?2004l
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hhttp -v get http://localhost:8888/v1/categories/1/1/100      a Store-Key:yxvzrvla[K[A[15Cgo run admin.go -f etc/admin.yaml[K[1B[K[A[57C[33Dll                               [31D./genapi.sh[11Dll         [9Dcd scripts[10Dscript    exit  [?2004l[1B[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hhttp -v get http://localhost:8888/v1/categories/1/1/100      a Store-Key:yxvzrvla[K[A[15Cgo run admin.go -f etc/admin.yaml[K[1B[K[A[57C[33Dll                               [31D./genapi.sh[11Dll         [9Dcd scripts[10Dll        [8D[?2004l[1B[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004h../gen
-[J[1;32mgenapi.sh[0m*      [J[1;32mgenrpc.sh[0m*      [J[1;32mgenswagger.sh[0m*[J[A[0m[27m[24m[24C./gen[Kapi.sh[1m [0m[0m [?1l>[?2004l
-[J]2;./genapi.sh]1;./genapi.sh/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/etc/admin.yaml exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/config/config.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/admin.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/svc/servicecontext.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getallcategorieshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getcategorybyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getcategorybyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createcategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/updatecategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/deletecategoryhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyskuhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductbyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getproductsbycategoryidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/getallproductshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/updateproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/deleteproducthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/createcustomerhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/customerloginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/handler/loginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getallcategorieslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getcategorybysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getcategorybyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createcategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/updatecategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/deletecategorylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbyskulogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductbyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getproductsbycategoryidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/getallproductslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/updateproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/deleteproductlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/createcustomerlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/customerloginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/logic/loginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/admin/internal/middleware/localemiddleware.go exists, ignored generation
-[32mDone.[0m
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/etc/client.yaml exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/config/config.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/client.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/svc/servicecontext.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/additemtocarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/updatecartitemquantityhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/removecartitemhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/clearcarthandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getallcategorieshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcategorybyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getcategorybyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyskuhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyslughandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductbyidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getproductsbycategoryidhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/getallproductshandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/createcustomerhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/handler/customerloginhandler.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/additemtocartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/updatecartitemquantitylogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/removecartitemlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/clearcartlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getallcategorieslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcategorybysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getcategorybyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbyskulogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbysluglogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductbyidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getproductsbycategoryidlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/getallproductslogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/createcustomerlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/logic/customerloginlogic.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/middleware/localemiddleware.go exists, ignored generation
-/Users/almatuck/workspaces/k8scommerce/k8scommerce/services/api/client/internal/middleware/storekeymiddleware.go exists, ignored generation
-[32mDone.[0m
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004h./genapi.sh[11Dhttp -v get http://localhost:8888/v1/categories/1/1/100[55D./genapi.sh                                            [44D[11Dhttp -v get http://localhost:8888/v1/categories/1/1/100[?1l>[?2004l
-]2;http -v get http://localhost:8888/v1/categories/1/1/100]1;http[32mGET[39;49;00m [04m[36m/v1/categories/1/1/100[39;49;00m [34mHTTP[39;49;00m/[34m1.1[39;49;00m
-[36mAccept[39;49;00m: */*
-[36mAccept-Encoding[39;49;00m: gzip, deflate
-[36mConnection[39;49;00m: keep-alive
-[36mHost[39;49;00m: localhost:8888
-[36mUser-Agent[39;49;00m: HTTPie/2.6.0
-
-
-
-[34mHTTP[39;49;00m/[34m1.1[39;49;00m [34m404[39;49;00m [36mNot Found[39;49;00m
-[36mContent-Length[39;49;00m: 19
-[36mContent-Type[39;49;00m: text/plain; charset=utf-8
-[36mDate[39;49;00m: Sat, 22 Jan 2022 19:36:25 GMT
-[36mX-Content-Type-Options[39;49;00m: nosniff
-
-404 page not found
-
-
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hhttp -v get http://localhost:8888/v1/categories/1/1/100   1[?1l>[?2004l
-]2;http -v get http://localhost:8888/v1/categories/1/1/1]1;http[32mGET[39;49;00m [04m[36m/v1/categories/1/1/1[39;49;00m [34mHTTP[39;49;00m/[34m1.1[39;49;00m
-[36mAccept[39;49;00m: */*
-[36mAccept-Encoding[39;49;00m: gzip, deflate
-[36mConnection[39;49;00m: keep-alive
-[36mHost[39;49;00m: localhost:8888
-[36mUser-Agent[39;49;00m: HTTPie/2.6.0
-
-
-
-[34mHTTP[39;49;00m/[34m1.1[39;49;00m [34m404[39;49;00m [36mNot Found[39;49;00m
-[36mContent-Length[39;49;00m: 19
-[36mContent-Type[39;49;00m: text/plain; charset=utf-8
-[36mDate[39;49;00m: Sat, 22 Jan 2022 19:36:32 GMT
-[36mX-Content-Type-Options[39;49;00m: nosniff
-
-404 page not found
-
-
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hhttp -v get http://localhost:8888/v1/categories/1/1/1/100 [K[K[?1l>[?2004l
-]2;http -v get http://localhost:8888/v1/categories/1/1/1/100]1;http[32mGET[39;49;00m [04m[36m/v1/categories/1/1/1/100[39;49;00m [34mHTTP[39;49;00m/[34m1.1[39;49;00m
-[36mAccept[39;49;00m: */*
-[36mAccept-Encoding[39;49;00m: gzip, deflate
-[36mConnection[39;49;00m: keep-alive
-[36mHost[39;49;00m: localhost:8888
-[36mUser-Agent[39;49;00m: HTTPie/2.6.0
-
-
-
-[34mHTTP[39;49;00m/[34m1.1[39;49;00m [34m200[39;49;00m [36mOK[39;49;00m
-[36mAccess-Control-Allow-Credentials[39;49;00m: true
-[36mAccess-Control-Allow-Headers[39;49;00m: Content-Type, Origin, X-CSRF-Token, Authorization, AccessToken, Token, Range
-[36mAccess-Control-Allow-Methods[39;49;00m: GET, HEAD, POST, PATCH, PUT, DELETE
-[36mAccess-Control-Allow-Origin[39;49;00m: 
-[36mAccess-Control-Expose-Headers[39;49;00m: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers
-[36mAccess-Control-Max-Age[39;49;00m: 86400
-[36mContent-Length[39;49;00m: 29
-[36mContent-Type[39;49;00m: application/json
-[36mDate[39;49;00m: Sat, 22 Jan 2022 19:36:35 GMT
-[36mVary[39;49;00m: Origin
-[36mX-Trace-Id[39;49;00m: 8da141aa317a22b390af38b9ccd6e1b0
-
-{
-    [94m"status"[39;49;00m: {
-        [94m"statusCode"[39;49;00m: [34m200[39;49;00m
-    }
-}
-
-
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hhttp -v get http://localhost:8888/v1/categories/1/1/1/100 [K[A[77C[K[1B[K[A[77C/100 [K[?2004l[K
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004h[?2004l
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004h[?2004l
-[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004hhttp -v get http://localhost:8888/v1/categories/1/1/1/100 [K[A[77C[K[1B[K[A[77C/100 [K[A[24C[K[1B[K[A[24Chttp -v get http://localhost:8888/v1/categories/1/1/1/100 [K[A[77C[K[1B[K[A[77C00[55Dgo run admin.go -f etc/admin.yaml                      [22D[33D./genapi.sh                      [22D[11Dhttp -v get http://localhost:8888/v1/categories/1/1/100[55D./genapi.sh                                            [44D[11Dgo run admin.go -f etc/admin.yaml[33Dhttp -v get http://localhost:8888/v1/categories/1/1/100  /100 [K[A[24C[K[1B[K[A[24C[?2004l[1B[1m[7m%[27m[1m[0m                                                                                 ]2;almatuck@Almas-MBP:~/workspaces/k8scommerce/k8scommerce/scripts]1;..merce/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mmain[34m) [33m✗[00m [K[?1h=[?2004heexit[?1l>[?2004l
-]2;exit]1;exit
-Script done on Sat Jan 22 12:36:55 2022

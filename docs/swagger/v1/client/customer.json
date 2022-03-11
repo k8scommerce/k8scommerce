@@ -31,6 +31,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": " create customer",
             "in": "body",
             "required": true,
             "schema": {
@@ -38,6 +39,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "customers"
         ]
@@ -59,6 +61,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": ", requests \u0026 responses,, login",
             "in": "body",
             "required": true,
             "schema": {
@@ -66,6 +69,7 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "customers"
         ]
@@ -317,8 +321,7 @@
       },
       "title": "ResponseStatus",
       "required": [
-        "statusCode",
-        "statusMessage"
+        "statusCode"
       ]
     }
   },

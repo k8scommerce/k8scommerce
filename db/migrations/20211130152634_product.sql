@@ -20,6 +20,8 @@ CREATE TABLE product (
     UNIQUE (slug)
 );
 
+CREATE INDEX IF NOT EXISTS idx_product_store_id ON product USING btree (store_id);
+
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin

@@ -137,6 +137,74 @@ func (v *Variant) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
+// VariantByIsDefault retrieves a row from 'public.variant' as a Variant.
+//
+// Generated from index 'idx_variant_is_default'.
+func VariantByIsDefault(ctx context.Context, db DB, isDefault bool) ([]*Variant, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, product_id, is_default, sku, sort_order, cost_amount, cost_currency, track_inventory, tax_category_id, shipping_category_id, discontinue_on, weight, height, width, depth ` +
+		`FROM public.variant ` +
+		`WHERE is_default = $1`
+	// run
+	logf(sqlstr, isDefault)
+	rows, err := db.QueryContext(ctx, sqlstr, isDefault)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Variant
+	for rows.Next() {
+		v := Variant{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&v.ID, &v.ProductID, &v.IsDefault, &v.Sku, &v.SortOrder, &v.CostAmount, &v.CostCurrency, &v.TrackInventory, &v.TaxCategoryID, &v.ShippingCategoryID, &v.DiscontinueOn, &v.Weight, &v.Height, &v.Width, &v.Depth); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &v)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// VariantByProductID retrieves a row from 'public.variant' as a Variant.
+//
+// Generated from index 'idx_variant_product_id'.
+func VariantByProductID(ctx context.Context, db DB, productID int64) ([]*Variant, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, product_id, is_default, sku, sort_order, cost_amount, cost_currency, track_inventory, tax_category_id, shipping_category_id, discontinue_on, weight, height, width, depth ` +
+		`FROM public.variant ` +
+		`WHERE product_id = $1`
+	// run
+	logf(sqlstr, productID)
+	rows, err := db.QueryContext(ctx, sqlstr, productID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Variant
+	for rows.Next() {
+		v := Variant{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&v.ID, &v.ProductID, &v.IsDefault, &v.Sku, &v.SortOrder, &v.CostAmount, &v.CostCurrency, &v.TrackInventory, &v.TaxCategoryID, &v.ShippingCategoryID, &v.DiscontinueOn, &v.Weight, &v.Height, &v.Width, &v.Depth); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &v)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
 // VariantByID retrieves a row from 'public.variant' as a Variant.
 //
 // Generated from index 'variant_pkey'.

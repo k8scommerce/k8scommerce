@@ -90,7 +90,26 @@ warehouse\
 catalog\
 cart
 
-consumerServices=imageresizer
+
+consumerServices=imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer\
+imageresizer
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))

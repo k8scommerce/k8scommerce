@@ -20,7 +20,9 @@ CREATE TABLE category (
     FOREIGN KEY (parent_id) REFERENCES category (id) ON DELETE CASCADE,
     UNIQUE(store_id, slug)
 );
+
 CREATE INDEX IF NOT EXISTS idx_category_parent_id ON category USING btree (parent_id);
+CREATE INDEX IF NOT EXISTS idx_category_store_id ON category USING btree (store_id);
 CREATE INDEX IF NOT EXISTS idx_category_lft ON category USING btree (lft);
 CREATE INDEX IF NOT EXISTS idx_category_rgt ON category USING btree (rgt);
 CREATE INDEX IF NOT EXISTS idx_category_depth ON category USING btree (depth);

@@ -9,6 +9,15 @@ api_dir=../endpoint-definitions
 # define the gateway services
 services='admin client'
 
+
+# SED_QUOTE=''
+# determine the platform
+# platform='unknown'
+# unamestr=$(uname)
+# if [[ "$unamestr" == 'Darwin' ]]; then
+#   # SED_QUOTE=' -e'
+# fi
+
 # create a tmp directory to work in
 tmp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'k8sswagtemp')
 
@@ -26,7 +35,6 @@ for service in $services; do
   # copy the shared folder to the svc_tpl_path
   cp -R $api_dir/$version/shared/. $svc_tpl_path/shared
 
-  # generate a complete json description
   goctl api plugin -plugin goctl-swagger="swagger -filename ${out_dir}/swagger/${version}/${service}.json" -api "${api_dir}/${version}/${service}.api" -dir "${api_dir}" >/dev/null 2>&1
   service_api_file_content=$(cat "${api_dir}/${version}/${service}.api") >/dev/null 2>&1
   shared_imports=$(echo -e "$service_api_file_content" | perl -0777ne 'print "\n    ","$1" while /("shared\/.*"?)/g;') >/dev/null 2>&1
@@ -92,6 +100,8 @@ for service in $services; do
     echo "${clean_md}" >>"${doc_file}"
 
   done
+
+  # rm -rf ${api_dir}/${version}/working-${service}.api
 done
 
 # remove the tmp directory

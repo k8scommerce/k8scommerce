@@ -51,12 +51,11 @@ func ConvertModelProductToProtoProduct(
 				for _, modelPrice := range *modelPrices {
 					if modelPrice.VariantID == variant.Id {
 						variant.Price = &catalog.Price{
-							Id:              modelPrice.ID,
-							VariantId:       modelPrice.VariantID,
-							Amount:          modelPrice.Amount,
-							CompareAtAmount: modelPrice.CompareAtAmount.Int64,
-							Currency:        modelPrice.Currency.String,
-							UserRoleId:      modelPrice.UserRoleID.Int64,
+							Id:          modelPrice.ID,
+							VariantId:   modelPrice.VariantID,
+							SalePrice:   modelPrice.SalePrice,
+							RetailPrice: modelPrice.RetailPrice.Int64,
+							Currency:    modelPrice.Currency.String,
 						}
 					}
 				}

@@ -27,7 +27,7 @@ type Category interface {
 	Delete(id int64) error
 	GetCategoryBySlug(storeId int64, slug string) (*models.Category, error)
 	GetCategoryById(id int64) (*models.Category, error)
-	GetAllCategories(storeId int64, currentPage, pageSize int64, sortOn string) (res *getAllCategoriesResponse, err error)
+	GetAllCategories(storeId int64) (res *getAllCategoriesResponse, err error)
 }
 
 type categoryRepo struct {
@@ -51,27 +51,8 @@ func (m *categoryRepo) GetCategoryById(id int64) (*models.Category, error) {
 	return models.CategoryByID(m.ctx, m.db, id)
 }
 
-func (m *categoryRepo) GetAllCategories(storeId int64, currentPage, pageSize int64, sortOn string) (res *getAllCategoriesResponse, err error) {
-	orderBy, err := BuildOrderBy(sortOn, map[string]string{
-		"parent_id":  "s",
-		"sort_order": "s",
-		"rgt":        "s",
-		"lft":        "s",
-		"name":       "s",
-		"depth":      "s",
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	// set a default order by
-	if orderBy == "" {
-		orderBy = "ORDER BY c.lft ASC"
-	}
-	offset := fmt.Sprintf("OFFSET %d", (currentPage-1)*pageSize)
-	limit := fmt.Sprintf("LIMIT %d", pageSize)
-
-	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
+func (m *categoryRepo) GetAllCategories(storeId int64) (res *getAllCategoriesResponse, err error) {
+	nstmt, err := m.db.PrepareNamed(`
 			select 
 				-- catgory
 				c.id AS "category.id",
@@ -86,46 +67,32 @@ func (m *categoryRepo) GetAllCategories(storeId int64, currentPage, pageSize int
 				c.lft AS "category.lft",
 				c.rgt AS "category.rgt",
 				c.depth AS "category.depth",
-				c.sort_order AS "category.sort_order",
-				
-				-- stats
-				COUNT(c.*) OVER() AS "pagingstats.total_records"
+				c.sort_order AS "category.sort_order"
 			from category c
 			where c.store_id = :store_id
-			%s
-			%s
-			%s
-		`, orderBy, offset, limit))
+			ORDER BY c.lft ASC
+		`)
 	if err != nil {
 		return nil, fmt.Errorf("error::GetAllCategories::%s", err.Error())
 	}
 
 	var result []*struct {
-		Category    models.Category
-		PagingStats PagingStats
+		Category models.Category
 	}
 
 	err = nstmt.Select(&result,
 		map[string]interface{}{
 			"store_id": storeId,
-			"offset":   (currentPage - 1) * pageSize,
-			"limit":    pageSize,
-			"order_by": orderBy,
 		})
 
 	var categories []models.Category
 	if len(result) > 0 {
-		var stats *PagingStats
-		for i, r := range result {
-			if i == 0 {
-				stats = r.PagingStats.Calc(pageSize)
-			}
+		for _, r := range result {
 			categories = append(categories, r.Category)
 		}
 
 		out := &getAllCategoriesResponse{
-			Categories:  categories,
-			PagingStats: *stats,
+			Categories: categories,
 		}
 		return out, err
 	}

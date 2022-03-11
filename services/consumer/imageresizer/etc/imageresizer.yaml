@@ -37,14 +37,14 @@ ImageResizeConfig:
       OutputType: jpeg
       ColorSpace: srgb
 
-    - SizeTag: thumbnail-mobile
-      Width: 50
-      Height: 50
-      Quality: 80
-      PngCompression: 6
-      HasWatermark: false
-      OutputType: jpeg
-      ColorSpace: srgb
+    # - SizeTag: thumbnail-mobile
+    #   Width: 50
+    #   Height: 50
+    #   Quality: 80
+    #   PngCompression: 6
+    #   HasWatermark: false
+    #   OutputType: jpeg
+    #   ColorSpace: srgb
     ###########
     # LISTING
     ###########
@@ -57,14 +57,14 @@ ImageResizeConfig:
       OutputType: jpeg
       ColorSpace: srgb
 
-    - SizeTag: listing-mobile
-      Width: 370
-      Height: 370
-      Quality: 80
-      PngCompression: 6
-      HasWatermark: false
-      OutputType: jpeg
-      ColorSpace: srgb
+    # - SizeTag: listing-mobile
+    #   Width: 370
+    #   Height: 370
+    #   Quality: 80
+    #   PngCompression: 6
+    #   HasWatermark: false
+    #   OutputType: jpeg
+    #   ColorSpace: srgb
     ###########
     # DISPLAY
     ###########
@@ -77,14 +77,14 @@ ImageResizeConfig:
       OutputType: jpeg
       ColorSpace: srgb
 
-    - SizeTag: display-mobile
-      Width: 640
-      Height: 640
-      Quality: 80
-      PngCompression: 6
-      HasWatermark: false
-      OutputType: jpeg
-      ColorSpace: srgb
+    # - SizeTag: display-mobile
+    #   Width: 640
+    #   Height: 640
+    #   Quality: 80
+    #   PngCompression: 6
+    #   HasWatermark: false
+    #   OutputType: jpeg
+    #   ColorSpace: srgb
 
     ###########
     # ZOOM
@@ -98,14 +98,14 @@ ImageResizeConfig:
       OutputType: jpeg
       ColorSpace: srgb
 
-    - SizeTag: zoom-mobile
-      Width: 1000
-      Height: 1000
-      Quality: 80
-      PngCompression: 6
-      HasWatermark: false
-      OutputType: jpeg
-      ColorSpace: srgb
+    # - SizeTag: zoom-mobile
+    #   Width: 1000
+    #   Height: 1000
+    #   Quality: 80
+    #   PngCompression: 6
+    #   HasWatermark: false
+    #   OutputType: jpeg
+    #   ColorSpace: srgb
     ###########
     # HERO
     ###########
@@ -118,14 +118,14 @@ ImageResizeConfig:
       OutputType: jpeg
       ColorSpace: srgb
 
-    - SizeTag: hero-mobile
-      Width: 800
-      Height: 1200
-      Quality: 80
-      PngCompression: 6
-      HasWatermark: false
-      OutputType: jpeg
-      ColorSpace: srgb
+    # - SizeTag: hero-mobile
+    #   Width: 800
+    #   Height: 1200
+    #   Quality: 80
+    #   PngCompression: 6
+    #   HasWatermark: false
+    #   OutputType: jpeg
+    #   ColorSpace: srgb
 UploadConfig:
   AllowedTypes:
     Images:

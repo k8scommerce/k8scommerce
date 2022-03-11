@@ -62,7 +62,7 @@ func (m *userRepo) GetAllPermissionGroups(currentPage, pageSize int64, sortOn st
 	if orderBy == "" {
 		orderBy = "ORDER BY pg.group_name ASC"
 	}
-	offset := fmt.Sprintf("OFFSET %d", (currentPage)*pageSize)
+	offset := fmt.Sprintf("OFFSET %d", currentPage*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
 	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
@@ -89,7 +89,7 @@ func (m *userRepo) GetAllPermissionGroups(currentPage, pageSize int64, sortOn st
 
 	err = nstmt.Select(&result,
 		map[string]interface{}{
-			"offset":   (currentPage) * pageSize,
+			"offset":   currentPage * pageSize,
 			"limit":    pageSize,
 			"order_by": orderBy,
 		})
@@ -128,7 +128,7 @@ func (m *userRepo) GetAllUsers(currentPage, pageSize int64, sortOn string) (res 
 	if orderBy == "" {
 		orderBy = "ORDER BY u.last_name ASC, u.first_name ASC"
 	}
-	offset := fmt.Sprintf("OFFSET %d", (currentPage)*pageSize)
+	offset := fmt.Sprintf("OFFSET %d", currentPage*pageSize)
 	limit := fmt.Sprintf("LIMIT %d", pageSize)
 
 	nstmt, err := m.db.PrepareNamed(fmt.Sprintf(`
@@ -175,7 +175,7 @@ func (m *userRepo) GetAllUsers(currentPage, pageSize int64, sortOn string) (res 
 
 	err = nstmt.Select(&result,
 		map[string]interface{}{
-			"offset":   (currentPage - 1) * pageSize,
+			"offset":   currentPage * pageSize,
 			"limit":    pageSize,
 			"order_by": orderBy,
 		})

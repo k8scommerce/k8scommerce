@@ -23,6 +23,9 @@ CREATE TABLE variant (
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE
 );
 
+CREATE INDEX IF NOT EXISTS idx_variant_product_id ON variant USING btree (product_id);
+CREATE INDEX IF NOT EXISTS idx_variant_is_default ON variant USING btree (is_default);
+
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
