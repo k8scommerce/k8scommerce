@@ -23,7 +23,7 @@ func NewGetProductBySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext) G
 	}
 }
 
-func (l *GetProductBySlugLogic) GetProductBySlug(req types.GetProductBySlugRequest) (resp *types.GetProductResponse, err error) {
+func (l *GetProductBySlugLogic) GetProductBySlug(req types.GetProductBySlugRequest) (resp *types.Product, err error) {
 	// todo: add your logic here and delete this line
 
 	return

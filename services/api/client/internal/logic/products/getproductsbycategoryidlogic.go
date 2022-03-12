@@ -2,9 +2,12 @@ package products
 
 import (
 	"context"
+	"encoding/json"
 
+	"k8scommerce/services/api/client/helpers"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +27,34 @@ func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceCon
 }
 
 func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(req types.GetProductsByCategoryIdRequest) (resp *types.GetProductsByCategoryIdResponse, err error) {
-	// todo: add your logic here and delete this line
+	response, err := l.svcCtx.CatalogRpc.GetProductsByCategoryId(l.ctx, &catalogclient.GetProductsByCategoryIdRequest{
+		CategoryId:  req.CategoryId,
+		CurrentPage: req.CurrentPage,
+		PageSize:    req.PageSize,
+		SortOn:      req.SortOn,
+		StoreId:     l.ctx.Value(types.StoreKey).(int64),
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	// convert from one type to another
+	// the structs are identical
+	res := &types.GetProductsByCategoryIdResponse{}
+	b, err := json.Marshal(response)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, res)
+
+	// format the currency to the locale and language
+	for i := 0; i < len(res.Products); i++ {
+		for x := 0; x < len(res.Products[i].Variants); x++ {
+			if res.Products[i].Variants[x].Price != (types.Price{}) {
+				helpers.ConvertOutgoingPrices(l.ctx, &res.Products[i].Variants[x].Price)
+			}
+		}
+	}
+
+	return res, err
 }

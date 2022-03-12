@@ -1,4 +1,4 @@
-package logic
+package api
 
 import (
 	"context"
@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UpdateCartItemQuantityLogic struct {
+type PingLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewUpdateCartItemQuantityLogic(ctx context.Context, svcCtx *svc.ServiceContext) UpdateCartItemQuantityLogic {
-	return UpdateCartItemQuantityLogic{
+func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) PingLogic {
+	return PingLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *UpdateCartItemQuantityLogic) UpdateCartItemQuantity(req types.UpdateCartItemQuantityRequest) (resp *types.UpdateCartItemQuantityResponse, err error) {
+func (l *PingLogic) Ping() (resp *types.PingResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return

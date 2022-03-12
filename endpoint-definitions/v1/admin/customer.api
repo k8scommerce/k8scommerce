@@ -8,10 +8,10 @@ info(
 
 // objects
 type Customer {
-	Id        int64  `json:"id"`                 // customer id
-	FirstName string `json:"firstName"`          // first name
-	LastName  string `json:"lastName"`           // last or given name
-	Email     string `json:"email,required"`     // email address
+	Id        int64  `json:"id"`                // customer id
+	FirstName string `json:"firstName"`         // first name
+	LastName  string `json:"lastName"`          // last or given name
+	Email     string `json:"email,required"`    // email address
 	Password  string `json:"password,optional"` // password
 }
 
@@ -50,8 +50,9 @@ type CustomerLoginRequest {
 }
 
 type CustomerLoginResponse {
-	JwtToken       JwtToken       `json:"jwt"`      // jwt token
-	Customer       Customer       `json:"customer"` // Customer object
+	JwtToken JwtToken `json:"jwt"`      // jwt token
+	Customer Customer `json:"customer"` // Customer object
+	Success  bool     `json:"success"`  // success bool
 }
 
 // create customer
@@ -60,7 +61,7 @@ type CreateCustomerRequest {
 }
 
 type CreateCustomerResponse {
-	Customer       Customer       `json:"customer"` // Customer object
+	Customer Customer `json:"customer"` // Customer object
 }
 
 //
@@ -84,6 +85,6 @@ service admin {
 		summary: "Login"
 		description: "login for customers"
 	)
-	@handler customerLogin
+	@handler login
 	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
 }

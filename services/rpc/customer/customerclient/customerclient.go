@@ -13,16 +13,19 @@ import (
 )
 
 type (
-	Address                = customer.Address
-	CreateCustomerRequest  = customer.CreateCustomerRequest
-	CreateCustomerResponse = customer.CreateCustomerResponse
-	Customer               = customer.Customer
-	CustomerAccount        = customer.CustomerAccount
-	LoginRequest           = customer.LoginRequest
-	LoginResponse          = customer.LoginResponse
+	Address                    = customer.Address
+	CreateCustomerRequest      = customer.CreateCustomerRequest
+	CreateCustomerResponse     = customer.CreateCustomerResponse
+	Customer                   = customer.Customer
+	CustomerAccount            = customer.CustomerAccount
+	GetCustomerByEmailRequest  = customer.GetCustomerByEmailRequest
+	GetCustomerByEmailResponse = customer.GetCustomerByEmailResponse
+	LoginRequest               = customer.LoginRequest
+	LoginResponse              = customer.LoginResponse
 
 	CustomerClient interface {
 		CreateCustomer(ctx context.Context, in *CreateCustomerRequest, opts ...grpc.CallOption) (*CreateCustomerResponse, error)
+		GetCustomerByEmail(ctx context.Context, in *GetCustomerByEmailRequest, opts ...grpc.CallOption) (*GetCustomerByEmailResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	}
 
@@ -40,6 +43,11 @@ func NewCustomerClient(cli zrpc.Client) CustomerClient {
 func (m *defaultCustomerClient) CreateCustomer(ctx context.Context, in *CreateCustomerRequest, opts ...grpc.CallOption) (*CreateCustomerResponse, error) {
 	client := customer.NewCustomerClientClient(m.cli.Conn())
 	return client.CreateCustomer(ctx, in, opts...)
+}
+
+func (m *defaultCustomerClient) GetCustomerByEmail(ctx context.Context, in *GetCustomerByEmailRequest, opts ...grpc.CallOption) (*GetCustomerByEmailResponse, error) {
+	client := customer.NewCustomerClientClient(m.cli.Conn())
+	return client.GetCustomerByEmail(ctx, in, opts...)
 }
 
 func (m *defaultCustomerClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {

@@ -150,3 +150,37 @@ func CustomerAddressByID(ctx context.Context, db DB, id int64) (*CustomerAddress
 	}
 	return &ca, nil
 }
+
+// CustomerAddressByCustomerID retrieves a row from 'public.customer_address' as a CustomerAddress.
+//
+// Generated from index 'idx_customer_customer_id'.
+func CustomerAddressByCustomerID(ctx context.Context, db DB, customerID int64) ([]*CustomerAddress, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, customer_id, kind, is_default, street, city, state_province, country, postal_code ` +
+		`FROM public.customer_address ` +
+		`WHERE customer_id = $1`
+	// run
+	logf(sqlstr, customerID)
+	rows, err := db.QueryContext(ctx, sqlstr, customerID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*CustomerAddress
+	for rows.Next() {
+		ca := CustomerAddress{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&ca.ID, &ca.StoreID, &ca.CustomerID, &ca.Kind, &ca.IsDefault, &ca.Street, &ca.City, &ca.StateProvince, &ca.Country, &ca.PostalCode); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &ca)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}

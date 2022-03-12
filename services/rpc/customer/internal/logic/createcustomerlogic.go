@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"net/http"
 	"sync"
 
 	"k8scommerce/internal/models"
@@ -39,25 +38,21 @@ func NewCreateCustomerLogic(ctx context.Context, svcCtx *svc.ServiceContext, uni
 }
 
 func (l *CreateCustomerLogic) CreateCustomer(in *customer.CreateCustomerRequest) (*customer.CreateCustomerResponse, error) {
-	u := models.Customer{}
-	utils.TransformObj(in.Customer, &u)
-	if err := l.svcCtx.Repo.Customer().Create(&u); err != nil {
+	c := models.Customer{}
+	utils.TransformObj(in.Customer, &c)
+	if err := l.svcCtx.Repo.Customer().Create(&c); err != nil {
 		// logx.Infof("error: %s", err)
 		return &customer.CreateCustomerResponse{
-			Customer:      nil,
-			StatusCode:    http.StatusExpectationFailed,
-			StatusMessage: err.Error(),
+			Customer: nil,
 		}, nil
 	}
 
 	// the output object
 	out := &customer.Customer{}
-	utils.TransformObj(u, &out)
+	utils.TransformObj(c, &out)
 
 	// the response struct
 	return &customer.CreateCustomerResponse{
-		Customer:      out,
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		Customer: out,
 	}, nil
 }

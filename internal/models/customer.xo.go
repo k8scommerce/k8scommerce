@@ -166,3 +166,57 @@ func CustomerByID(ctx context.Context, db DB, id int64) (*Customer, error) {
 	}
 	return &c, nil
 }
+
+// CustomerByStoreIDEmail retrieves a row from 'public.customer' as a Customer.
+//
+// Generated from index 'customer_store_id_email_key'.
+func CustomerByStoreIDEmail(ctx context.Context, db DB, storeID int64, email string) (*Customer, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, first_name, last_name, email, password ` +
+		`FROM public.customer ` +
+		`WHERE store_id = $1 AND email = $2`
+	// run
+	logf(sqlstr, storeID, email)
+	c := Customer{
+		_exists: true,
+	}
+	if err := db.QueryRowContext(ctx, sqlstr, storeID, email).Scan(&c.ID, &c.StoreID, &c.FirstName, &c.LastName, &c.Email, &c.Password); err != nil {
+		return nil, logerror(err)
+	}
+	return &c, nil
+}
+
+// CustomerByStoreID retrieves a row from 'public.customer' as a Customer.
+//
+// Generated from index 'idx_customer_store_id'.
+func CustomerByStoreID(ctx context.Context, db DB, storeID int64) ([]*Customer, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, first_name, last_name, email, password ` +
+		`FROM public.customer ` +
+		`WHERE store_id = $1`
+	// run
+	logf(sqlstr, storeID)
+	rows, err := db.QueryContext(ctx, sqlstr, storeID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Customer
+	for rows.Next() {
+		c := Customer{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&c.ID, &c.StoreID, &c.FirstName, &c.LastName, &c.Email, &c.Password); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &c)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}

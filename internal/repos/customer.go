@@ -10,6 +10,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	CustomerLoginError  = "incorrect username and password combination"
+	CustomerUpdateError = "can't update customer, missing customer ID"
+)
+
 func newCustomer(repo *repo) Customer {
 	return &customerRepo{
 		db:   repo.db,
@@ -21,12 +26,13 @@ func newCustomer(repo *repo) Customer {
 type Customer interface {
 	Exists() bool
 	Deleted() bool
-	Create(user *models.Customer) error
-	Update(user *models.Customer) error
+	Create(customer *models.Customer) error
+	Update(customer *models.Customer) error
 	Save() error
 	Upsert() error
 	Delete(id int64) error
-	Login(username, password string) (res *models.Customer, err error)
+	Login(storeId int64, email, password string) (res *models.Customer, err error)
+	GetCustomerByEmail(storeId int64, email string) (res *models.Customer, err error)
 }
 
 type customerRepo struct {
@@ -37,62 +43,109 @@ type customerRepo struct {
 	*models.Customer
 }
 
-func (m *customerRepo) Login(username, password string) (res *models.Customer, err error) {
-	res, err = models.CustomerByEmail(m.ctx, m.db, username)
+func (m *customerRepo) Login(storeId int64, email, password string) (res *models.Customer, err error) {
+	res, err = models.CustomerByStoreIDEmail(m.ctx, m.db, storeId, email)
 	if err != nil {
-		return nil, err
+		return nil, &RepoError{Err: err}
 	}
 
 	if m.checkPasswordHash(password, res.Password) {
 		return res, nil
 	}
 
-	return nil, fmt.Errorf("error: incorrect username and password combination")
+	return nil, &RepoError{
+		Err:        fmt.Errorf(CustomerLoginError),
+		StatusCode: CustomerLoginErrorCode,
+	}
 }
 
-func (m *customerRepo) Create(user *models.Customer) error {
+func (m *customerRepo) Create(customer *models.Customer) error {
 	// hash the password
-	hash, _ := m.hashPassword(user.Password)
-	user.Password = hash
+	hash, _ := m.hashPassword(customer.Password)
+	customer.Password = hash
 
-	if err := user.Insert(m.ctx, m.db); err != nil {
+	if err := customer.Insert(m.ctx, m.db); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *customerRepo) Update(user *models.Customer) error {
-	if user.ID == 0 {
-		return fmt.Errorf("error: can't update user, missing user ID")
+func (m *customerRepo) Update(customer *models.Customer) error {
+	if customer.ID == 0 {
+		return &RepoError{
+			Err:        fmt.Errorf(CustomerUpdateError),
+			StatusCode: UpdateErrorCode,
+		}
 	}
-	if err := user.Update(m.ctx, m.db); err != nil {
-		return err
+	if err := customer.Update(m.ctx, m.db); err != nil {
+		return &RepoError{
+			Err:        err,
+			StatusCode: UpdateErrorCode,
+		}
 	}
 	return nil
 }
 
 func (m *customerRepo) Save() error {
-	return m.Customer.Save(m.ctx, m.db)
+	if err := m.Customer.Save(m.ctx, m.db); err != nil {
+		return &RepoError{
+			Err:        err,
+			StatusCode: SaveErrorCode,
+		}
+	}
+	return nil
 }
 
 func (m *customerRepo) Upsert() error {
-	return m.Customer.Upsert(m.ctx, m.db)
+	if err := m.Customer.Upsert(m.ctx, m.db); err != nil {
+		return &RepoError{
+			Err:        err,
+			StatusCode: UpsertErrorCode,
+		}
+	}
+	return nil
 }
 
 func (m *customerRepo) Delete(id int64) error {
-	user, err := models.ProductByID(m.ctx, m.db, id)
+	customer, err := models.ProductByID(m.ctx, m.db, id)
 	if err != nil {
-		return err
+		return &RepoError{
+			Err:        err,
+			StatusCode: DeleteErrorCode,
+		}
 	}
-	return user.Delete(m.ctx, m.db)
+	if err := customer.Delete(m.ctx, m.db); err != nil {
+		return &RepoError{
+			Err:        err,
+			StatusCode: DeleteErrorCode,
+		}
+	}
+	return nil
 }
 
 func (m *customerRepo) hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	if err != nil {
+		err = &RepoError{
+			Err:        err,
+			StatusCode: HashPasswordErrorCode,
+		}
+	}
 	return string(bytes), err
 }
 
 func (m *customerRepo) checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func (m *customerRepo) GetCustomerByEmail(storeId int64, email string) (*models.Customer, error) {
+	customer, err := models.CustomerByStoreIDEmail(m.ctx, m.db, storeId, email)
+	if err != nil {
+		err = &RepoError{
+			Err:        err,
+			StatusCode: GetCustomerByEmailErrorCode,
+		}
+	}
+	return customer, err
 }

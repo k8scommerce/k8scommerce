@@ -3,14 +3,13 @@ package customers
 import (
 	"net/http"
 
-	"k8scommerce/services/api/admin/internal/logic/customers"
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
-
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"k8scommerce/services/api/client/internal/logic/customers"
+	"k8scommerce/services/api/client/internal/svc"
+	"k8scommerce/services/api/client/internal/types"
 )
 
-func CustomerLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.CustomerLoginRequest
 		if err := httpx.Parse(r, &req); err != nil {
@@ -18,8 +17,8 @@ func CustomerLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := customers.NewCustomerLoginLogic(r.Context(), svcCtx)
-		resp, err := l.CustomerLogin(req)
+		l := customers.NewLoginLogic(r.Context(), svcCtx)
+		resp, err := l.Login(req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

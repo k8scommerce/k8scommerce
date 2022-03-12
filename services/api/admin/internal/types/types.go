@@ -209,9 +209,9 @@ type CustomerLoginRequest struct {
 }
 
 type CustomerLoginResponse struct {
-	JwtToken       JwtToken       `json:"jwt"`      // jwt token
-	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
+	JwtToken JwtToken `json:"jwt"`      // jwt token
+	Customer Customer `json:"customer"` // Customer object
+	Success  bool     `json:"success"`  // success bool
 }
 
 type CreateCustomerRequest struct {
@@ -219,8 +219,7 @@ type CreateCustomerRequest struct {
 }
 
 type CreateCustomerResponse struct {
-	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
+	Customer Customer `json:"customer"` // Customer object
 }
 
 type User struct {

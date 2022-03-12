@@ -11,8 +11,13 @@ CREATE TABLE customer (
     password character varying NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    UNIQUE(store_id, email)
 );
+
+CREATE INDEX IF NOT EXISTS idx_customer_store_id ON customer USING btree (store_id);
+
+
 -- +goose StatementEnd
 -- +goose StatementBegin
 CREATE TABLE customer_address (
@@ -30,6 +35,10 @@ CREATE TABLE customer_address (
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
     deleted_at timestamp without time zone
 );
+
+CREATE INDEX IF NOT EXISTS idx_customer_store_id ON customer_address USING btree (store_id);
+CREATE INDEX IF NOT EXISTS idx_customer_customer_id ON customer_address USING btree (customer_id);
+
 -- +goose StatementEnd
 --
 --

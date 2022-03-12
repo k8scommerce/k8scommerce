@@ -140,7 +140,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/customer/login",
-					Handler: customers.CustomerLoginHandler(serverCtx),
+					Handler: customers.LoginHandler(serverCtx),
 				},
 			}...,
 		),

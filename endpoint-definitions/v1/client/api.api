@@ -14,7 +14,7 @@ type PingResponse {
 	middleware: Locale
 	group: api
 )
-service admin {
+service client {
 	// ping
 	@doc(
 		summary: "Ping"

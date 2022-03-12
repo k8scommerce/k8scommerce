@@ -1,16 +1,14 @@
-package logic
+package customers
 
 import (
 	"context"
+	"k8scommerce/internal/utils"
+	"k8scommerce/services/api/admin/internal/svc"
+	"k8scommerce/services/api/admin/internal/types"
+	"k8scommerce/services/rpc/customer/customerclient"
 	"time"
 
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/api/client/internal/svc"
-	"k8scommerce/services/api/client/internal/types"
-	"k8scommerce/services/rpc/customer/customerclient"
-
 	"github.com/golang-jwt/jwt"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -28,16 +26,21 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) LoginLogic {
 	}
 }
 
-func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLoginResponse, error) {
-	// logx.Info("RECEIVED ", req.Email)
+func (l *LoginLogic) Login(req types.CustomerLoginRequest) (resp *types.CustomerLoginResponse, err error) {
+	resp = &types.CustomerLoginResponse{
+		Success: false,
+	}
 
 	res, err := l.svcCtx.CustomerRpc.Login(l.ctx, &customerclient.LoginRequest{
 		Email:    req.Email,
 		Password: req.Password,
-		StoreId:  l.ctx.Value(types.StoreKey).(int64),
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	if res.Customer == nil {
+		return resp, nil
 	}
 
 	// create the token
@@ -51,14 +54,11 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (*types.CustomerLogin
 	customer := types.Customer{}
 	utils.TransformObj(res.Customer, &customer)
 
-	return &types.CustomerLoginResponse{
-		JwtToken: *jwtToken,
-		Customer: customer,
-		ResponseStatus: types.ResponseStatus{
-			StatusCode:    res.StatusCode,
-			StatusMessage: res.StatusMessage,
-		},
-	}, nil
+	resp.JwtToken = *jwtToken
+	resp.Customer = customer
+	resp.Success = true
+
+	return resp, nil
 }
 
 func (l *LoginLogic) getJwt(payload map[string]interface{}) (*types.JwtToken, error) {

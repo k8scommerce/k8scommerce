@@ -50,9 +50,10 @@ type CustomerLoginRequest {
 }
 
 type CustomerLoginResponse {
-	// JwtToken       JwtToken       `json:"jwt"`      // jwt token
+	JwtToken JwtToken `json:"jwt"`      // jwt token
 	Customer Customer `json:"customer"` // Customer object
-}
+	Success  bool     `json:"success"`  // success bool
+	}
 
 // create customer
 type CreateCustomerRequest {
@@ -85,14 +86,7 @@ type GetCustomerResponse {
 	middleware: Locale, StoreKey
 	group: customers
 )
-service client {
-	@doc(
-		summary: "Login"
-		description: "login for customers"
-	)
-	@handler customerLogin
-	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
-	
+service client {	
 	@doc(
 		summary: "Check for Existing Email"
 		description: "verifies the email address is unique"
@@ -106,6 +100,13 @@ service client {
 	)
 	@handler createCustomer
 	post /v1/customer(CreateCustomerRequest) returns (CreateCustomerResponse)
+
+		@doc(
+		summary: "Login"
+		description: "login for customers"
+	)
+	@handler login
+	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
 	
 }
 

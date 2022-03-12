@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	api "k8scommerce/services/api/client/internal/handler/api"
 	cart "k8scommerce/services/api/client/internal/handler/cart"
 	categories "k8scommerce/services/api/client/internal/handler/categories"
 	customers "k8scommerce/services/api/client/internal/handler/customers"
@@ -14,6 +15,19 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/api/ping",
+					Handler: api.PingHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
 	server.AddRoutes(
 		rest.WithMiddlewares(
 			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
@@ -50,7 +64,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale, serverCtx.Filter, serverCtx.StoreKey},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
@@ -110,15 +124,34 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
+					Path:    "/v1/customer/email",
+					Handler: customers.CheckForExistingEmailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/v1/customer",
 					Handler: customers.CreateCustomerHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/customer/login",
-					Handler: customers.CustomerLoginHandler(serverCtx),
+					Handler: customers.LoginHandler(serverCtx),
 				},
 			}...,
 		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/customer",
+					Handler: customers.GetCustomerHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }

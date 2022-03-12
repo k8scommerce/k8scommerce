@@ -9,16 +9,16 @@ import (
 	"k8scommerce/services/api/client/internal/types"
 )
 
-func CreateCustomerHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func CheckForExistingEmailHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.CreateCustomerRequest
+		var req types.CheckForExistingEmailRequest
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := customers.NewCreateCustomerLogic(r.Context(), svcCtx)
-		resp, err := l.CreateCustomer(req)
+		l := customers.NewCheckForExistingEmailLogic(r.Context(), svcCtx)
+		resp, err := l.CheckForExistingEmail(req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

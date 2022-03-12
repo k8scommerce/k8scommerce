@@ -31,6 +31,11 @@ func (s *CustomerClientServer) CreateCustomer(ctx context.Context, in *customer.
 	return l.CreateCustomer(in)
 }
 
+func (s *CustomerClientServer) GetCustomerByEmail(ctx context.Context, in *customer.GetCustomerByEmailRequest) (*customer.GetCustomerByEmailResponse, error) {
+	l := logic.NewGetCustomerByEmailLogic(ctx, s.svcCtx, s.universe)
+	return l.GetCustomerByEmail(in)
+}
+
 func (s *CustomerClientServer) Login(ctx context.Context, in *customer.LoginRequest) (*customer.LoginResponse, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx, s.universe)
 	return l.Login(in)

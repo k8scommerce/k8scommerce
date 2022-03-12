@@ -44,8 +44,16 @@ message CreateCustomerRequest {
 
 message CreateCustomerResponse {
   Customer Customer = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
+}
+
+// get customer
+message GetCustomerByEmailRequest {
+  int64 storeId = 1;
+  string email = 2;
+}
+
+message GetCustomerByEmailResponse {
+  Customer Customer = 1;
 }
 
 // login
@@ -57,12 +65,12 @@ message LoginRequest {
 
 message LoginResponse {
   Customer Customer = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // service client
 service CustomerClient {
   rpc CreateCustomer(CreateCustomerRequest) returns (CreateCustomerResponse);
+  rpc GetCustomerByEmail(GetCustomerByEmailRequest)
+      returns (GetCustomerByEmailResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
 }
