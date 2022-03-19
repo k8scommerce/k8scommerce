@@ -20,7 +20,7 @@ K8sCommerce began as a personal project of [localrivet](https://github.com/local
 
 ## Service Overview
 
-![K8sCommerce Overview](docs/K8sCommerceOverview.png)
+![K8sCommerce Overview](docs/K8sCommerceOverview.drawio.png)
 
 ## Development Progress
 
