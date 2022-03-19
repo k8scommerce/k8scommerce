@@ -9,8 +9,8 @@ info(
 // objects
 type User {
 	Id         int64             `json:"id"`                   // user id
-	FirstName  string            `json:"firstName"`            // first name
-	LastName   string            `json:"lastName"`             // last name
+	FirstName  string            `json:"first_name"`            // first name
+	LastName   string            `json:"last_name"`             // last name
 	Email      string            `json:"email"`                // email address
 	Password   string            `json:"password,optional"`   // password
 	// Attributes map[string]string `json:"attributes,optional"` // password
@@ -18,12 +18,12 @@ type User {
 
 type PermissionGroup {
 	Id        int64  `json:"id"`        // permission group id
-	GroupName string `json:"groupName"` // groupName
+	GroupName string `json:"group_name"` // groupName
 }
 
 type UsersPermissionGroups {
-	UserId            int64 `json:"userId"`            // user id
-	PermissionGroupId int64 `json:"permissionGroupId"` // permission group id
+	UserId            int64 `json:"user_id"`            // user id
+	PermissionGroupId int64 `json:"permission_group_id"` // permission group id
 }
 
 //
@@ -44,15 +44,15 @@ type UserLoginResponse {
 
 // get all users
 type GetAllUsersRequest {
-	CurrentPage int64  `path:"currentPage"`
-	PageSize    int64  `path:"pageSize"`
+	CurrentPage int64  `path:"current_page"`
+	PageSize    int64  `path:"page_size"`
 	SortOn      string `form:"sortOn,optional"`
 }
 
 type GetAllUsersResponse {
 	Users        []User `json:"users"`
-	TotalRecords int64  `json:"totalRecords"`
-	TotalPages   int64  `json:"totalPages"`
+	TotalRecords int64  `json:"total_records"`
+	TotalPages   int64  `json:"total_pages"`
 }
 //
 // endpoints

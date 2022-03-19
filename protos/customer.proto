@@ -8,26 +8,24 @@ option go_package = "pb/customer";
 
 message Customer {
   int64 id = 1;
-  int64 storeId = 2;
-  string firstName = 3;
-  string lastName = 4;
+  int64 store_id = 2;
+  string first_name = 3;
+  string last_name = 4;
   string email = 5;
   string password = 6;
-}
-
-message CustomerAccount {
-  int64 customerId = 1;
-  Address billingAddress = 2;
-  repeated Address shippingAddress = 3;
+  bool is_verified = 7;
+  Address billing_address = 8;
+  repeated Address shipping_address = 9;
 }
 
 message Address {
   string street = 1;
-  string city = 2;
-  string state = 3;
-  string country = 4;
-  string postalCode = 5;
-  bool isDefault = 6;
+  string apt_suite = 2;
+  string city = 3;
+  string state_province = 4;
+  string country = 5;
+  string postal_code = 6;
+  bool is_default = 7;
 }
 
 //
@@ -38,39 +36,87 @@ message Address {
 
 // create customer
 message CreateCustomerRequest {
-  int64 storeId = 1;
-  Customer Customer = 2;
+  int64 store_id = 1;
+  Customer customer = 2;
 }
 
 message CreateCustomerResponse {
-  Customer Customer = 1;
+  Customer customer = 1;
+}
+
+// update customer
+message UpdateCustomerRequest {
+  int64 store_id = 1;
+  Customer customer = 3;
+}
+
+message UpdateCustomerResponse {
+  Customer customer = 1;
 }
 
 // get customer
 message GetCustomerByEmailRequest {
-  int64 storeId = 1;
+  int64 store_id = 1;
   string email = 2;
 }
 
 message GetCustomerByEmailResponse {
-  Customer Customer = 1;
+  Customer customer = 1;
 }
 
 // login
 message LoginRequest {
-  int64 storeId = 1;
+  int64 store_id = 1;
   string email = 2;
   string password = 3;
 }
 
 message LoginResponse {
-  Customer Customer = 1;
+  Customer customer = 1;
+}
+
+// forgot password
+message SendForgotPasswordEmailRequest {
+  int64 store_id = 1;
+  string email = 2;
+}
+
+message SendForgotPasswordEmailResponse {
+  bool success = 1;
+}
+
+// confirm email
+message SendConfirmEmailAddressEmailRequest {
+  int64 store_id = 1;
+  string email = 2;
+}
+
+message SendConfirmEmailAddressEmailResponse {
+  bool success = 1;
+}
+
+// verify customer email address
+message VerifyEmailAddressRequest {
+  int64 store_id = 1;
+  string code = 2;
+}
+
+message VerifyEmailAddressResponse {
+  bool success = 1;
 }
 
 // service client
 service CustomerClient {
   rpc CreateCustomer(CreateCustomerRequest) returns (CreateCustomerResponse);
+  rpc UpdateCustomer(UpdateCustomerRequest) returns (UpdateCustomerResponse);
   rpc GetCustomerByEmail(GetCustomerByEmailRequest)
       returns (GetCustomerByEmailResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
+
+  rpc SendForgotPasswordEmail(SendForgotPasswordEmailRequest)
+      returns (SendForgotPasswordEmailResponse);
+  rpc SendConfirmEmailAddressEmail(SendConfirmEmailAddressEmailRequest)
+      returns (SendConfirmEmailAddressEmailResponse);
+  rpc VerifyEmailAddress(VerifyEmailAddressRequest)
+      returns (VerifyEmailAddressResponse);
 }

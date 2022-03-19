@@ -5,6 +5,7 @@ import (
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/customer/internal/svc"
 	"k8scommerce/services/rpc/customer/pb/customer"
+	"strings"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -27,13 +28,19 @@ func NewGetCustomerByEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext,
 func (l *GetCustomerByEmailLogic) GetCustomerByEmail(in *customer.GetCustomerByEmailRequest) (*customer.GetCustomerByEmailResponse, error) {
 	found, err := l.svcCtx.Repo.Customer().GetCustomerByEmail(in.StoreId, in.Email)
 	if err != nil {
-		return &customer.GetCustomerByEmailResponse{
-			Customer: nil,
-		}, err
+		if !strings.Contains(err.Error(), "sql: no rows in result set") {
+			return &customer.GetCustomerByEmailResponse{
+				Customer: nil,
+			}, err
+		}
 	}
 
 	out := &customer.Customer{}
 	utils.TransformObj(found, &out)
+
+	if found != nil {
+		out.IsVerified = found.IsVerified.Bool
+	}
 
 	// the response struct
 	return &customer.GetCustomerByEmailResponse{

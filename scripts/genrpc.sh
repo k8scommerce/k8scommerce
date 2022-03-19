@@ -9,7 +9,7 @@ out_dir=$ROOT/../services/rpc
 protos_dir=$ROOT/../protos
 
 # define the RPC services
-services='cart catalog customer email inventory othersbought payment shipping similarproducts store user warehouse'
+services='cart catalog customer inventory othersbought payment shipping similarproducts store user warehouse'
 
 # define the proto import paths
 go_opts=''

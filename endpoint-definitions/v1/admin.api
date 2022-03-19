@@ -15,5 +15,6 @@ import(
 	"admin/api.api"
 	"admin/catalog.api"
 	"admin/customer.api"
+	"admin/store.api"
 	"admin/user.api"
 )

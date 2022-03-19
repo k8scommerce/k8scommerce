@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"database/sql"
 	"sync"
 
 	"k8scommerce/internal/models"
@@ -11,6 +12,8 @@ import (
 
 	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type galaxyCreateCustomerLogicHelper struct {
@@ -40,12 +43,27 @@ func NewCreateCustomerLogic(ctx context.Context, svcCtx *svc.ServiceContext, uni
 func (l *CreateCustomerLogic) CreateCustomer(in *customer.CreateCustomerRequest) (*customer.CreateCustomerResponse, error) {
 	c := models.Customer{}
 	utils.TransformObj(in.Customer, &c)
+
+	if in.Customer.IsVerified {
+		c.IsVerified = sql.NullBool{Bool: true, Valid: true}
+	} else {
+		c.IsVerified = sql.NullBool{Bool: false, Valid: true}
+	}
+
+	logx.Infof("INCOMING CUSTOMER: %#v", in.Customer)
+	logx.Infof("TRANSFORMED CUSTOMER: %#v", c)
+
 	if err := l.svcCtx.Repo.Customer().Create(&c); err != nil {
-		// logx.Infof("error: %s", err)
 		return &customer.CreateCustomerResponse{
 			Customer: nil,
-		}, nil
+		}, status.Errorf(codes.Internal, "could not create customer: %s", err.Error())
 	}
+
+	// if in.Customer.BillingAddress != nil {
+	// 	if in.Customer.BillingAddress.IsDefault {
+	// 		c.IsVerified = sql.NullBool{Bool: true, Valid: true}
+	// 	}
+	// }
 
 	// the output object
 	out := &customer.Customer{}

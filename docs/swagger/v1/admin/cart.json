@@ -34,7 +34,7 @@
             "description": "a customer's id",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -204,7 +204,7 @@
     "AddItemToCartRequest": {
       "type": "object",
       "properties": {
-        "customerId": {
+        "customer_id": {
           "type": "integer",
           "format": "int64",
           "description": " a customer's id"
@@ -216,7 +216,7 @@
       },
       "title": "AddItemToCartRequest",
       "required": [
-        "customerId",
+        "customer_id",
         "item"
       ]
     },
@@ -248,7 +248,7 @@
           },
           "description": " a collection of Item"
         },
-        "totalPrice": {
+        "total_price": {
           "type": "number",
           "format": "double",
           "description": " the sum total of the cart"
@@ -257,13 +257,13 @@
       "title": "Cart",
       "required": [
         "items",
-        "totalPrice"
+        "total_price"
       ]
     },
     "ClearCartRequest": {
       "type": "object",
       "properties": {
-        "customerId": {
+        "customer_id": {
           "type": "integer",
           "format": "int64",
           "description": " a customer's id"
@@ -275,7 +275,7 @@
       },
       "title": "ClearCartRequest",
       "required": [
-        "customerId",
+        "customer_id",
         "status"
       ]
     },
@@ -295,7 +295,7 @@
     "GetCartRequest": {
       "type": "object",
       "properties": {
-        "customerId": {
+        "customer_id": {
           "type": "integer",
           "format": "int64",
           "description": " a customer's id"
@@ -303,7 +303,7 @@
       },
       "title": "GetCartRequest",
       "required": [
-        "customerId"
+        "customer_id"
       ]
     },
     "GetCartResponse": {
@@ -341,7 +341,7 @@
           "format": "double",
           "description": " the item's price"
         },
-        "expiresAt": {
+        "expires_at": {
           "type": "string",
           "description": " when this item expires in the cart"
         }
@@ -351,7 +351,7 @@
         "sku",
         "quantity",
         "price",
-        "expiresAt"
+        "expires_at"
       ]
     },
     "JwtToken": {
@@ -379,7 +379,7 @@
     "RemoveCartItemRequest": {
       "type": "object",
       "properties": {
-        "customerId": {
+        "customer_id": {
           "type": "integer",
           "format": "int64",
           "description": " a customer's id"
@@ -396,7 +396,7 @@
       },
       "title": "RemoveCartItemRequest",
       "required": [
-        "customerId",
+        "customer_id",
         "sku",
         "quanity"
       ]
@@ -440,7 +440,7 @@
     "UpdateCartItemQuantityRequest": {
       "type": "object",
       "properties": {
-        "customerId": {
+        "customer_id": {
           "type": "integer",
           "format": "int64",
           "description": " a customer's id"
@@ -457,7 +457,7 @@
       },
       "title": "UpdateCartItemQuantityRequest",
       "required": [
-        "customerId",
+        "customer_id",
         "sku",
         "quanity"
       ]

@@ -134,8 +134,28 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodPost,
+					Path:    "/v1/customer/password",
+					Handler: customers.SetPasswordHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/v1/customer/login",
 					Handler: customers.LoginHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/forgot-password",
+					Handler: customers.ForgotPasswordHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/resend-confirm-email",
+					Handler: customers.ResendConfirmEmailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/verfify-email-address",
+					Handler: customers.VerifyEmailAddressHandler(serverCtx),
 				},
 			}...,
 		),

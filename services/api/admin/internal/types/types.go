@@ -17,16 +17,16 @@ type PingResponse struct {
 }
 
 type Category struct {
-	Id              int64  `json:"id"`                                 // category id
-	ParentId        int64  `json:"parentId"`                           // parent category id. references Category.Id
-	Slug            string `json:"slug"`                               // slug name of the category
-	Name            string `json:"name"`                               // name of category
-	Description     string `json:"description,optional,omitempty"`     // description of category
-	MetaTitle       string `json:"metaTitle,optional,omitempty"`       // metatag title for SEO
-	MetaDescription string `json:"metaDescription,optional,omitempty"` // metatag description for SEO
-	MetaKeywords    string `json:"metaKeywords,optional,omitempty"`    // metatag keywords for SEO
-	Depth           int32  `json:"depth,optional,omitempty"`           // category level depth
-	SortOrder       int32  `json:"sortOrder,optional,omitempty"`       // sort order of menu items on the same level and same parent id
+	Id              int64  `json:"id"`                                  // category id
+	ParentId        int64  `json:"parent_id"`                           // parent category id. references Category.Id
+	Slug            string `json:"slug"`                                // slug name of the category
+	Name            string `json:"name"`                                // name of category
+	Description     string `json:"description,optional,omitempty"`      // description of category
+	MetaTitle       string `json:"meta_title,optional,omitempty"`       // metatag title for SEO
+	MetaDescription string `json:"meta_description,optional,omitempty"` // metatag description for SEO
+	MetaKeywords    string `json:"meta_keywords,optional,omitempty"`    // metatag keywords for SEO
+	Depth           int32  `json:"depth,optional,omitempty"`            // category level depth
+	SortOrder       int32  `json:"sort_order,optional,omitempty"`       // sort order of menu items on the same level and same parent id
 }
 
 type CategoryPair struct {
@@ -35,23 +35,23 @@ type CategoryPair struct {
 }
 
 type Product struct {
-	Id               int64          `json:"id"`                                  // product id
-	Slug             string         `json:"slug"`                                // product slug
-	Name             string         `json:"name"`                                // product name
-	ShortDescription string         `json:"shortDescription,optional,omitempty"` // product short description. used in category pages
-	Description      string         `json:"description,optional,omitempty"`      // category description
-	MetaTitle        string         `json:"metaTitle,optional,omitempty"`        // metatag title for SEO
-	MetaDescription  string         `json:"metaDescription,optional,omitempty"`  // metatag description for SEO
-	MetaKeywords     string         `json:"metaKeywords,optional,omitempty"`     // metatag keywords for SEO
-	Variants         []Variant      `json:"variants,optional,omitempty"`         // collection of Variant objects
-	DefaultImage     Asset          `json:"defaultImage,optional,omitempty"`     // default Asset object of image type
-	Images           []Asset        `json:"images,optional,omitempty"`           // array of Asset objects of image type
-	Categories       []CategoryPair `json:"categories,optional,omitempty"`       // array of Asset objects of image type
+	Id               int64          `json:"id"`                                   // product id
+	Slug             string         `json:"slug"`                                 // product slug
+	Name             string         `json:"name"`                                 // product name
+	ShortDescription string         `json:"short_description,optional,omitempty"` // product short description. used in category pages
+	Description      string         `json:"description,optional,omitempty"`       // category description
+	MetaTitle        string         `json:"meta_title,optional,omitempty"`        // metatag title for SEO
+	MetaDescription  string         `json:"meta_description,optional,omitempty"`  // metatag description for SEO
+	MetaKeywords     string         `json:"meta_keywords,optional,omitempty"`     // metatag keywords for SEO
+	Variants         []Variant      `json:"variants,optional,omitempty"`          // collection of Variant objects
+	DefaultImage     Asset          `json:"default_image,optional,omitempty"`     // default Asset object of image type
+	Images           []Asset        `json:"images,optional,omitempty"`            // array of Asset objects of image type
+	Categories       []CategoryPair `json:"categories,optional,omitempty"`        // array of Asset objects of image type
 }
 
 type Variant struct {
 	Id        int64   `json:"id"`                        // variant id
-	IsDefault bool    `json:"isDefault"`                 // is default variant. each product must have exactly 1 default variant
+	IsDefault bool    `json:"is_default"`                // is default variant. each product must have exactly 1 default variant
 	Sku       string  `json:"sku"`                       // variant sku. usually the product sku with appended identification tags
 	Weight    float64 `json:"weight,optional,omitempty"` // variant weight. used in calculating shipping
 	Height    float64 `json:"height,optional,omitempty"` // variant height. used in calculating shipping
@@ -61,24 +61,24 @@ type Variant struct {
 }
 
 type Price struct {
-	Id                   int64   `json:"id,optional,omitempty"`                   // price id
-	SalePrice            float64 `json:"salePrice"`                               // sale price
-	FormattedSalePrice   string  `json:"formattedSalePrice"`                      // formatted sale price
-	RetailPrice          float64 `json:"retailPrice,optional,omitempty"`          // retail price
-	FormattedRetailPrice string  `json:"formattedRetailPrice,optional,omitempty"` // formatted retail price
-	Currency             string  `json:"currency,optional,omitempty"`             // currency. example: USD, CAN, etc.
+	Id                   int64   `json:"id,optional,omitempty"`                     // price id
+	SalePrice            float64 `json:"sale_price"`                                // sale price
+	FormattedSalePrice   string  `json:"formatted_sale_price"`                      // formatted sale price
+	RetailPrice          float64 `json:"retail_price,optional,omitempty"`           // retail price
+	FormattedRetailPrice string  `json:"formatted_retail_price,optional,omitempty"` // formatted retail price
+	Currency             string  `json:"currency,optional,omitempty"`               // currency. example: USD, CAN, etc.
 }
 
 type Asset struct {
 	Id          int64             `json:"id,optional,omitempty"`                       // asset id
-	ProductId   int64             `json:"productId,optional,omitempty"`                // product id
-	VariantId   int64             `json:"variantId,optional,omitempty"`                // variant id
+	ProductId   int64             `json:"product_id,optional,omitempty"`               // product id
+	VariantId   int64             `json:"variant_id,optional,omitempty"`               // variant id
 	Name        string            `json:"name,optional,omitempty"`                     // asset name
-	DisplayName string            `json:"displayName,optional,omitempty"`              // display name
+	DisplayName string            `json:"display_name,optional,omitempty"`             // display name
 	Url         string            `json:"url,optional,omitempty"`                      // full, public access url
 	Kind        int               `json:"kind,optional,omitempty,options=0|1|2|3|4|5"` // asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)
-	ContentType string            `json:"contentType,optional,omitempty"`              // content type (mime type)
-	SortOrder   int64             `json:"sortOrder,optional,omitempty"`                // sort order
+	ContentType string            `json:"content_type,optional,omitempty"`             // content type (mime type)
+	SortOrder   int64             `json:"sort_order,optional,omitempty"`               // sort order
 	Sizes       map[string]string `json:"sizes,optional,omitempty"`                    // map[tag:string]url:string
 }
 
@@ -91,7 +91,7 @@ type GetCategoryBySlugRequest struct {
 }
 
 type GetCategoryByIdRequest struct {
-	Id int64 `path:"id"`
+	Id int64 `path:"id"` // category id
 }
 
 type CreateCategoryRequest struct {
@@ -123,30 +123,30 @@ type GetProductByIdRequest struct {
 }
 
 type GetProductsByCategoryIdRequest struct {
-	CategoryId  int64  `path:"categoryId"`
-	CurrentPage int64  `path:"currentPage"`
-	PageSize    int64  `path:"pageSize"`
+	CategoryId  int64  `path:"category_id"`
+	CurrentPage int64  `path:"current_page"`
+	PageSize    int64  `path:"page_size"`
 	Filter      string `form:"filter,optional,omitempty"`
 	SortOn      string `form:"sortOn,optional,omitempty"`
 }
 
 type GetProductsByCategoryIdResponse struct {
 	Products     []Product `json:"products"`
-	TotalRecords int64     `json:"totalRecords"`
-	TotalPages   int64     `json:"totalPages"`
+	TotalRecords int64     `json:"total_records"`
+	TotalPages   int64     `json:"total_pages"`
 }
 
 type GetAllProductsRequest struct {
-	CurrentPage int64  `path:"currentPage"`
-	PageSize    int64  `path:"pageSize"`
+	CurrentPage int64  `path:"current_page"`
+	PageSize    int64  `path:"page_size"`
 	Filter      string `form:"filter,optional,omitempty"`
 	SortOn      string `form:"sortOn,optional,omitempty"`
 }
 
 type GetAllProductsResponse struct {
 	Products     []Product `json:"products"`
-	TotalRecords int64     `json:"totalRecords"`
-	TotalPages   int64     `json:"totalPages"`
+	TotalRecords int64     `json:"total_records"`
+	TotalPages   int64     `json:"total_pages"`
 }
 
 type CreateProductRequest struct {
@@ -166,41 +166,42 @@ type DeleteProductResponse struct {
 }
 
 type UploadAssetRequest struct {
-	ProductId int64  `path:"productId"`
-	VariantId int64  `path:"variantId"`
+	ProductId int64  `path:"product_id"`
+	VariantId int64  `path:"variant_id"`
 	Kind      string `path:"kind"`
 }
 
 type Customer struct {
-	Id        int64  `json:"id"`                // customer id
-	FirstName string `json:"firstName"`         // first name
-	LastName  string `json:"lastName"`          // last or given name
-	Email     string `json:"email,required"`    // email address
-	Password  string `json:"password,optional"` // password
+	Id         int64  `json:"id"`                   // customer id
+	FirstName  string `json:"first_name"`           // first name
+	LastName   string `json:"last_name"`            // last or given name
+	Email      string `json:"email,required"`       // email address
+	Password   string `json:"password,optional"`    // password
+	IsVerified bool   `json:"is_verified,optional"` // is_verified
 }
 
 type NewCustomer struct {
-	FirstName       string  `json:"firstName,required"`         // first name
-	LastName        string  `json:"lastName,required"`          // last or given name
-	Email           string  `json:"email,required"`             // email address, unique per store id
-	Password        string  `json:"password,required"`          // password
-	BillingAddress  Address `json:"billingAddress,optional"`    // Address object
-	ShippingAddress Address `json:"shippingAddresses,optional"` // Address object
+	FirstName       string  `json:"first_name,required"`         // first name
+	LastName        string  `json:"last_name,required"`          // last or given name
+	Email           string  `json:"email,required"`              // email address, unique per store id
+	Password        string  `json:"password,required"`           // password
+	BillingAddress  Address `json:"billing_address,optional"`    // Address object
+	ShippingAddress Address `json:"shipping_addresses,optional"` // Address object
 }
 
 type CustomerAccount struct {
-	CustomerId        int64     `json:"id"`                // customer id
-	BillingAddress    Address   `json:"billingAddress"`    // Address object
-	ShippingAddresses []Address `json:"shippingAddresses"` // collection of Address objects
+	CustomerId        int64     `json:"id"`                 // customer id
+	BillingAddress    Address   `json:"billing_address"`    // Address object
+	ShippingAddresses []Address `json:"shipping_addresses"` // collection of Address objects
 }
 
 type Address struct {
-	Street        string `json:"street"`             // street name, ie: 1723 NW 23rd Ave.
-	City          string `json:"city"`               // city name
-	StateProvince string `json:"stateProvince"`      // state or province name
-	Country       string `json:"country"`            // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
-	PostalCode    string `json:"postalCode"`         // postal or zip code
-	IsDefault     bool   `json:"isDefault,required"` // indicates if this is a default address
+	Street        string `json:"street"`              // street name, ie: 1723 NW 23rd Ave.
+	City          string `json:"city"`                // city name
+	StateProvince string `json:"state_province"`      // state or province name
+	Country       string `json:"country"`             // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
+	PostalCode    string `json:"postal_code"`         // postal or zip code
+	IsDefault     bool   `json:"is_default,required"` // indicates if this is a default address
 }
 
 type CustomerLoginRequest struct {
@@ -222,22 +223,55 @@ type CreateCustomerResponse struct {
 	Customer Customer `json:"customer"` // Customer object
 }
 
+type CheckForExistingEmailRequest struct {
+	Email string `json:"email"` // Customer object
+}
+
+type CheckForExistingEmailResponse struct {
+	Exists     bool `json:"exists"`      // boolean true/false if email exists or not
+	IsVerified bool `json:"is_verified"` // boolean true/false
+}
+
+type GetCustomerRequest struct {
+	Id int64 `path:"id"` // customer id
+}
+
+type GetCustomerResponse struct {
+	Customer Customer `json:"customer"` // Customer object
+}
+
+type Store struct {
+	Id          int64  `json:"id"`                   // store id
+	Url         string `json:"url,optional"`         // unique url
+	Name        string `json:"name,optional"`        // store name
+	Description string `json:"description,optional"` // description
+	IsDefault   bool   `json:"is_default,optional"`  // indicates if this is the default store
+}
+
+type GenerateStoreKeyTokenRequest struct {
+	StoreId int64 `path:"store_id"`
+}
+
+type GenerateStoreKeyTokenResponse struct {
+	Token string `json:"token"`
+}
+
 type User struct {
 	Id        int64  `json:"id"`                // user id
-	FirstName string `json:"firstName"`         // first name
-	LastName  string `json:"lastName"`          // last name
+	FirstName string `json:"first_name"`        // first name
+	LastName  string `json:"last_name"`         // last name
 	Email     string `json:"email"`             // email address
 	Password  string `json:"password,optional"` // password
 }
 
 type PermissionGroup struct {
-	Id        int64  `json:"id"`        // permission group id
-	GroupName string `json:"groupName"` // groupName
+	Id        int64  `json:"id"`         // permission group id
+	GroupName string `json:"group_name"` // groupName
 }
 
 type UsersPermissionGroups struct {
-	UserId            int64 `json:"userId"`            // user id
-	PermissionGroupId int64 `json:"permissionGroupId"` // permission group id
+	UserId            int64 `json:"user_id"`             // user id
+	PermissionGroupId int64 `json:"permission_group_id"` // permission group id
 }
 
 type UserLoginRequest struct {
@@ -252,13 +286,13 @@ type UserLoginResponse struct {
 }
 
 type GetAllUsersRequest struct {
-	CurrentPage int64  `path:"currentPage"`
-	PageSize    int64  `path:"pageSize"`
+	CurrentPage int64  `path:"current_page"`
+	PageSize    int64  `path:"page_size"`
 	SortOn      string `form:"sortOn,optional"`
 }
 
 type GetAllUsersResponse struct {
 	Users        []User `json:"users"`
-	TotalRecords int64  `json:"totalRecords"`
-	TotalPages   int64  `json:"totalPages"`
+	TotalRecords int64  `json:"total_records"`
+	TotalPages   int64  `json:"total_pages"`
 }

@@ -10,14 +10,14 @@ info(
 
 type Cart {
 	Item       []Item  `json:"items"`      // a collection of Item
-	TotalPrice float64 `json:"totalPrice"` // the sum total of the cart
+	TotalPrice float64 `json:"total_price"` // the sum total of the cart
 }
 
 type Item {
 	Sku       string  `json:"sku"`       // an item's variant sku number
 	Quantity  int32   `json:"quantity"`  // how many of identical items
 	Price     float64 `json:"price"`     // the item's price
-	ExpiresAt string  `json:"expiresAt"` // when this item expires in the cart
+	ExpiresAt string  `json:"expires_at"` // when this item expires in the cart
 }
 
 //
@@ -26,7 +26,7 @@ type Item {
 
 // get cart
 type GetCartRequest {
-	CustomerId int64 `path:"customerId"` // a customer's id
+	CustomerId int64 `path:"customer_id"` // a customer's id
 }
 
 type GetCartResponse {
@@ -36,7 +36,7 @@ type GetCartResponse {
 
 // add item to cart
 type AddItemToCartRequest {
-	CustomerId int64 `path:"customerId"` // a customer's id
+	CustomerId int64 `path:"customer_id"` // a customer's id
 	Item       Item  `json:"item"`       // an Item object
 }
 
@@ -47,7 +47,7 @@ type AddItemToCartResponse {
 
 // update cart item quantity
 type UpdateCartItemQuantityRequest {
-	CustomerId int64  `path:"customerId"` // a customer's id
+	CustomerId int64  `path:"customer_id"` // a customer's id
 	Sku        string `path:"sku"`        // an item's variant sku number
 	Quanity    int32  `json:"quanity"`    // a new quantity
 }
@@ -59,7 +59,7 @@ type UpdateCartItemQuantityResponse {
 
 // remove item
 type RemoveCartItemRequest {
-	CustomerId int64  `path:"customerId"` // a customer's id
+	CustomerId int64  `path:"customer_id"` // a customer's id
 	Sku        string `path:"sku"`        // an item's variant sku number
 	Quanity    int32  `json:"quanity"`    // a new quantity
 }
@@ -71,7 +71,7 @@ type RemoveCartItemResponse {
 
 // clear cart
 type ClearCartRequest {
-	CustomerId     int64          `path:"customerId"` // a customer's id
+	CustomerId     int64          `path:"customer_id"` // a customer's id
 	ResponseStatus ResponseStatus `json:"status"`     // a ResponseStatus object
 }
 

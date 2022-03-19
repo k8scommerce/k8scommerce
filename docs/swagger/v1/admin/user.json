@@ -64,14 +64,14 @@
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "pageSize",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "sortOn",
@@ -91,11 +91,11 @@
     "GetAllUsersRequest": {
       "type": "object",
       "properties": {
-        "currentPage": {
+        "current_page": {
           "type": "integer",
           "format": "int64"
         },
-        "pageSize": {
+        "page_size": {
           "type": "integer",
           "format": "int64"
         },
@@ -105,8 +105,8 @@
       },
       "title": "GetAllUsersRequest",
       "required": [
-        "currentPage",
-        "pageSize"
+        "current_page",
+        "page_size"
       ]
     },
     "GetAllUsersResponse": {
@@ -118,11 +118,11 @@
             "$ref": "#/definitions/User"
           }
         },
-        "totalRecords": {
+        "total_records": {
           "type": "integer",
           "format": "int64"
         },
-        "totalPages": {
+        "total_pages": {
           "type": "integer",
           "format": "int64"
         }
@@ -130,8 +130,8 @@
       "title": "GetAllUsersResponse",
       "required": [
         "users",
-        "totalRecords",
-        "totalPages"
+        "total_records",
+        "total_pages"
       ]
     },
     "JwtToken": {
@@ -164,7 +164,7 @@
           "format": "int64",
           "description": " permission group id"
         },
-        "groupName": {
+        "group_name": {
           "type": "string",
           "description": " groupName"
         }
@@ -172,7 +172,7 @@
       "title": "PermissionGroup",
       "required": [
         "id",
-        "groupName"
+        "group_name"
       ]
     },
     "ResponseStatus": {
@@ -201,11 +201,11 @@
           "format": "int64",
           "description": " user id"
         },
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last name"
         },
@@ -221,8 +221,8 @@
       "title": "User",
       "required": [
         "id",
-        "firstName",
-        "lastName",
+        "first_name",
+        "last_name",
         "email"
       ]
     },
@@ -269,12 +269,12 @@
     "UsersPermissionGroups": {
       "type": "object",
       "properties": {
-        "userId": {
+        "user_id": {
           "type": "integer",
           "format": "int64",
           "description": " user id"
         },
-        "permissionGroupId": {
+        "permission_group_id": {
           "type": "integer",
           "format": "int64",
           "description": " permission group id"
@@ -282,8 +282,8 @@
       },
       "title": "UsersPermissionGroups",
       "required": [
-        "userId",
-        "permissionGroupId"
+        "user_id",
+        "permission_group_id"
       ]
     }
   },

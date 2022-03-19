@@ -11,40 +11,41 @@ message Store {
   bool is_default = 2;
   string name = 3;
   string description = 4;
+  string url = 5;
 }
 
 message StoreSetting {
   int64 id = 1;
-  int64 storeId = 2;
-  string seoTitle = 3;
-  string seoRobots = 4;
-  string metaDescription = 5;
-  string metaKeywords = 6;
+  int64 store_id = 2;
+  string seo_title = 3;
+  string seo_robots = 4;
+  string meta_description = 5;
+  string meta_keywords = 6;
   string facebook = 7;
   string twitter = 8;
   string instagram = 9;
   string code = 10;
-  string defaultCurrency = 11;
-  string supportedCurrencies = 12;
-  string defaultLocale = 13;
-  string supportedLocales = 14;
-  int64 defaultCountryId = 15;
-  string contactPhone = 16;
-  string customerSupportEmail = 17;
-  string newOrderNotificationsEmail = 18;
-  int64 checkoutZoneId = 19;
+  string default_currency = 11;
+  string supported_currencies = 12;
+  string default_locale = 13;
+  string supported_locales = 14;
+  int64 default_country_id = 15;
+  string contact_phone = 16;
+  string customer_support_email = 17;
+  string new_order_notifications_email = 18;
+  int64 checkout_zone_id = 19;
 }
 
 message StoreAddress {
   int64 id = 1;
-  int64 storeId = 2;
+  int64 store_id = 2;
   string address = 3;
   string city = 4;
-  string stateProvince = 5;
-  string postalCode = 6;
+  string state_province = 5;
+  string postal_code = 6;
   string country = 7;
   string kind = 8;
-  bool isDefault = 9;
+  bool is_default = 9;
 }
 
 //
@@ -60,8 +61,6 @@ message CreateStoreRequest {
 
 message CreateStoreResponse {
   Store store = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // get store by id
@@ -71,8 +70,6 @@ message GetStoreByIdRequest {
 
 message GetStoreByIdResponse {
   Store store = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // get all stores
@@ -80,8 +77,6 @@ message GetAllStoresRequest {}
 
 message GetAllStoresResponse {
   repeated Store stores = 1;
-  int64 statusCode = 2;
-  string statusMessage = 3;
 }
 
 // service client

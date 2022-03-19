@@ -16,6 +16,23 @@
   ],
   "paths": {
     "/v1/customer": {
+      "get": {
+        "summary": "Login",
+        "description": "login for customers",
+        "operationId": "getCustomer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCustomerResponse"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      },
       "post": {
         "summary": "Create Customer",
         "description": "creates a new customer",
@@ -45,11 +62,71 @@
         ]
       }
     },
+    "/v1/customer/email": {
+      "post": {
+        "summary": "Check for Existing Email",
+        "description": "verifies the email address is unique",
+        "operationId": "checkForExistingEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CheckForExistingEmailResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " email",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CheckForExistingEmailRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/customer/forgot-password": {
+      "post": {
+        "summary": "Forgot Password",
+        "description": "send forgot password email to customer",
+        "operationId": "forgotPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ForgotPasswordResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": ", Emails,, forgot password",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ForgotPasswordRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
     "/v1/customer/login": {
       "post": {
         "summary": "Login",
         "description": "login for customers",
-        "operationId": "customerLogin",
+        "operationId": "login",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -74,6 +151,96 @@
           "customers"
         ]
       }
+    },
+    "/v1/customer/password": {
+      "post": {
+        "summary": "Create Customer",
+        "description": "creates a new customer",
+        "operationId": "setPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SetPasswordResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " set password",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetPasswordRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/customer/resend-confirm-email": {
+      "post": {
+        "summary": "Resend Email Address Confirm Email",
+        "description": "resend email address confirmation email",
+        "operationId": "resendConfirmEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ResendConfirmEmailResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " resend confirm email",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResendConfirmEmailRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/customer/verfify-email-address": {
+      "post": {
+        "summary": "Verify Email Address",
+        "description": "verifies an email address via code contained in resendConfirmEmail",
+        "operationId": "verifyEmailAddress",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/VerifyEmailAddressResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " verify customer email address",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyEmailAddressRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
     }
   },
   "definitions": {
@@ -84,11 +251,15 @@
           "type": "string",
           "description": " street name, ie: 1723 NW 23rd Ave."
         },
+        "apt_suite": {
+          "type": "string",
+          "description": " apartment or suite"
+        },
         "city": {
           "type": "string",
           "description": " city name"
         },
-        "stateProvince": {
+        "state_province": {
           "type": "string",
           "description": " state or province name"
         },
@@ -96,11 +267,11 @@
           "type": "string",
           "description": " IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
         },
-        "postalCode": {
+        "postal_code": {
           "type": "string",
           "description": " postal or zip code"
         },
-        "isDefault": {
+        "is_default": {
           "type": "boolean",
           "format": "boolean",
           "description": " indicates if this is a default address"
@@ -110,10 +281,43 @@
       "required": [
         "street",
         "city",
-        "stateProvince",
+        "state_province",
         "country",
-        "postalCode",
-        "isDefault"
+        "postal_code",
+        "is_default"
+      ]
+    },
+    "CheckForExistingEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " Customer object"
+        }
+      },
+      "title": "CheckForExistingEmailRequest",
+      "required": [
+        "email"
+      ]
+    },
+    "CheckForExistingEmailResponse": {
+      "type": "object",
+      "properties": {
+        "exists": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " boolean true/false if email exists or not"
+        },
+        "is_verified": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " boolean true/false"
+        }
+      },
+      "title": "CheckForExistingEmailResponse",
+      "required": [
+        "exists",
+        "is_verified"
       ]
     },
     "CreateCustomerRequest": {
@@ -135,16 +339,11 @@
         "customer": {
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "CreateCustomerResponse",
       "required": [
-        "customer",
-        "status"
+        "customer"
       ]
     },
     "Customer": {
@@ -155,11 +354,11 @@
           "format": "int64",
           "description": " customer id"
         },
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last or given name"
         },
@@ -167,16 +366,17 @@
           "type": "string",
           "description": " email address"
         },
-        "password": {
-          "type": "string",
-          "description": " password"
+        "is_verified": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " is_verified"
         }
       },
       "title": "Customer",
       "required": [
         "id",
-        "firstName",
-        "lastName",
+        "first_name",
+        "last_name",
         "email"
       ]
     },
@@ -188,23 +388,23 @@
           "format": "int64",
           "description": " customer id"
         },
-        "billingAddress": {
+        "billing_address": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         },
-        "shippingAddresses": {
+        "shipping_addresses": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Address"
           },
-          "description": " collection of Address objects"
+          "description": " array of Address objects"
         }
       },
       "title": "CustomerAccount",
       "required": [
         "id",
-        "billingAddress",
-        "shippingAddresses"
+        "billing_address",
+        "shipping_addresses"
       ]
     },
     "CustomerLoginRequest": {
@@ -236,16 +436,57 @@
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
         },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
         }
       },
       "title": "CustomerLoginResponse",
       "required": [
         "jwt",
         "customer",
-        "status"
+        "success"
+      ]
+    },
+    "ForgotPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " email address, unique to each store id"
+        }
+      },
+      "title": "ForgotPasswordRequest",
+      "required": [
+        "email"
+      ]
+    },
+    "ForgotPasswordResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
+        }
+      },
+      "title": "ForgotPasswordResponse",
+      "required": [
+        "success"
+      ]
+    },
+    "GetCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        }
+      },
+      "title": "GetCustomerResponse",
+      "required": [
+        "customer"
       ]
     },
     "JwtToken": {
@@ -273,11 +514,11 @@
     "NewCustomer": {
       "type": "object",
       "properties": {
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last or given name"
         },
@@ -285,25 +526,47 @@
           "type": "string",
           "description": " email address, unique per store id"
         },
-        "password": {
-          "type": "string",
-          "description": " password"
-        },
-        "billingAddress": {
+        "billing_address": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         },
-        "shippingAddresses": {
+        "shipping_address": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         }
       },
       "title": "NewCustomer",
       "required": [
-        "firstName",
-        "lastName",
-        "email",
-        "password"
+        "first_name",
+        "last_name",
+        "email"
+      ]
+    },
+    "ResendConfirmEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " email address, unique to each store id"
+        }
+      },
+      "title": "ResendConfirmEmailRequest",
+      "required": [
+        "email"
+      ]
+    },
+    "ResendConfirmEmailResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
+        }
+      },
+      "title": "ResendConfirmEmailResponse",
+      "required": [
+        "success"
       ]
     },
     "ResponseStatus": {
@@ -322,6 +585,97 @@
       "title": "ResponseStatus",
       "required": [
         "statusCode"
+      ]
+    },
+    "SetPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": " customer verification code"
+        },
+        "password": {
+          "type": "string",
+          "description": " password"
+        }
+      },
+      "title": "SetPasswordRequest",
+      "required": [
+        "code",
+        "password"
+      ]
+    },
+    "SetPasswordResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
+        }
+      },
+      "title": "SetPasswordResponse",
+      "required": [
+        "success"
+      ]
+    },
+    "UpdateCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        }
+      },
+      "title": "UpdateCustomerRequest",
+      "required": [
+        "customer"
+      ]
+    },
+    "UpdateCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
+        }
+      },
+      "title": "UpdateCustomerResponse",
+      "required": [
+        "customer",
+        "success"
+      ]
+    },
+    "VerifyEmailAddressRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": " verfication code"
+        }
+      },
+      "title": "VerifyEmailAddressRequest",
+      "required": [
+        "code"
+      ]
+    },
+    "VerifyEmailAddressResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
+        }
+      },
+      "title": "VerifyEmailAddressResponse",
+      "required": [
+        "success"
       ]
     }
   },

@@ -13,20 +13,31 @@ import (
 )
 
 type (
-	Address                    = customer.Address
-	CreateCustomerRequest      = customer.CreateCustomerRequest
-	CreateCustomerResponse     = customer.CreateCustomerResponse
-	Customer                   = customer.Customer
-	CustomerAccount            = customer.CustomerAccount
-	GetCustomerByEmailRequest  = customer.GetCustomerByEmailRequest
-	GetCustomerByEmailResponse = customer.GetCustomerByEmailResponse
-	LoginRequest               = customer.LoginRequest
-	LoginResponse              = customer.LoginResponse
+	Address                              = customer.Address
+	CreateCustomerRequest                = customer.CreateCustomerRequest
+	CreateCustomerResponse               = customer.CreateCustomerResponse
+	Customer                             = customer.Customer
+	GetCustomerByEmailRequest            = customer.GetCustomerByEmailRequest
+	GetCustomerByEmailResponse           = customer.GetCustomerByEmailResponse
+	LoginRequest                         = customer.LoginRequest
+	LoginResponse                        = customer.LoginResponse
+	SendConfirmEmailAddressEmailRequest  = customer.SendConfirmEmailAddressEmailRequest
+	SendConfirmEmailAddressEmailResponse = customer.SendConfirmEmailAddressEmailResponse
+	SendForgotPasswordEmailRequest       = customer.SendForgotPasswordEmailRequest
+	SendForgotPasswordEmailResponse      = customer.SendForgotPasswordEmailResponse
+	UpdateCustomerRequest                = customer.UpdateCustomerRequest
+	UpdateCustomerResponse               = customer.UpdateCustomerResponse
+	VerifyEmailAddressRequest            = customer.VerifyEmailAddressRequest
+	VerifyEmailAddressResponse           = customer.VerifyEmailAddressResponse
 
 	CustomerClient interface {
 		CreateCustomer(ctx context.Context, in *CreateCustomerRequest, opts ...grpc.CallOption) (*CreateCustomerResponse, error)
+		UpdateCustomer(ctx context.Context, in *UpdateCustomerRequest, opts ...grpc.CallOption) (*UpdateCustomerResponse, error)
 		GetCustomerByEmail(ctx context.Context, in *GetCustomerByEmailRequest, opts ...grpc.CallOption) (*GetCustomerByEmailResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+		SendForgotPasswordEmail(ctx context.Context, in *SendForgotPasswordEmailRequest, opts ...grpc.CallOption) (*SendForgotPasswordEmailResponse, error)
+		SendConfirmEmailAddressEmail(ctx context.Context, in *SendConfirmEmailAddressEmailRequest, opts ...grpc.CallOption) (*SendConfirmEmailAddressEmailResponse, error)
+		VerifyEmailAddress(ctx context.Context, in *VerifyEmailAddressRequest, opts ...grpc.CallOption) (*VerifyEmailAddressResponse, error)
 	}
 
 	defaultCustomerClient struct {
@@ -45,6 +56,11 @@ func (m *defaultCustomerClient) CreateCustomer(ctx context.Context, in *CreateCu
 	return client.CreateCustomer(ctx, in, opts...)
 }
 
+func (m *defaultCustomerClient) UpdateCustomer(ctx context.Context, in *UpdateCustomerRequest, opts ...grpc.CallOption) (*UpdateCustomerResponse, error) {
+	client := customer.NewCustomerClientClient(m.cli.Conn())
+	return client.UpdateCustomer(ctx, in, opts...)
+}
+
 func (m *defaultCustomerClient) GetCustomerByEmail(ctx context.Context, in *GetCustomerByEmailRequest, opts ...grpc.CallOption) (*GetCustomerByEmailResponse, error) {
 	client := customer.NewCustomerClientClient(m.cli.Conn())
 	return client.GetCustomerByEmail(ctx, in, opts...)
@@ -53,4 +69,19 @@ func (m *defaultCustomerClient) GetCustomerByEmail(ctx context.Context, in *GetC
 func (m *defaultCustomerClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	client := customer.NewCustomerClientClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
+}
+
+func (m *defaultCustomerClient) SendForgotPasswordEmail(ctx context.Context, in *SendForgotPasswordEmailRequest, opts ...grpc.CallOption) (*SendForgotPasswordEmailResponse, error) {
+	client := customer.NewCustomerClientClient(m.cli.Conn())
+	return client.SendForgotPasswordEmail(ctx, in, opts...)
+}
+
+func (m *defaultCustomerClient) SendConfirmEmailAddressEmail(ctx context.Context, in *SendConfirmEmailAddressEmailRequest, opts ...grpc.CallOption) (*SendConfirmEmailAddressEmailResponse, error) {
+	client := customer.NewCustomerClientClient(m.cli.Conn())
+	return client.SendConfirmEmailAddressEmail(ctx, in, opts...)
+}
+
+func (m *defaultCustomerClient) VerifyEmailAddress(ctx context.Context, in *VerifyEmailAddressRequest, opts ...grpc.CallOption) (*VerifyEmailAddressResponse, error) {
+	client := customer.NewCustomerClientClient(m.cli.Conn())
+	return client.VerifyEmailAddress(ctx, in, opts...)
 }

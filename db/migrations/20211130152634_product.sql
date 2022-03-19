@@ -21,6 +21,7 @@ CREATE TABLE product (
 );
 
 CREATE INDEX IF NOT EXISTS idx_product_store_id ON product USING btree (store_id);
+CREATE INDEX IF NOT EXISTS idx_product_slug ON product USING btree (slug);
 
 -- +goose StatementEnd
 -- +goose Down

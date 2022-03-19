@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/convert"
 	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 	"strconv"
 	"strings"
@@ -69,7 +69,7 @@ func (l *GetCategoryBySlugLogic) GetCategoryBySlug(in *catalog.GetCategoryBySlug
 
 				cat := catalog.Category{}
 				if found != nil {
-					types.ConvertModelCategoryToProtoCategory(found, &cat)
+					convert.ModelCategoryToProtoCategory(found, &cat)
 				}
 
 				// the response struct

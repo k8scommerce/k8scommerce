@@ -8,8 +8,8 @@ option go_package = "pb/user";
 
 message User {
   int64 id = 1;
-  string firstName = 2;
-  string lastName = 3;
+  string first_name = 2;
+  string last_name = 3;
   string email = 4;
   string password = 5;
   map<string, string> attributes = 6;
@@ -17,12 +17,12 @@ message User {
 
 message PermissionGroup {
   int64 id = 1;
-  string groupName = 2;
+  string group_name = 2;
 }
 
 message UsersPermissionGroups {
     int64 userId = 1;
-    int64 permissionGroupId = 2;
+    int64 permission_group_id = 2;
 }
 
 //
@@ -33,28 +33,28 @@ message UsersPermissionGroups {
 
 // get all users
 message GetAllUsersRequest {
-  int64 currentPage = 1;
-  int64 pageSize = 2;
-  string sortOn = 3;
+  int64 current_page = 1;
+  int64 page_size = 2;
+  string sort_on = 3;
 }
 
 message GetAllUsersResponse {
   repeated User users = 1;
-  int64 totalRecords = 2;
-  int64 totalPages = 3;
+  int64 total_records = 2;
+  int64 total_pages = 3;
 }
 
 // get all permissions groups
 message GetAllPermissionGroupsRequest {
-  int64 currentPage = 1;
-  int64 pageSize = 2;
-  string sortOn = 3;
+  int64 current_page = 1;
+  int64 page_size = 2;
+  string sort_on = 3;
 }
 
 message GetAllPermissionGroupsResponse {
-  repeated PermissionGroup permissionGroups = 1;
-  int64 totalRecords = 2;
-  int64 totalPages = 3;
+  repeated PermissionGroup permission_groups = 1;
+  int64 total_records = 2;
+  int64 total_pages = 3;
 }
 
 // create user product

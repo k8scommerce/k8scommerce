@@ -1,6 +1,7 @@
 package repos_test
 
 import (
+	"database/sql"
 	"fmt"
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/repos"
@@ -29,7 +30,7 @@ var _ = Describe("Customer", func() {
 			FirstName: "Test",
 			LastName:  "Customer",
 			Email:     email,
-			Password:  password,
+			Password:  sql.NullString{String: password, Valid: true},
 		}
 
 		err := repo.Customer().Create(&customer)
@@ -63,6 +64,14 @@ var _ = Describe("Customer", func() {
 			Expect(err).To(BeNil())
 			Expect(result).ToNot(BeNil())
 		})
+
+		It("should fail geting a customer by email", func() {
+			email := "fail@example.com"
+			Expect(repo).ToNot(BeNil())
+			result, err := repo.Customer().GetCustomerByEmail(storeId, email)
+			Expect(err).ToNot(BeNil())
+			Expect(result).To(BeNil())
+		})
 	})
 
 	Describe("Login", func() {
@@ -83,7 +92,6 @@ var _ = Describe("Customer", func() {
 			password = "abc@example.com"
 			result, err := repo.Customer().Login(storeId, email, password)
 			Expect(err).ToNot(BeNil())
-
 			Expect(err.Error()).To(Equal(fmt.Sprintf("status %d: error %v", repos.CustomerLoginErrorCode, repos.CustomerLoginError)))
 			Expect(result).To(BeNil())
 		})

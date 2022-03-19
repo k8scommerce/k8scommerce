@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"sync"
 
+	"k8scommerce/internal/convert"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/galaxycache"
@@ -82,7 +82,7 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(in *catalog.GetPr
 					for _, f := range found.Results {
 						prod := catalog.Product{}
 
-						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
+						convert.ModelProductToProtoProduct(&f.Product, &[]models.Variant{
 							f.Variant,
 						}, &[]models.Price{
 							f.Price,

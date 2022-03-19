@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"strconv"
 	"sync"
 
+	"k8scommerce/internal/convert"
+	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/services/rpc/store/internal/svc"
 	"k8scommerce/services/rpc/store/pb/store"
 
@@ -57,18 +57,22 @@ func (l *GetStoreByIdLogic) GetStoreById(in *store.GetStoreByIdRequest) (*store.
 		// register the galaxy one time
 		entryGetStoreByIdLogic.galaxy = gcache.RegisterGalaxyFunc("GetStoreById", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// todo: add your logic here and delete this line
-				fmt.Printf("Looking up GetStoreById record by key: %s", key)
 
-				// uncomment below to get the item from the adapter
-				// found, err := l.ca.GetProductBySku(key)
-				// if err != nil {
-				//	logx.Infof("error: %s", err)
-				//	return err
-				// }
+				found, err := l.svcCtx.Repo.Store().GetStoreById(galaxyctx.GetStoreId(ctx))
+				if err != nil {
+					logx.Infof("error: %s", err)
+					return err
+				}
+
+				s := &store.Store{}
+				if found != nil {
+					convert.ModelStoreToProtoStore(found, s)
+				}
 
 				// the response struct
-				item := &store.GetStoreByIdResponse{}
+				item := &store.GetStoreByIdResponse{
+					Store: s,
+				}
 
 				out, err := json.Marshal(item)
 				if err != nil {
@@ -80,17 +84,16 @@ func (l *GetStoreByIdLogic) GetStoreById(in *store.GetStoreByIdRequest) (*store.
 
 	res := &store.GetStoreByIdResponse{}
 
+	l.ctx = galaxyctx.SetStoreId(l.ctx, in.Id)
+
+	key := fmt.Sprintf("StoreID:%d", in.Id)
 	codec := &galaxycache.ByteCodec{}
-	if err := entryGetStoreByIdLogic.galaxy.Get(l.ctx, strconv.Itoa(int(in.Id)), codec); err != nil {
-		res.StatusCode = http.StatusNoContent
-		res.StatusMessage = err.Error()
+	if err := entryGetStoreByIdLogic.galaxy.Get(l.ctx, key, codec); err != nil {
 		return res, nil
 	}
 
 	b, err := codec.MarshalBinary()
 	if err != nil {
-		res.StatusCode = http.StatusInternalServerError
-		res.StatusMessage = err.Error()
 		return res, nil
 	}
 

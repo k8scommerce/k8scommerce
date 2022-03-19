@@ -5,6 +5,7 @@ import (
 
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/rpc/customer/customerclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +25,20 @@ func NewCheckForExistingEmailLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *CheckForExistingEmailLogic) CheckForExistingEmail(req types.CheckForExistingEmailRequest) (resp *types.CheckForExistingEmailResponse, err error) {
-	// todo: add your logic here and delete this line
+	resp = &types.CheckForExistingEmailResponse{
+		Exists: false,
+	}
+	found, err := l.svcCtx.CustomerRpc.GetCustomerByEmail(l.ctx, &customerclient.GetCustomerByEmailRequest{
+		StoreId: l.ctx.Value(types.StoreKey).(int64),
+		Email:   req.Email,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	if found.Customer != nil {
+		resp.Exists = true
+		resp.IsVerified = found.Customer.IsVerified
+	}
+	return resp, err
 }

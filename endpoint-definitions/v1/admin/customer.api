@@ -8,35 +8,36 @@ info(
 
 // objects
 type Customer {
-	Id        int64  `json:"id"`                // customer id
-	FirstName string `json:"firstName"`         // first name
-	LastName  string `json:"lastName"`          // last or given name
-	Email     string `json:"email,required"`    // email address
-	Password  string `json:"password,optional"` // password
+	Id         int64  `json:"id"`                  // customer id
+	FirstName  string `json:"first_name"`           // first name
+	LastName   string `json:"last_name"`            // last or given name
+	Email      string `json:"email,required"`      // email address
+	Password   string `json:"password,optional"`   // password
+	IsVerified bool   `json:"is_verified,optional"` // is_verified
 }
 
 type NewCustomer {
-	FirstName       string  `json:"firstName,required"`         // first name
-	LastName        string  `json:"lastName,required"`          // last or given name
+	FirstName       string  `json:"first_name,required"`         // first name
+	LastName        string  `json:"last_name,required"`          // last or given name
 	Email           string  `json:"email,required"`             // email address, unique per store id
 	Password        string  `json:"password,required"`          // password
-	BillingAddress  Address `json:"billingAddress,optional"`    // Address object
-	ShippingAddress Address `json:"shippingAddresses,optional"` // Address object
+	BillingAddress  Address `json:"billing_address,optional"`    // Address object
+	ShippingAddress Address `json:"shipping_addresses,optional"` // Address object
 }
 
 type CustomerAccount {
 	CustomerId        int64     `json:"id"`                // customer id
-	BillingAddress    Address   `json:"billingAddress"`    // Address object
-	ShippingAddresses []Address `json:"shippingAddresses"` // collection of Address objects
+	BillingAddress    Address   `json:"billing_address"`    // Address object
+	ShippingAddresses []Address `json:"shipping_addresses"` // collection of Address objects
 }
 
 type Address {
 	Street        string `json:"street"`             // street name, ie: 1723 NW 23rd Ave.
 	City          string `json:"city"`               // city name
-	StateProvince string `json:"stateProvince"`      // state or province name
+	StateProvince string `json:"state_province"`      // state or province name
 	Country       string `json:"country"`            // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
-	PostalCode    string `json:"postalCode"`         // postal or zip code
-	IsDefault     bool   `json:"isDefault,required"` // indicates if this is a default address
+	PostalCode    string `json:"postal_code"`         // postal or zip code
+	IsDefault     bool   `json:"is_default,required"` // indicates if this is a default address
 }
 
 //
@@ -64,16 +65,41 @@ type CreateCustomerResponse {
 	Customer Customer `json:"customer"` // Customer object
 }
 
+// email
+type CheckForExistingEmailRequest {
+	Email string `json:"email"` // Customer object
+}
+
+type CheckForExistingEmailResponse {
+	Exists     bool `json:"exists"`     // boolean true/false if email exists or not
+	IsVerified bool `json:"is_verified"` // boolean true/false
+}
+
+// get customer
+type GetCustomerRequest {
+	Id int64 `path:"id"` // customer id
+}
+
+type GetCustomerResponse {
+	Customer Customer `json:"customer"` // Customer object
+}
+
 //
 // endpoints
 //
 
 @server(
-	// jwt: Auth
 	middleware: Locale, StoreKey
 	group: customers
 )
 service admin {
+	@doc(
+		summary: "Check for Existing Email"
+		description: "verifies the email address is unique"
+	)
+	@handler checkForExistingEmail
+	post /v1/customer/email(CheckForExistingEmailRequest) returns (CheckForExistingEmailResponse)
+	
 	@doc(
 		summary: "Create Customer"
 		description: "creates a new customer"
@@ -87,4 +113,19 @@ service admin {
 	)
 	@handler login
 	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
+	
+}
+
+@server(
+	// jwt: Auth
+	middleware: Locale, StoreKey
+	group: customers
+)
+service admin {
+	@doc(
+		summary: "Login"
+		description: "login for customers"
+	)
+	@handler getCustomer
+	get /v1/customer/:id(GetCustomerRequest) returns (GetCustomerResponse)
 }

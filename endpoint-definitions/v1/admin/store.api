@@ -1,0 +1,45 @@
+info(
+	title: "User API Endpoints"
+	desc: "admin gateway user api endpoints"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1"
+)
+
+// objects
+type Store {
+	Id          int64  `json:"id"`                   // store id
+	Url         string `json:"url,optional"`         // unique url
+	Name        string `json:"name,optional"`        // store name
+	Description string `json:"description,optional"` // description
+	IsDefault   bool   `json:"is_default,optional"`   // indicates if this is the default store
+
+}
+
+// generate store id
+type GenerateStoreKeyTokenRequest {
+	StoreId int64 `path:"store_id"`
+}
+
+type GenerateStoreKeyTokenResponse {
+	Token string `json:"token"`
+}
+//
+// endpoints
+//
+
+@server(
+	// jwt: Auth
+	middleware: Locale
+	group: store
+)
+service admin {
+	// generate store key token
+	@doc(
+		summary: "Geneate Store ID"
+		description: "returns a valid store ID, long-term JWT token"
+		storeId: "numeric store ID"
+	)
+	@handler generateStoreKeyToken
+	get /v1/store/generate-token/:storeId(GenerateStoreKeyTokenRequest) returns (GenerateStoreKeyTokenResponse)
+}

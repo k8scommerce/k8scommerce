@@ -2,20 +2,28 @@ package middleware
 
 import (
 	"context"
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/api/client/internal/types"
+	"fmt"
 	"net/http"
+
+	"k8scommerce/services/api/client/internal/config"
+	"k8scommerce/services/api/client/internal/types"
+
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type StoreKeyMiddleware struct {
-	hashCoder utils.HashCoder
+	// hashCoder utils.HashCoder
+	hashSalt string
+	config   config.Config
 }
 
-func NewStoreKeyMiddleware(hashSalt string) *StoreKeyMiddleware {
-	hashCoder := utils.NewHashCoder(hashSalt, utils.Store)
+func NewStoreKeyMiddleware(c config.Config) *StoreKeyMiddleware {
+	// hashCoder := utils.NewHashCoder(c.hashSalt, utils.Store)
 
 	return &StoreKeyMiddleware{
-		hashCoder: hashCoder,
+		// hashCoder: hashCoder,
+		hashSalt: c.HashSalt,
+		config:   c,
 	}
 }
 
@@ -28,17 +36,30 @@ func (m *StoreKeyMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			}
 
 			ctx := r.Context()
-			ctx = context.WithValue(ctx, types.StoreKey, int64(1))
+			ctx = context.WithValue(ctx, types.StoreKey, int64(0))
 
-			// decode the hashed ID
-			id := m.hashCoder.Decode(result[0])
-			if id != 0 {
-				ctx = context.WithValue(ctx, types.StoreKey, id)
+			token, err := jwt.ParseWithClaims(result[0], &types.StoreKeyClaims{}, func(token *jwt.Token) (interface{}, error) {
+				return []byte(m.hashSalt), nil
+			})
+
+			var storeId int64 = 0
+
+			if claims, ok := token.Claims.(*types.StoreKeyClaims); ok && token.Valid {
+				storeId = claims.StoreId
+				// fmt.Printf("%v %v", claims.StoreId, claims.RegisteredClaims.Issuer)
+			} else {
+
+				http.Error(w, fmt.Sprintf("error: invalid Store-Key header: %s", err.Error()), http.StatusUnauthorized)
+				return
+			}
+
+			if storeId != 0 {
+				ctx = context.WithValue(ctx, types.StoreKey, storeId)
 				next(w, r.WithContext(ctx))
 				return
 			}
 		}
 
-		http.Error(w, "error: missing Store-Key header :: "+m.hashCoder.Encode(1), http.StatusUnauthorized)
+		http.Error(w, "error: missing Store-Key header", http.StatusUnauthorized)
 	}
 }

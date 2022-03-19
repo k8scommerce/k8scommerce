@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/convert"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/services/rpc/user/internal/svc"
-	"k8scommerce/services/rpc/user/internal/types"
 	"k8scommerce/services/rpc/user/pb/user"
 	"sync"
 
@@ -78,7 +78,7 @@ func (l *GetAllUsersLogic) GetAllUsers(in *user.GetAllUsersRequest) (*user.GetAl
 
 					for _, f := range found.Users {
 						user := user.User{}
-						types.ConvertModelUserToProtoUser(&f, &user)
+						convert.ModelUserToProtoUser(&f, &user)
 						users = append(users, &user)
 					}
 				}

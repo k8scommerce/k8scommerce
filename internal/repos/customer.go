@@ -2,6 +2,7 @@ package repos
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"k8scommerce/internal/models"
@@ -61,9 +62,10 @@ func (m *customerRepo) Login(storeId int64, email, password string) (res *models
 
 func (m *customerRepo) Create(customer *models.Customer) error {
 	// hash the password
-	hash, _ := m.hashPassword(customer.Password)
-	customer.Password = hash
-
+	if customer.Password.Valid {
+		hash, _ := m.hashPassword(customer.Password.String)
+		customer.Password = sql.NullString{String: hash, Valid: true}
+	}
 	if err := customer.Insert(m.ctx, m.db); err != nil {
 		return err
 	}
@@ -107,7 +109,7 @@ func (m *customerRepo) Upsert() error {
 }
 
 func (m *customerRepo) Delete(id int64) error {
-	customer, err := models.ProductByID(m.ctx, m.db, id)
+	customer, err := models.CustomerByID(m.ctx, m.db, id)
 	if err != nil {
 		return &RepoError{
 			Err:        err,
@@ -134,9 +136,12 @@ func (m *customerRepo) hashPassword(password string) (string, error) {
 	return string(bytes), err
 }
 
-func (m *customerRepo) checkPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
+func (m *customerRepo) checkPasswordHash(password string, hash sql.NullString) bool {
+	if hash.Valid {
+		err := bcrypt.CompareHashAndPassword([]byte(hash.String), []byte(password))
+		return err == nil
+	}
+	return false
 }
 
 func (m *customerRepo) GetCustomerByEmail(storeId int64, email string) (*models.Customer, error) {

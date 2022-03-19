@@ -158,10 +158,9 @@
         "parameters": [
           {
             "name": "id",
-            "description": "category id",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -443,21 +442,21 @@
             "description": "category id",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "currentPage",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "pageSize",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "filter",
@@ -497,14 +496,14 @@
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "pageSize",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "filter",
@@ -535,12 +534,12 @@
           "format": "int64",
           "description": " asset id"
         },
-        "productId": {
+        "product_id": {
           "type": "integer",
           "format": "int64",
           "description": " product id"
         },
-        "variantId": {
+        "variant_id": {
           "type": "integer",
           "format": "int64",
           "description": " variant id"
@@ -549,7 +548,7 @@
           "type": "string",
           "description": " asset name"
         },
-        "displayName": {
+        "display_name": {
           "type": "string",
           "description": " display name"
         },
@@ -562,11 +561,11 @@
           "format": "int32",
           "description": " asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)"
         },
-        "contentType": {
+        "content_type": {
           "type": "string",
           "description": " content type (mime type)"
         },
-        "sortOrder": {
+        "sort_order": {
           "type": "integer",
           "format": "int64",
           "description": " sort order"
@@ -586,7 +585,7 @@
           "format": "int64",
           "description": " category id"
         },
-        "parentId": {
+        "parent_id": {
           "type": "integer",
           "format": "int64",
           "description": " parent category id. references Category.Id"
@@ -603,15 +602,15 @@
           "type": "string",
           "description": " description of category"
         },
-        "metaTitle": {
+        "meta_title": {
           "type": "string",
           "description": " metatag title for SEO"
         },
-        "metaDescription": {
+        "meta_description": {
           "type": "string",
           "description": " metatag description for SEO"
         },
-        "metaKeywords": {
+        "meta_keywords": {
           "type": "string",
           "description": " metatag keywords for SEO"
         },
@@ -620,7 +619,7 @@
           "format": "int32",
           "description": " category level depth"
         },
-        "sortOrder": {
+        "sort_order": {
           "type": "integer",
           "format": "int32",
           "description": " sort order of menu items on the same level and same parent id"
@@ -629,7 +628,7 @@
       "title": "Category",
       "required": [
         "id",
-        "parentId",
+        "parent_id",
         "slug",
         "name"
       ]
@@ -729,11 +728,11 @@
     "GetAllProductsRequest": {
       "type": "object",
       "properties": {
-        "currentPage": {
+        "current_page": {
           "type": "integer",
           "format": "int64"
         },
-        "pageSize": {
+        "page_size": {
           "type": "integer",
           "format": "int64"
         },
@@ -746,8 +745,8 @@
       },
       "title": "GetAllProductsRequest",
       "required": [
-        "currentPage",
-        "pageSize"
+        "current_page",
+        "page_size"
       ]
     },
     "GetAllProductsResponse": {
@@ -759,11 +758,11 @@
             "$ref": "#/definitions/Product"
           }
         },
-        "totalRecords": {
+        "total_records": {
           "type": "integer",
           "format": "int64"
         },
-        "totalPages": {
+        "total_pages": {
           "type": "integer",
           "format": "int64"
         }
@@ -771,8 +770,8 @@
       "title": "GetAllProductsResponse",
       "required": [
         "products",
-        "totalRecords",
-        "totalPages"
+        "total_records",
+        "total_pages"
       ]
     },
     "GetCategoryByIdRequest": {
@@ -780,7 +779,8 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " category id"
         }
       },
       "title": "GetCategoryByIdRequest",
@@ -842,15 +842,15 @@
     "GetProductsByCategoryIdRequest": {
       "type": "object",
       "properties": {
-        "categoryId": {
+        "category_id": {
           "type": "integer",
           "format": "int64"
         },
-        "currentPage": {
+        "current_page": {
           "type": "integer",
           "format": "int64"
         },
-        "pageSize": {
+        "page_size": {
           "type": "integer",
           "format": "int64"
         },
@@ -863,9 +863,9 @@
       },
       "title": "GetProductsByCategoryIdRequest",
       "required": [
-        "categoryId",
-        "currentPage",
-        "pageSize"
+        "category_id",
+        "current_page",
+        "page_size"
       ]
     },
     "GetProductsByCategoryIdResponse": {
@@ -877,11 +877,11 @@
             "$ref": "#/definitions/Product"
           }
         },
-        "totalRecords": {
+        "total_records": {
           "type": "integer",
           "format": "int64"
         },
-        "totalPages": {
+        "total_pages": {
           "type": "integer",
           "format": "int64"
         }
@@ -889,8 +889,8 @@
       "title": "GetProductsByCategoryIdResponse",
       "required": [
         "products",
-        "totalRecords",
-        "totalPages"
+        "total_records",
+        "total_pages"
       ]
     },
     "JwtToken": {
@@ -923,21 +923,21 @@
           "format": "int64",
           "description": " price id"
         },
-        "salePrice": {
+        "sale_price": {
           "type": "number",
           "format": "double",
           "description": " sale price"
         },
-        "formattedSalePrice": {
+        "formatted_sale_price": {
           "type": "string",
           "description": " formatted sale price"
         },
-        "retailPrice": {
+        "retail_price": {
           "type": "number",
           "format": "double",
           "description": " retail price"
         },
-        "formattedRetailPrice": {
+        "formatted_retail_price": {
           "type": "string",
           "description": " formatted retail price"
         },
@@ -948,8 +948,8 @@
       },
       "title": "Price",
       "required": [
-        "salePrice",
-        "formattedSalePrice"
+        "sale_price",
+        "formatted_sale_price"
       ]
     },
     "Product": {
@@ -968,7 +968,7 @@
           "type": "string",
           "description": " product name"
         },
-        "shortDescription": {
+        "short_description": {
           "type": "string",
           "description": " product short description. used in category pages"
         },
@@ -976,15 +976,15 @@
           "type": "string",
           "description": " category description"
         },
-        "metaTitle": {
+        "meta_title": {
           "type": "string",
           "description": " metatag title for SEO"
         },
-        "metaDescription": {
+        "meta_description": {
           "type": "string",
           "description": " metatag description for SEO"
         },
-        "metaKeywords": {
+        "meta_keywords": {
           "type": "string",
           "description": " metatag keywords for SEO"
         },
@@ -995,7 +995,7 @@
           },
           "description": " collection of Variant objects"
         },
-        "defaultImage": {
+        "default_image": {
           "$ref": "#/definitions/Asset",
           "description": " default Asset object of image type"
         },
@@ -1076,11 +1076,11 @@
     "UploadAssetRequest": {
       "type": "object",
       "properties": {
-        "productId": {
+        "product_id": {
           "type": "integer",
           "format": "int64"
         },
-        "variantId": {
+        "variant_id": {
           "type": "integer",
           "format": "int64"
         },
@@ -1090,8 +1090,8 @@
       },
       "title": "UploadAssetRequest",
       "required": [
-        "productId",
-        "variantId",
+        "product_id",
+        "variant_id",
         "kind"
       ]
     },
@@ -1103,7 +1103,7 @@
           "format": "int64",
           "description": " variant id"
         },
-        "isDefault": {
+        "is_default": {
           "type": "boolean",
           "format": "boolean",
           "description": " is default variant. each product must have exactly 1 default variant"
@@ -1140,7 +1140,7 @@
       "title": "Variant",
       "required": [
         "id",
-        "isDefault",
+        "is_default",
         "sku"
       ]
     }

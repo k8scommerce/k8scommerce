@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"net/http"
 	"sync"
 
 	"k8scommerce/services/rpc/inventory/internal/svc"
@@ -39,10 +38,8 @@ func NewGetItemQuantityLogic(ctx context.Context, svcCtx *svc.ServiceContext, un
 func (l *GetItemQuantityLogic) GetItemQuantity(in *inventory.GetItemQuantityRequest) (*inventory.GetItemQuantityResponse, error) {
 
 	res := &inventory.GetItemQuantityResponse{
-		Sku:           in.Sku,
-		Quanity:       100,
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+		Sku:     in.Sku,
+		Quanity: 100,
 	}
 
 	return res, nil

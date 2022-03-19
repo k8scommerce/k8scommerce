@@ -2,8 +2,8 @@ package users
 
 import (
 	"context"
-	"encoding/json"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 	"k8scommerce/services/rpc/user/userclient"
@@ -37,12 +37,13 @@ func (l *GetAllUsersLogic) GetAllUsers(req types.GetAllUsersRequest) (resp *type
 
 	// convert from one type to another
 	// the structs are identical
-	resp = &types.GetAllUsersResponse{}
-	b, err := json.Marshal(response)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &resp)
+	out := &types.GetAllUsersResponse{}
+	utils.TransformObj(response, &out)
+	// b, err := json.Marshal(response)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// err = json.Unmarshal(b, &res)
 
-	return resp, err
+	return out, err
 }

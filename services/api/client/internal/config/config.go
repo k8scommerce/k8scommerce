@@ -15,7 +15,6 @@ type Config struct {
 	CartRpc            zrpc.RpcClientConf
 	CatalogRpc         zrpc.RpcClientConf
 	CustomerRpc        zrpc.RpcClientConf
-	EmailRpc           zrpc.RpcClientConf
 	InventoryRpc       zrpc.RpcClientConf
 	OthersBoughtRpc    zrpc.RpcClientConf
 	PaymentRpc         zrpc.RpcClientConf

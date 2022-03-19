@@ -6,6 +6,7 @@ type ErrorCode int
 
 const (
 	SqlErrorCode ErrorCode = iota
+	SelectErrorCode
 	SaveErrorCode
 	UpdateErrorCode
 	UpsertErrorCode
@@ -13,6 +14,10 @@ const (
 	HashPasswordErrorCode
 	CustomerLoginErrorCode
 	GetCustomerByEmailErrorCode
+	GetStoreByIdErrorCode
+	RedeemPasswordResetErrorCode
+	SelectCustomerPasswordResetByTokenErrorCode
+	SelectCustomerErrorCode
 )
 
 type RepoError struct {

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"sync"
 
 	"k8scommerce/services/rpc/store/internal/svc"
@@ -56,14 +55,15 @@ func (l *GetAllStoresLogic) GetAllStores(in *store.GetAllStoresRequest) (*store.
 		// register the galaxy one time
 		entryGetAllStoresLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllStores", l.universe, galaxycache.GetterFunc(
 			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// todo: add your logic here and delete this line
-				fmt.Printf("Looking up GetAllStores record by key: %s", key)
-
-				// uncomment below to get the item from the adapter
-				// found, err := l.ca.GetProductBySku(key)
+				// found, err := l.svcCtx.Repo.Store().GetStoreById(galaxyctx.GetStoreId(ctx))
 				// if err != nil {
-				//	logx.Infof("error: %s", err)
-				//	return err
+				// 	logx.Infof("error: %s", err)
+				// 	return err
+				// }
+
+				// s := &store.Store{}
+				// if found != nil {
+				//  convert.ModelStoreToProtoStore(found, s)
 				// }
 
 				// the response struct
@@ -81,15 +81,11 @@ func (l *GetAllStoresLogic) GetAllStores(in *store.GetAllStoresRequest) (*store.
 
 	codec := &galaxycache.ByteCodec{}
 	if err := entryGetAllStoresLogic.galaxy.Get(l.ctx, "all-stores", codec); err != nil {
-		res.StatusCode = http.StatusNoContent
-		res.StatusMessage = err.Error()
 		return res, nil
 	}
 
 	b, err := codec.MarshalBinary()
 	if err != nil {
-		res.StatusCode = http.StatusInternalServerError
-		res.StatusMessage = err.Error()
 		return res, nil
 	}
 

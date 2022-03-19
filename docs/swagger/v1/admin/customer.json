@@ -45,11 +45,41 @@
         ]
       }
     },
+    "/v1/customer/email": {
+      "post": {
+        "summary": "Check for Existing Email",
+        "description": "verifies the email address is unique",
+        "operationId": "checkForExistingEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CheckForExistingEmailResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " email",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CheckForExistingEmailRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
     "/v1/customer/login": {
       "post": {
         "summary": "Login",
         "description": "login for customers",
-        "operationId": "customerLogin",
+        "operationId": "login",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -74,6 +104,33 @@
           "customers"
         ]
       }
+    },
+    "/v1/customer/{id}": {
+      "get": {
+        "summary": "Login",
+        "description": "login for customers",
+        "operationId": "getCustomer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCustomerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
     }
   },
   "definitions": {
@@ -88,7 +145,7 @@
           "type": "string",
           "description": " city name"
         },
-        "stateProvince": {
+        "state_province": {
           "type": "string",
           "description": " state or province name"
         },
@@ -96,11 +153,11 @@
           "type": "string",
           "description": " IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
         },
-        "postalCode": {
+        "postal_code": {
           "type": "string",
           "description": " postal or zip code"
         },
-        "isDefault": {
+        "is_default": {
           "type": "boolean",
           "format": "boolean",
           "description": " indicates if this is a default address"
@@ -110,10 +167,43 @@
       "required": [
         "street",
         "city",
-        "stateProvince",
+        "state_province",
         "country",
-        "postalCode",
-        "isDefault"
+        "postal_code",
+        "is_default"
+      ]
+    },
+    "CheckForExistingEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " Customer object"
+        }
+      },
+      "title": "CheckForExistingEmailRequest",
+      "required": [
+        "email"
+      ]
+    },
+    "CheckForExistingEmailResponse": {
+      "type": "object",
+      "properties": {
+        "exists": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " boolean true/false if email exists or not"
+        },
+        "is_verified": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " boolean true/false"
+        }
+      },
+      "title": "CheckForExistingEmailResponse",
+      "required": [
+        "exists",
+        "is_verified"
       ]
     },
     "CreateCustomerRequest": {
@@ -135,16 +225,11 @@
         "customer": {
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "CreateCustomerResponse",
       "required": [
-        "customer",
-        "status"
+        "customer"
       ]
     },
     "Customer": {
@@ -155,11 +240,11 @@
           "format": "int64",
           "description": " customer id"
         },
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last or given name"
         },
@@ -170,13 +255,18 @@
         "password": {
           "type": "string",
           "description": " password"
+        },
+        "is_verified": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " is_verified"
         }
       },
       "title": "Customer",
       "required": [
         "id",
-        "firstName",
-        "lastName",
+        "first_name",
+        "last_name",
         "email"
       ]
     },
@@ -188,11 +278,11 @@
           "format": "int64",
           "description": " customer id"
         },
-        "billingAddress": {
+        "billing_address": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         },
-        "shippingAddresses": {
+        "shipping_addresses": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Address"
@@ -203,8 +293,8 @@
       "title": "CustomerAccount",
       "required": [
         "id",
-        "billingAddress",
-        "shippingAddresses"
+        "billing_address",
+        "shipping_addresses"
       ]
     },
     "CustomerLoginRequest": {
@@ -236,16 +326,44 @@
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
         },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
         }
       },
       "title": "CustomerLoginResponse",
       "required": [
         "jwt",
         "customer",
-        "status"
+        "success"
+      ]
+    },
+    "GetCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " customer id"
+        }
+      },
+      "title": "GetCustomerRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "GetCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        }
+      },
+      "title": "GetCustomerResponse",
+      "required": [
+        "customer"
       ]
     },
     "JwtToken": {
@@ -273,11 +391,11 @@
     "NewCustomer": {
       "type": "object",
       "properties": {
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last or given name"
         },
@@ -289,19 +407,19 @@
           "type": "string",
           "description": " password"
         },
-        "billingAddress": {
+        "billing_address": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         },
-        "shippingAddresses": {
+        "shipping_addresses": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         }
       },
       "title": "NewCustomer",
       "required": [
-        "firstName",
-        "lastName",
+        "first_name",
+        "last_name",
         "email",
         "password"
       ]

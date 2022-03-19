@@ -9,3 +9,11 @@ PostgresConfig:
   MaxOpenConnections: 10
   MaxIdleConnections: 2
   MaxConnectionLifetimeMinutes: 5
+EventsConfig:
+  Enabled: ${EVENTS_ENABLED}
+  RabbitMQ: ${RABBITMQ_ENABLED}
+  RabbitMQConfig:
+    Url: ${RABBITMQ_URL}
+EncryptionConfig:
+  Secret: "${ENCRYPTION_SECRET}"
+  Token: "${ENCRYPTION_TOKEN}"
