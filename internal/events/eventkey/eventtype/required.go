@@ -8,4 +8,9 @@ import (
 type Required struct {
 	*customer.Customer
 	*store.Store
+	*store.StoreSetting
+}
+
+func (r *Required) Load() {
+
 }

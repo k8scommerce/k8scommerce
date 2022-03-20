@@ -3,12 +3,14 @@ package logic
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"log"
 	"net/url"
 
 	"k8scommerce/internal/events/eventkey/eventtype"
 	"k8scommerce/services/consumer/email/internal/svc"
 
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	mail "github.com/xhit/go-simple-mail/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -35,15 +37,36 @@ func (l *CustomerConfirmationEmailLogic) Send(in *eventtype.CustomerConfirmation
 
 	CUSTOMER_CONFIRMATION_EMAIL.Execute(&body, in)
 
+	fromName := in.StoreSetting.Config.Emails.CustomerConfirmationEmail.Name
+	fromEmail := in.StoreSetting.Config.Emails.CustomerConfirmationEmail.Email
+	if fromName == "" {
+		fromName = in.StoreSetting.Config.Emails.Default.Name
+	}
+	if fromEmail == "" {
+		fromEmail = in.StoreSetting.Config.Emails.Default.Email
+	}
+
+	subject, err := l.svcCtx.Localizer.Localize(&i18n.LocalizeConfig{
+		MessageID: "CustomerConfirmationEmailSubject",
+		DefaultMessage: &i18n.Message{
+			ID:          "CustomerConfirmationEmailSubject",
+			Description: "The subject of the customer account confirmation email",
+			Other:       "Confirm your email address",
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Create email
 	msg := mail.NewMSG()
-	msg.SetFrom("K8sCommerce <alma.tuck@k8scommerce.com>")
-	msg.AddTo("alma.tuck@gmail.com")
-	msg.SetSubject("Confirm your email address")
+	msg.SetFrom(fmt.Sprintf("%s <%s>", fromName, fromEmail))
+	msg.AddTo(in.Customer.Email)
+	msg.SetSubject(subject)
 	msg.SetBody(mail.TextHTML, body.String())
 
 	// Send msg
-	err := msg.Send(l.svcCtx.EmailClient.GetSMTPClient())
+	err = msg.Send(l.svcCtx.EmailClient.GetSMTPClient())
 	if err != nil {
 		log.Fatal(err)
 	}

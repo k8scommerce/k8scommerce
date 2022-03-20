@@ -3,6 +3,8 @@ package logic
 import "html/template"
 
 var (
+	err error
+
 	// Customer Emails
 	CUSTOMER_COMPLETED_ORDER    *template.Template
 	CUSTOMER_CONFIRMATION_EMAIL *template.Template

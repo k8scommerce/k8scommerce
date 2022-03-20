@@ -5,12 +5,12 @@ import (
 	"k8scommerce/services/rpc/customer/pb/customer"
 )
 
-func ModelCustomerToProtoCustomer(modelCustomer *models.Customer, protoCustomer *customer.Customer) {
+func ModelCustomerToProtoCustomer(fromModel *models.Customer, toProto *customer.Customer) {
 	// convert the Customer
-	protoCustomer.Id = modelCustomer.ID
-	protoCustomer.StoreId = modelCustomer.StoreID
-	protoCustomer.FirstName = modelCustomer.FirstName
-	protoCustomer.LastName = modelCustomer.LastName
-	protoCustomer.Email = modelCustomer.Email
-	protoCustomer.IsVerified = modelCustomer.IsVerified
+	toProto.Id = fromModel.ID
+	toProto.StoreId = fromModel.StoreID
+	toProto.FirstName = fromModel.FirstName
+	toProto.LastName = fromModel.LastName
+	toProto.Email = fromModel.Email
+	toProto.IsVerified = fromModel.IsVerified
 }

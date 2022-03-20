@@ -90,8 +90,8 @@ cart
 # customer\
 
 
-consumerServices=imageresizer\
-imageresizer
+consumerServices=imageresizer
+# email
 # imageresizer\
 # imageresizer\
 # imageresizer\

@@ -47,7 +47,7 @@ func MustHandle(ev events.EventManager, svcCtx *svc.ServiceContext) {
 		log.Fatal("Error loading adminFailedOrder")
 	}
 	if err := adminNewOrder(ev, svcCtx); err != nil {
-		log.Fatal("Error loading newOrder")
+		log.Fatal("Error loading adminNewOrder")
 	}
 
 }

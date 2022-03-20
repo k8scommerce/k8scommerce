@@ -6,18 +6,18 @@ import (
 	"k8scommerce/services/rpc/customer/pb/customer"
 )
 
-func ProtoAddressToProtoModelCustomerAddress(id *int64, storeId, customerId int64, kind models.AddressKind, proto *customer.Address, model *models.CustomerAddress) {
+func ProtoAddressToProtoModelCustomerAddress(id *int64, storeId, customerId int64, kind models.AddressKind, fromProto *customer.Address, toModel *models.CustomerAddress) {
 	if id != nil {
-		model.ID = *id
+		toModel.ID = *id
 	}
-	model.StoreID = storeId
-	model.CustomerID = customerId
-	model.Kind = kind
-	model.Street = proto.Street
-	model.AptSuite = sql.NullString{String: proto.AptSuite, Valid: true}
-	model.City = proto.City
-	model.StateProvince = proto.StateProvince
-	model.PostalCode = proto.PostalCode
-	model.Country = proto.Country
-	model.IsDefault = proto.IsDefault
+	toModel.StoreID = storeId
+	toModel.CustomerID = customerId
+	toModel.Kind = kind
+	toModel.Street = fromProto.Street
+	toModel.AptSuite = sql.NullString{String: fromProto.AptSuite, Valid: true}
+	toModel.City = fromProto.City
+	toModel.StateProvince = fromProto.StateProvince
+	toModel.PostalCode = fromProto.PostalCode
+	toModel.Country = fromProto.Country
+	toModel.IsDefault = fromProto.IsDefault
 }

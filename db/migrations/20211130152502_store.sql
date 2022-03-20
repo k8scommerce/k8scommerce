@@ -19,52 +19,20 @@ CREATE TABLE store (
 CREATE TABLE store_setting (
     id bigserial PRIMARY KEY,
     store_id bigint not null,
-    seo_title character varying,
-    seo_robots character varying,
-    meta_description text,
-    meta_keywords text,
-    facebook character varying,
-    twitter character varying,
-    instagram character varying,
-    code character varying,
-    default_currency character varying DEFAULT 'USD' NOT NULL,
-    supported_currencies character varying,
-    default_locale character varying DEFAULT 'America/Denver' NOT NULL,
-    supported_locales character varying,
-    default_country_id bigint DEFAULT 1 NOT NULL,
-    contact_phone character varying,
-    mail_from_address character varying,
-    customer_support_email character varying,
-    new_order_notifications_email character varying,
-    checkout_zone_id bigint,
+    config JSONB default '{}' NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    FOREIGN KEY (store_id) REFERENCES store (id) ON DELETE CASCADE
 );
+CREATE INDEX IF NOT EXISTS idx_store_setting_store_id ON store_setting USING btree (store_id);
 -- +goose StatementEnd
 --
 --
--- +goose StatementBegin
-CREATE TABLE store_address (
-    id bigserial PRIMARY KEY,
-    store_id bigint not null,
-    kind address_kind NOT NULL,
-    is_default boolean DEFAULT FALSE NOT NULL,
-    address text,
-    city text,
-    state_province character varying,
-    postal_code character varying,
-    country character varying,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
-    deleted_at timestamp without time zone
-);
--- +goose StatementEnd
 --
 -- +goose Down
 --
 -- +goose StatementBegin
 DROP TABLE store;
 DROP TABLE store_setting;
-DROP TABLE store_address;
 -- +goose StatementEnd

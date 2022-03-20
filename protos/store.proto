@@ -3,49 +3,102 @@ syntax = "proto3";
 package store;
 option go_package = "pb/store";
 
-// import "google/protobuf/wrappers.proto";
-// import "google/protobuf/timestamp.proto";
-
 message Store {
   int64 id = 1;
-  bool is_default = 2;
+  string url = 2;
   string name = 3;
   string description = 4;
-  string url = 5;
+  bool is_default = 5;
 }
 
 message StoreSetting {
   int64 id = 1;
   int64 store_id = 2;
-  string seo_title = 3;
-  string seo_robots = 4;
-  string meta_description = 5;
-  string meta_keywords = 6;
-  string facebook = 7;
-  string twitter = 8;
-  string instagram = 9;
-  string code = 10;
-  string default_currency = 11;
-  string supported_currencies = 12;
-  string default_locale = 13;
-  string supported_locales = 14;
-  int64 default_country_id = 15;
-  string contact_phone = 16;
-  string customer_support_email = 17;
-  string new_order_notifications_email = 18;
-  int64 checkout_zone_id = 19;
+  StoreConfig config = 3;
 }
 
-message StoreAddress {
-  int64 id = 1;
-  int64 store_id = 2;
-  string address = 3;
+message StoreConfig {
+  SEO seo = 1;
+  Social social = 2;
+  Currency currency = 3;
+  Locale locale = 4;
+  Contact contact = 5;
+  Emails emails = 6;
+}
+
+message SEO {
+  string seo_title = 1;
+  string seo_robots = 2;
+  string meta_description = 3;
+  string meta_keywords = 4;
+}
+
+message Social {
+  string facebook = 1;
+  string twitter = 2;
+  string instagram = 3;
+  map<string, string> custom = 4;
+}
+
+message Currency {
+  string default_currency = 1;
+  string supported_currencies = 2;
+}
+
+message Locale {
+  string default_locale = 1;
+  string supported_locales = 2;
+  string default_country_id = 3;
+}
+
+message Contact {
+  repeated Phone phones = 1;
+  repeated Address addresses = 2;
+}
+
+message Phone {
+  string corportate = 1;
+  string customer_support = 2;
+  map<string, string> custom = 3;
+}
+
+message Address {
+  string name = 1;
+  string street = 2;
+  string apt_suite = 3;
   string city = 4;
   string state_province = 5;
-  string postal_code = 6;
-  string country = 7;
-  string kind = 8;
-  bool is_default = 9;
+  string country = 6;
+  string postal_code = 7;
+  bool is_default = 8;
+}
+
+message Emails {
+  Email default = 1;
+  Email customer_support = 2;
+
+  // Customer Emails
+  Email customer_completed_order = 3;
+  Email customer_confirmation_email = 4;
+  Email customer_new_account = 5;
+  Email customer_note = 6;
+  Email customer_on_hold_order = 7;
+  Email customer_password_changed = 8;
+  Email customer_processing_order = 9;
+  Email customer_refunded_order = 10;
+  Email customer_reset_password = 11;
+  Email customer_sale = 12;
+
+  // Admin Emails
+  Email admin_cancelled_order = 13;
+  Email admin_failed_order = 14;
+  Email admin_new_order = 15;
+}
+
+message Email {
+  string name = 1;
+  string email = 2;
+  string subject = 3;
 }
 
 //
@@ -79,9 +132,20 @@ message GetAllStoresResponse {
   repeated Store stores = 1;
 }
 
+// get store settings
+message GetStoreSettingRequest {
+  int64 storeId = 1;
+}
+
+message GetStoreSettingResponse {
+  StoreSetting setting = 1;
+}
+
 // service client
 service StoreClient {
   rpc CreateStore(CreateStoreRequest) returns (CreateStoreResponse);
   rpc GetStoreById(GetStoreByIdRequest) returns (GetStoreByIdResponse);
   rpc GetAllStores(GetAllStoresRequest) returns (GetAllStoresResponse);
+  rpc GetStoreSettings(GetStoreSettingRequest)
+      returns (GetStoreSettingResponse);
 }

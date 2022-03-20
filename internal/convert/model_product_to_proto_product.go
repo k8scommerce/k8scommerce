@@ -9,20 +9,20 @@ func ModelProductToProtoProduct(
 	modelProduct *models.Product,
 	modelVariants *[]models.Variant,
 	modelPrices *[]models.Price,
-	protoProduct *catalog.Product,
+	toProto *catalog.Product,
 ) {
 	// convert the product
-	protoProduct.Id = modelProduct.ID
-	protoProduct.Slug = modelProduct.Slug
-	protoProduct.Name = modelProduct.Name
-	protoProduct.ShortDescription = modelProduct.ShortDescription.String
-	protoProduct.Description = modelProduct.Description.String
-	protoProduct.MetaTitle = modelProduct.MetaTitle.String
-	protoProduct.MetaDescription = modelProduct.MetaDescription.String
-	protoProduct.MetaKeywords = modelProduct.MetaKeywords.String
-	protoProduct.Promotionable = modelProduct.Promotionable
-	protoProduct.AvailableOn = modelProduct.AvailableOn.Time.String()
-	protoProduct.DiscontinueOn = modelProduct.DiscontinueOn.Time.GoString()
+	toProto.Id = modelProduct.ID
+	toProto.Slug = modelProduct.Slug
+	toProto.Name = modelProduct.Name
+	toProto.ShortDescription = modelProduct.ShortDescription.String
+	toProto.Description = modelProduct.Description.String
+	toProto.MetaTitle = modelProduct.MetaTitle.String
+	toProto.MetaDescription = modelProduct.MetaDescription.String
+	toProto.MetaKeywords = modelProduct.MetaKeywords.String
+	toProto.Promotionable = modelProduct.Promotionable
+	toProto.AvailableOn = modelProduct.AvailableOn.Time.String()
+	toProto.DiscontinueOn = modelProduct.DiscontinueOn.Time.GoString()
 
 	if modelVariants != nil {
 		// convert the variants
@@ -65,7 +65,7 @@ func ModelProductToProtoProduct(
 
 		}
 
-		protoProduct.Variants = variants
-		// protoProduct.Variants[0].
+		toProto.Variants = variants
+		// toProto.Variants[0].
 	}
 }

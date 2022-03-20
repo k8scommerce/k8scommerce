@@ -5,10 +5,10 @@ import (
 	"k8scommerce/services/rpc/store/pb/store"
 )
 
-func ModelStoreToProtoStore(modelStore *models.Store, protoStore *store.Store) {
+func ModelStoreToProtoStore(fromModel *models.Store, toProto *store.Store) {
 	// convert the Store
-	protoStore.Id = modelStore.ID
-	protoStore.Name = modelStore.Name
-	protoStore.Description = modelStore.Description.String
-	protoStore.Url = modelStore.URL
+	toProto.Id = fromModel.ID
+	toProto.Name = fromModel.Name
+	toProto.Description = fromModel.Description.String
+	toProto.Url = fromModel.URL
 }

@@ -5,14 +5,14 @@ import (
 	"k8scommerce/services/rpc/customer/pb/customer"
 )
 
-func ModelCustomerAddressToProtoAddress(model *models.CustomerAddress, proto *customer.Address) {
-	proto.Street = model.Street
-	if model.AptSuite.Valid {
-		proto.AptSuite = model.AptSuite.String
+func ModelCustomerAddressToProtoAddress(fromModel *models.CustomerAddress, toProto *customer.Address) {
+	toProto.Street = fromModel.Street
+	if fromModel.AptSuite.Valid {
+		toProto.AptSuite = fromModel.AptSuite.String
 	}
-	proto.City = model.City
-	proto.StateProvince = model.StateProvince
-	proto.PostalCode = model.PostalCode
-	proto.Country = model.Country
-	proto.IsDefault = model.IsDefault
+	toProto.City = fromModel.City
+	toProto.StateProvince = fromModel.StateProvince
+	toProto.PostalCode = fromModel.PostalCode
+	toProto.Country = fromModel.Country
+	toProto.IsDefault = fromModel.IsDefault
 }

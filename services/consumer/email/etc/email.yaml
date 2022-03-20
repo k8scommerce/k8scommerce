@@ -1,4 +1,4 @@
-Name: imageresizer
+Name: email
 ListenOn:
 Log:
   Mode: file
@@ -15,8 +15,8 @@ EventsConfig:
 EmailConfig:
   Host: ${EMAIL_HOST}
   Port: ${EMAIL_PORT}
-  Username: "${EMAIL_USERNAME}"
-  Password: "${EMAIL_PASSWORD}"
+  Username: ${EMAIL_USERNAME}
+  Password: ${EMAIL_PASSWORD}
   Encryption: ${EMAIL_ENCRYPTION}
   DKIMOptions:
     PrivateKey: ${EMAIL_PRIVATE_KEY}

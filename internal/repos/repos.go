@@ -55,6 +55,7 @@ type Repo interface {
 	OthersBought() OthersBought
 	SimilarProducts() SimilarProducts
 	Store() Store
+	StoreSetting() StoreSetting
 	User() User
 
 	Begin() (*sql.Tx, error)
@@ -144,6 +145,10 @@ func (r *repo) SimilarProducts() SimilarProducts {
 
 func (r *repo) Store() Store {
 	return newStore(r)
+}
+
+func (r *repo) StoreSetting() StoreSetting {
+	return newStoreSetting(r)
 }
 
 func (r *repo) User() User {

@@ -13,20 +13,32 @@ import (
 )
 
 type (
-	CreateStoreRequest   = store.CreateStoreRequest
-	CreateStoreResponse  = store.CreateStoreResponse
-	GetAllStoresRequest  = store.GetAllStoresRequest
-	GetAllStoresResponse = store.GetAllStoresResponse
-	GetStoreByIdRequest  = store.GetStoreByIdRequest
-	GetStoreByIdResponse = store.GetStoreByIdResponse
-	Store                = store.Store
-	StoreAddress         = store.StoreAddress
-	StoreSetting         = store.StoreSetting
+	Address                 = store.Address
+	Contact                 = store.Contact
+	CreateStoreRequest      = store.CreateStoreRequest
+	CreateStoreResponse     = store.CreateStoreResponse
+	Currency                = store.Currency
+	Email                   = store.Email
+	Emails                  = store.Emails
+	GetAllStoresRequest     = store.GetAllStoresRequest
+	GetAllStoresResponse    = store.GetAllStoresResponse
+	GetStoreByIdRequest     = store.GetStoreByIdRequest
+	GetStoreByIdResponse    = store.GetStoreByIdResponse
+	GetStoreSettingRequest  = store.GetStoreSettingRequest
+	GetStoreSettingResponse = store.GetStoreSettingResponse
+	Locale                  = store.Locale
+	Phone                   = store.Phone
+	SEO                     = store.SEO
+	Social                  = store.Social
+	Store                   = store.Store
+	StoreConfig             = store.StoreConfig
+	StoreSetting            = store.StoreSetting
 
 	StoreClient interface {
 		CreateStore(ctx context.Context, in *CreateStoreRequest, opts ...grpc.CallOption) (*CreateStoreResponse, error)
 		GetStoreById(ctx context.Context, in *GetStoreByIdRequest, opts ...grpc.CallOption) (*GetStoreByIdResponse, error)
 		GetAllStores(ctx context.Context, in *GetAllStoresRequest, opts ...grpc.CallOption) (*GetAllStoresResponse, error)
+		GetStoreSettings(ctx context.Context, in *GetStoreSettingRequest, opts ...grpc.CallOption) (*GetStoreSettingResponse, error)
 	}
 
 	defaultStoreClient struct {
@@ -53,4 +65,9 @@ func (m *defaultStoreClient) GetStoreById(ctx context.Context, in *GetStoreByIdR
 func (m *defaultStoreClient) GetAllStores(ctx context.Context, in *GetAllStoresRequest, opts ...grpc.CallOption) (*GetAllStoresResponse, error) {
 	client := store.NewStoreClientClient(m.cli.Conn())
 	return client.GetAllStores(ctx, in, opts...)
+}
+
+func (m *defaultStoreClient) GetStoreSettings(ctx context.Context, in *GetStoreSettingRequest, opts ...grpc.CallOption) (*GetStoreSettingResponse, error) {
+	client := store.NewStoreClientClient(m.cli.Conn())
+	return client.GetStoreSettings(ctx, in, opts...)
 }

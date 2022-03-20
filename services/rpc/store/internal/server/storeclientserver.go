@@ -40,3 +40,8 @@ func (s *StoreClientServer) GetAllStores(ctx context.Context, in *store.GetAllSt
 	l := logic.NewGetAllStoresLogic(ctx, s.svcCtx, s.universe)
 	return l.GetAllStores(in)
 }
+
+func (s *StoreClientServer) GetStoreSettings(ctx context.Context, in *store.GetStoreSettingRequest) (*store.GetStoreSettingResponse, error) {
+	l := logic.NewGetStoreSettingsLogic(ctx, s.svcCtx, s.universe)
+	return l.GetStoreSettings(in)
+}
