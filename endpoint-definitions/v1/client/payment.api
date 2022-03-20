@@ -1,33 +1,32 @@
+info(
+	title: "Client Customer API"
+	desc: "client customer api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1"
+)
 
-enum TransactionKind {
-  Unknown = 0;
-  Sale = 1;
-  Refund = 2;
-  Credit = 3;
-  Chargeback = 4;
+type CreditCard {
+	StoreId                   int64  `json:"store_id"`
+	CardNumber                string `json:"card_number"`
+	Cvc                       int32  `json:"cvc"`
+	CreditCardExpirationYear  int32  `json:"credit_card_expiration_year"`
+	CreditCardExpirationMonth int32  `json:"credit_card_expiration_month"`
 }
 
-message CreditCard {
-  int64 storeId = 1;
-  string cardNumber = 2;
-  int32 cvc = 3;
-  int32 creditCardExpirationYear = 4;
-  int32 creditCardExpirationMonth = 5;
-}
-
-message Transaction {
-  int64 id = 1;
-  int64 storeId = 2;
-  int64 gatewayId = 3;
-  string referenceCode = 4;
-  string authCode = 5;
-  string response = 6;
-  int64 amount = 7;
-  string currency = 8;
-  TransactionKind kind = 9;
-  bool isRecurring = 10;
-  google.protobuf.Timestamp expiresAt = 11;
-  google.protobuf.Timestamp createdAt = 12;
+type Transaction {
+	Id            int64  `json:"id"`
+	StoreId       int64  `json:"store_id"`
+	GatewayId     int64  `json:"gateway_id"`
+	ReferenceCode string `json:"reference_code"`
+	AuthCode      string `json:"auth_code"`
+	Response      string `json:"response"`
+	Amount        int64  `json:"amount"`
+	Currency      string `json:"currency"`
+	Kind          int    `json:"kind,options=0|1|2|3|4|5"`
+	IsRecurring   bool   `json:"is_recurring"`
+	ExpiresAt     string `json:"expires_at"`
+	CreatedAt     string `json:"created_at"`
 }
 
 //
@@ -37,71 +36,105 @@ message Transaction {
 //
 
 // process payment
-message ProcessPaymentRequest {
-  int64 storeId = 1;
-  int64 amount = 2;
-  CreditCard creditCard = 3;
-  customer.Address billingAddress = 4;
+type ProcessPaymentRequest {
+	StoreId    int64      `json:"store_id"`
+	Amount     int64      `json:"amount"`
+	CreditCard CreditCard `json:"credit_card"`
+	//   CustomerAddress Address `json:"address"`
 }
 
-message ProcessPaymentResponse {
-  string transactionId = 1;
+type ProcessPaymentResponse {
+	TransactionId string `json:"transaction_id"`
 }
 
 // get transactions
-message GetTransactionsRequest {
-  int64 storeId = 1;
-  int64 currentPage = 2;
-  int64 pageSize = 3;
-  string sortOn = 4;
+type GetTransactionsRequest {
+	StoreId     int64  `json:"store_id"`
+	CurrentPage int64  `json:"current_page"`
+	PageSize    int64  `json:"page_size"`
+	SortOn      string `json:"sort_on"`
 }
 
-message GetTransactionsResponse {
-  repeated Transaction transactions = 1;
-  int64 totalRecords = 2;
-  int64 totalPages = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
+type GetTransactionsResponse {
+	Transactions []Transaction `json:"transactions"`
+	TotalRecords int64         `json:"total_records"`
+	TotalPages   int64         `json:"total_pages"`
 }
 
 // get transaction by id
-message GetTranscationByIdRequest {
-  int64 storeId = 1;
-  int64 currentPage = 2;
-  int64 pageSize = 3;
-  string sortOn = 4;
+type GetTranscationByIdRequest {
+	StoreId     int64  `json:"store_id"`
+	CurrentPage int64  `json:"current_page"`
+	PageSize    int64  `json:"page_size"`
+	SortOn      string `json:"sort_on"`
 }
 
-message GetTranscationByIdResponse {
-  Transaction transactions = 1;
-  int64 totalRecords = 2;
-  int64 totalPages = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
+type GetTranscationByIdResponse {
+	Transactions []Transaction `json:"transactions"`
+	TotalRecords int64         `json:"total_records"`
+	TotalPages   int64         `json:"total_pages"`
 }
 
-// search transactions
-message SearchTransactionsRequest {
-  int64 storeId = 1;
-  string searchtOn = 2;
-  int64 currentPage = 3;
-  int64 pageSize = 4;
-  string sortOn = 5;
-}
-
-message SearchTransactionsResponse {
-  Transaction transactions = 1;
-  int64 totalRecords = 2;
-  int64 totalPages = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
-}
-
-service PaymentClient {
-  rpc ProcessPayment(ProcessPaymentRequest) returns (ProcessPaymentResponse);
-  rpc GetTransactions(ProcessPaymentRequest) returns (ProcessPaymentResponse);
-  rpc GetTranscationById(GetTranscationByIdRequest)
-      returns (GetTranscationByIdResponse);
-  rpc SearchTranscations(SearchTransactionsRequest)
-      returns (SearchTransactionsResponse);
+@server(
+	// jwt: Auth
+	middleware: Locale, StoreKey // IdempotencyKey - https://stripe.com/docs/api/idempotent_requests
+	group: customers
+)
+service client {
+	@doc(
+		summary: "Charge"
+		description: "creates an authorization-capture"
+	)
+	@handler sale
+	post /v1/payment/charge(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Auth"
+		description: "creates an authorization only"
+	)
+	@handler auth
+	post /v1/payment/authorization(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Capture"
+		description: "creates a capture on a prior authorization"
+	)
+	@handler capture
+	post /v1/payment/capture(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Cancel"
+		description: "cancels a prior authorization"
+	)
+	@handler cancel
+	post /v1/payment/cancel(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Refund"
+		description: "creates a refund"
+	)
+	@handler refund
+	post /v1/payment/refund(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Credit"
+		description: "creates a credit"
+	)
+	@handler credit
+	post /v1/payment/credit(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Get All Transaction"
+		description: "returns all transations"
+	)
+	@handler getTransactions
+	get /v1/transactions(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Get Transaction By ID"
+		description: "returns a transction by id"
+		id: "transaction id"
+	)
+	@handler getTranscationById
+	get /v1/transaction/:id(GetTranscationByIdRequest)  returns (GetTranscationByIdResponse)
 }

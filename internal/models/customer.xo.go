@@ -15,7 +15,7 @@ type Customer struct {
 	LastName   string         `json:"last_name" db:"last_name"`     // last_name
 	Email      string         `json:"email" db:"email"`             // email
 	Password   sql.NullString `json:"password" db:"password"`       // password
-	IsVerified sql.NullBool   `json:"is_verified" db:"is_verified"` // is_verified
+	IsVerified bool           `json:"is_verified" db:"is_verified"` // is_verified
 	// xo fields
 	_exists, _deleted bool
 }

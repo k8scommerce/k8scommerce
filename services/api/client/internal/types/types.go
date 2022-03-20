@@ -191,11 +191,13 @@ type GetAllProductsResponse struct {
 }
 
 type Customer struct {
-	Id         int64  `json:"id"`                             // customer id
-	FirstName  string `json:"first_name"`                     // first name
-	LastName   string `json:"last_name"`                      // last or given name
-	Email      string `json:"email,required"`                 // email address
-	IsVerified bool   `json:"is_verified,optional,omitempty"` // is_verified
+	Id                int64     `json:"id"`                                    // customer id
+	FirstName         string    `json:"first_name"`                            // first name
+	LastName          string    `json:"last_name"`                             // last or given name
+	Email             string    `json:"email,required"`                        // email address
+	IsVerified        bool      `json:"is_verified,optional,omitempty"`        // is_verified
+	BillingAddresses  []Address `json:"billing_addresses,optional,omitempty"`  // Address object
+	ShippingAddresses []Address `json:"shipping_addresses,optional,omitempty"` // array of Address objects
 }
 
 type NewCustomer struct {
@@ -204,12 +206,6 @@ type NewCustomer struct {
 	Email           string  `json:"email,required"`                      // email address, unique per store id
 	BillingAddress  Address `json:"billing_address,optional,omitempty"`  // Address object
 	ShippingAddress Address `json:"shipping_address,optional,omitempty"` // Address object
-}
-
-type CustomerAccount struct {
-	CustomerId        int64     `json:"id"`                 // customer id
-	BillingAddress    Address   `json:"billing_address"`    // Address object
-	ShippingAddresses []Address `json:"shipping_addresses"` // array of Address objects
 }
 
 type Address struct {

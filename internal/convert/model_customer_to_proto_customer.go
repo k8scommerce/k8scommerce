@@ -12,5 +12,5 @@ func ModelCustomerToProtoCustomer(modelCustomer *models.Customer, protoCustomer 
 	protoCustomer.FirstName = modelCustomer.FirstName
 	protoCustomer.LastName = modelCustomer.LastName
 	protoCustomer.Email = modelCustomer.Email
-	protoCustomer.IsVerified = modelCustomer.IsVerified.Bool
+	protoCustomer.IsVerified = modelCustomer.IsVerified
 }

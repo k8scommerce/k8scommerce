@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"database/sql"
 	"k8scommerce/internal/convert"
 	"k8scommerce/internal/events/eventkey"
 	"k8scommerce/internal/events/eventkey/eventtype"
@@ -48,7 +47,7 @@ func (l *VerifyEmailAddressLogic) VerifyEmailAddress(in *customer.VerifyEmailAdd
 	}
 
 	if foundCustomer != nil {
-		foundCustomer.IsVerified = sql.NullBool{Bool: true, Valid: true}
+		foundCustomer.IsVerified = true
 		l.svcCtx.Repo.Customer().Update(foundCustomer)
 	}
 

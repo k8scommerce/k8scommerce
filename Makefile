@@ -190,7 +190,7 @@ cleanup:
 .PHONY: generate-xo
 generate-xo:
 	@xo schema ${POSTGRES_DSN} \
-	--go-field-tag='`json:"{{ .SQLName }}" db:"{{ .SQLName }}"`' \
+	--go-field-tag='json:"{{ .SQLName }}" db:"{{ .SQLName }}"' \
 	-o ./internal/models \
 	-e *.created_at \
 	-e *.updated_at \

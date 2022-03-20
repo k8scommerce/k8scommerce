@@ -45,6 +45,7 @@ type Repo interface {
 	CartItem() CartItem
 	Category() Category
 	Customer() Customer
+	CustomerAddress() CustomerAddress
 	CustomerPasswordReset() CustomerPasswordReset
 	InventoryBrand() InventoryBrand
 	InventoryItem() InventoryItem
@@ -99,6 +100,10 @@ func (r *repo) CartItem() CartItem {
 
 func (r *repo) Category() Category {
 	return newCategory(r)
+}
+
+func (r *repo) CustomerAddress() CustomerAddress {
+	return newCustomerAddress(r)
 }
 
 func (r *repo) Customer() Customer {

@@ -370,26 +370,12 @@
           "type": "boolean",
           "format": "boolean",
           "description": " is_verified"
-        }
-      },
-      "title": "Customer",
-      "required": [
-        "id",
-        "first_name",
-        "last_name",
-        "email"
-      ]
-    },
-    "CustomerAccount": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": " customer id"
         },
-        "billing_address": {
-          "$ref": "#/definitions/Address",
+        "billing_addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          },
           "description": " Address object"
         },
         "shipping_addresses": {
@@ -400,11 +386,12 @@
           "description": " array of Address objects"
         }
       },
-      "title": "CustomerAccount",
+      "title": "Customer",
       "required": [
         "id",
-        "billing_address",
-        "shipping_addresses"
+        "first_name",
+        "last_name",
+        "email"
       ]
     },
     "CustomerLoginRequest": {

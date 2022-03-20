@@ -14,8 +14,8 @@ message Customer {
   string email = 5;
   string password = 6;
   bool is_verified = 7;
-  Address billing_address = 8;
-  repeated Address shipping_address = 9;
+  repeated Address billing_addresses = 8;
+  repeated Address shipping_addresses = 9;
 }
 
 message Address {

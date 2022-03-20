@@ -3,7 +3,9 @@ package customers
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
 	"k8scommerce/services/rpc/customer/customerclient"
@@ -36,20 +38,22 @@ func (l *CreateCustomerLogic) CreateCustomer(req types.CreateCustomerRequest) (r
 			LastName:   req.Customer.LastName,
 			Email:      req.Customer.Email,
 			IsVerified: false,
-			BillingAddress: &customerclient.Address{
-				Street:        req.Customer.BillingAddress.Street,
-				AptSuite:      req.Customer.BillingAddress.AptSuite,
-				City:          req.Customer.BillingAddress.City,
-				StateProvince: req.Customer.BillingAddress.StateProvince,
-				PostalCode:    req.Customer.BillingAddress.PostalCode,
-				Country:       req.Customer.BillingAddress.Country,
-				IsDefault:     req.Customer.BillingAddress.IsDefault,
+			BillingAddresses: []*customerclient.Address{
+				{
+					Street:        req.Customer.BillingAddress.Street,
+					AptSuite:      req.Customer.BillingAddress.AptSuite,
+					City:          req.Customer.BillingAddress.City,
+					StateProvince: req.Customer.BillingAddress.StateProvince,
+					PostalCode:    req.Customer.BillingAddress.PostalCode,
+					Country:       req.Customer.BillingAddress.Country,
+					IsDefault:     req.Customer.BillingAddress.IsDefault,
+				},
 			},
 		},
 	}
 
 	if (types.Address{}) != req.Customer.ShippingAddress {
-		customerObj.Customer.ShippingAddress = append(customerObj.Customer.ShippingAddress, &customerclient.Address{
+		customerObj.Customer.ShippingAddresses = append(customerObj.Customer.ShippingAddresses, &customerclient.Address{
 			Street:        req.Customer.ShippingAddress.Street,
 			AptSuite:      req.Customer.ShippingAddress.AptSuite,
 			City:          req.Customer.ShippingAddress.City,
@@ -62,7 +66,19 @@ func (l *CreateCustomerLogic) CreateCustomer(req types.CreateCustomerRequest) (r
 
 	createCustomerResponse, err := l.svcCtx.CustomerRpc.CreateCustomer(l.ctx, customerObj)
 	if err != nil {
-		return nil, err
+		if strings.Contains(err.Error(), "AlreadyExists") {
+			// return a valid customer
+			found, err := l.svcCtx.CustomerRpc.GetCustomerByEmail(l.ctx, &customerclient.GetCustomerByEmailRequest{
+				StoreId: l.ctx.Value(types.StoreKey).(int64),
+				Email:   req.Customer.Email,
+			})
+			if err != nil {
+				return nil, err
+			}
+			utils.TransformObj(found, &createCustomerResponse)
+		} else {
+			return nil, err
+		}
 	}
 
 	b, err := json.Marshal(createCustomerResponse)

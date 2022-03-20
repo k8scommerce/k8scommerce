@@ -2,9 +2,7 @@ package logic_test
 
 import (
 	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
-
-	"k8scommerce/services/rpc/customer/internal/logic"
+	// . "github.com/onsi/gomega"
 )
 
 var _ = Describe("Createcustomerlogic", func() {
