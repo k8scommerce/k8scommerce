@@ -8,35 +8,31 @@ info(
 
 // objects
 type Customer {
-	Id        int64  `json:"id"`                 // customer id
-	FirstName string `json:"firstName"`          // first name
-	LastName  string `json:"lastName"`           // last or given name
-	Email     string `json:"email,required"`     // email address
-	Password  string `json:"password,optional"` // password
+	Id                int64     `json:"id,optional,omitempty"`                 // customer id
+	FirstName         string    `json:"first_name,optional,omitempty"`         // first name
+	LastName          string    `json:"last_name,optional,omitempty"`          // last or given name
+	Email             string    `json:"email,optional,omitempty"`              // email address
+	IsVerified        bool      `json:"is_verified,optional,omitempty"`        // is_verified
+	BillingAddresses  []Address `json:"billing_addresses,optional,omitempty"`  // Address object
+	ShippingAddresses []Address `json:"shipping_addresses,optional,omitempty"` // array of Address objects
 }
 
 type NewCustomer {
-	FirstName       string  `json:"firstName,required"`         // first name
-	LastName        string  `json:"lastName,required"`          // last or given name
-	Email           string  `json:"email,required"`             // email address, unique per store id
-	Password        string  `json:"password,required"`          // password
-	BillingAddress  Address `json:"billingAddress,optional"`    // Address object
-	ShippingAddress Address `json:"shippingAddresses,optional"` // Address object
-}
-
-type CustomerAccount {
-	CustomerId        int64     `json:"id"`                // customer id
-	BillingAddress    Address   `json:"billingAddress"`    // Address object
-	ShippingAddresses []Address `json:"shippingAddresses"` // collection of Address objects
+	FirstName       string  `json:"first_name,required"`                 // first name
+	LastName        string  `json:"last_name,required"`                  // last or given name
+	Email           string  `json:"email,required"`                      // email address, unique per store id
+	BillingAddress  Address `json:"billing_address,optional,omitempty"`  // Address object
+	ShippingAddress Address `json:"shipping_address,optional,omitempty"` // Address object
 }
 
 type Address {
-	Street        string `json:"street"`             // street name, ie: 1723 NW 23rd Ave.
-	City          string `json:"city"`               // city name
-	StateProvince string `json:"stateProvince"`      // state or province name
-	Country       string `json:"country"`            // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
-	PostalCode    string `json:"postalCode"`         // postal or zip code
-	IsDefault     bool   `json:"isDefault,required"` // indicates if this is a default address
+	Street        string `json:"street"`                       // street name, ie: 1723 NW 23rd Ave.
+	AptSuite      string `json:"apt_suite,optional,omitempty"` // apartment or suite
+	City          string `json:"city"`                         // city name
+	StateProvince string `json:"state_province"`               // state or province name
+	Country       string `json:"country"`                      // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
+	PostalCode    string `json:"postal_code"`                  // postal or zip code
+	IsDefault     bool   `json:"is_default,required"`          // indicates if this is a default address
 }
 
 //
@@ -50,9 +46,9 @@ type CustomerLoginRequest {
 }
 
 type CustomerLoginResponse {
-	JwtToken       JwtToken       `json:"jwt"`      // jwt token
-	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
+	JwtToken JwtToken `json:"jwt,optional,omitempty"`      // jwt token
+	Customer Customer `json:"customer,optional,omitempty"` // Customer object
+	Success  bool     `json:"success"`                     // success bool
 }
 
 // create customer
@@ -61,8 +57,75 @@ type CreateCustomerRequest {
 }
 
 type CreateCustomerResponse {
-	Customer       Customer       `json:"customer"` // Customer object
-	ResponseStatus ResponseStatus `json:"status"`   // a ResponseStatus object
+	Customer Customer `json:"customer"` // Customer object
+}
+
+// update customer
+type UpdateCustomerRequest {
+	Customer Customer `json:"customer"` // Customer object
+}
+
+type UpdateCustomerResponse {
+	Customer Customer `json:"customer"` // Customer object
+	Success  bool     `json:"success"`  // success bool
+}
+
+// set password
+type SetPasswordRequest {
+	Code     string `json:"code,required"`     // customer verification code
+	Password string `json:"password,required"` // password
+}
+
+type SetPasswordResponse {
+	JwtToken JwtToken `json:"jwt,optional,omitempty"`      // jwt token
+	Customer Customer `json:"customer,optional,omitempty"` // Customer object
+	Success  bool     `json:"success"`                     // success bool
+}
+
+// email
+type CheckForExistingEmailRequest {
+	Email string `json:"email"` // Customer object
+}
+
+type CheckForExistingEmailResponse {
+	Exists     bool `json:"exists"`      // boolean true/false if email exists or not
+	IsVerified bool `json:"is_verified"` // boolean true/false
+}
+
+// get customer
+type GetCustomerResponse {
+	Customer Customer `json:"customer"` // Customer object
+}
+
+// verify customer email address
+type VerifyEmailAddressRequest {
+	Code string `json:"code,required"` // verfication code
+}
+
+type VerifyEmailAddressResponse {
+	Success bool `json:"success"` // success bool
+}
+
+//
+// Emails
+//
+
+// forgot password
+type ForgotPasswordRequest {
+	Email string `json:"email,required"` // email address, unique to each store id
+}
+
+type ForgotPasswordResponse {
+	Success bool `json:"success"` // success bool
+}
+
+// resend confirm email
+type ResendConfirmEmailRequest {
+	Email string `json:"email,required"` // email address, unique to each store id
+}
+
+type ResendConfirmEmailResponse {
+	Success bool `json:"success"` // success bool
 }
 
 //
@@ -75,6 +138,13 @@ type CreateCustomerResponse {
 )
 service client {
 	@doc(
+		summary: "Check for Existing Email"
+		description: "verifies the email address is unique"
+	)
+	@handler checkForExistingEmail
+	post /v1/customer/email(CheckForExistingEmailRequest) returns (CheckForExistingEmailResponse)
+	
+	@doc(
 		summary: "Create Customer"
 		description: "creates a new customer"
 	)
@@ -82,9 +152,51 @@ service client {
 	post /v1/customer(CreateCustomerRequest) returns (CreateCustomerResponse)
 	
 	@doc(
+		summary: "Create Customer"
+		description: "creates a new customer"
+	)
+	@handler setPassword
+	post /v1/customer/password(SetPasswordRequest) returns (SetPasswordResponse)
+	
+	@doc(
 		summary: "Login"
 		description: "login for customers"
 	)
-	@handler customerLogin
+	@handler login
 	post /v1/customer/login(CustomerLoginRequest) returns (CustomerLoginResponse)
+	
+	@doc(
+		summary: "Forgot Password"
+		description: "send forgot password email to customer"
+	)
+	@handler forgotPassword
+	post /v1/customer/forgot-password(ForgotPasswordRequest) returns (ForgotPasswordResponse)
+	
+	@doc(
+		summary: "Resend Email Address Confirm Email"
+		description: "resend email address confirmation email"
+	)
+	@handler resendConfirmEmail
+	post /v1/customer/resend-confirm-email(ResendConfirmEmailRequest) returns (ResendConfirmEmailResponse)
+	
+	@doc(
+		summary: "Verify Email Address"
+		description: "verifies an email address via code contained in resendConfirmEmail"
+	)
+	@handler verifyEmailAddress
+	post /v1/customer/verify-email-address(VerifyEmailAddressRequest) returns (VerifyEmailAddressResponse)
+}
+
+@server(
+	jwt: Auth
+	middleware: Locale, StoreKey
+	group: customers
+)
+service client {
+	@doc(
+		summary: "Login"
+		description: "login for customers"
+	)
+	@handler getCustomer
+	get /v1/customer returns (GetCustomerResponse)
 }

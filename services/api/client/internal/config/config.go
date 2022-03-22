@@ -1,21 +1,22 @@
 package config
 
 import (
+	encryptionconfig "k8scommerce/internal/encryption/config"
+
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type Config struct {
 	rest.RestConf
-	HashSalt string
-	Auth     struct {
+	EncryptionConfig encryptionconfig.EncryptionConfig
+	Auth             struct {
 		AccessSecret string
 		AccessExpire int64
 	}
 	CartRpc            zrpc.RpcClientConf
 	CatalogRpc         zrpc.RpcClientConf
 	CustomerRpc        zrpc.RpcClientConf
-	EmailRpc           zrpc.RpcClientConf
 	InventoryRpc       zrpc.RpcClientConf
 	OthersBoughtRpc    zrpc.RpcClientConf
 	PaymentRpc         zrpc.RpcClientConf

@@ -1,0 +1,578 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/payment/authorization": {
+      "post": {
+        "summary": "Auth",
+        "description": "creates an authorization only",
+        "operationId": "auth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": ",,, Requests \u0026 Responses,, process payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/payment/cancel": {
+      "post": {
+        "summary": "Cancel",
+        "description": "cancels a prior authorization",
+        "operationId": "cancel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": ",,, Requests \u0026 Responses,, process payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/payment/capture": {
+      "post": {
+        "summary": "Capture",
+        "description": "creates a capture on a prior authorization",
+        "operationId": "capture",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": ",,, Requests \u0026 Responses,, process payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/payment/charge": {
+      "post": {
+        "summary": "Charge",
+        "description": "creates an authorization-capture",
+        "operationId": "sale",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": ",,, Requests \u0026 Responses,, process payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/payment/credit": {
+      "post": {
+        "summary": "Credit",
+        "description": "creates a credit",
+        "operationId": "credit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": ",,, Requests \u0026 Responses,, process payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/payment/refund": {
+      "post": {
+        "summary": "Refund",
+        "description": "creates a refund",
+        "operationId": "refund",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": ",,, Requests \u0026 Responses,, process payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/transaction/{id}": {
+      "get": {
+        "summary": "Get Transaction By ID",
+        "description": "returns a transction by id",
+        "operationId": "getTranscationById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTranscationByIdResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "transaction id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "store_id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "current_page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "sort_on",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/transactions": {
+      "get": {
+        "summary": "Get All Transaction",
+        "description": "returns all transations",
+        "operationId": "getTransactions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProcessPaymentResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "credit_card",
+            "in": "query",
+            "required": true,
+            "type": "invalid",
+            "format": "UNKNOWN"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreditCard": {
+      "type": "object",
+      "properties": {
+        "store_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "card_number": {
+          "type": "string"
+        },
+        "cvc": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "credit_card_expiration_year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "credit_card_expiration_month": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CreditCard",
+      "required": [
+        "store_id",
+        "card_number",
+        "cvc",
+        "credit_card_expiration_year",
+        "credit_card_expiration_month"
+      ]
+    },
+    "GetTransactionsRequest": {
+      "type": "object",
+      "properties": {
+        "store_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "current_page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sort_on": {
+          "type": "string"
+        }
+      },
+      "title": "GetTransactionsRequest",
+      "required": [
+        "store_id",
+        "current_page",
+        "page_size",
+        "sort_on"
+      ]
+    },
+    "GetTransactionsResponse": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Transaction"
+          }
+        },
+        "total_records": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "total_pages": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetTransactionsResponse",
+      "required": [
+        "transactions",
+        "total_records",
+        "total_pages"
+      ]
+    },
+    "GetTranscationByIdRequest": {
+      "type": "object",
+      "properties": {
+        "store_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "current_page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sort_on": {
+          "type": "string"
+        }
+      },
+      "title": "GetTranscationByIdRequest",
+      "required": [
+        "store_id",
+        "current_page",
+        "page_size",
+        "sort_on"
+      ]
+    },
+    "GetTranscationByIdResponse": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Transaction"
+          }
+        },
+        "total_records": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "total_pages": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetTranscationByIdResponse",
+      "required": [
+        "transactions",
+        "total_records",
+        "total_pages"
+      ]
+    },
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "accessExpire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refreshAfter": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "JwtToken"
+    },
+    "ProcessPaymentRequest": {
+      "type": "object",
+      "properties": {
+        "store_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "credit_card": {
+          "$ref": "#/definitions/CreditCard"
+        }
+      },
+      "title": "ProcessPaymentRequest",
+      "required": [
+        "store_id",
+        "amount",
+        "credit_card"
+      ]
+    },
+    "ProcessPaymentResponse": {
+      "type": "object",
+      "properties": {
+        "transaction_id": {
+          "type": "string"
+        }
+      },
+      "title": "ProcessPaymentResponse",
+      "required": [
+        "transaction_id"
+      ]
+    },
+    "ResponseStatus": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int64",
+          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": " status message"
+        }
+      },
+      "title": "ResponseStatus",
+      "required": [
+        "statusCode"
+      ]
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "store_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gateway_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "reference_code": {
+          "type": "string"
+        },
+        "auth_code": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "is_recurring": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "expires_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "title": "Transaction",
+      "required": [
+        "id",
+        "store_id",
+        "gateway_id",
+        "reference_code",
+        "auth_code",
+        "response",
+        "amount",
+        "currency",
+        "kind",
+        "is_recurring",
+        "expires_at",
+        "created_at"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

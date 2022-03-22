@@ -2,20 +2,21 @@ package middleware
 
 import (
 	"context"
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/api/admin/internal/types"
 	"net/http"
+	"strconv"
+
+	"k8scommerce/internal/encryption"
+	encryptionconfig "k8scommerce/internal/encryption/config"
+	"k8scommerce/services/api/admin/internal/types"
 )
 
 type StoreKeyMiddleware struct {
-	hashCoder utils.HashCoder
+	encrypter encryption.Encrypter
 }
 
-func NewStoreKeyMiddleware(hashSalt string) *StoreKeyMiddleware {
-	hashCoder := utils.NewHashCoder(hashSalt, utils.Store)
-
+func NewStoreKeyMiddleware(config encryptionconfig.EncryptionConfig) *StoreKeyMiddleware {
 	return &StoreKeyMiddleware{
-		hashCoder: hashCoder,
+		encrypter: encryption.NewEncrypter(&config),
 	}
 }
 
@@ -27,18 +28,24 @@ func (m *StoreKeyMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 				return
 			}
 
-			ctx := r.Context()
-			ctx = context.WithValue(ctx, types.StoreKey, int64(1)) // add a default value
+			var err error
+			var id int64 = 0
+			var decryptedStr string
 
-			// decode the hashed ID
-			id := m.hashCoder.Decode(result[0])
-			if id != 0 {
-				ctx = context.WithValue(ctx, types.StoreKey, id)
-				next(w, r.WithContext(ctx))
-				return
+			ctx := r.Context()
+			ctx = context.WithValue(ctx, types.StoreKey, id) // add a default value
+
+			decryptedStr, err = m.encrypter.Decrypt(result[0])
+			if err == nil {
+				id, err = strconv.ParseInt(decryptedStr, 10, 64)
+				if err == nil {
+					ctx = context.WithValue(ctx, types.StoreKey, id)
+					next(w, r.WithContext(ctx))
+					return
+				}
 			}
 		}
 
-		http.Error(w, "error: missing Store-Key header :: "+m.hashCoder.Encode(1), http.StatusUnauthorized)
+		http.Error(w, "error: missing Store-Key header", http.StatusUnauthorized)
 	}
 }

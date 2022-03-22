@@ -69,6 +69,9 @@ func (tk *TransactionKind) Scan(v interface{}) error {
 	if buf, ok := v.([]byte); ok {
 		return tk.UnmarshalText(buf)
 	}
+	if buf, ok := v.(string); ok {
+		return tk.UnmarshalText([]byte(buf))
+	}
 	return ErrInvalidTransactionKind(fmt.Sprintf("%T", v))
 }
 

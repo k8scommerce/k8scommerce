@@ -6,7 +6,6 @@ import (
 	"k8scommerce/services/rpc/cart/cartclient"
 	"k8scommerce/services/rpc/catalog/catalogclient"
 	"k8scommerce/services/rpc/customer/customerclient"
-	"k8scommerce/services/rpc/email/emailclient"
 	"k8scommerce/services/rpc/inventory/inventoryclient"
 	"k8scommerce/services/rpc/othersbought/othersboughtclient"
 	"k8scommerce/services/rpc/payment/paymentclient"
@@ -28,7 +27,6 @@ type ServiceContext struct {
 	CartRpc            cartclient.CartClient
 	CatalogRpc         catalogclient.CatalogClient
 	CustomerRpc        customerclient.CustomerClient
-	EmailRpc           emailclient.EmailClient
 	InventoryRpc       inventoryclient.InventoryClient
 	OthersBoughtRpc    othersboughtclient.OthersBoughtClient
 	PaymentRpc         paymentclient.PaymentClient
@@ -44,11 +42,10 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config:             c,
 		Locale:             middleware.NewLocaleMiddleware().Handle,
 		Filter:             middleware.NewFilterMiddleware().Handle,
-		StoreKey:           middleware.NewStoreKeyMiddleware(c.HashSalt).Handle,
+		StoreKey:           middleware.NewStoreKeyMiddleware(c.EncryptionConfig).Handle,
 		CartRpc:            cartclient.NewCartClient(zrpc.MustNewClient(c.CartRpc)),
 		CatalogRpc:         catalogclient.NewCatalogClient(zrpc.MustNewClient(c.CatalogRpc)),
 		CustomerRpc:        customerclient.NewCustomerClient(zrpc.MustNewClient(c.CustomerRpc)),
-		EmailRpc:           emailclient.NewEmailClient(zrpc.MustNewClient(c.EmailRpc)),
 		InventoryRpc:       inventoryclient.NewInventoryClient(zrpc.MustNewClient(c.InventoryRpc)),
 		OthersBoughtRpc:    othersboughtclient.NewOthersBoughtClient(zrpc.MustNewClient(c.OthersBoughtRpc)),
 		PaymentRpc:         paymentclient.NewPaymentClient(zrpc.MustNewClient(c.PaymentRpc)),

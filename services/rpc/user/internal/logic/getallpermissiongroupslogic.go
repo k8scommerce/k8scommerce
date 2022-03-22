@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/convert"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/services/rpc/user/internal/svc"
-	"k8scommerce/services/rpc/user/internal/types"
 	"k8scommerce/services/rpc/user/pb/user"
 	"sync"
 
@@ -78,7 +78,7 @@ func (l *GetAllPermissionGroupsLogic) GetAllPermissionGroups(in *user.GetAllPerm
 
 					for _, f := range found.PermissionGroups {
 						group := user.PermissionGroup{}
-						types.ConvertModelPermissionGroupToProtoPermissionGroup(&f, &group)
+						convert.ModelPermissionGroupToProtoPermissionGroup(&f, &group)
 						groups = append(groups, &group)
 					}
 				}

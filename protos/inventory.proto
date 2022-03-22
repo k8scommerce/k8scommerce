@@ -8,34 +8,34 @@ option go_package = "pb/inventory";
 
 message InventoryItem {
   int64 id = 1;
-  int64 storeId = 2;
+  int64 store_id = 2;
   string sku = 3;
   string name = 4;
-  int64 supplierId = 5;
-  int64 brandId = 6;
+  int64 supplier_id = 5;
+  int64 brand_id = 6;
 }
 
 message Warehouse {
   int64 id = 1;
-  int64 storeId = 2;
+  int64 store_id = 2;
 }
 
 message SockLevel {
-  int64 storeId = 1;
-  int64 warehouseId = 2;
-  int64 inventoryItemId = 3;
+  int64 store_id = 1;
+  int64 warehouse_id = 2;
+  int64 inventory_item_id = 3;
   int32 quantity = 4;
 }
 
 message Supplier {
   int64 id = 1;
-  int64 storeId = 2;
+  int64 store_id = 2;
   string name = 3;
 }
 
 message Brand {
   int64 id = 1;
-  int64 storeId = 2;
+  int64 store_id = 2;
   string name = 3;
 }
 
@@ -47,17 +47,15 @@ message Brand {
 
 // get item quantity
 message GetItemQuantityRequest {
-  int64 storeId = 1;
+  int64 store_id = 1;
   string sku = 2;
   string region = 3;
 }
 
 message GetItemQuantityResponse {
-  int64 storeId = 1;
+  int64 store_id = 1;
   string sku = 2;
   int32 quanity = 3;
-  int64 statusCode = 4;
-  string statusMessage = 5;
 }
 
 // service client

@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/convert"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 	"sync"
 
@@ -73,7 +73,7 @@ func (l *GetAllCategoriesLogic) GetAllCategories(in *catalog.GetAllCategoriesReq
 				if found != nil {
 					for _, f := range found.Categories {
 						cat := catalog.Category{}
-						types.ConvertModelCategoryToProtoCategory(&f, &cat)
+						convert.ModelCategoryToProtoCategory(&f, &cat)
 						cats = append(cats, &cat)
 					}
 				}

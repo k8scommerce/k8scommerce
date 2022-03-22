@@ -2,8 +2,8 @@ package products
 
 import (
 	"context"
-	"encoding/json"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/helpers"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
@@ -27,7 +27,9 @@ func NewGetProductBySkuLogic(ctx context.Context, svcCtx *svc.ServiceContext) Ge
 }
 
 func (l *GetProductBySkuLogic) GetProductBySku(req types.GetProductBySkuRequest) (resp *types.Product, err error) {
-	getOneBySkuResponse, err := l.svcCtx.CatalogRpc.GetProductBySku(l.ctx, &catalogclient.GetProductBySkuRequest{
+	resp = &types.Product{}
+
+	response, err := l.svcCtx.CatalogRpc.GetProductBySku(l.ctx, &catalogclient.GetProductBySkuRequest{
 		Sku:     req.Sku,
 		StoreId: l.ctx.Value(types.StoreKey).(int64),
 	})
@@ -37,18 +39,14 @@ func (l *GetProductBySkuLogic) GetProductBySku(req types.GetProductBySkuRequest)
 
 	// convert from one type to another
 	// the structs are identical
-	res := &types.Product{}
-	b, err := json.Marshal(getOneBySkuResponse.Product)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, res)
+	utils.TransformObj(response.Product, &resp)
 
 	// format the currency to the locale and language
-	for x := 0; x < len(res.Variants); x++ {
-		if res.Variants[x].Price != (types.Price{}) {
-			helpers.ConvertOutgoingPrices(l.ctx, &res.Variants[x].Price)
+	for x := 0; x < len(resp.Variants); x++ {
+		if resp.Variants[x].Price != (types.Price{}) {
+			helpers.ConvertOutgoingPrices(l.ctx, &resp.Variants[x].Price)
 		}
 	}
-	return res, err
+
+	return resp, err
 }

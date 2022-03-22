@@ -10,6 +10,7 @@ import (
 	"k8scommerce/services/api/client/internal/svc"
 
 	"github.com/joho/godotenv"
+	middleware "github.com/muhfajar/go-zero-cors-middleware"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -28,10 +29,18 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 
+	c.Timeout = 0
 	ctx := svc.NewServiceContext(c)
+
+	cors := middleware.NewCORSMiddleware(&middleware.Options{
+		AllowCredentials: true,
+		AllowHeaders:     []string{"Content-Type", "X-CSRF-Token", "Authorization", "AccessToken", "Token", "Store-Key"},
+	})
+
 	server := rest.MustNewServer(
 		c.RestConf,
 		rest.WithCors("*"),
+		rest.WithNotAllowedHandler(cors.Handler()),
 	)
 	defer server.Stop()
 

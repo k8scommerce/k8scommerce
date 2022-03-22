@@ -9,6 +9,7 @@ import (
 	categories "k8scommerce/services/api/admin/internal/handler/categories"
 	customers "k8scommerce/services/api/admin/internal/handler/customers"
 	products "k8scommerce/services/api/admin/internal/handler/products"
+	store "k8scommerce/services/api/admin/internal/handler/store"
 	users "k8scommerce/services/api/admin/internal/handler/users"
 	"k8scommerce/services/api/admin/internal/svc"
 
@@ -88,12 +89,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/:categoryId/:currentPage/:pageSize",
+					Path:    "/v1/products/:category_id/:current_page/:page_size",
 					Handler: products.GetProductsByCategoryIdHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/:currentPage/:pageSize",
+					Path:    "/v1/products/:current_page/:page_size",
 					Handler: products.GetAllProductsHandler(serverCtx),
 				},
 				{
@@ -121,7 +122,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
-					Path:    "/v1/asset/:productId/:variantId/:kind",
+					Path:    "/v1/asset/:product_id/:variant_id/:kind",
 					Handler: assets.UploadHandler(serverCtx),
 				},
 			}...,
@@ -134,13 +135,44 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
+					Path:    "/v1/customer/email",
+					Handler: customers.CheckForExistingEmailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/v1/customer",
 					Handler: customers.CreateCustomerHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/v1/customer/login",
-					Handler: customers.CustomerLoginHandler(serverCtx),
+					Handler: customers.LoginHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/customer/:id",
+					Handler: customers.GetCustomerHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/store/generate-token/:store_id",
+					Handler: store.GenerateStoreKeyTokenHandler(serverCtx),
 				},
 			}...,
 		),
@@ -165,7 +197,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/users/:currentPage/:pageSize",
+					Path:    "/v1/users/:current_page/:page_size",
 					Handler: users.GetAllUsersHandler(serverCtx),
 				},
 			}...,

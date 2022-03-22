@@ -29,7 +29,10 @@ func NewRepo(c *PostgresConfig) Repo {
 	r := &repo{
 		cfg: c,
 	}
+
+	r.mu.Lock()
 	r.db = r.mustConnect()
+	r.mu.Unlock()
 
 	return r
 }
@@ -42,6 +45,8 @@ type Repo interface {
 	CartItem() CartItem
 	Category() Category
 	Customer() Customer
+	CustomerAddress() CustomerAddress
+	CustomerPasswordReset() CustomerPasswordReset
 	InventoryBrand() InventoryBrand
 	InventoryItem() InventoryItem
 	InventoryStock() InventoryStock
@@ -49,6 +54,8 @@ type Repo interface {
 	Product() Product
 	OthersBought() OthersBought
 	SimilarProducts() SimilarProducts
+	Store() Store
+	StoreSetting() StoreSetting
 	User() User
 
 	Begin() (*sql.Tx, error)
@@ -60,6 +67,7 @@ type repo struct {
 	db       *sqlx.DB
 	listener *pq.Listener
 	cfg      *PostgresConfig
+	mu       sync.Mutex
 }
 
 func (r *repo) GetRawDB() *sqlx.DB {
@@ -95,8 +103,16 @@ func (r *repo) Category() Category {
 	return newCategory(r)
 }
 
+func (r *repo) CustomerAddress() CustomerAddress {
+	return newCustomerAddress(r)
+}
+
 func (r *repo) Customer() Customer {
 	return newCustomer(r)
+}
+
+func (r *repo) CustomerPasswordReset() CustomerPasswordReset {
+	return newCustomerPasswordReset(r)
 }
 
 func (r *repo) InventoryBrand() InventoryBrand {
@@ -127,6 +143,14 @@ func (r *repo) SimilarProducts() SimilarProducts {
 	return newSimilarProducts(r)
 }
 
+func (r *repo) Store() Store {
+	return newStore(r)
+}
+
+func (r *repo) StoreSetting() StoreSetting {
+	return newStoreSetting(r)
+}
+
 func (r *repo) User() User {
 	return newUser(r)
 }
@@ -142,13 +166,14 @@ func (a *repo) mustConnect() (conn *sqlx.DB) {
 
 		go func() {
 			for {
+				a.mu.Lock()
 				err := a.db.Ping()
 				if err != nil {
 					logx.Info("DB Ping failed: ", err)
 				} else {
 					// logx.Info("Pinged successfully")
 				}
-
+				a.mu.Unlock()
 				time.Sleep(10 * time.Second)
 			}
 		}()
@@ -201,6 +226,9 @@ func (a *repo) setDBListener(dburl string) {
 }
 
 func (a *repo) kickDBChannel() {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	// `pg_notify('commission_payment_jobs_channel'`
 	_, err := a.db.Exec(`SELECT pg_notify('commission_payment_jobs_channel','worker startup')`)
 	if err != nil {

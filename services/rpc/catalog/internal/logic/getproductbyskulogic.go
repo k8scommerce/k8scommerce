@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"sync"
 
+	"k8scommerce/internal/convert"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/localrivet/galaxycache"
@@ -66,7 +66,7 @@ func (l *GetProductBySkuLogic) GetProductBySku(in *catalog.GetProductBySkuReques
 
 				prod := catalog.Product{}
 				if found != nil {
-					types.ConvertModelProductToProtoProduct(&found.Product, &found.Variants, &found.Prices, &prod)
+					convert.ModelProductToProtoProduct(&found.Product, &found.Variants, &found.Prices, &prod)
 
 					for _, pair := range found.Categories {
 						prod.Categories = append(prod.Categories, &catalog.CategoryPair{

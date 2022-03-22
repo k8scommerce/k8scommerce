@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/convert"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 	"sync"
 
@@ -82,12 +82,12 @@ func (l *GetAllProductsLogic) GetAllProducts(in *catalog.GetAllProductsRequest) 
 						defaultImage := []*models.Asset{}
 						defaultImage = append(defaultImage, &f.Asset)
 
-						convertedImages := types.ConvertModelAssetToProtoAsset(defaultImage)
+						convertedImages := convert.ModelAssetToProtoAsset(defaultImage)
 						if len(convertedImages) > 0 {
 							prod.DefaultImage = convertedImages[0]
 						}
 
-						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
+						convert.ModelProductToProtoProduct(&f.Product, &[]models.Variant{
 							f.Variant,
 						}, &[]models.Price{
 							f.Price,

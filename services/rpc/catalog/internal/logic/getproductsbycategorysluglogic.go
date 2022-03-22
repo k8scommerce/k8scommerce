@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8scommerce/internal/convert"
 	"k8scommerce/internal/galaxyctx"
 	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/internal/types"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 	"sync"
 
@@ -81,7 +81,7 @@ func (l *GetProductsByCategorySlugLogic) GetProductsByCategorySlug(in *catalog.G
 					for _, f := range found.Results {
 						prod := catalog.Product{}
 
-						types.ConvertModelProductToProtoProduct(&f.Product, &[]models.Variant{
+						convert.ModelProductToProtoProduct(&f.Product, &[]models.Variant{
 							f.Variant,
 						}, &[]models.Price{
 							f.Price,

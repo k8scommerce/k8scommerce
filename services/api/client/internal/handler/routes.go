@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	api "k8scommerce/services/api/client/internal/handler/api"
 	cart "k8scommerce/services/api/client/internal/handler/cart"
 	categories "k8scommerce/services/api/client/internal/handler/categories"
 	customers "k8scommerce/services/api/client/internal/handler/customers"
@@ -16,31 +17,44 @@ import (
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/api/ping",
+					Handler: api.PingHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
 			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/cart/:customerId",
+					Path:    "/v1/cart/:customer_id",
 					Handler: cart.GetCartHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/v1/cart/:customerId",
+					Path:    "/v1/cart/:customer_id",
 					Handler: cart.AddItemToCartHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/v1/cart/:customerId/:sku",
+					Path:    "/v1/cart/:customer_id/:sku",
 					Handler: cart.UpdateCartItemQuantityHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
-					Path:    "/v1/cart/:customerId/:sku",
+					Path:    "/v1/cart/:customer_id/:sku",
 					Handler: cart.RemoveCartItemHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
-					Path:    "/v1/cart/:customerId",
+					Path:    "/v1/cart/:customer_id",
 					Handler: cart.ClearCartHandler(serverCtx),
 				},
 			}...,
@@ -50,7 +64,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale, serverCtx.Filter, serverCtx.StoreKey},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
@@ -92,12 +106,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/:categoryId/:currentPage/:pageSize",
+					Path:    "/v1/products/:category_id/:current_page/:page_size",
 					Handler: products.GetProductsByCategoryIdHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/:currentPage/:pageSize",
+					Path:    "/v1/products/:current_page/:page_size",
 					Handler: products.GetAllProductsHandler(serverCtx),
 				},
 			}...,
@@ -110,15 +124,54 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
+					Path:    "/v1/customer/email",
+					Handler: customers.CheckForExistingEmailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/v1/customer",
 					Handler: customers.CreateCustomerHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
+					Path:    "/v1/customer/password",
+					Handler: customers.SetPasswordHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/v1/customer/login",
-					Handler: customers.CustomerLoginHandler(serverCtx),
+					Handler: customers.LoginHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/forgot-password",
+					Handler: customers.ForgotPasswordHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/resend-confirm-email",
+					Handler: customers.ResendConfirmEmailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/customer/verify-email-address",
+					Handler: customers.VerifyEmailAddressHandler(serverCtx),
 				},
 			}...,
 		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/customer",
+					Handler: customers.GetCustomerHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }

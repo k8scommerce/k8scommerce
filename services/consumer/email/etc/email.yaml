@@ -1,0 +1,25 @@
+Name: email
+ListenOn:
+Log:
+  Mode: file
+PostgresConfig:
+  DataSourceName: ${POSTGRES_DSN}
+  MaxOpenConnections: 10
+  MaxIdleConnections: 2
+  MaxConnectionLifetimeMinutes: 5
+EventsConfig:
+  Enabled: ${EVENTS_ENABLED}
+  RabbitMQ: ${RABBITMQ_ENABLED}
+  RabbitMQConfig:
+    Url: ${RABBITMQ_URL}
+EmailConfig:
+  Host: ${EMAIL_HOST}
+  Port: ${EMAIL_PORT}
+  Username: ${EMAIL_USERNAME}
+  Password: ${EMAIL_PASSWORD}
+  Encryption: ${EMAIL_ENCRYPTION}
+  DKIMOptions:
+    PrivateKey: ${EMAIL_PRIVATE_KEY}
+    Domain: ${EMAIL_DOMAIN}
+    SignatureExpireIn: ${EMAIL_SIGNATURE_EXPIRE_IN}
+    AddSignatureTimestamp: ${EMAIL_ADD_SIGNATURE_TIMESTAMP}

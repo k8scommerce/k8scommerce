@@ -5,10 +5,12 @@ MaxBytes: 1048576000
 Log:
   Mode: console
 Timeout: 1500
-HashSalt: MTF)kaA}.5x85SK~J{6gf88_jc;?RH<+
+EncryptionConfig:
+  Secret: ${ENCRYPTION_SECRET}
+  Token: ${ENCRYPTION_TOKEN}
 Auth:
-  AccessSecret: YhCRfmTatNG9c8mQkrkazYjd5B2QNQXB
-  AccessExpire: 1612867074
+  AccessSecret: ${AUTH_ACCESS_SECRET}
+  AccessExpire: ${AUTH_ACCESS_EXPIRE}
 CartRpc:
   Etcd:
     Hosts:
@@ -24,11 +26,6 @@ CustomerRpc:
     Hosts:
       - 127.0.0.1:2379
     Key: customer.rpc
-EmailRpc:
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: email.rpc
 InventoryRpc:
   Etcd:
     Hosts:

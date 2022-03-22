@@ -17,8 +17,8 @@ services:
     restart: unless-stopped
   migrations:
     build: .
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
     environment:
       PGUSER: postgres
       PGPASSWORD: postgres
@@ -34,9 +34,9 @@ services:
   # https://www.pgadmin.org/
   pgadmin:
     container_name: pgadmin
-    image: dpage/pgadmin4:6.5
-    depends_on:
-      - postgres
+    image: dpage/pgadmin4:6.7
+    # depends_on:
+    #   - postgres
     ports:
       - "5433:80"
     environment:

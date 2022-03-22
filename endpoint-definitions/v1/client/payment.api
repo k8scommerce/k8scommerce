@@ -1,0 +1,140 @@
+info(
+	title: "Client Customer API"
+	desc: "client customer api"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1"
+)
+
+type CreditCard {
+	StoreId                   int64  `json:"store_id"`
+	CardNumber                string `json:"card_number"`
+	Cvc                       int32  `json:"cvc"`
+	CreditCardExpirationYear  int32  `json:"credit_card_expiration_year"`
+	CreditCardExpirationMonth int32  `json:"credit_card_expiration_month"`
+}
+
+type Transaction {
+	Id            int64  `json:"id"`
+	StoreId       int64  `json:"store_id"`
+	GatewayId     int64  `json:"gateway_id"`
+	ReferenceCode string `json:"reference_code"`
+	AuthCode      string `json:"auth_code"`
+	Response      string `json:"response"`
+	Amount        int64  `json:"amount"`
+	Currency      string `json:"currency"`
+	Kind          int    `json:"kind,options=0|1|2|3|4|5"`
+	IsRecurring   bool   `json:"is_recurring"`
+	ExpiresAt     string `json:"expires_at"`
+	CreatedAt     string `json:"created_at"`
+}
+
+//
+//
+//
+// Requests & Responses
+//
+
+// process payment
+type ProcessPaymentRequest {
+	StoreId    int64      `json:"store_id"`
+	Amount     int64      `json:"amount"`
+	CreditCard CreditCard `json:"credit_card"`
+	//   CustomerAddress Address `json:"address"`
+}
+
+type ProcessPaymentResponse {
+	TransactionId string `json:"transaction_id"`
+}
+
+// get transactions
+type GetTransactionsRequest {
+	StoreId     int64  `json:"store_id"`
+	CurrentPage int64  `json:"current_page"`
+	PageSize    int64  `json:"page_size"`
+	SortOn      string `json:"sort_on"`
+}
+
+type GetTransactionsResponse {
+	Transactions []Transaction `json:"transactions"`
+	TotalRecords int64         `json:"total_records"`
+	TotalPages   int64         `json:"total_pages"`
+}
+
+// get transaction by id
+type GetTranscationByIdRequest {
+	StoreId     int64  `json:"store_id"`
+	CurrentPage int64  `json:"current_page"`
+	PageSize    int64  `json:"page_size"`
+	SortOn      string `json:"sort_on"`
+}
+
+type GetTranscationByIdResponse {
+	Transactions []Transaction `json:"transactions"`
+	TotalRecords int64         `json:"total_records"`
+	TotalPages   int64         `json:"total_pages"`
+}
+
+@server(
+	// jwt: Auth
+	middleware: Locale, StoreKey // IdempotencyKey - https://stripe.com/docs/api/idempotent_requests
+	group: customers
+)
+service client {
+	@doc(
+		summary: "Charge"
+		description: "creates an authorization-capture"
+	)
+	@handler sale
+	post /v1/payment/charge(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Auth"
+		description: "creates an authorization only"
+	)
+	@handler auth
+	post /v1/payment/authorization(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Capture"
+		description: "creates a capture on a prior authorization"
+	)
+	@handler capture
+	post /v1/payment/capture(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Cancel"
+		description: "cancels a prior authorization"
+	)
+	@handler cancel
+	post /v1/payment/cancel(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Refund"
+		description: "creates a refund"
+	)
+	@handler refund
+	post /v1/payment/refund(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Credit"
+		description: "creates a credit"
+	)
+	@handler credit
+	post /v1/payment/credit(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Get All Transaction"
+		description: "returns all transations"
+	)
+	@handler getTransactions
+	get /v1/transactions(ProcessPaymentRequest) returns (ProcessPaymentResponse)
+	
+	@doc(
+		summary: "Get Transaction By ID"
+		description: "returns a transction by id"
+		id: "transaction id"
+	)
+	@handler getTranscationById
+	get /v1/transaction/:id(GetTranscationByIdRequest)  returns (GetTranscationByIdResponse)
+}

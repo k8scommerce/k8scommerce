@@ -2,6 +2,37 @@ package eventkey
 
 type EventKey string
 
+// emails
+type AdminCancelledOrderKey EventKey
+type AdminFailedOrderKey EventKey
+type AdminNewOrderKey EventKey
+type CustomerAccountConfirmedEmailKey EventKey
+type CustomerCompletedOrderKey EventKey
+type CustomerConfirmationEmailKey EventKey
+type CustomerNewAccountKey EventKey
+type CustomerNoteKey EventKey
+type CustomerOnHoldOrderKey EventKey
+type CustomerPasswordChangedKey EventKey
+type CustomerProcessingOrderKey EventKey
+type CustomerRefundedOrderKey EventKey
+type CustomerResetPasswordKey EventKey
+type CustomerSaleKey EventKey
+
+var AdminCancelledOrder AdminCancelledOrderKey = "AdminCancelledOrder"
+var AdminFailedOrder AdminFailedOrderKey = "AdminFailedOrder"
+var AdminNewOrder AdminNewOrderKey = "AdminNewOrder"
+var CustomerAccountConfirmedEmail CustomerAccountConfirmedEmailKey = "CustomerAccountConfirmedEmail" // unsure about this one
+var CustomerCompletedOrder CustomerCompletedOrderKey = "CustomerCompletedOrder"
+var CustomerConfirmationEmail CustomerConfirmationEmailKey = "CustomerConfirmationEmail"
+var CustomerNewAccount CustomerNewAccountKey = "CustomerNewAccount"
+var CustomerNote CustomerNoteKey = "CustomerNote"
+var CustomerOnHoldOrder CustomerOnHoldOrderKey = "CustomerOnHoldOrder"
+var CustomerPasswordChanged CustomerPasswordChangedKey = "CustomerPasswordChanged"
+var CustomerProcessingOrder CustomerProcessingOrderKey = "CustomerProcessingOrder"
+var CustomerRefundedOrder CustomerRefundedOrderKey = "CustomerRefundedOrder"
+var CustomerResetPassword CustomerResetPasswordKey = "CustomerResetPassword"
+var CustomerSale CustomerSaleKey = "CustomerSale"
+
 // customer events
 type CustomerCreatedKey EventKey
 type CustomerUpdatedKey EventKey
@@ -16,18 +47,18 @@ type CustomerAddedShippingAddressKey EventKey
 type CustomerUpdatedShippingAddressKey EventKey
 type CustomerDeletedShippingAddressKey EventKey
 
-var CustomerCreated CustomerCreatedKey = "customer-created"
-var CustomerUpdated CustomerUpdatedKey = "customer-updated"
-var CustomerForgotPassword CustomerForgotPasswordKey = "customer-forgot-password"
-var CustomerChangedPassword CustomerChangedPasswordKey = "customer-changed-password"
-var CustomerLoginSuccess CustomerLoginSuccessKey = "customer-login-success"
-var CustomerLoginFailed CustomerLoginFailedKey = "customer-login-failed"
-var CustomerAddedBillingAddress CustomerAddedBillingAddressKey = "customer-billing-address-added"
-var CustomerUpdatedBillingAddress CustomerUpdatedBillingAddressKey = "customer-billing-address-updated"
-var CustomerDeletedBillingAddress CustomerDeletedBillingAddressKey = "customer-billing-address-deleted"
-var CustomerAddedShippingAddress CustomerAddedShippingAddressKey = "customer-shipping-address-added"
-var CustomerUpdatedShippingAddress CustomerUpdatedShippingAddressKey = "customer-shipping-address-updated"
-var CustomerDeletedShippingAddress CustomerDeletedShippingAddressKey = "customer-shipping-address-deleted"
+var CustomerCreated CustomerCreatedKey = "CustomerCreated"
+var CustomerUpdated CustomerUpdatedKey = "CustomerUpdated"
+var CustomerForgotPassword CustomerForgotPasswordKey = "CustomerForgotPassword"
+var CustomerChangedPassword CustomerChangedPasswordKey = "CustomerChangedPassword"
+var CustomerLoginSuccess CustomerLoginSuccessKey = "CustomerLoginSuccess"
+var CustomerLoginFailed CustomerLoginFailedKey = "CustomerLoginFailed"
+var CustomerAddedBillingAddress CustomerAddedBillingAddressKey = "CustomerAddedBillingAddress"
+var CustomerUpdatedBillingAddress CustomerUpdatedBillingAddressKey = "CustomerUpdatedBillingAddress"
+var CustomerDeletedBillingAddress CustomerDeletedBillingAddressKey = "CustomerDeletedBillingAddress"
+var CustomerAddedShippingAddress CustomerAddedShippingAddressKey = "CustomerAddedShippingAddress"
+var CustomerUpdatedShippingAddress CustomerUpdatedShippingAddressKey = "CustomerUpdatedShippingAddress"
+var CustomerDeletedShippingAddress CustomerDeletedShippingAddressKey = "CustomerDeletedShippingAddress"
 
 // catalog
 type CatalogImageUploadedKey EventKey
@@ -38,22 +69,22 @@ type CatalogCategoryAddedKey EventKey
 type CatalogCategoryUpdatedKey EventKey
 type CatalogCategoryDeletedKey EventKey
 
-var CatalogImageUploaded CatalogImageUploadedKey = "catalog-image-uploaded"
-var CatalogProductAdded CatalogProductAddedKey = "catalog-product-added"
-var CatalogProductUpdated CatalogProductUpdatedKey = "catalog-product-updated"
-var CatalogProductDeleted CatalogProductDeletedKey = "catalog-product-deleted"
-var CatalogCategoryAdded CatalogCategoryAddedKey = "catalog-category-added"
-var CatalogCategoryUpdated CatalogCategoryUpdatedKey = "catalog-category-updated"
-var CatalogCategoryDeleted CatalogCategoryDeletedKey = "catalog-category-deleted"
+var CatalogImageUploaded CatalogImageUploadedKey = "CatalogImageUploaded"
+var CatalogProductAdded CatalogProductAddedKey = "CatalogProductAdded"
+var CatalogProductUpdated CatalogProductUpdatedKey = "CatalogProductUpdated"
+var CatalogProductDeleted CatalogProductDeletedKey = "CatalogProductDeleted"
+var CatalogCategoryAdded CatalogCategoryAddedKey = "CatalogCategoryAdded"
+var CatalogCategoryUpdated CatalogCategoryUpdatedKey = "CatalogCategoryUpdated"
+var CatalogCategoryDeleted CatalogCategoryDeletedKey = "CatalogCategoryDeleted"
 
 // cart
 type CartProductAddedKey EventKey
 type CartProductUpdatedKey EventKey
 type CartProductDeletedKey EventKey
 
-var CartProductAdded CartProductAddedKey = "cart-product-added"
-var CartProductUpdated CartProductUpdatedKey = "cart-product-updated"
-var CartProductDeleted CartProductDeletedKey = "cart-product-deleted"
+var CartProductAdded CartProductAddedKey = "CartProductAdded"
+var CartProductUpdated CartProductUpdatedKey = "CartProductUpdated"
+var CartProductDeleted CartProductDeletedKey = "CartProductDeleted"
 
 // user
 type UserCreatedKey EventKey
@@ -63,14 +94,14 @@ type UserChangedPasswordKey EventKey
 type UserLoginSuccessKey EventKey
 type UserLoginFailedKey EventKey
 
-var UserCreated UserCreatedKey = "user-created"
-var UserUpdated UserUpdatedKey = "user-updated"
-var UserForgotPassword UserForgotPasswordKey = "user-forgot-password"
-var UserChangedPassword UserChangedPasswordKey = "user-changed-password"
-var UserLoginSuccess UserLoginSuccessKey = "user-login-success"
-var UserLoginFailed UserLoginFailedKey = "user-login-failed"
+var UserCreated UserCreatedKey = "UserCreated"
+var UserUpdated UserUpdatedKey = "UserUpdated"
+var UserForgotPassword UserForgotPasswordKey = "UserForgotPassword"
+var UserChangedPassword UserChangedPasswordKey = "UserChangedPassword"
+var UserLoginSuccess UserLoginSuccessKey = "UserLoginSuccess"
+var UserLoginFailed UserLoginFailedKey = "UserLoginFailed"
 
 // debug/testing
 type DebugTestingKey EventKey
 
-var DebugTesting DebugTestingKey = "ginkgo-test-event"
+var DebugTesting DebugTestingKey = "DebugTesting"

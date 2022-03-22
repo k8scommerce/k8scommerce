@@ -12,6 +12,7 @@ import(
 	"shared/response-status.api"
 	
 	// import all client endpoint descriptions
+	"client/api.api"
 	"client/cart.api"
 	"client/catalog.api"
 	"client/customer.api"

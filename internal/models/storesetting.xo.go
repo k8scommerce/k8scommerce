@@ -4,31 +4,13 @@ package models
 
 import (
 	"context"
-	"database/sql"
 )
 
 // StoreSetting represents a row from 'public.store_setting'.
 type StoreSetting struct {
-	ID                         int64          `json:"id" db:"id"`                                                       // id
-	StoreID                    int64          `json:"store_id" db:"store_id"`                                           // store_id
-	SeoTitle                   sql.NullString `json:"seo_title" db:"seo_title"`                                         // seo_title
-	SeoRobots                  sql.NullString `json:"seo_robots" db:"seo_robots"`                                       // seo_robots
-	MetaDescription            sql.NullString `json:"meta_description" db:"meta_description"`                           // meta_description
-	MetaKeywords               sql.NullString `json:"meta_keywords" db:"meta_keywords"`                                 // meta_keywords
-	Facebook                   sql.NullString `json:"facebook" db:"facebook"`                                           // facebook
-	Twitter                    sql.NullString `json:"twitter" db:"twitter"`                                             // twitter
-	Instagram                  sql.NullString `json:"instagram" db:"instagram"`                                         // instagram
-	Code                       sql.NullString `json:"code" db:"code"`                                                   // code
-	DefaultCurrency            string         `json:"default_currency" db:"default_currency"`                           // default_currency
-	SupportedCurrencies        sql.NullString `json:"supported_currencies" db:"supported_currencies"`                   // supported_currencies
-	DefaultLocale              string         `json:"default_locale" db:"default_locale"`                               // default_locale
-	SupportedLocales           sql.NullString `json:"supported_locales" db:"supported_locales"`                         // supported_locales
-	DefaultCountryID           int64          `json:"default_country_id" db:"default_country_id"`                       // default_country_id
-	ContactPhone               sql.NullString `json:"contact_phone" db:"contact_phone"`                                 // contact_phone
-	MailFromAddress            sql.NullString `json:"mail_from_address" db:"mail_from_address"`                         // mail_from_address
-	CustomerSupportEmail       sql.NullString `json:"customer_support_email" db:"customer_support_email"`               // customer_support_email
-	NewOrderNotificationsEmail sql.NullString `json:"new_order_notifications_email" db:"new_order_notifications_email"` // new_order_notifications_email
-	CheckoutZoneID             sql.NullInt64  `json:"checkout_zone_id" db:"checkout_zone_id"`                           // checkout_zone_id
+	ID      int64  `json:"id" db:"id"`             // id
+	StoreID int64  `json:"store_id" db:"store_id"` // store_id
+	Config  []byte `json:"config" db:"config"`     // config
 	// xo fields
 	_exists, _deleted bool
 }
@@ -54,13 +36,13 @@ func (ss *StoreSetting) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.store_setting (` +
-		`store_id, seo_title, seo_robots, meta_description, meta_keywords, facebook, twitter, instagram, code, default_currency, supported_currencies, default_locale, supported_locales, default_country_id, contact_phone, mail_from_address, customer_support_email, new_order_notifications_email, checkout_zone_id` +
+		`store_id, config` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19` +
+		`$1, $2` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, ss.StoreID, ss.SeoTitle, ss.SeoRobots, ss.MetaDescription, ss.MetaKeywords, ss.Facebook, ss.Twitter, ss.Instagram, ss.Code, ss.DefaultCurrency, ss.SupportedCurrencies, ss.DefaultLocale, ss.SupportedLocales, ss.DefaultCountryID, ss.ContactPhone, ss.MailFromAddress, ss.CustomerSupportEmail, ss.NewOrderNotificationsEmail, ss.CheckoutZoneID)
-	if err := db.QueryRowContext(ctx, sqlstr, ss.StoreID, ss.SeoTitle, ss.SeoRobots, ss.MetaDescription, ss.MetaKeywords, ss.Facebook, ss.Twitter, ss.Instagram, ss.Code, ss.DefaultCurrency, ss.SupportedCurrencies, ss.DefaultLocale, ss.SupportedLocales, ss.DefaultCountryID, ss.ContactPhone, ss.MailFromAddress, ss.CustomerSupportEmail, ss.NewOrderNotificationsEmail, ss.CheckoutZoneID).Scan(&ss.ID); err != nil {
+	logf(sqlstr, ss.StoreID, ss.Config)
+	if err := db.QueryRowContext(ctx, sqlstr, ss.StoreID, ss.Config).Scan(&ss.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -78,11 +60,11 @@ func (ss *StoreSetting) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.store_setting SET ` +
-		`store_id = $1, seo_title = $2, seo_robots = $3, meta_description = $4, meta_keywords = $5, facebook = $6, twitter = $7, instagram = $8, code = $9, default_currency = $10, supported_currencies = $11, default_locale = $12, supported_locales = $13, default_country_id = $14, contact_phone = $15, mail_from_address = $16, customer_support_email = $17, new_order_notifications_email = $18, checkout_zone_id = $19 ` +
-		`WHERE id = $20`
+		`store_id = $1, config = $2 ` +
+		`WHERE id = $3`
 	// run
-	logf(sqlstr, ss.StoreID, ss.SeoTitle, ss.SeoRobots, ss.MetaDescription, ss.MetaKeywords, ss.Facebook, ss.Twitter, ss.Instagram, ss.Code, ss.DefaultCurrency, ss.SupportedCurrencies, ss.DefaultLocale, ss.SupportedLocales, ss.DefaultCountryID, ss.ContactPhone, ss.MailFromAddress, ss.CustomerSupportEmail, ss.NewOrderNotificationsEmail, ss.CheckoutZoneID, ss.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, ss.StoreID, ss.SeoTitle, ss.SeoRobots, ss.MetaDescription, ss.MetaKeywords, ss.Facebook, ss.Twitter, ss.Instagram, ss.Code, ss.DefaultCurrency, ss.SupportedCurrencies, ss.DefaultLocale, ss.SupportedLocales, ss.DefaultCountryID, ss.ContactPhone, ss.MailFromAddress, ss.CustomerSupportEmail, ss.NewOrderNotificationsEmail, ss.CheckoutZoneID, ss.ID); err != nil {
+	logf(sqlstr, ss.StoreID, ss.Config, ss.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, ss.StoreID, ss.Config, ss.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -104,16 +86,16 @@ func (ss *StoreSetting) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.store_setting (` +
-		`id, store_id, seo_title, seo_robots, meta_description, meta_keywords, facebook, twitter, instagram, code, default_currency, supported_currencies, default_locale, supported_locales, default_country_id, contact_phone, mail_from_address, customer_support_email, new_order_notifications_email, checkout_zone_id` +
+		`id, store_id, config` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20` +
+		`$1, $2, $3` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`store_id = EXCLUDED.store_id, seo_title = EXCLUDED.seo_title, seo_robots = EXCLUDED.seo_robots, meta_description = EXCLUDED.meta_description, meta_keywords = EXCLUDED.meta_keywords, facebook = EXCLUDED.facebook, twitter = EXCLUDED.twitter, instagram = EXCLUDED.instagram, code = EXCLUDED.code, default_currency = EXCLUDED.default_currency, supported_currencies = EXCLUDED.supported_currencies, default_locale = EXCLUDED.default_locale, supported_locales = EXCLUDED.supported_locales, default_country_id = EXCLUDED.default_country_id, contact_phone = EXCLUDED.contact_phone, mail_from_address = EXCLUDED.mail_from_address, customer_support_email = EXCLUDED.customer_support_email, new_order_notifications_email = EXCLUDED.new_order_notifications_email, checkout_zone_id = EXCLUDED.checkout_zone_id `
+		`store_id = EXCLUDED.store_id, config = EXCLUDED.config `
 	// run
-	logf(sqlstr, ss.ID, ss.StoreID, ss.SeoTitle, ss.SeoRobots, ss.MetaDescription, ss.MetaKeywords, ss.Facebook, ss.Twitter, ss.Instagram, ss.Code, ss.DefaultCurrency, ss.SupportedCurrencies, ss.DefaultLocale, ss.SupportedLocales, ss.DefaultCountryID, ss.ContactPhone, ss.MailFromAddress, ss.CustomerSupportEmail, ss.NewOrderNotificationsEmail, ss.CheckoutZoneID)
-	if _, err := db.ExecContext(ctx, sqlstr, ss.ID, ss.StoreID, ss.SeoTitle, ss.SeoRobots, ss.MetaDescription, ss.MetaKeywords, ss.Facebook, ss.Twitter, ss.Instagram, ss.Code, ss.DefaultCurrency, ss.SupportedCurrencies, ss.DefaultLocale, ss.SupportedLocales, ss.DefaultCountryID, ss.ContactPhone, ss.MailFromAddress, ss.CustomerSupportEmail, ss.NewOrderNotificationsEmail, ss.CheckoutZoneID); err != nil {
+	logf(sqlstr, ss.ID, ss.StoreID, ss.Config)
+	if _, err := db.ExecContext(ctx, sqlstr, ss.ID, ss.StoreID, ss.Config); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -142,13 +124,47 @@ func (ss *StoreSetting) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
+// StoreSettingByStoreID retrieves a row from 'public.store_setting' as a StoreSetting.
+//
+// Generated from index 'idx_store_settings_store_id'.
+func StoreSettingByStoreID(ctx context.Context, db DB, storeID int64) ([]*StoreSetting, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, config ` +
+		`FROM public.store_setting ` +
+		`WHERE store_id = $1`
+	// run
+	logf(sqlstr, storeID)
+	rows, err := db.QueryContext(ctx, sqlstr, storeID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*StoreSetting
+	for rows.Next() {
+		ss := StoreSetting{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&ss.ID, &ss.StoreID, &ss.Config); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &ss)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
 // StoreSettingByID retrieves a row from 'public.store_setting' as a StoreSetting.
 //
 // Generated from index 'store_setting_pkey'.
 func StoreSettingByID(ctx context.Context, db DB, id int64) (*StoreSetting, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, seo_title, seo_robots, meta_description, meta_keywords, facebook, twitter, instagram, code, default_currency, supported_currencies, default_locale, supported_locales, default_country_id, contact_phone, mail_from_address, customer_support_email, new_order_notifications_email, checkout_zone_id ` +
+		`id, store_id, config ` +
 		`FROM public.store_setting ` +
 		`WHERE id = $1`
 	// run
@@ -156,8 +172,15 @@ func StoreSettingByID(ctx context.Context, db DB, id int64) (*StoreSetting, erro
 	ss := StoreSetting{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&ss.ID, &ss.StoreID, &ss.SeoTitle, &ss.SeoRobots, &ss.MetaDescription, &ss.MetaKeywords, &ss.Facebook, &ss.Twitter, &ss.Instagram, &ss.Code, &ss.DefaultCurrency, &ss.SupportedCurrencies, &ss.DefaultLocale, &ss.SupportedLocales, &ss.DefaultCountryID, &ss.ContactPhone, &ss.MailFromAddress, &ss.CustomerSupportEmail, &ss.NewOrderNotificationsEmail, &ss.CheckoutZoneID); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&ss.ID, &ss.StoreID, &ss.Config); err != nil {
 		return nil, logerror(err)
 	}
 	return &ss, nil
+}
+
+// Store returns the Store associated with the StoreSetting's (StoreID).
+//
+// Generated from foreign key 'store_setting_store_id_fkey'.
+func (ss *StoreSetting) Store(ctx context.Context, db DB) (*Store, error) {
+	return StoreByID(ctx, db, ss.StoreID)
 }

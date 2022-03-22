@@ -56,9 +56,8 @@ option_item\
 archetype\
 asset
 
-apiServices=client\
-admin
-
+apiServices=admin
+# client\
 # cart depends on inventory, othersbought
 
 # if developing, only enable the services you're not writing code for
@@ -77,9 +76,7 @@ admin
 # 		- press CTRL+C
 #
 
-rpcServices=customer\
-email\
-inventory\
+rpcServices=inventory\
 othersbought\
 payment\
 shipping\
@@ -89,27 +86,28 @@ user\
 warehouse\
 catalog\
 cart
+# customer\
 
 
-consumerServices=imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer\
-imageresizer
+consumerServices=imageresizer
+# email
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer\
+# imageresizer
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
@@ -190,8 +188,8 @@ cleanup:
 	done
 .PHONY: generate-xo
 generate-xo:
-	@xo schema '${POSTGRES_DSN}' \
-	--go-field-tag='`json:"{{ .SQLName }}" db:"{{ .SQLName }}"`' \
+	@xo schema ${POSTGRES_DSN} \
+	--go-field-tag='json:"{{ .SQLName }}" db:"{{ .SQLName }}"' \
 	-o ./internal/models \
 	-e *.created_at \
 	-e *.updated_at \

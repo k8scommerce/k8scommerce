@@ -35,7 +35,7 @@
         ]
       }
     },
-    "/v1/asset/{productId}/{variantId}/{kind}": {
+    "/v1/asset/{product_id}/{variant_id}/{kind}": {
       "post": {
         "summary": "Upload Asset",
         "description": "uploads an image, document, audio, video or archive asset",
@@ -50,14 +50,14 @@
         },
         "parameters": [
           {
-            "name": "productId",
+            "name": "product_id",
             "description": "product id",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "variantId",
+            "name": "variant_id",
             "description": "variant id",
             "in": "path",
             "required": true,
@@ -178,10 +178,9 @@
         "parameters": [
           {
             "name": "id",
-            "description": "category id",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -290,11 +289,41 @@
         ]
       }
     },
+    "/v1/customer/email": {
+      "post": {
+        "summary": "Check for Existing Email",
+        "description": "verifies the email address is unique",
+        "operationId": "checkForExistingEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CheckForExistingEmailResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " email",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CheckForExistingEmailRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
     "/v1/customer/login": {
       "post": {
         "summary": "Login",
         "description": "login for customers",
-        "operationId": "customerLogin",
+        "operationId": "login",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -312,6 +341,33 @@
             "schema": {
               "$ref": "#/definitions/CustomerLoginRequest"
             }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/v1/customer/{id}": {
+      "get": {
+        "summary": "Login",
+        "description": "login for customers",
+        "operationId": "getCustomer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCustomerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -504,7 +560,7 @@
         ]
       }
     },
-    "/v1/products/{categoryId}/{currentPage}/{pageSize}": {
+    "/v1/products/{category_id}/{current_page}/{page_size}": {
       "get": {
         "summary": "Get Products By Category Id",
         "description": "returns all products by category id belonging to a store",
@@ -519,21 +575,21 @@
         },
         "parameters": [
           {
-            "name": "categoryId",
+            "name": "category_id",
             "description": "category id",
             "in": "path",
             "required": true,
             "type": "integer"
           },
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
             "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
@@ -558,7 +614,7 @@
         ]
       }
     },
-    "/v1/products/{currentPage}/{pageSize}": {
+    "/v1/products/{current_page}/{page_size}": {
       "get": {
         "summary": "Get All Products",
         "description": "returns all products belonging to a store",
@@ -573,14 +629,14 @@
         },
         "parameters": [
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
             "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
@@ -602,6 +658,34 @@
         "requestBody": {},
         "tags": [
           "products"
+        ]
+      }
+    },
+    "/v1/store/generate-token/{store_id}": {
+      "get": {
+        "summary": "Geneate Store ID",
+        "description": "returns a valid store ID, long-term JWT token",
+        "operationId": "generateStoreKeyToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GenerateStoreKeyTokenResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "store_id",
+            "description": "numeric store ID",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "store"
         ]
       }
     },
@@ -635,7 +719,7 @@
         ]
       }
     },
-    "/v1/users/{currentPage}/{pageSize}": {
+    "/v1/users/{current_page}/{page_size}": {
       "get": {
         "summary": "Get Users",
         "description": "returns all users",
@@ -650,14 +734,14 @@
         },
         "parameters": [
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
             "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
@@ -689,7 +773,7 @@
           "type": "string",
           "description": " city name"
         },
-        "stateProvince": {
+        "state_province": {
           "type": "string",
           "description": " state or province name"
         },
@@ -697,11 +781,11 @@
           "type": "string",
           "description": " IISO 3166-1 alpha-2 country code. https:en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
         },
-        "postalCode": {
+        "postal_code": {
           "type": "string",
           "description": " postal or zip code"
         },
-        "isDefault": {
+        "is_default": {
           "type": "boolean",
           "format": "boolean",
           "description": " indicates if this is a default address"
@@ -711,10 +795,10 @@
       "required": [
         "street",
         "city",
-        "stateProvince",
+        "state_province",
         "country",
-        "postalCode",
-        "isDefault"
+        "postal_code",
+        "is_default"
       ]
     },
     "Asset": {
@@ -725,12 +809,12 @@
           "format": "int64",
           "description": " asset id"
         },
-        "productId": {
+        "product_id": {
           "type": "integer",
           "format": "int64",
           "description": " product id"
         },
-        "variantId": {
+        "variant_id": {
           "type": "integer",
           "format": "int64",
           "description": " variant id"
@@ -739,7 +823,7 @@
           "type": "string",
           "description": " asset name"
         },
-        "displayName": {
+        "display_name": {
           "type": "string",
           "description": " display name"
         },
@@ -752,11 +836,11 @@
           "format": "int32",
           "description": " asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)"
         },
-        "contentType": {
+        "content_type": {
           "type": "string",
           "description": " content type (mime type)"
         },
-        "sortOrder": {
+        "sort_order": {
           "type": "integer",
           "format": "int64",
           "description": " sort order"
@@ -776,7 +860,7 @@
           "format": "int64",
           "description": " category id"
         },
-        "parentId": {
+        "parent_id": {
           "type": "integer",
           "format": "int64",
           "description": " parent category id. references Category.Id"
@@ -793,15 +877,15 @@
           "type": "string",
           "description": " description of category"
         },
-        "metaTitle": {
+        "meta_title": {
           "type": "string",
           "description": " metatag title for SEO"
         },
-        "metaDescription": {
+        "meta_description": {
           "type": "string",
           "description": " metatag description for SEO"
         },
-        "metaKeywords": {
+        "meta_keywords": {
           "type": "string",
           "description": " metatag keywords for SEO"
         },
@@ -810,7 +894,7 @@
           "format": "int32",
           "description": " category level depth"
         },
-        "sortOrder": {
+        "sort_order": {
           "type": "integer",
           "format": "int32",
           "description": " sort order of menu items on the same level and same parent id"
@@ -819,7 +903,7 @@
       "title": "Category",
       "required": [
         "id",
-        "parentId",
+        "parent_id",
         "slug",
         "name"
       ]
@@ -840,6 +924,39 @@
       "required": [
         "slug",
         "name"
+      ]
+    },
+    "CheckForExistingEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " Customer object"
+        }
+      },
+      "title": "CheckForExistingEmailRequest",
+      "required": [
+        "email"
+      ]
+    },
+    "CheckForExistingEmailResponse": {
+      "type": "object",
+      "properties": {
+        "exists": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " boolean true/false if email exists or not"
+        },
+        "is_verified": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " boolean true/false"
+        }
+      },
+      "title": "CheckForExistingEmailResponse",
+      "required": [
+        "exists",
+        "is_verified"
       ]
     },
     "CreateCategoryRequest": {
@@ -873,16 +990,11 @@
         "customer": {
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
-        },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
         }
       },
       "title": "CreateCustomerResponse",
       "required": [
-        "customer",
-        "status"
+        "customer"
       ]
     },
     "CreateProductRequest": {
@@ -905,11 +1017,11 @@
           "format": "int64",
           "description": " customer id"
         },
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last or given name"
         },
@@ -920,13 +1032,18 @@
         "password": {
           "type": "string",
           "description": " password"
+        },
+        "is_verified": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " is_verified"
         }
       },
       "title": "Customer",
       "required": [
         "id",
-        "firstName",
-        "lastName",
+        "first_name",
+        "last_name",
         "email"
       ]
     },
@@ -938,11 +1055,11 @@
           "format": "int64",
           "description": " customer id"
         },
-        "billingAddress": {
+        "billing_address": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         },
-        "shippingAddresses": {
+        "shipping_addresses": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Address"
@@ -953,8 +1070,8 @@
       "title": "CustomerAccount",
       "required": [
         "id",
-        "billingAddress",
-        "shippingAddresses"
+        "billing_address",
+        "shipping_addresses"
       ]
     },
     "CustomerLoginRequest": {
@@ -986,16 +1103,17 @@
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
         },
-        "status": {
-          "$ref": "#/definitions/ResponseStatus",
-          "description": " a ResponseStatus object"
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " success bool"
         }
       },
       "title": "CustomerLoginResponse",
       "required": [
         "jwt",
         "customer",
-        "status"
+        "success"
       ]
     },
     "DeleteCategoryRequest": {
@@ -1032,6 +1150,31 @@
       "type": "object",
       "title": "DeleteProductResponse"
     },
+    "GenerateStoreKeyTokenRequest": {
+      "type": "object",
+      "properties": {
+        "store_id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GenerateStoreKeyTokenRequest",
+      "required": [
+        "store_id"
+      ]
+    },
+    "GenerateStoreKeyTokenResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "title": "GenerateStoreKeyTokenResponse",
+      "required": [
+        "token"
+      ]
+    },
     "GetAllCategoriesResponse": {
       "type": "object",
       "properties": {
@@ -1051,11 +1194,11 @@
     "GetAllProductsRequest": {
       "type": "object",
       "properties": {
-        "currentPage": {
+        "current_page": {
           "type": "integer",
           "format": "int64"
         },
-        "pageSize": {
+        "page_size": {
           "type": "integer",
           "format": "int64"
         },
@@ -1068,8 +1211,8 @@
       },
       "title": "GetAllProductsRequest",
       "required": [
-        "currentPage",
-        "pageSize"
+        "current_page",
+        "page_size"
       ]
     },
     "GetAllProductsResponse": {
@@ -1081,11 +1224,11 @@
             "$ref": "#/definitions/Product"
           }
         },
-        "totalRecords": {
+        "total_records": {
           "type": "integer",
           "format": "int64"
         },
-        "totalPages": {
+        "total_pages": {
           "type": "integer",
           "format": "int64"
         }
@@ -1093,18 +1236,18 @@
       "title": "GetAllProductsResponse",
       "required": [
         "products",
-        "totalRecords",
-        "totalPages"
+        "total_records",
+        "total_pages"
       ]
     },
     "GetAllUsersRequest": {
       "type": "object",
       "properties": {
-        "currentPage": {
+        "current_page": {
           "type": "integer",
           "format": "int64"
         },
-        "pageSize": {
+        "page_size": {
           "type": "integer",
           "format": "int64"
         },
@@ -1114,8 +1257,8 @@
       },
       "title": "GetAllUsersRequest",
       "required": [
-        "currentPage",
-        "pageSize"
+        "current_page",
+        "page_size"
       ]
     },
     "GetAllUsersResponse": {
@@ -1127,11 +1270,11 @@
             "$ref": "#/definitions/User"
           }
         },
-        "totalRecords": {
+        "total_records": {
           "type": "integer",
           "format": "int64"
         },
-        "totalPages": {
+        "total_pages": {
           "type": "integer",
           "format": "int64"
         }
@@ -1139,8 +1282,8 @@
       "title": "GetAllUsersResponse",
       "required": [
         "users",
-        "totalRecords",
-        "totalPages"
+        "total_records",
+        "total_pages"
       ]
     },
     "GetCategoryByIdRequest": {
@@ -1148,7 +1291,8 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": " category id"
         }
       },
       "title": "GetCategoryByIdRequest",
@@ -1167,6 +1311,33 @@
       "title": "GetCategoryBySlugRequest",
       "required": [
         "slug"
+      ]
+    },
+    "GetCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " customer id"
+        }
+      },
+      "title": "GetCustomerRequest",
+      "required": [
+        "id"
+      ]
+    },
+    "GetCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        }
+      },
+      "title": "GetCustomerResponse",
+      "required": [
+        "customer"
       ]
     },
     "GetProductByIdRequest": {
@@ -1210,15 +1381,15 @@
     "GetProductsByCategoryIdRequest": {
       "type": "object",
       "properties": {
-        "categoryId": {
+        "category_id": {
           "type": "integer",
           "format": "int64"
         },
-        "currentPage": {
+        "current_page": {
           "type": "integer",
           "format": "int64"
         },
-        "pageSize": {
+        "page_size": {
           "type": "integer",
           "format": "int64"
         },
@@ -1231,9 +1402,9 @@
       },
       "title": "GetProductsByCategoryIdRequest",
       "required": [
-        "categoryId",
-        "currentPage",
-        "pageSize"
+        "category_id",
+        "current_page",
+        "page_size"
       ]
     },
     "GetProductsByCategoryIdResponse": {
@@ -1245,11 +1416,11 @@
             "$ref": "#/definitions/Product"
           }
         },
-        "totalRecords": {
+        "total_records": {
           "type": "integer",
           "format": "int64"
         },
-        "totalPages": {
+        "total_pages": {
           "type": "integer",
           "format": "int64"
         }
@@ -1257,8 +1428,8 @@
       "title": "GetProductsByCategoryIdResponse",
       "required": [
         "products",
-        "totalRecords",
-        "totalPages"
+        "total_records",
+        "total_pages"
       ]
     },
     "JwtToken": {
@@ -1276,21 +1447,16 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "NewCustomer": {
       "type": "object",
       "properties": {
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last or given name"
         },
@@ -1302,19 +1468,19 @@
           "type": "string",
           "description": " password"
         },
-        "billingAddress": {
+        "billing_address": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         },
-        "shippingAddresses": {
+        "shipping_addresses": {
           "$ref": "#/definitions/Address",
           "description": " Address object"
         }
       },
       "title": "NewCustomer",
       "required": [
-        "firstName",
-        "lastName",
+        "first_name",
+        "last_name",
         "email",
         "password"
       ]
@@ -1327,7 +1493,7 @@
           "format": "int64",
           "description": " permission group id"
         },
-        "groupName": {
+        "group_name": {
           "type": "string",
           "description": " groupName"
         }
@@ -1335,7 +1501,7 @@
       "title": "PermissionGroup",
       "required": [
         "id",
-        "groupName"
+        "group_name"
       ]
     },
     "PingResponse": {
@@ -1358,21 +1524,21 @@
           "format": "int64",
           "description": " price id"
         },
-        "salePrice": {
+        "sale_price": {
           "type": "number",
           "format": "double",
           "description": " sale price"
         },
-        "formattedSalePrice": {
+        "formatted_sale_price": {
           "type": "string",
           "description": " formatted sale price"
         },
-        "retailPrice": {
+        "retail_price": {
           "type": "number",
           "format": "double",
           "description": " retail price"
         },
-        "formattedRetailPrice": {
+        "formatted_retail_price": {
           "type": "string",
           "description": " formatted retail price"
         },
@@ -1383,8 +1549,8 @@
       },
       "title": "Price",
       "required": [
-        "salePrice",
-        "formattedSalePrice"
+        "sale_price",
+        "formatted_sale_price"
       ]
     },
     "Product": {
@@ -1403,7 +1569,7 @@
           "type": "string",
           "description": " product name"
         },
-        "shortDescription": {
+        "short_description": {
           "type": "string",
           "description": " product short description. used in category pages"
         },
@@ -1411,15 +1577,15 @@
           "type": "string",
           "description": " category description"
         },
-        "metaTitle": {
+        "meta_title": {
           "type": "string",
           "description": " metatag title for SEO"
         },
-        "metaDescription": {
+        "meta_description": {
           "type": "string",
           "description": " metatag description for SEO"
         },
-        "metaKeywords": {
+        "meta_keywords": {
           "type": "string",
           "description": " metatag keywords for SEO"
         },
@@ -1430,7 +1596,7 @@
           },
           "description": " collection of Variant objects"
         },
-        "defaultImage": {
+        "default_image": {
           "$ref": "#/definitions/Asset",
           "description": " default Asset object of image type"
         },
@@ -1474,6 +1640,37 @@
         "statusCode"
       ]
     },
+    "Store": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " store id"
+        },
+        "url": {
+          "type": "string",
+          "description": " unique url"
+        },
+        "name": {
+          "type": "string",
+          "description": " store name"
+        },
+        "description": {
+          "type": "string",
+          "description": " description"
+        },
+        "is_default": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " indicates if this is the default store"
+        }
+      },
+      "title": "Store",
+      "required": [
+        "id"
+      ]
+    },
     "UpdateCategoryRequest": {
       "type": "object",
       "properties": {
@@ -1511,11 +1708,11 @@
     "UploadAssetRequest": {
       "type": "object",
       "properties": {
-        "productId": {
+        "product_id": {
           "type": "integer",
           "format": "int64"
         },
-        "variantId": {
+        "variant_id": {
           "type": "integer",
           "format": "int64"
         },
@@ -1525,8 +1722,8 @@
       },
       "title": "UploadAssetRequest",
       "required": [
-        "productId",
-        "variantId",
+        "product_id",
+        "variant_id",
         "kind"
       ]
     },
@@ -1538,11 +1735,11 @@
           "format": "int64",
           "description": " user id"
         },
-        "firstName": {
+        "first_name": {
           "type": "string",
           "description": " first name"
         },
-        "lastName": {
+        "last_name": {
           "type": "string",
           "description": " last name"
         },
@@ -1558,8 +1755,8 @@
       "title": "User",
       "required": [
         "id",
-        "firstName",
-        "lastName",
+        "first_name",
+        "last_name",
         "email"
       ]
     },
@@ -1606,12 +1803,12 @@
     "UsersPermissionGroups": {
       "type": "object",
       "properties": {
-        "userId": {
+        "user_id": {
           "type": "integer",
           "format": "int64",
           "description": " user id"
         },
-        "permissionGroupId": {
+        "permission_group_id": {
           "type": "integer",
           "format": "int64",
           "description": " permission group id"
@@ -1619,8 +1816,8 @@
       },
       "title": "UsersPermissionGroups",
       "required": [
-        "userId",
-        "permissionGroupId"
+        "user_id",
+        "permission_group_id"
       ]
     },
     "Variant": {
@@ -1631,7 +1828,7 @@
           "format": "int64",
           "description": " variant id"
         },
-        "isDefault": {
+        "is_default": {
           "type": "boolean",
           "format": "boolean",
           "description": " is default variant. each product must have exactly 1 default variant"
@@ -1668,7 +1865,7 @@
       "title": "Variant",
       "required": [
         "id",
-        "isDefault",
+        "is_default",
         "sku"
       ]
     }

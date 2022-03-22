@@ -8,7 +8,7 @@ import (
 var (
 	storeID     int64 = 1
 	minProducts       = 1
-	maxProducts       = 3
+	maxProducts       = 2
 )
 
 func main() {
@@ -16,6 +16,7 @@ func main() {
 	tables.Truncate()
 
 	createStore()
+	createStoreSetting()
 	createArchetypes()
 
 	categories.Import("categories.csv").Save()

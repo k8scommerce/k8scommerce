@@ -1,0 +1,124 @@
+info(
+	title: "Catalog API Endpoints"
+	desc: "client gateway catalog api endpoints"
+	author: "localrivet"
+	email: "localrivet"
+	version: "1"
+)
+
+// objects
+type Store {
+	Id          int64  `json:"id"`                   // store id
+	Url         string `json:"url,optional"`         // unique url
+	Name        string `json:"name,optional"`        // store name
+	Description string `json:"description,optional"` // description
+	IsDefault   bool   `json:"is_default,optional"`  // indicates if this is the default store
+}
+
+type StoreSetting {
+	Id      int64       `json:"id"`       // store id
+	StoreId int64       `json:"store_id"` // store id
+	Config  StoreConfig `json:"config"`   // store config
+}
+
+type StoreConfig {
+	Currency Currency `json:"currency,omitempty"`
+	Locale   Locale   `json:"locale,omitempty"`
+	Contact  Contact  `json:"contact,omitempty"`
+	Emails   Emails   `json:"emails,omitempty"`
+}
+
+type Currency {
+	DefaultCurrency     string   `json:"default_currency,omitempty"`
+	SupportedCurrencies []string `json:"supported_currencies,omitempty"`
+}
+
+type Locale {
+	DefaultLocale      string   `json:"default_locale,omitempty"`
+	SupportedLocales   []string `json:"supported_locales,omitempty"`
+	DefaultCountryCode string   `json:"default_country_code,omitempty"`
+}
+
+type Contact {
+	Phone     Phone     `json:"phone_numbers,omitempty"`
+	Addresses []Address `json:"mailing_address,omitempty"`
+}
+
+type Phone {
+	Corportate      string            `json:"corportate,omitempty"`
+	CustomerSupport string            `json:"contact_phone,omitempty"`
+	Custom          map[string]string `json:"custom,omitempty"`
+}
+
+type Address {
+	Name          string `json:"name"`
+	Street        string `json:"street"`
+	AptSuite      string `json:"apt_suite,omitempty"`
+	City          string `json:"city"`
+	StateProvince string `json:"state_province"`
+	Country       string `json:"country"`
+	PostalCode    string `json:"postal_code"`
+	IsDefault     bool   `json:"is_default"`
+}
+
+type Emails {
+	Default         Email `json:"default,omitempty"`
+	CustomerSupport Email `json:"customer_support,omitempty"`
+
+	// Customer Emails
+	CustomerCompletedOrder    Email `json:"customer_completed_order,omitempty"`
+	CustomerConfirmationEmail Email `json:"customer_confirmation_email,omitempty"`
+	CustomerNewAccount        Email `json:"customer_new_account,omitempty"`
+	CustomerNote              Email `json:"customer_note,omitempty"`
+	CustomerOnHoldOrder       Email `json:"customer_on_hold_order,omitempty"`
+	CustomerPasswordChanged   Email `json:"customer_password_changed,omitempty"`
+	CustomerProcessingOrder   Email `json:"customer_processing_order,omitempty"`
+	CustomerRefundedOrder     Email `json:"customer_refunded_order,omitempty"`
+	CustomerResetPassword     Email `json:"customer_reset_password,omitempty"`
+	CustomerSale              Email `json:"customer_sale,omitempty"`
+
+	// Admin Emails
+	AdminCancelledOrder Email `json:"admin_cancelled_order,omitempty"`
+	AdminFailedOrder    Email `json:"admin_failed_order,omitempty"`
+	AdminNewOrder       Email `json:"admin_new_order,omitempty"`
+}
+
+type Email {
+	Name    string `json:"from_name,omitempty"`
+	Email   string `json:"from_email,omitempty"`
+}
+
+// generate store id
+type GenerateStoreKeyTokenRequest {
+	StoreId int64 `path:"store_id"`
+}
+
+type GenerateStoreKeyTokenResponse {
+	Token string `json:"token"`
+}
+
+//
+// endpoints
+//
+
+@server(
+	// jwt: Auth
+	middleware: Locale, StoreKey
+	group: store
+)
+service client {
+	
+	@doc(
+		summary: "Get Store"
+		description: "returns the store associated with the header Store-Key"
+	)
+	@handler getStore
+	get /v1/store returns (Store)
+	
+	@doc(
+		summary: "Get Store Settings"
+		description: "returns the store settings associated with the header Store-Key"
+	)
+	@handler getStoreSettings
+	get /v1/store/settings returns (StoreSetting)
+}

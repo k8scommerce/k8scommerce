@@ -3,8 +3,10 @@ package categories
 import (
 	"context"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +25,20 @@ func NewGetCategoryBySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *GetCategoryBySlugLogic) GetCategoryBySlug(req types.GetCategoryBySlugRequest) (resp *types.GetCategoryBySlugResponse, err error) {
-	// todo: add your logic here and delete this line
+func (l *GetCategoryBySlugLogic) GetCategoryBySlug(req types.GetCategoryBySlugRequest) (resp *types.Category, err error) {
+	resp = &types.Category{}
 
-	return
+	response, err := l.svcCtx.CatalogRpc.GetCategoryBySlug(l.ctx, &catalogclient.GetCategoryBySlugRequest{
+		Slug:    req.Slug,
+		StoreId: l.ctx.Value(types.StoreKey).(int64),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// convert from one type to another
+	// the structs are identical
+	utils.TransformObj(response.Category, &resp)
+
+	return resp, err
 }

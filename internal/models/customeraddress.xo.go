@@ -4,20 +4,22 @@ package models
 
 import (
 	"context"
+	"database/sql"
 )
 
 // CustomerAddress represents a row from 'public.customer_address'.
 type CustomerAddress struct {
-	ID            int64       `json:"id" db:"id"`                         // id
-	StoreID       int64       `json:"store_id" db:"store_id"`             // store_id
-	CustomerID    int64       `json:"customer_id" db:"customer_id"`       // customer_id
-	Kind          AddressKind `json:"kind" db:"kind"`                     // kind
-	IsDefault     bool        `json:"is_default" db:"is_default"`         // is_default
-	Street        string      `json:"street" db:"street"`                 // street
-	City          string      `json:"city" db:"city"`                     // city
-	StateProvince string      `json:"state_province" db:"state_province"` // state_province
-	Country       string      `json:"country" db:"country"`               // country
-	PostalCode    string      `json:"postal_code" db:"postal_code"`       // postal_code
+	ID            int64          `json:"id" db:"id"`                         // id
+	StoreID       int64          `json:"store_id" db:"store_id"`             // store_id
+	CustomerID    int64          `json:"customer_id" db:"customer_id"`       // customer_id
+	Kind          AddressKind    `json:"kind" db:"kind"`                     // kind
+	IsDefault     bool           `json:"is_default" db:"is_default"`         // is_default
+	Street        string         `json:"street" db:"street"`                 // street
+	AptSuite      sql.NullString `json:"apt_suite" db:"apt_suite"`           // apt_suite
+	City          string         `json:"city" db:"city"`                     // city
+	StateProvince string         `json:"state_province" db:"state_province"` // state_province
+	Country       string         `json:"country" db:"country"`               // country
+	PostalCode    string         `json:"postal_code" db:"postal_code"`       // postal_code
 	// xo fields
 	_exists, _deleted bool
 }
@@ -43,13 +45,13 @@ func (ca *CustomerAddress) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (primary key generated and returned by database)
 	const sqlstr = `INSERT INTO public.customer_address (` +
-		`store_id, customer_id, kind, is_default, street, city, state_province, country, postal_code` +
+		`store_id, customer_id, kind, is_default, street, apt_suite, city, state_province, country, postal_code` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10` +
 		`) RETURNING id`
 	// run
-	logf(sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
-	if err := db.QueryRowContext(ctx, sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode).Scan(&ca.ID); err != nil {
+	logf(sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.AptSuite, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
+	if err := db.QueryRowContext(ctx, sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.AptSuite, ca.City, ca.StateProvince, ca.Country, ca.PostalCode).Scan(&ca.ID); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -67,11 +69,11 @@ func (ca *CustomerAddress) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.customer_address SET ` +
-		`store_id = $1, customer_id = $2, kind = $3, is_default = $4, street = $5, city = $6, state_province = $7, country = $8, postal_code = $9 ` +
-		`WHERE id = $10`
+		`store_id = $1, customer_id = $2, kind = $3, is_default = $4, street = $5, apt_suite = $6, city = $7, state_province = $8, country = $9, postal_code = $10 ` +
+		`WHERE id = $11`
 	// run
-	logf(sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID); err != nil {
+	logf(sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.AptSuite, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.AptSuite, ca.City, ca.StateProvince, ca.Country, ca.PostalCode, ca.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -93,16 +95,16 @@ func (ca *CustomerAddress) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.customer_address (` +
-		`id, store_id, customer_id, kind, is_default, street, city, state_province, country, postal_code` +
+		`id, store_id, customer_id, kind, is_default, street, apt_suite, city, state_province, country, postal_code` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`store_id = EXCLUDED.store_id, customer_id = EXCLUDED.customer_id, kind = EXCLUDED.kind, is_default = EXCLUDED.is_default, street = EXCLUDED.street, city = EXCLUDED.city, state_province = EXCLUDED.state_province, country = EXCLUDED.country, postal_code = EXCLUDED.postal_code `
+		`store_id = EXCLUDED.store_id, customer_id = EXCLUDED.customer_id, kind = EXCLUDED.kind, is_default = EXCLUDED.is_default, street = EXCLUDED.street, apt_suite = EXCLUDED.apt_suite, city = EXCLUDED.city, state_province = EXCLUDED.state_province, country = EXCLUDED.country, postal_code = EXCLUDED.postal_code `
 	// run
-	logf(sqlstr, ca.ID, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
-	if _, err := db.ExecContext(ctx, sqlstr, ca.ID, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.City, ca.StateProvince, ca.Country, ca.PostalCode); err != nil {
+	logf(sqlstr, ca.ID, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.AptSuite, ca.City, ca.StateProvince, ca.Country, ca.PostalCode)
+	if _, err := db.ExecContext(ctx, sqlstr, ca.ID, ca.StoreID, ca.CustomerID, ca.Kind, ca.IsDefault, ca.Street, ca.AptSuite, ca.City, ca.StateProvince, ca.Country, ca.PostalCode); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -137,7 +139,7 @@ func (ca *CustomerAddress) Delete(ctx context.Context, db DB) error {
 func CustomerAddressByID(ctx context.Context, db DB, id int64) (*CustomerAddress, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, store_id, customer_id, kind, is_default, street, city, state_province, country, postal_code ` +
+		`id, store_id, customer_id, kind, is_default, street, apt_suite, city, state_province, country, postal_code ` +
 		`FROM public.customer_address ` +
 		`WHERE id = $1`
 	// run
@@ -145,8 +147,76 @@ func CustomerAddressByID(ctx context.Context, db DB, id int64) (*CustomerAddress
 	ca := CustomerAddress{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&ca.ID, &ca.StoreID, &ca.CustomerID, &ca.Kind, &ca.IsDefault, &ca.Street, &ca.City, &ca.StateProvince, &ca.Country, &ca.PostalCode); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&ca.ID, &ca.StoreID, &ca.CustomerID, &ca.Kind, &ca.IsDefault, &ca.Street, &ca.AptSuite, &ca.City, &ca.StateProvince, &ca.Country, &ca.PostalCode); err != nil {
 		return nil, logerror(err)
 	}
 	return &ca, nil
+}
+
+// CustomerAddressByCustomerIDKind retrieves a row from 'public.customer_address' as a CustomerAddress.
+//
+// Generated from index 'idx_customer_address_customer_id_kind'.
+func CustomerAddressByCustomerIDKind(ctx context.Context, db DB, customerID int64, kind AddressKind) ([]*CustomerAddress, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, customer_id, kind, is_default, street, apt_suite, city, state_province, country, postal_code ` +
+		`FROM public.customer_address ` +
+		`WHERE customer_id = $1 AND kind = $2`
+	// run
+	logf(sqlstr, customerID, kind)
+	rows, err := db.QueryContext(ctx, sqlstr, customerID, kind)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*CustomerAddress
+	for rows.Next() {
+		ca := CustomerAddress{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&ca.ID, &ca.StoreID, &ca.CustomerID, &ca.Kind, &ca.IsDefault, &ca.Street, &ca.AptSuite, &ca.City, &ca.StateProvince, &ca.Country, &ca.PostalCode); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &ca)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// CustomerAddressByStoreID retrieves a row from 'public.customer_address' as a CustomerAddress.
+//
+// Generated from index 'idx_customer_address_store_id'.
+func CustomerAddressByStoreID(ctx context.Context, db DB, storeID int64) ([]*CustomerAddress, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, customer_id, kind, is_default, street, apt_suite, city, state_province, country, postal_code ` +
+		`FROM public.customer_address ` +
+		`WHERE store_id = $1`
+	// run
+	logf(sqlstr, storeID)
+	rows, err := db.QueryContext(ctx, sqlstr, storeID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*CustomerAddress
+	for rows.Next() {
+		ca := CustomerAddress{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&ca.ID, &ca.StoreID, &ca.CustomerID, &ca.Kind, &ca.IsDefault, &ca.Street, &ca.AptSuite, &ca.City, &ca.StateProvince, &ca.Country, &ca.PostalCode); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &ca)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
 }

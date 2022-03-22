@@ -31,9 +31,9 @@ func (t ModelKind) String() string {
 
 func NewHashCoder(hashSalt string, modelKind ModelKind) HashCoder {
 	data := hashids.NewData()
-	data.Alphabet = "abcdefghijklmnopqrstuvzyx"
+	data.Alphabet = "abcdefghijklmnopqrstuvzyx-0123456789"
 	data.Salt = strconv.Itoa(int(modelKind)) + StringToMD5(hashSalt)
-	data.MinLength = 8
+	data.MinLength = 32
 	hashID, _ := hashids.NewWithData(data)
 
 	return &hashCoder{
@@ -66,4 +66,8 @@ func (h *hashCoder) Decode(encodedHash string) int64 {
 		return decoded[0]
 	}
 	return 0
+}
+
+func (h *hashCoder) Validate() {
+
 }
