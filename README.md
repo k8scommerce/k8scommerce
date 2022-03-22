@@ -39,7 +39,7 @@ The following shows what has been completed and what is yet to be done:
 | Shipping         |         -          | :white_check_mark: |                    |                    |       |    -    |
 | Similar Products | :white_check_mark: | :white_check_mark: |                    |                    |       |    -    |
 | Store            | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |       |    -    |
-| User             | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |       |  alpha  |
+| User             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |       |  alpha  |
 | Warehouse        |         -          | :white_check_mark: |                    |                    |       |    -    |
 | Wishlist         |         -          |         -          |                    |                    |       |    -    |
 
