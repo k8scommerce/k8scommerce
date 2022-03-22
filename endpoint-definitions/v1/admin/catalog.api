@@ -8,15 +8,15 @@ info(
 
 // objects
 type Category {
-	Id              int64  `json:"id"`                                 // category id
+	Id              int64  `json:"id"`                                  // category id
 	ParentId        int64  `json:"parent_id"`                           // parent category id. references Category.Id
-	Slug            string `json:"slug"`                               // slug name of the category
-	Name            string `json:"name"`                               // name of category
-	Description     string `json:"description,optional,omitempty"`     // description of category
+	Slug            string `json:"slug"`                                // slug name of the category
+	Name            string `json:"name"`                                // name of category
+	Description     string `json:"description,optional,omitempty"`      // description of category
 	MetaTitle       string `json:"meta_title,optional,omitempty"`       // metatag title for SEO
 	MetaDescription string `json:"meta_description,optional,omitempty"` // metatag description for SEO
 	MetaKeywords    string `json:"meta_keywords,optional,omitempty"`    // metatag keywords for SEO
-	Depth           int32  `json:"depth,optional,omitempty"`           // category level depth
+	Depth           int32  `json:"depth,optional,omitempty"`            // category level depth
 	SortOrder       int32  `json:"sort_order,optional,omitempty"`       // sort order of menu items on the same level and same parent id
 }
 
@@ -26,23 +26,23 @@ type CategoryPair {
 }
 
 type Product {
-	Id               int64          `json:"id"`                                  // product id
-	Slug             string         `json:"slug"`                                // product slug
-	Name             string         `json:"name"`                                // product name
+	Id               int64          `json:"id"`                                   // product id
+	Slug             string         `json:"slug"`                                 // product slug
+	Name             string         `json:"name"`                                 // product name
 	ShortDescription string         `json:"short_description,optional,omitempty"` // product short description. used in category pages
-	Description      string         `json:"description,optional,omitempty"`      // category description
+	Description      string         `json:"description,optional,omitempty"`       // category description
 	MetaTitle        string         `json:"meta_title,optional,omitempty"`        // metatag title for SEO
 	MetaDescription  string         `json:"meta_description,optional,omitempty"`  // metatag description for SEO
 	MetaKeywords     string         `json:"meta_keywords,optional,omitempty"`     // metatag keywords for SEO
-	Variants         []Variant      `json:"variants,optional,omitempty"`         // collection of Variant objects
+	Variants         []Variant      `json:"variants,optional,omitempty"`          // collection of Variant objects
 	DefaultImage     Asset          `json:"default_image,optional,omitempty"`     // default Asset object of image type
-	Images           []Asset        `json:"images,optional,omitempty"`           // array of Asset objects of image type
-	Categories       []CategoryPair `json:"categories,optional,omitempty"`       // array of Asset objects of image type
+	Images           []Asset        `json:"images,optional,omitempty"`            // array of Asset objects of image type
+	Categories       []CategoryPair `json:"categories,optional,omitempty"`        // array of Asset objects of image type
 }
 
 type Variant {
 	Id        int64   `json:"id"`                        // variant id
-	IsDefault bool    `json:"is_default"`                 // is default variant. each product must have exactly 1 default variant
+	IsDefault bool    `json:"is_default"`                // is default variant. each product must have exactly 1 default variant
 	Sku       string  `json:"sku"`                       // variant sku. usually the product sku with appended identification tags
 	Weight    float64 `json:"weight,optional,omitempty"` // variant weight. used in calculating shipping
 	Height    float64 `json:"height,optional,omitempty"` // variant height. used in calculating shipping
@@ -52,24 +52,24 @@ type Variant {
 }
 
 type Price {
-	Id                   int64   `json:"id,optional,omitempty"`                   // price id
-	SalePrice            float64 `json:"sale_price"`                               // sale price
+	Id                   int64   `json:"id,optional,omitempty"`                     // price id
+	SalePrice            float64 `json:"sale_price"`                                // sale price
 	FormattedSalePrice   string  `json:"formatted_sale_price"`                      // formatted sale price
-	RetailPrice          float64 `json:"retail_price,optional,omitempty"`          // retail price
+	RetailPrice          float64 `json:"retail_price,optional,omitempty"`           // retail price
 	FormattedRetailPrice string  `json:"formatted_retail_price,optional,omitempty"` // formatted retail price
-	Currency             string  `json:"currency,optional,omitempty"`             // currency. example: USD, CAN, etc.
+	Currency             string  `json:"currency,optional,omitempty"`               // currency. example: USD, CAN, etc.
 }
 
 type Asset {
 	Id          int64             `json:"id,optional,omitempty"`                       // asset id
-	ProductId   int64             `json:"product_id,optional,omitempty"`                // product id
-	VariantId   int64             `json:"variant_id,optional,omitempty"`                // variant id
+	ProductId   int64             `json:"product_id,optional,omitempty"`               // product id
+	VariantId   int64             `json:"variant_id,optional,omitempty"`               // variant id
 	Name        string            `json:"name,optional,omitempty"`                     // asset name
-	DisplayName string            `json:"display_name,optional,omitempty"`              // display name
+	DisplayName string            `json:"display_name,optional,omitempty"`             // display name
 	Url         string            `json:"url,optional,omitempty"`                      // full, public access url
 	Kind        int               `json:"kind,optional,omitempty,options=0|1|2|3|4|5"` // asset kind (0=unknown|1=image|2=document|3=audio|4=video|5=archive)
-	ContentType string            `json:"content_type,optional,omitempty"`              // content type (mime type)
-	SortOrder   int64             `json:"sort_order,optional,omitempty"`                // sort order
+	ContentType string            `json:"content_type,optional,omitempty"`             // content type (mime type)
+	SortOrder   int64             `json:"sort_order,optional,omitempty"`               // sort order
 	Sizes       map[string]string `json:"sizes,optional,omitempty"`                    // map[tag:string]url:string
 }
 
@@ -286,21 +286,21 @@ service admin {
 	@doc(
 		summary: "Get Products By Category Id"
 		description: "returns all products by category id belonging to a store"
-		categoryId: "category id"
-		currentPage: "current page number"
-		pageSize: "number of records per page"
+		category_id: "category id"
+		current_page: "current page number"
+		page_size: "number of records per page"
 	)
 	@handler getProductsByCategoryId
-	get /v1/products/:categoryId/:currentPage/:pageSize(GetProductsByCategoryIdRequest) returns (GetProductsByCategoryIdResponse)
+	get /v1/products/:category_id/:current_page/:page_size(GetProductsByCategoryIdRequest) returns (GetProductsByCategoryIdResponse)
 	
 	@doc(
 		summary: "Get All Products"
 		description: "returns all products belonging to a store"
-		currentPage: "current page number"
-		pageSize: "number of records per page"
+		current_page: "current page number"
+		page_size: "number of records per page"
 	)
 	@handler getAllProducts
-	get /v1/products/:currentPage/:pageSize(GetAllProductsRequest) returns (GetAllProductsResponse)
+	get /v1/products/:current_page/:page_size(GetAllProductsRequest) returns (GetAllProductsResponse)
 	
 	@doc(
 		summary: "Create Product"
@@ -335,9 +335,9 @@ service admin {
 	@doc(
 		summary: "Upload Asset"
 		description: "uploads an image, document, audio, video or archive asset"
-		productId: "product id"
-		variantId: "variant id"
+		product_id: "product id"
+		variant_id: "variant id"
 	)
 	@handler upload
-	post /v1/asset/:productId/:variantId/:kind(UploadAssetRequest) returns (Asset)
+	post /v1/asset/:product_id/:variant_id/:kind(UploadAssetRequest) returns (Asset)
 }

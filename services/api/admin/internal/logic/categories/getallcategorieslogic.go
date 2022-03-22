@@ -2,8 +2,8 @@ package categories
 
 import (
 	"context"
-	"encoding/json"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 	"k8scommerce/services/rpc/catalog/catalogclient"
@@ -35,10 +35,6 @@ func (l *GetAllCategoriesLogic) GetAllCategories() (resp *types.GetAllCategories
 
 	// convert from one type to another
 	// the structs are identical
-	b, err := json.Marshal(response)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &resp)
+	utils.TransformObj(response, &resp)
 	return resp, err
 }

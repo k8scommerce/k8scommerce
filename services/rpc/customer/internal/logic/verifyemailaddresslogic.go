@@ -38,12 +38,12 @@ func (l *VerifyEmailAddressLogic) VerifyEmailAddress(in *customer.VerifyEmailAdd
 	}
 
 	if *storeId != in.StoreId {
-		return nil, status.Errorf(codes.Internal, "invalid store id: %s", storeId)
+		return nil, status.Errorf(codes.Internal, "invalid store id: %d", storeId)
 	}
 
 	foundCustomer, err := l.svcCtx.Repo.Customer().GetCustomerByEmail(in.StoreId, *email)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "could not find customer by email: %s", email)
+		return nil, status.Errorf(codes.Internal, "could not find customer by email: %s", *email)
 	}
 
 	if foundCustomer != nil {

@@ -79,6 +79,12 @@ func (m *customerRepo) Update(customer *models.Customer) error {
 			StatusCode: UpdateErrorCode,
 		}
 	}
+
+	if customer.Password.Valid {
+		hash, _ := m.hashPassword(customer.Password.String)
+		customer.Password = sql.NullString{String: hash, Valid: true}
+	}
+
 	if err := customer.Update(m.ctx, m.db); err != nil {
 		return &RepoError{
 			Err:        err,

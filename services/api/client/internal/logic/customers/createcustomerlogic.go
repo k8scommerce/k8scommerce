@@ -2,7 +2,6 @@ package customers
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	"k8scommerce/internal/utils"
@@ -64,7 +63,7 @@ func (l *CreateCustomerLogic) CreateCustomer(req types.CreateCustomerRequest) (r
 		})
 	}
 
-	createCustomerResponse, err := l.svcCtx.CustomerRpc.CreateCustomer(l.ctx, customerObj)
+	response, err := l.svcCtx.CustomerRpc.CreateCustomer(l.ctx, customerObj)
 	if err != nil {
 		if strings.Contains(err.Error(), "AlreadyExists") {
 			// return a valid customer
@@ -75,17 +74,13 @@ func (l *CreateCustomerLogic) CreateCustomer(req types.CreateCustomerRequest) (r
 			if err != nil {
 				return nil, err
 			}
-			utils.TransformObj(found, &createCustomerResponse)
+			utils.TransformObj(found, &response)
 		} else {
 			return nil, err
 		}
 	}
 
-	b, err := json.Marshal(createCustomerResponse)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &resp)
+	utils.TransformObj(response, &resp)
 
 	return resp, err
 }

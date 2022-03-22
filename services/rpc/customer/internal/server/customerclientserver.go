@@ -41,6 +41,11 @@ func (s *CustomerClientServer) GetCustomerByEmail(ctx context.Context, in *custo
 	return l.GetCustomerByEmail(in)
 }
 
+func (s *CustomerClientServer) SetPassword(ctx context.Context, in *customer.SetPasswordRequest) (*customer.SetPasswordResponse, error) {
+	l := logic.NewSetPasswordLogic(ctx, s.svcCtx, s.universe)
+	return l.SetPassword(in)
+}
+
 func (s *CustomerClientServer) Login(ctx context.Context, in *customer.LoginRequest) (*customer.LoginResponse, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx, s.universe)
 	return l.Login(in)

@@ -12,7 +12,7 @@ import (
 func getProtoStoreByStoreId(repo repos.Repo, storeId int64) (*store.Store, error) {
 	foundStore, err := repo.Store().GetStoreById(storeId)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "could not find store by id: %s", storeId)
+		return nil, status.Errorf(codes.Internal, "could not find store by id: %d", storeId)
 	}
 
 	protoStore := &store.Store{}

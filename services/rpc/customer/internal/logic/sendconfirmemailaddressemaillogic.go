@@ -7,6 +7,7 @@ import (
 	"k8scommerce/internal/events/eventkey/eventtype"
 	"k8scommerce/services/rpc/customer/internal/svc"
 	"k8scommerce/services/rpc/customer/pb/customer"
+	"k8scommerce/services/rpc/store/pb/store"
 	"strconv"
 	"strings"
 
@@ -44,21 +45,25 @@ func (l *SendConfirmEmailAddressEmailLogic) SendConfirmEmailAddressEmail(in *cus
 		convert.ModelCustomerToProtoCustomer(foundCustomer, protoCustomer)
 	}
 
-	protoStore, err := getProtoStoreByStoreId(l.svcCtx.Repo, in.StoreId)
-	if err != nil {
-		return nil, err
-	}
-
 	code, err := l.svcCtx.Encrypter.Encrypt(strings.Join([]string{protoCustomer.Email, strconv.FormatInt(protoCustomer.StoreId, 10)}, "|"))
 	if err != nil {
 		return nil, err
 	}
 
 	evt := &eventtype.CustomerConfirmationEmail{
-		Required: &eventtype.Required{
-			Customer: protoCustomer,
-			Store:    protoStore,
-		},
+		Required: eventtype.NewRequired().Prepare(l.svcCtx.Repo, &struct {
+			StoreId       int64
+			CustomerEmail string
+			Customer      *customer.Customer
+			Store         *store.Store
+			StoreSetting  *store.StoreSetting
+		}{
+			in.StoreId,
+			in.Email,
+			protoCustomer,
+			nil,
+			nil,
+		}),
 		Code: code,
 	}
 

@@ -82,11 +82,11 @@ service admin {
 	@doc(
 		summary: "Get Users"
 		description: "returns all users"
-		currentPage: "current page number"
-		pageSize: "number of records per page"
+		current_page: "current page number"
+		page_size: "number of records per page"
 	)
 	@handler getAllUsers
-	get /v1/users/:currentPage/:pageSize(GetAllUsersRequest) returns (GetAllUsersResponse)
+	get /v1/users/:current_page/:page_size(GetAllUsersRequest) returns (GetAllUsersResponse)
 	
 	// rpc GetAllPermissionGroups(GetAllPermissionGroupsRequest) returns (GetAllPermissionGroupsResponse);
 	

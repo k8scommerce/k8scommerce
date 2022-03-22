@@ -25,6 +25,8 @@ type (
 	SendConfirmEmailAddressEmailResponse = customer.SendConfirmEmailAddressEmailResponse
 	SendForgotPasswordEmailRequest       = customer.SendForgotPasswordEmailRequest
 	SendForgotPasswordEmailResponse      = customer.SendForgotPasswordEmailResponse
+	SetPasswordRequest                   = customer.SetPasswordRequest
+	SetPasswordResponse                  = customer.SetPasswordResponse
 	UpdateCustomerRequest                = customer.UpdateCustomerRequest
 	UpdateCustomerResponse               = customer.UpdateCustomerResponse
 	VerifyEmailAddressRequest            = customer.VerifyEmailAddressRequest
@@ -34,6 +36,7 @@ type (
 		CreateCustomer(ctx context.Context, in *CreateCustomerRequest, opts ...grpc.CallOption) (*CreateCustomerResponse, error)
 		UpdateCustomer(ctx context.Context, in *UpdateCustomerRequest, opts ...grpc.CallOption) (*UpdateCustomerResponse, error)
 		GetCustomerByEmail(ctx context.Context, in *GetCustomerByEmailRequest, opts ...grpc.CallOption) (*GetCustomerByEmailResponse, error)
+		SetPassword(ctx context.Context, in *SetPasswordRequest, opts ...grpc.CallOption) (*SetPasswordResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 		SendForgotPasswordEmail(ctx context.Context, in *SendForgotPasswordEmailRequest, opts ...grpc.CallOption) (*SendForgotPasswordEmailResponse, error)
 		SendConfirmEmailAddressEmail(ctx context.Context, in *SendConfirmEmailAddressEmailRequest, opts ...grpc.CallOption) (*SendConfirmEmailAddressEmailResponse, error)
@@ -64,6 +67,11 @@ func (m *defaultCustomerClient) UpdateCustomer(ctx context.Context, in *UpdateCu
 func (m *defaultCustomerClient) GetCustomerByEmail(ctx context.Context, in *GetCustomerByEmailRequest, opts ...grpc.CallOption) (*GetCustomerByEmailResponse, error) {
 	client := customer.NewCustomerClientClient(m.cli.Conn())
 	return client.GetCustomerByEmail(ctx, in, opts...)
+}
+
+func (m *defaultCustomerClient) SetPassword(ctx context.Context, in *SetPasswordRequest, opts ...grpc.CallOption) (*SetPasswordResponse, error) {
+	client := customer.NewCustomerClientClient(m.cli.Conn())
+	return client.SetPassword(ctx, in, opts...)
 }
 
 func (m *defaultCustomerClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {

@@ -2,9 +2,9 @@
 package types
 
 type JwtToken struct {
-	AccessToken  string `json:"accessToken"`
-	AccessExpire int64  `json:"accessExpire"`
-	RefreshAfter int64  `json:"refreshAfter"`
+	AccessToken  string `json:"accessToken,optional,omitempty"`
+	AccessExpire int64  `json:"accessExpire,optional,omitempty"`
+	RefreshAfter int64  `json:"refreshAfter,optional,omitempty"`
 }
 
 type ResponseStatus struct {
@@ -191,10 +191,10 @@ type GetAllProductsResponse struct {
 }
 
 type Customer struct {
-	Id                int64     `json:"id"`                                    // customer id
-	FirstName         string    `json:"first_name"`                            // first name
-	LastName          string    `json:"last_name"`                             // last or given name
-	Email             string    `json:"email,required"`                        // email address
+	Id                int64     `json:"id,optional,omitempty"`                 // customer id
+	FirstName         string    `json:"first_name,optional,omitempty"`         // first name
+	LastName          string    `json:"last_name,optional,omitempty"`          // last or given name
+	Email             string    `json:"email,optional,omitempty"`              // email address
 	IsVerified        bool      `json:"is_verified,optional,omitempty"`        // is_verified
 	BillingAddresses  []Address `json:"billing_addresses,optional,omitempty"`  // Address object
 	ShippingAddresses []Address `json:"shipping_addresses,optional,omitempty"` // array of Address objects
@@ -224,9 +224,9 @@ type CustomerLoginRequest struct {
 }
 
 type CustomerLoginResponse struct {
-	JwtToken JwtToken `json:"jwt"`      // jwt token
-	Customer Customer `json:"customer"` // Customer object
-	Success  bool     `json:"success"`  // success bool
+	JwtToken JwtToken `json:"jwt,optional,omitempty"`      // jwt token
+	Customer Customer `json:"customer,optional,omitempty"` // Customer object
+	Success  bool     `json:"success"`                     // success bool
 }
 
 type CreateCustomerRequest struct {
@@ -252,7 +252,9 @@ type SetPasswordRequest struct {
 }
 
 type SetPasswordResponse struct {
-	Success bool `json:"success"` // success bool
+	JwtToken JwtToken `json:"jwt,optional,omitempty"`      // jwt token
+	Customer Customer `json:"customer,optional,omitempty"` // Customer object
+	Success  bool     `json:"success"`                     // success bool
 }
 
 type CheckForExistingEmailRequest struct {

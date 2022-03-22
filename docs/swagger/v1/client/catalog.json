@@ -173,7 +173,7 @@
         ]
       }
     },
-    "/v1/products/{categoryId}/{currentPage}/{pageSize}": {
+    "/v1/products/{category_id}/{current_page}/{page_size}": {
       "get": {
         "summary": "Get Products By Category Id",
         "description": "returns all products by category id belonging to a store",
@@ -188,25 +188,25 @@
         },
         "parameters": [
           {
-            "name": "categoryId",
+            "name": "category_id",
             "description": "category id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "filter",
@@ -227,7 +227,7 @@
         ]
       }
     },
-    "/v1/products/{currentPage}/{pageSize}": {
+    "/v1/products/{current_page}/{page_size}": {
       "get": {
         "summary": "Get All Products",
         "description": "returns all products belonging to a store",
@@ -242,18 +242,18 @@
         },
         "parameters": [
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "filter",
@@ -600,12 +600,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "Price": {
       "type": "object",

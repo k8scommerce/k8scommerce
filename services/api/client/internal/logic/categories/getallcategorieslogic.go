@@ -3,8 +3,10 @@ package categories
 import (
 	"context"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
+	"k8scommerce/services/rpc/catalog/catalogclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +26,15 @@ func NewGetAllCategoriesLogic(ctx context.Context, svcCtx *svc.ServiceContext) G
 }
 
 func (l *GetAllCategoriesLogic) GetAllCategories() (resp *types.GetAllCategoriesResponse, err error) {
-	// todo: add your logic here and delete this line
+	response, err := l.svcCtx.CatalogRpc.GetAllCategories(l.ctx, &catalogclient.GetAllCategoriesRequest{
+		StoreId: l.ctx.Value(types.StoreKey).(int64),
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	// convert from one type to another
+	// the structs are identical
+	utils.TransformObj(response, &resp)
+	return resp, err
 }

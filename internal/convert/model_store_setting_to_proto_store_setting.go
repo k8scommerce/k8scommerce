@@ -13,8 +13,11 @@ func ModelStoreSettingToProtoStoreSetting(fromModel *models.StoreSetting, toProt
 	toProto.Id = fromModel.ID
 	toProto.StoreId = fromModel.StoreID
 
-	err := json.Unmarshal(fromModel.Config, toProto.Config)
+	storeConfig := &store.StoreConfig{}
+	err := json.Unmarshal(fromModel.Config, storeConfig)
 	if err != nil {
 		logx.Errorf("unmarshal of store setting config failed: %s", err.Error())
 	}
+
+	toProto.Config = storeConfig
 }

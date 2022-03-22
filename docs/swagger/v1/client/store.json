@@ -99,10 +99,7 @@
       "type": "object",
       "properties": {
         "phone_numbers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Phone"
-          }
+          "$ref": "#/definitions/Phone"
         },
         "mailing_address": {
           "type": "array",
@@ -120,7 +117,10 @@
           "type": "string"
         },
         "supported_currencies": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "Currency"
@@ -132,9 +132,6 @@
           "type": "string"
         },
         "from_email": {
-          "type": "string"
-        },
-        "subject": {
           "type": "string"
         }
       },
@@ -231,12 +228,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "Locale": {
       "type": "object",
@@ -245,9 +237,12 @@
           "type": "string"
         },
         "supported_locales": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
-        "default_country_id": {
+        "default_country_code": {
           "type": "string"
         }
       },
@@ -286,42 +281,6 @@
         "statusCode"
       ]
     },
-    "SEO": {
-      "type": "object",
-      "properties": {
-        "seo_title": {
-          "type": "string"
-        },
-        "seo_robots": {
-          "type": "string"
-        },
-        "meta_description": {
-          "type": "string"
-        },
-        "meta_keywords": {
-          "type": "string"
-        }
-      },
-      "title": "SEO"
-    },
-    "Social": {
-      "type": "object",
-      "properties": {
-        "facebook": {
-          "type": "string"
-        },
-        "twitter": {
-          "type": "string"
-        },
-        "instagram": {
-          "type": "string"
-        },
-        "custom": {
-          "type": "object"
-        }
-      },
-      "title": "Social"
-    },
     "Store": {
       "type": "object",
       "properties": {
@@ -356,12 +315,6 @@
     "StoreConfig": {
       "type": "object",
       "properties": {
-        "seo": {
-          "$ref": "#/definitions/SEO"
-        },
-        "social": {
-          "$ref": "#/definitions/Social"
-        },
         "currency": {
           "$ref": "#/definitions/Currency"
         },

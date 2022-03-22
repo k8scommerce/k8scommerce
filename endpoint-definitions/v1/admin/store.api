@@ -38,8 +38,8 @@ service admin {
 	@doc(
 		summary: "Geneate Store ID"
 		description: "returns a valid store ID, long-term JWT token"
-		storeId: "numeric store ID"
+		store_id: "numeric store ID"
 	)
 	@handler generateStoreKeyToken
-	get /v1/store/generate-token/:storeId(GenerateStoreKeyTokenRequest) returns (GenerateStoreKeyTokenResponse)
+	get /v1/store/generate-token/:store_id(GenerateStoreKeyTokenRequest) returns (GenerateStoreKeyTokenResponse)
 }

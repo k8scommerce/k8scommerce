@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/url"
 
 	"k8scommerce/internal/events/eventkey/eventtype"
@@ -55,7 +54,7 @@ func (l *CustomerConfirmationEmailLogic) Send(in *eventtype.CustomerConfirmation
 		},
 	})
 	if err != nil {
-		log.Fatal(err)
+		logx.Info(err)
 	}
 
 	// Create email
@@ -68,7 +67,7 @@ func (l *CustomerConfirmationEmailLogic) Send(in *eventtype.CustomerConfirmation
 	// Send msg
 	err = msg.Send(l.svcCtx.EmailClient.GetSMTPClient())
 	if err != nil {
-		log.Fatal(err)
+		logx.Info(err)
 	}
 
 	return nil

@@ -35,7 +35,7 @@
         ]
       }
     },
-    "/v1/cart/{customerId}": {
+    "/v1/cart/{customer_id}": {
       "get": {
         "summary": "Get Cart",
         "description": "returns a shopping cart if one exists",
@@ -50,11 +50,11 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "requestBody": {},
@@ -76,7 +76,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -111,7 +111,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -133,7 +133,7 @@
         ]
       }
     },
-    "/v1/cart/{customerId}/{sku}": {
+    "/v1/cart/{customer_id}/{sku}": {
       "delete": {
         "summary": "Remove Item",
         "description": "removes an item from a customer's cart",
@@ -148,7 +148,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -190,7 +190,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -490,7 +490,7 @@
         ]
       }
     },
-    "/v1/customer/verfify-email-address": {
+    "/v1/customer/verify-email-address": {
       "post": {
         "summary": "Verify Email Address",
         "description": "verifies an email address via code contained in resendConfirmEmail",
@@ -604,7 +604,7 @@
         ]
       }
     },
-    "/v1/products/{categoryId}/{currentPage}/{pageSize}": {
+    "/v1/products/{category_id}/{current_page}/{page_size}": {
       "get": {
         "summary": "Get Products By Category Id",
         "description": "returns all products by category id belonging to a store",
@@ -619,25 +619,25 @@
         },
         "parameters": [
           {
-            "name": "categoryId",
+            "name": "category_id",
             "description": "category id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "filter",
@@ -658,7 +658,7 @@
         ]
       }
     },
-    "/v1/products/{currentPage}/{pageSize}": {
+    "/v1/products/{current_page}/{page_size}": {
       "get": {
         "summary": "Get All Products",
         "description": "returns all products belonging to a store",
@@ -673,18 +673,18 @@
         },
         "parameters": [
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "filter",
@@ -1056,13 +1056,7 @@
           "description": " array of Address objects"
         }
       },
-      "title": "Customer",
-      "required": [
-        "id",
-        "first_name",
-        "last_name",
-        "email"
-      ]
+      "title": "Customer"
     },
     "CustomerLoginRequest": {
       "type": "object",
@@ -1101,8 +1095,6 @@
       },
       "title": "CustomerLoginResponse",
       "required": [
-        "jwt",
-        "customer",
         "success"
       ]
     },
@@ -1402,12 +1394,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "NewCustomer": {
       "type": "object",
@@ -1662,6 +1649,14 @@
     "SetPasswordResponse": {
       "type": "object",
       "properties": {
+        "jwt": {
+          "$ref": "#/definitions/JwtToken",
+          "description": " jwt token"
+        },
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        },
         "success": {
           "type": "boolean",
           "format": "boolean",

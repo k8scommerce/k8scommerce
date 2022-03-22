@@ -212,7 +212,7 @@
         ]
       }
     },
-    "/v1/customer/verfify-email-address": {
+    "/v1/customer/verify-email-address": {
       "post": {
         "summary": "Verify Email Address",
         "description": "verifies an email address via code contained in resendConfirmEmail",
@@ -386,13 +386,7 @@
           "description": " array of Address objects"
         }
       },
-      "title": "Customer",
-      "required": [
-        "id",
-        "first_name",
-        "last_name",
-        "email"
-      ]
+      "title": "Customer"
     },
     "CustomerLoginRequest": {
       "type": "object",
@@ -431,8 +425,6 @@
       },
       "title": "CustomerLoginResponse",
       "required": [
-        "jwt",
-        "customer",
         "success"
       ]
     },
@@ -491,12 +483,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "NewCustomer": {
       "type": "object",
@@ -595,6 +582,14 @@
     "SetPasswordResponse": {
       "type": "object",
       "properties": {
+        "jwt": {
+          "$ref": "#/definitions/JwtToken",
+          "description": " jwt token"
+        },
+        "customer": {
+          "$ref": "#/definitions/Customer",
+          "description": " Customer object"
+        },
         "success": {
           "type": "boolean",
           "format": "boolean",

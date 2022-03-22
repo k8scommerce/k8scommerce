@@ -28,8 +28,6 @@ type (
 	GetStoreSettingResponse = store.GetStoreSettingResponse
 	Locale                  = store.Locale
 	Phone                   = store.Phone
-	SEO                     = store.SEO
-	Social                  = store.Social
 	Store                   = store.Store
 	StoreConfig             = store.StoreConfig
 	StoreSetting            = store.StoreSetting

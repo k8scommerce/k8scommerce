@@ -15,7 +15,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/asset/{productId}/{variantId}/{kind}": {
+    "/v1/asset/{product_id}/{variant_id}/{kind}": {
       "post": {
         "summary": "Upload Asset",
         "description": "uploads an image, document, audio, video or archive asset",
@@ -30,14 +30,14 @@
         },
         "parameters": [
           {
-            "name": "productId",
+            "name": "product_id",
             "description": "product id",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "variantId",
+            "name": "variant_id",
             "description": "variant id",
             "in": "path",
             "required": true,
@@ -423,7 +423,7 @@
         ]
       }
     },
-    "/v1/products/{categoryId}/{currentPage}/{pageSize}": {
+    "/v1/products/{category_id}/{current_page}/{page_size}": {
       "get": {
         "summary": "Get Products By Category Id",
         "description": "returns all products by category id belonging to a store",
@@ -438,25 +438,25 @@
         },
         "parameters": [
           {
-            "name": "categoryId",
+            "name": "category_id",
             "description": "category id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "filter",
@@ -477,7 +477,7 @@
         ]
       }
     },
-    "/v1/products/{currentPage}/{pageSize}": {
+    "/v1/products/{current_page}/{page_size}": {
       "get": {
         "summary": "Get All Products",
         "description": "returns all products belonging to a store",
@@ -492,18 +492,18 @@
         },
         "parameters": [
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "filter",
@@ -908,12 +908,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "Price": {
       "type": "object",

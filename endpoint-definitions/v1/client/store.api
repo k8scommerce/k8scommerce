@@ -22,41 +22,25 @@ type StoreSetting {
 }
 
 type StoreConfig {
-	SEO      SEO      `json:"seo,omitempty"`
-	Social   Social   `json:"social,omitempty"`
 	Currency Currency `json:"currency,omitempty"`
 	Locale   Locale   `json:"locale,omitempty"`
 	Contact  Contact  `json:"contact,omitempty"`
 	Emails   Emails   `json:"emails,omitempty"`
 }
 
-type SEO {
-	SeoTitle        string `json:"seo_title,omitempty"`
-	SeoRobots       string `json:"seo_robots,omitempty"`
-	MetaDescription string `json:"meta_description,omitempty"`
-	MetaKeywords    string `json:"meta_keywords,omitempty"`
-}
-
-type Social {
-	Facebook  string            `json:"facebook,omitempty"`
-	Twitter   string            `json:"twitter,omitempty"`
-	Instagram string            `json:"instagram,omitempty"`
-	Custom    map[string]string `json:"custom,omitempty"`
-}
-
 type Currency {
-	DefaultCurrency     string `json:"default_currency,omitempty"`
-	SupportedCurrencies string `json:"supported_currencies,omitempty"`
+	DefaultCurrency     string   `json:"default_currency,omitempty"`
+	SupportedCurrencies []string `json:"supported_currencies,omitempty"`
 }
 
 type Locale {
-	DefaultLocale    string `json:"default_locale,omitempty"`
-	SupportedLocales string `json:"supported_locales,omitempty"`
-	DefaultCountryId string `json:"default_country_id,omitempty"`
+	DefaultLocale      string   `json:"default_locale,omitempty"`
+	SupportedLocales   []string `json:"supported_locales,omitempty"`
+	DefaultCountryCode string   `json:"default_country_code,omitempty"`
 }
 
 type Contact {
-	Phones    []Phone   `json:"phone_numbers,omitempty"`
+	Phone     Phone     `json:"phone_numbers,omitempty"`
 	Addresses []Address `json:"mailing_address,omitempty"`
 }
 
@@ -102,7 +86,6 @@ type Emails {
 type Email {
 	Name    string `json:"from_name,omitempty"`
 	Email   string `json:"from_email,omitempty"`
-	Subject string `json:"subject,omitempty"`
 }
 
 // generate store id

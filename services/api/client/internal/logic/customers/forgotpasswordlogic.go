@@ -2,8 +2,8 @@ package customers
 
 import (
 	"context"
-	"encoding/json"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
 	"k8scommerce/services/rpc/customer/customerclient"
@@ -38,13 +38,7 @@ func (l *ForgotPasswordLogic) ForgotPassword(req types.ForgotPasswordRequest) (r
 		return nil, err
 	}
 
-	b, err := json.Marshal(response)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &resp)
+	utils.TransformObj(response, &resp)
 
 	return resp, err
-
-	return
 }

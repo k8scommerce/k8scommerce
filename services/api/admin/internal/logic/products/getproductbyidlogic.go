@@ -2,8 +2,8 @@ package products
 
 import (
 	"context"
-	"encoding/json"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/admin/internal/helpers"
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
@@ -39,11 +39,7 @@ func (l *GetProductByIdLogic) GetProductById(req types.GetProductByIdRequest) (r
 
 	// convert from one type to another
 	// the structs are identical
-	b, err := json.Marshal(response.Product)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, resp)
+	utils.TransformObj(response.Product, &resp)
 
 	// format the currency to the locale and language
 	for x := 0; x < len(resp.Variants); x++ {

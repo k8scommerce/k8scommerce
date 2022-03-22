@@ -34,27 +34,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/cart/:customerId",
+					Path:    "/v1/cart/:customer_id",
 					Handler: cart.GetCartHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/v1/cart/:customerId",
+					Path:    "/v1/cart/:customer_id",
 					Handler: cart.AddItemToCartHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/v1/cart/:customerId/:sku",
+					Path:    "/v1/cart/:customer_id/:sku",
 					Handler: cart.UpdateCartItemQuantityHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
-					Path:    "/v1/cart/:customerId/:sku",
+					Path:    "/v1/cart/:customer_id/:sku",
 					Handler: cart.RemoveCartItemHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
-					Path:    "/v1/cart/:customerId",
+					Path:    "/v1/cart/:customer_id",
 					Handler: cart.ClearCartHandler(serverCtx),
 				},
 			}...,
@@ -106,12 +106,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/:categoryId/:currentPage/:pageSize",
+					Path:    "/v1/products/:category_id/:current_page/:page_size",
 					Handler: products.GetProductsByCategoryIdHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/v1/products/:currentPage/:pageSize",
+					Path:    "/v1/products/:current_page/:page_size",
 					Handler: products.GetAllProductsHandler(serverCtx),
 				},
 			}...,
@@ -154,7 +154,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/v1/customer/verfify-email-address",
+					Path:    "/v1/customer/verify-email-address",
 					Handler: customers.VerifyEmailAddressHandler(serverCtx),
 				},
 			}...,

@@ -45,7 +45,7 @@
         ]
       }
     },
-    "/v1/users/{currentPage}/{pageSize}": {
+    "/v1/users/{current_page}/{page_size}": {
       "get": {
         "summary": "Get Users",
         "description": "returns all users",
@@ -60,18 +60,18 @@
         },
         "parameters": [
           {
-            "name": "currentPage",
+            "name": "current_page",
             "description": "current page number",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "description": "number of records per page",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "sortOn",
@@ -149,12 +149,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "PermissionGroup": {
       "type": "object",

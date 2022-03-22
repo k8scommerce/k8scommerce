@@ -2,9 +2,11 @@ Name: client
 Host: 0.0.0.0
 Port: 8888
 Log:
-  Mode: file
+  Mode: console
 Timeout: 1500
-HashSalt: ${HASH_SALT}
+EncryptionConfig:
+  Secret: ${ENCRYPTION_SECRET}
+  Token: ${ENCRYPTION_TOKEN}
 Auth:
   AccessSecret: ${AUTH_ACCESS_SECRET}
   AccessExpire: ${AUTH_ACCESS_EXPIRE}

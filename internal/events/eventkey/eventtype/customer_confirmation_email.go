@@ -2,5 +2,5 @@ package eventtype
 
 type CustomerConfirmationEmail struct {
 	*Required
-	Code string
+	Code string `json:"code"`
 }

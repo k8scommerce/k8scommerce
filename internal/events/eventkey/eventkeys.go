@@ -21,7 +21,7 @@ type CustomerSaleKey EventKey
 var AdminCancelledOrder AdminCancelledOrderKey = "AdminCancelledOrder"
 var AdminFailedOrder AdminFailedOrderKey = "AdminFailedOrder"
 var AdminNewOrder AdminNewOrderKey = "AdminNewOrder"
-var CustomerAccountConfirmedEmail CustomerAccountConfirmedEmailKey = "CustomerAccountConfirmedEmail"
+var CustomerAccountConfirmedEmail CustomerAccountConfirmedEmailKey = "CustomerAccountConfirmedEmail" // unsure about this one
 var CustomerCompletedOrder CustomerCompletedOrderKey = "CustomerCompletedOrder"
 var CustomerConfirmationEmail CustomerConfirmationEmailKey = "CustomerConfirmationEmail"
 var CustomerNewAccount CustomerNewAccountKey = "CustomerNewAccount"

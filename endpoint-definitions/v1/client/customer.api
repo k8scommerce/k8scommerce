@@ -8,12 +8,12 @@ info(
 
 // objects
 type Customer {
-	Id                int64     `json:"id"`                                    // customer id
-	FirstName         string    `json:"first_name"`                            // first name
-	LastName          string    `json:"last_name"`                             // last or given name
-	Email             string    `json:"email,required"`                        // email address
+	Id                int64     `json:"id,optional,omitempty"`                 // customer id
+	FirstName         string    `json:"first_name,optional,omitempty"`         // first name
+	LastName          string    `json:"last_name,optional,omitempty"`          // last or given name
+	Email             string    `json:"email,optional,omitempty"`              // email address
 	IsVerified        bool      `json:"is_verified,optional,omitempty"`        // is_verified
-	BillingAddresses  []Address `json:"billing_addresses,optional,omitempty"`    // Address object
+	BillingAddresses  []Address `json:"billing_addresses,optional,omitempty"`  // Address object
 	ShippingAddresses []Address `json:"shipping_addresses,optional,omitempty"` // array of Address objects
 }
 
@@ -46,9 +46,9 @@ type CustomerLoginRequest {
 }
 
 type CustomerLoginResponse {
-	JwtToken JwtToken `json:"jwt"`      // jwt token
-	Customer Customer `json:"customer"` // Customer object
-	Success  bool     `json:"success"`  // success bool
+	JwtToken JwtToken `json:"jwt,optional,omitempty"`      // jwt token
+	Customer Customer `json:"customer,optional,omitempty"` // Customer object
+	Success  bool     `json:"success"`                     // success bool
 }
 
 // create customer
@@ -77,7 +77,9 @@ type SetPasswordRequest {
 }
 
 type SetPasswordResponse {
-	Success bool `json:"success"` // success bool
+	JwtToken JwtToken `json:"jwt,optional,omitempty"`      // jwt token
+	Customer Customer `json:"customer,optional,omitempty"` // Customer object
+	Success  bool     `json:"success"`                     // success bool
 }
 
 // email
@@ -182,7 +184,7 @@ service client {
 		description: "verifies an email address via code contained in resendConfirmEmail"
 	)
 	@handler verifyEmailAddress
-	post /v1/customer/verfify-email-address(VerifyEmailAddressRequest) returns (VerifyEmailAddressResponse)
+	post /v1/customer/verify-email-address(VerifyEmailAddressRequest) returns (VerifyEmailAddressResponse)
 }
 
 @server(

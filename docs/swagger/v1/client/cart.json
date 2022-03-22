@@ -15,7 +15,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/cart/{customerId}": {
+    "/v1/cart/{customer_id}": {
       "get": {
         "summary": "Get Cart",
         "description": "returns a shopping cart if one exists",
@@ -30,11 +30,11 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "requestBody": {},
@@ -56,7 +56,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -91,7 +91,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -113,7 +113,7 @@
         ]
       }
     },
-    "/v1/cart/{customerId}/{sku}": {
+    "/v1/cart/{customer_id}/{sku}": {
       "delete": {
         "summary": "Remove Item",
         "description": "removes an item from a customer's cart",
@@ -128,7 +128,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -170,7 +170,7 @@
         },
         "parameters": [
           {
-            "name": "customerId",
+            "name": "customer_id",
             "description": "a customer's id",
             "in": "path",
             "required": true,
@@ -355,12 +355,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "RemoveCartItemRequest": {
       "type": "object",

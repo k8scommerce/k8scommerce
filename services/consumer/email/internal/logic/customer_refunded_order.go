@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 
 	"k8scommerce/internal/events/eventkey/eventtype"
 	"k8scommerce/services/consumer/email/internal/svc"
@@ -54,7 +53,7 @@ func (l *CustomerRefundedOrderLogic) Send(in *eventtype.CustomerRefundedOrder) e
 		},
 	})
 	if err != nil {
-		log.Fatal(err)
+		logx.Info(err)
 	}
 
 	// Create email
@@ -67,7 +66,7 @@ func (l *CustomerRefundedOrderLogic) Send(in *eventtype.CustomerRefundedOrder) e
 	// Send msg
 	err = msg.Send(l.svcCtx.EmailClient.GetSMTPClient())
 	if err != nil {
-		log.Fatal(err)
+		logx.Info(err)
 	}
 
 	return nil

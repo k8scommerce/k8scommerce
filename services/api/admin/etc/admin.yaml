@@ -5,7 +5,9 @@ MaxBytes: 1048576000
 Log:
   Mode: console
 Timeout: 1500
-HashSalt: ${HASH_SALT}
+EncryptionConfig:
+  Secret: ${ENCRYPTION_SECRET}
+  Token: ${ENCRYPTION_TOKEN}
 Auth:
   AccessSecret: ${AUTH_ACCESS_SECRET}
   AccessExpire: ${AUTH_ACCESS_EXPIRE}

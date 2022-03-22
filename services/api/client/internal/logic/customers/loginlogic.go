@@ -2,7 +2,6 @@ package customers
 
 import (
 	"context"
-	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
 	"k8scommerce/services/rpc/customer/customerclient"
@@ -31,7 +30,8 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (resp *types.Customer
 		Success: false,
 	}
 
-	res, err := l.svcCtx.CustomerRpc.Login(l.ctx, &customerclient.LoginRequest{
+	found, err := l.svcCtx.CustomerRpc.Login(l.ctx, &customerclient.LoginRequest{
+		StoreId:  l.ctx.Value(types.StoreKey).(int64),
 		Email:    req.Email,
 		Password: req.Password,
 	})
@@ -39,20 +39,27 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (resp *types.Customer
 		return nil, err
 	}
 
-	if res.Customer == nil {
+	if found.Customer == nil || found.Customer.Id == 0 {
 		return resp, nil
 	}
 
 	// create the token
-	jwtToken, err := l.getJwt(map[string]interface{}{
-		"customerId": res.Customer.Id,
-	})
+	jwtToken, err := getJwt(
+		l.svcCtx.Config.Auth.AccessExpire,
+		l.svcCtx.Config.Auth.AccessSecret,
+		map[string]interface{}{
+			"customerId": found.Customer.Id,
+		},
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	customer := types.Customer{}
-	utils.TransformObj(res.Customer, &customer)
+	customer := types.Customer{
+		FirstName: found.Customer.FirstName,
+		LastName:  found.Customer.LastName,
+		Email:     found.Customer.Email,
+	}
 
 	resp.JwtToken = *jwtToken
 	resp.Customer = customer
@@ -61,8 +68,7 @@ func (l *LoginLogic) Login(req types.CustomerLoginRequest) (resp *types.Customer
 	return resp, nil
 }
 
-func (l *LoginLogic) getJwt(payload map[string]interface{}) (*types.JwtToken, error) {
-	var accessExpire = l.svcCtx.Config.Auth.AccessExpire
+func (l *LoginLogic) getJwt(accessExpire int64, accessSecret string, payload map[string]interface{}) (*types.JwtToken, error) {
 
 	now := time.Now().Unix()
 	accessToken, err := l.genToken(now, l.svcCtx.Config.Auth.AccessSecret, payload, accessExpire)

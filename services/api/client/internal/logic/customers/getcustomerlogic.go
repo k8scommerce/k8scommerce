@@ -24,7 +24,18 @@ func NewGetCustomerLogic(ctx context.Context, svcCtx *svc.ServiceContext) GetCus
 }
 
 func (l *GetCustomerLogic) GetCustomer() (resp *types.GetCustomerResponse, err error) {
-	// todo: add your logic here and delete this line
+	resp = &types.GetCustomerResponse{}
 
-	return
+	// response, err := l.svcCtx.CustomerRpc.GetCustomerByEmail(l.ctx, &customerclient.SetPasswordRequest{
+	// 	StoreId:  l.ctx.Value(types.StoreKey).(int64),
+	// 	Code:     req.Code,
+	// 	Password: req.Password,
+	// })
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// utils.TransformObj(response, &resp)
+
+	return resp, err
 }

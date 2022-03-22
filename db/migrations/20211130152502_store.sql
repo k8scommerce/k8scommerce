@@ -23,9 +23,9 @@ CREATE TABLE store_setting (
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NULL,
     deleted_at timestamp without time zone,
-    FOREIGN KEY (store_id) REFERENCES store (id) ON DELETE CASCADE
+    FOREIGN KEY (store_id) REFERENCES store (id) ON DELETE CASCADE,
+    UNIQUE (store_id)
 );
-CREATE INDEX IF NOT EXISTS idx_store_setting_store_id ON store_setting USING btree (store_id);
 -- +goose StatementEnd
 --
 --

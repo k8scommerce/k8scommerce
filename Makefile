@@ -56,9 +56,8 @@ option_item\
 archetype\
 asset
 
-apiServices=client\
-admin
-
+apiServices=admin
+# client\
 # cart depends on inventory, othersbought
 
 # if developing, only enable the services you're not writing code for

@@ -15,7 +15,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/store/generate-token/{storeId}": {
+    "/v1/store/generate-token/{store_id}": {
       "get": {
         "summary": "Geneate Store ID",
         "description": "returns a valid store ID, long-term JWT token",
@@ -30,11 +30,11 @@
         },
         "parameters": [
           {
-            "name": "storeId",
+            "name": "store_id",
             "description": "numeric store ID",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "requestBody": {},
@@ -85,12 +85,7 @@
           "format": "int64"
         }
       },
-      "title": "JwtToken",
-      "required": [
-        "accessToken",
-        "accessExpire",
-        "refreshAfter"
-      ]
+      "title": "JwtToken"
     },
     "ResponseStatus": {
       "type": "object",

@@ -2,13 +2,12 @@ package store
 
 import (
 	"context"
-	"time"
+	"strconv"
 
 	"k8scommerce/services/api/admin/internal/svc"
 	"k8scommerce/services/api/admin/internal/types"
 	"k8scommerce/services/rpc/store/storeclient"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +26,6 @@ func NewGenerateStoreKeyTokenLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *GenerateStoreKeyTokenLogic) GenerateStoreKeyToken(req types.GenerateStoreKeyTokenRequest) (resp *types.GenerateStoreKeyTokenResponse, err error) {
-	resp = &types.GenerateStoreKeyTokenResponse{}
 
 	result, err := l.svcCtx.StoreRpc.GetStoreById(l.ctx, &storeclient.GetStoreByIdRequest{
 		Id: req.StoreId,
@@ -36,19 +34,9 @@ func (l *GenerateStoreKeyTokenLogic) GenerateStoreKeyToken(req types.GenerateSto
 		return nil, err
 	}
 
-	claims := types.StoreKeyClaims{
-		StoreId: result.Store.Id,
-		Url:     result.Store.Url,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(((24 * time.Hour) * 365) * 100)),
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			NotBefore: jwt.NewNumericDate(time.Now()),
-			Issuer:    "K8sCommerce",
-		},
+	token, err := l.svcCtx.Encrypter.Encrypt(strconv.Itoa(int(result.Store.Id)))
+	resp = &types.GenerateStoreKeyTokenResponse{
+		Token: token,
 	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString([]byte(l.svcCtx.Config.HashSalt))
-	resp.Token = ss
 	return resp, err
 }

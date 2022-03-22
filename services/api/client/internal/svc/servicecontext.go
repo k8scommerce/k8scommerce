@@ -42,7 +42,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config:             c,
 		Locale:             middleware.NewLocaleMiddleware().Handle,
 		Filter:             middleware.NewFilterMiddleware().Handle,
-		StoreKey:           middleware.NewStoreKeyMiddleware(c).Handle,
+		StoreKey:           middleware.NewStoreKeyMiddleware(c.EncryptionConfig).Handle,
 		CartRpc:            cartclient.NewCartClient(zrpc.MustNewClient(c.CartRpc)),
 		CatalogRpc:         catalogclient.NewCatalogClient(zrpc.MustNewClient(c.CatalogRpc)),
 		CustomerRpc:        customerclient.NewCustomerClient(zrpc.MustNewClient(c.CustomerRpc)),

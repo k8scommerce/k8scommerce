@@ -18,41 +18,25 @@ message StoreSetting {
 }
 
 message StoreConfig {
-  SEO seo = 1;
-  Social social = 2;
-  Currency currency = 3;
-  Locale locale = 4;
-  Contact contact = 5;
-  Emails emails = 6;
-}
-
-message SEO {
-  string seo_title = 1;
-  string seo_robots = 2;
-  string meta_description = 3;
-  string meta_keywords = 4;
-}
-
-message Social {
-  string facebook = 1;
-  string twitter = 2;
-  string instagram = 3;
-  map<string, string> custom = 4;
+  Currency currency = 1;
+  Locale locale = 2;
+  Contact contact = 3;
+  Emails emails = 4;
 }
 
 message Currency {
   string default_currency = 1;
-  string supported_currencies = 2;
+  repeated string supported_currencies = 2;
 }
 
 message Locale {
   string default_locale = 1;
-  string supported_locales = 2;
-  string default_country_id = 3;
+  repeated string supported_locales = 2;
+  string default_country_code = 3;
 }
 
 message Contact {
-  repeated Phone phones = 1;
+  Phone phone = 1;
   repeated Address addresses = 2;
 }
 
@@ -98,7 +82,6 @@ message Emails {
 message Email {
   string name = 1;
   string email = 2;
-  string subject = 3;
 }
 
 //

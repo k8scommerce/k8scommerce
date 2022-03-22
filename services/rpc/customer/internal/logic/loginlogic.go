@@ -27,9 +27,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *ga
 func (l *LoginLogic) Login(in *customer.LoginRequest) (*customer.LoginResponse, error) {
 	found, err := l.svcCtx.Repo.Customer().Login(in.StoreId, in.Email, in.Password)
 	if err != nil {
-		return &customer.LoginResponse{
-			Customer: nil,
-		}, nil
+		return &customer.LoginResponse{}, nil
 	}
 
 	res := &customer.LoginResponse{

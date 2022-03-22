@@ -2,9 +2,9 @@
 package types
 
 type JwtToken struct {
-	AccessToken  string `json:"accessToken"`
-	AccessExpire int64  `json:"accessExpire"`
-	RefreshAfter int64  `json:"refreshAfter"`
+	AccessToken  string `json:"accessToken,optional,omitempty"`
+	AccessExpire int64  `json:"accessExpire,optional,omitempty"`
+	RefreshAfter int64  `json:"refreshAfter,optional,omitempty"`
 }
 
 type ResponseStatus struct {

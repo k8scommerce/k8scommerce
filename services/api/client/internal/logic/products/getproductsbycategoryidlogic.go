@@ -2,8 +2,8 @@ package products
 
 import (
 	"context"
-	"encoding/json"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/helpers"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
@@ -28,11 +28,11 @@ func NewGetProductsByCategoryIdLogic(ctx context.Context, svcCtx *svc.ServiceCon
 
 func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(req types.GetProductsByCategoryIdRequest) (resp *types.GetProductsByCategoryIdResponse, err error) {
 	response, err := l.svcCtx.CatalogRpc.GetProductsByCategoryId(l.ctx, &catalogclient.GetProductsByCategoryIdRequest{
+		StoreId:     l.ctx.Value(types.StoreKey).(int64),
 		CategoryId:  req.CategoryId,
 		CurrentPage: req.CurrentPage,
 		PageSize:    req.PageSize,
-		SortOn:      req.SortOn,
-		StoreId:     l.ctx.Value(types.StoreKey).(int64),
+		Filter:      l.ctx.Value(types.Filter).(string),
 	})
 	if err != nil {
 		return nil, err
@@ -40,21 +40,16 @@ func (l *GetProductsByCategoryIdLogic) GetProductsByCategoryId(req types.GetProd
 
 	// convert from one type to another
 	// the structs are identical
-	res := &types.GetProductsByCategoryIdResponse{}
-	b, err := json.Marshal(response)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, res)
+	resp = &types.GetProductsByCategoryIdResponse{}
+	utils.TransformObj(response, &resp)
 
 	// format the currency to the locale and language
-	for i := 0; i < len(res.Products); i++ {
-		for x := 0; x < len(res.Products[i].Variants); x++ {
-			if res.Products[i].Variants[x].Price != (types.Price{}) {
-				helpers.ConvertOutgoingPrices(l.ctx, &res.Products[i].Variants[x].Price)
+	for i := 0; i < len(resp.Products); i++ {
+		for x := 0; x < len(resp.Products[i].Variants); x++ {
+			if resp.Products[i].Variants[x].Price != (types.Price{}) {
+				helpers.ConvertOutgoingPrices(l.ctx, &resp.Products[i].Variants[x].Price)
 			}
 		}
 	}
-
-	return res, err
+	return resp, err
 }
