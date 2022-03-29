@@ -76,7 +76,6 @@ type GetTranscationByIdResponse {
 }
 
 @server(
-	// jwt: Auth
 	middleware: Locale, StoreKey // IdempotencyKey - https://stripe.com/docs/api/idempotent_requests
 	group: customers
 )

@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"k8scommerce/internal/encryption"
 	"k8scommerce/services/api/client/internal/config"
 	"k8scommerce/services/api/client/internal/middleware"
 	"k8scommerce/services/rpc/cart/cartclient"
@@ -21,6 +22,8 @@ import (
 
 type ServiceContext struct {
 	Config             config.Config
+	Encrypter          encryption.Encrypter
+	Session            rest.Middleware
 	Locale             rest.Middleware
 	Filter             rest.Middleware
 	StoreKey           rest.Middleware
@@ -38,8 +41,12 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+
+	encrypter := encryption.NewEncrypter(&c.EncryptionConfig)
 	return &ServiceContext{
 		Config:             c,
+		Encrypter:          encrypter,
+		Session:            middleware.NewSessionMiddleware(encrypter).Handle,
 		Locale:             middleware.NewLocaleMiddleware().Handle,
 		Filter:             middleware.NewFilterMiddleware().Handle,
 		StoreKey:           middleware.NewStoreKeyMiddleware(c.EncryptionConfig).Handle,

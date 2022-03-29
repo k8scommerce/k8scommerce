@@ -6,7 +6,6 @@ import (
 	"k8scommerce/services/rpc/shipping/internal/svc"
 	"k8scommerce/services/rpc/shipping/pb/shipping"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -16,7 +15,7 @@ type GetQuoteLogic struct {
 	logx.Logger
 }
 
-func NewGetQuoteLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetQuoteLogic {
+func NewGetQuoteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetQuoteLogic {
 	return &GetQuoteLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

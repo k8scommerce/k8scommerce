@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -24,7 +23,7 @@ type SetPasswordLogic struct {
 	logx.Logger
 }
 
-func NewSetPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *SetPasswordLogic {
+func NewSetPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetPasswordLogic {
 	return &SetPasswordLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

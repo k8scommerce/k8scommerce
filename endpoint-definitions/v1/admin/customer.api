@@ -8,36 +8,37 @@ info(
 
 // objects
 type Customer {
-	Id         int64  `json:"id"`                  // customer id
+	Id         int64  `json:"id"`                   // customer id
 	FirstName  string `json:"first_name"`           // first name
 	LastName   string `json:"last_name"`            // last or given name
-	Email      string `json:"email,required"`      // email address
-	Password   string `json:"password,optional"`   // password
+	Email      string `json:"email,required"`       // email address
+	Password   string `json:"password,optional"`    // password
 	IsVerified bool   `json:"is_verified,optional"` // is_verified
 }
 
 type NewCustomer {
 	FirstName       string  `json:"first_name,required"`         // first name
 	LastName        string  `json:"last_name,required"`          // last or given name
-	Email           string  `json:"email,required"`             // email address, unique per store id
-	Password        string  `json:"password,required"`          // password
+	Email           string  `json:"email,required"`              // email address, unique per store id
+	Password        string  `json:"password,required"`           // password
 	BillingAddress  Address `json:"billing_address,optional"`    // Address object
 	ShippingAddress Address `json:"shipping_addresses,optional"` // Address object
 }
 
 type CustomerAccount {
-	CustomerId        int64     `json:"id"`                // customer id
+	CustomerId        int64     `json:"id"`                 // customer id
 	BillingAddress    Address   `json:"billing_address"`    // Address object
 	ShippingAddresses []Address `json:"shipping_addresses"` // collection of Address objects
 }
 
 type Address {
-	Street        string `json:"street"`             // street name, ie: 1723 NW 23rd Ave.
-	City          string `json:"city"`               // city name
-	StateProvince string `json:"state_province"`      // state or province name
-	Country       string `json:"country"`            // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
-	PostalCode    string `json:"postal_code"`         // postal or zip code
-	IsDefault     bool   `json:"is_default,required"` // indicates if this is a default address
+	Street        string `json:"street"`                       // street name, ie: 1723 NW 23rd Ave.
+	AptSuite      string `json:"apt_suite,optional,omitempty"` // apartment or suite
+	City          string `json:"city"`                         // city name
+	StateProvince string `json:"state_province"`               // state or province name
+	Country       string `json:"country"`                      // IISO 3166-1 alpha-2 country code. https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
+	PostalCode    string `json:"postal_code"`                  // postal or zip code
+	IsDefault     bool   `json:"is_default,required"`          // indicates if this is a default address
 }
 
 //
@@ -51,7 +52,6 @@ type CustomerLoginRequest {
 }
 
 type CustomerLoginResponse {
-	JwtToken JwtToken `json:"jwt"`      // jwt token
 	Customer Customer `json:"customer"` // Customer object
 	Success  bool     `json:"success"`  // success bool
 }
@@ -71,7 +71,7 @@ type CheckForExistingEmailRequest {
 }
 
 type CheckForExistingEmailResponse {
-	Exists     bool `json:"exists"`     // boolean true/false if email exists or not
+	Exists     bool `json:"exists"`      // boolean true/false if email exists or not
 	IsVerified bool `json:"is_verified"` // boolean true/false
 }
 
@@ -117,7 +117,6 @@ service admin {
 }
 
 @server(
-	// jwt: Auth
 	middleware: Locale, StoreKey
 	group: customers
 )

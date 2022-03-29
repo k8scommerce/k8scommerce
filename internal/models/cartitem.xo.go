@@ -5,17 +5,19 @@ package models
 import (
 	"context"
 	"database/sql"
-	"time"
+
+	"github.com/google/uuid"
 )
 
 // CartItem represents a row from 'public.cart_item'.
 type CartItem struct {
-	CustomerID  int64        `json:"customer_id" db:"customer_id"`   // customer_id
-	Sku         string       `json:"sku" db:"sku"`                   // sku
-	Quantity    int          `json:"quantity" db:"quantity"`         // quantity
-	Price       int64        `json:"price" db:"price"`               // price
-	ExpiresAt   time.Time    `json:"expires_at" db:"expires_at"`     // expires_at
-	AbandonedAt sql.NullTime `json:"abandoned_at" db:"abandoned_at"` // abandoned_at
+	CartID      uuid.UUID      `json:"cart_id" db:"cart_id"`           // cart_id
+	Sku         string         `json:"sku" db:"sku"`                   // sku
+	Quantity    int            `json:"quantity" db:"quantity"`         // quantity
+	Price       int64          `json:"price" db:"price"`               // price
+	Currency    sql.NullString `json:"currency" db:"currency"`         // currency
+	ExpiresAt   sql.NullTime   `json:"expires_at" db:"expires_at"`     // expires_at
+	AbandonedAt sql.NullTime   `json:"abandoned_at" db:"abandoned_at"` // abandoned_at
 	// xo fields
 	_exists, _deleted bool
 }
@@ -41,13 +43,13 @@ func (ci *CartItem) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (manual)
 	const sqlstr = `INSERT INTO public.cart_item (` +
-		`customer_id, sku, quantity, price, expires_at, abandoned_at` +
+		`cart_id, sku, quantity, price, currency, expires_at, abandoned_at` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6` +
+		`$1, $2, $3, $4, $5, $6, $7` +
 		`)`
 	// run
-	logf(sqlstr, ci.CustomerID, ci.Sku, ci.Quantity, ci.Price, ci.ExpiresAt, ci.AbandonedAt)
-	if _, err := db.ExecContext(ctx, sqlstr, ci.CustomerID, ci.Sku, ci.Quantity, ci.Price, ci.ExpiresAt, ci.AbandonedAt); err != nil {
+	logf(sqlstr, ci.CartID, ci.Sku, ci.Quantity, ci.Price, ci.Currency, ci.ExpiresAt, ci.AbandonedAt)
+	if _, err := db.ExecContext(ctx, sqlstr, ci.CartID, ci.Sku, ci.Quantity, ci.Price, ci.Currency, ci.ExpiresAt, ci.AbandonedAt); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -65,11 +67,11 @@ func (ci *CartItem) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.cart_item SET ` +
-		`quantity = $1, price = $2, expires_at = $3, abandoned_at = $4 ` +
-		`WHERE customer_id = $5 AND sku = $6`
+		`quantity = $1, price = $2, currency = $3, expires_at = $4, abandoned_at = $5 ` +
+		`WHERE cart_id = $6 AND sku = $7`
 	// run
-	logf(sqlstr, ci.Quantity, ci.Price, ci.ExpiresAt, ci.AbandonedAt, ci.CustomerID, ci.Sku)
-	if _, err := db.ExecContext(ctx, sqlstr, ci.Quantity, ci.Price, ci.ExpiresAt, ci.AbandonedAt, ci.CustomerID, ci.Sku); err != nil {
+	logf(sqlstr, ci.Quantity, ci.Price, ci.Currency, ci.ExpiresAt, ci.AbandonedAt, ci.CartID, ci.Sku)
+	if _, err := db.ExecContext(ctx, sqlstr, ci.Quantity, ci.Price, ci.Currency, ci.ExpiresAt, ci.AbandonedAt, ci.CartID, ci.Sku); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -91,16 +93,16 @@ func (ci *CartItem) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.cart_item (` +
-		`customer_id, sku, quantity, price, expires_at, abandoned_at` +
+		`cart_id, sku, quantity, price, currency, expires_at, abandoned_at` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6` +
+		`$1, $2, $3, $4, $5, $6, $7` +
 		`)` +
-		` ON CONFLICT (customer_id, sku) DO ` +
+		` ON CONFLICT (cart_id, sku) DO ` +
 		`UPDATE SET ` +
-		`quantity = EXCLUDED.quantity, price = EXCLUDED.price, expires_at = EXCLUDED.expires_at, abandoned_at = EXCLUDED.abandoned_at `
+		`quantity = EXCLUDED.quantity, price = EXCLUDED.price, currency = EXCLUDED.currency, expires_at = EXCLUDED.expires_at, abandoned_at = EXCLUDED.abandoned_at `
 	// run
-	logf(sqlstr, ci.CustomerID, ci.Sku, ci.Quantity, ci.Price, ci.ExpiresAt, ci.AbandonedAt)
-	if _, err := db.ExecContext(ctx, sqlstr, ci.CustomerID, ci.Sku, ci.Quantity, ci.Price, ci.ExpiresAt, ci.AbandonedAt); err != nil {
+	logf(sqlstr, ci.CartID, ci.Sku, ci.Quantity, ci.Price, ci.Currency, ci.ExpiresAt, ci.AbandonedAt)
+	if _, err := db.ExecContext(ctx, sqlstr, ci.CartID, ci.Sku, ci.Quantity, ci.Price, ci.Currency, ci.ExpiresAt, ci.AbandonedAt); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -118,10 +120,10 @@ func (ci *CartItem) Delete(ctx context.Context, db DB) error {
 	}
 	// delete with composite primary key
 	const sqlstr = `DELETE FROM public.cart_item ` +
-		`WHERE customer_id = $1 AND sku = $2`
+		`WHERE cart_id = $1 AND sku = $2`
 	// run
-	logf(sqlstr, ci.CustomerID, ci.Sku)
-	if _, err := db.ExecContext(ctx, sqlstr, ci.CustomerID, ci.Sku); err != nil {
+	logf(sqlstr, ci.CartID, ci.Sku)
+	if _, err := db.ExecContext(ctx, sqlstr, ci.CartID, ci.Sku); err != nil {
 		return logerror(err)
 	}
 	// set deleted
@@ -129,31 +131,133 @@ func (ci *CartItem) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
-// CartItemByCustomerIDSku retrieves a row from 'public.cart_item' as a CartItem.
+// CartItemByCartIDSku retrieves a row from 'public.cart_item' as a CartItem.
 //
 // Generated from index 'cart_item_pkey'.
-func CartItemByCustomerIDSku(ctx context.Context, db DB, customerID int64, sku string) (*CartItem, error) {
+func CartItemByCartIDSku(ctx context.Context, db DB, cartID uuid.UUID, sku string) (*CartItem, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`customer_id, sku, quantity, price, expires_at, abandoned_at ` +
+		`cart_id, sku, quantity, price, currency, expires_at, abandoned_at ` +
 		`FROM public.cart_item ` +
-		`WHERE customer_id = $1 AND sku = $2`
+		`WHERE cart_id = $1 AND sku = $2`
 	// run
-	logf(sqlstr, customerID, sku)
+	logf(sqlstr, cartID, sku)
 	ci := CartItem{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, customerID, sku).Scan(&ci.CustomerID, &ci.Sku, &ci.Quantity, &ci.Price, &ci.ExpiresAt, &ci.AbandonedAt); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, cartID, sku).Scan(&ci.CartID, &ci.Sku, &ci.Quantity, &ci.Price, &ci.Currency, &ci.ExpiresAt, &ci.AbandonedAt); err != nil {
 		return nil, logerror(err)
 	}
 	return &ci, nil
 }
 
-// Cart returns the Cart associated with the CartItem's (CustomerID).
+// CartItemByAbandonedAt retrieves a row from 'public.cart_item' as a CartItem.
 //
-// Generated from foreign key 'cart_item_customer_id_fkey'.
+// Generated from index 'idx_cart_item_abandoned_at'.
+func CartItemByAbandonedAt(ctx context.Context, db DB, abandonedAt sql.NullTime) ([]*CartItem, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`cart_id, sku, quantity, price, currency, expires_at, abandoned_at ` +
+		`FROM public.cart_item ` +
+		`WHERE abandoned_at = $1`
+	// run
+	logf(sqlstr, abandonedAt)
+	rows, err := db.QueryContext(ctx, sqlstr, abandonedAt)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*CartItem
+	for rows.Next() {
+		ci := CartItem{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&ci.CartID, &ci.Sku, &ci.Quantity, &ci.Price, &ci.Currency, &ci.ExpiresAt, &ci.AbandonedAt); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &ci)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// CartItemByCartID retrieves a row from 'public.cart_item' as a CartItem.
+//
+// Generated from index 'idx_cart_item_cart_id'.
+func CartItemByCartID(ctx context.Context, db DB, cartID uuid.UUID) ([]*CartItem, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`cart_id, sku, quantity, price, currency, expires_at, abandoned_at ` +
+		`FROM public.cart_item ` +
+		`WHERE cart_id = $1`
+	// run
+	logf(sqlstr, cartID)
+	rows, err := db.QueryContext(ctx, sqlstr, cartID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*CartItem
+	for rows.Next() {
+		ci := CartItem{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&ci.CartID, &ci.Sku, &ci.Quantity, &ci.Price, &ci.Currency, &ci.ExpiresAt, &ci.AbandonedAt); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &ci)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// CartItemBySku retrieves a row from 'public.cart_item' as a CartItem.
+//
+// Generated from index 'idx_cart_item_sku'.
+func CartItemBySku(ctx context.Context, db DB, sku string) ([]*CartItem, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`cart_id, sku, quantity, price, currency, expires_at, abandoned_at ` +
+		`FROM public.cart_item ` +
+		`WHERE sku = $1`
+	// run
+	logf(sqlstr, sku)
+	rows, err := db.QueryContext(ctx, sqlstr, sku)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*CartItem
+	for rows.Next() {
+		ci := CartItem{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&ci.CartID, &ci.Sku, &ci.Quantity, &ci.Price, &ci.Currency, &ci.ExpiresAt, &ci.AbandonedAt); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &ci)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// Cart returns the Cart associated with the CartItem's (CartID).
+//
+// Generated from foreign key 'cart_item_cart_id_fkey'.
 func (ci *CartItem) Cart(ctx context.Context, db DB) (*Cart, error) {
-	return CartByCustomerID(ctx, db, ci.CustomerID)
+	return CartByID(ctx, db, ci.CartID)
 }
 
 // Variant returns the Variant associated with the CartItem's (Sku).

@@ -5,10 +5,7 @@ import (
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"strconv"
-	"sync"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -16,16 +13,13 @@ type UpdateCategoryLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewUpdateCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *UpdateCategoryLogic {
+func NewUpdateCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateCategoryLogic {
 	return &UpdateCategoryLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
@@ -44,28 +38,9 @@ func (l *UpdateCategoryLogic) UpdateCategory(in *catalog.UpdateCategoryRequest) 
 
 	// invalidate the cache for this record
 	{
-		if entryGetCategoryByIdLogic != nil {
-			l.mu.Lock()
-			entryGetCategoryByIdLogic.galaxy.Remove(l.ctx, strconv.Itoa(int(in.Id)))
-			l.mu.Unlock()
-		}
-
-		// TODO change the removal strategy
-		// the issue is we have dynamic key names
-		// we can only remove "A" key if we know its name
-		// and we don't know all key names
-		if entryGetAllCategoriesLogic != nil {
-			l.mu.Lock()
-			entryGetAllCategoriesLogic.galaxy.Remove(l.ctx, AllCatgoriesKey)
-			l.mu.Unlock()
-		}
-
-		// same here
-		if entryGetProductsByCategoryIdLogic != nil {
-			l.mu.Lock()
-			entryGetProductsByCategoryIdLogic.galaxy.Remove(l.ctx, AllCatgoriesKey)
-			l.mu.Unlock()
-		}
+		l.svcCtx.Cache.Delete(l.ctx, Group_GetCategoryById, Group_GetCategoryByIdKey(in.Id))
+		l.svcCtx.Cache.Delete(l.ctx, Group_GetAllCategories, Group_GetAllCategoriesKey(in.StoreId))
+		l.svcCtx.Cache.DestroyGroup(Group_GetProductsByCategoryId)
 	}
 
 	// the output object

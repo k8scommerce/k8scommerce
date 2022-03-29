@@ -6,7 +6,6 @@ import (
 	"k8scommerce/services/rpc/warehouse/internal/svc"
 	"k8scommerce/services/rpc/warehouse/pb/warehouse"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -16,7 +15,7 @@ type CreateWarehouseLogic struct {
 	logx.Logger
 }
 
-func NewCreateWarehouseLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *CreateWarehouseLogic {
+func NewCreateWarehouseLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateWarehouseLogic {
 	return &CreateWarehouseLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

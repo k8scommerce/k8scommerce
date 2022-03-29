@@ -11,6 +11,8 @@ type Customer {
 	Id                int64     `json:"id,optional,omitempty"`                 // customer id
 	FirstName         string    `json:"first_name,optional,omitempty"`         // first name
 	LastName          string    `json:"last_name,optional,omitempty"`          // last or given name
+	Company           string    `json:"company,optional,omitempty"`            // company name
+	Phone             string    `json:"phone,optional,omitempty"`              // phone
 	Email             string    `json:"email,optional,omitempty"`              // email address
 	IsVerified        bool      `json:"is_verified,optional,omitempty"`        // is_verified
 	BillingAddresses  []Address `json:"billing_addresses,optional,omitempty"`  // Address object
@@ -20,6 +22,8 @@ type Customer {
 type NewCustomer {
 	FirstName       string  `json:"first_name,required"`                 // first name
 	LastName        string  `json:"last_name,required"`                  // last or given name
+	Company         string  `json:"company,optional,omitempty"`          // company name
+	Phone           string  `json:"phone,optional,omitempty"`            // phone
 	Email           string  `json:"email,required"`                      // email address, unique per store id
 	BillingAddress  Address `json:"billing_address,optional,omitempty"`  // Address object
 	ShippingAddress Address `json:"shipping_address,optional,omitempty"` // Address object
@@ -189,7 +193,7 @@ service client {
 
 @server(
 	jwt: Auth
-	middleware: Locale, StoreKey
+	middleware: Locale, StoreKey, Session
 	group: customers
 )
 service client {

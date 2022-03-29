@@ -9,34 +9,30 @@ import (
 	"k8scommerce/services/rpc/warehouse/internal/logic"
 	"k8scommerce/services/rpc/warehouse/internal/svc"
 	"k8scommerce/services/rpc/warehouse/pb/warehouse"
-
-	"github.com/localrivet/galaxycache"
 )
 
 type WarehouseClientServer struct {
-	svcCtx   *svc.ServiceContext
-	universe *galaxycache.Universe
+	svcCtx *svc.ServiceContext
 	warehouse.UnimplementedWarehouseClientServer
 }
 
-func NewWarehouseClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *WarehouseClientServer {
+func NewWarehouseClientServer(svcCtx *svc.ServiceContext) *WarehouseClientServer {
 	return &WarehouseClientServer{
-		svcCtx:   svcCtx,
-		universe: universe,
+		svcCtx: svcCtx,
 	}
 }
 
 func (s *WarehouseClientServer) CreateWarehouse(ctx context.Context, in *warehouse.CreateWarehouseRequest) (*warehouse.CreateWarehouseResponse, error) {
-	l := logic.NewCreateWarehouseLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewCreateWarehouseLogic(ctx, s.svcCtx)
 	return l.CreateWarehouse(in)
 }
 
 func (s *WarehouseClientServer) GetAllWarehousesByStoreId(ctx context.Context, in *warehouse.GetAllWarehousesByStoreIdRequest) (*warehouse.GetAllWarehousesByStoreIdResponse, error) {
-	l := logic.NewGetAllWarehousesByStoreIdLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetAllWarehousesByStoreIdLogic(ctx, s.svcCtx)
 	return l.GetAllWarehousesByStoreId(in)
 }
 
 func (s *WarehouseClientServer) GetWarehouseById(ctx context.Context, in *warehouse.GetWarehouseByIdRequest) (*warehouse.GetWarehouseByIdResponse, error) {
-	l := logic.NewGetWarehouseByIdLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetWarehouseByIdLogic(ctx, s.svcCtx)
 	return l.GetWarehouseById(in)
 }

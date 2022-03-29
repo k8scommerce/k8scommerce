@@ -1,31 +1,20 @@
 package customers
 
 import (
+	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
 	"time"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/dgrijalva/jwt-go"
 )
 
-func getJwt(accessExpire int64, accessSecret string, payload map[string]interface{}) (*types.JwtToken, error) {
+func genJwtToken(svcCtx *svc.ServiceContext, payloads map[string]interface{}) (*types.JwtToken, error) {
+	now := time.Now().UnixMilli()
+	accessExpire := svcCtx.Config.Auth.AccessExpire
 
-	now := time.Now().Unix()
-	accessToken, err := genToken(now, accessSecret, payload, accessExpire)
-	if err != nil {
-		return nil, err
-	}
-
-	return &types.JwtToken{
-		AccessToken:  accessToken,
-		AccessExpire: now + accessExpire,
-		RefreshAfter: now + accessExpire/2,
-	}, nil
-}
-
-func genToken(iat int64, secretKey string, payloads map[string]interface{}, seconds int64) (string, error) {
 	claims := make(jwt.MapClaims)
-	claims["exp"] = iat + seconds
-	claims["iat"] = iat
+	claims["exp"] = now + accessExpire
+	claims["iat"] = now
 	for k, v := range payloads {
 		claims[k] = v
 	}
@@ -33,5 +22,11 @@ func genToken(iat int64, secretKey string, payloads map[string]interface{}, seco
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
 
-	return token.SignedString([]byte(secretKey))
+	accessToken, err := token.SignedString([]byte(svcCtx.Config.Auth.AccessSecret))
+
+	return &types.JwtToken{
+		AccessToken:  accessToken,
+		AccessExpire: now + accessExpire,
+		RefreshAfter: now + accessExpire/2,
+	}, err
 }

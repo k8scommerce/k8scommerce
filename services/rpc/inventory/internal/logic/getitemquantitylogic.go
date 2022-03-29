@@ -22,26 +22,28 @@ type GetItemQuantityLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewGetItemQuantityLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetItemQuantityLogic {
+func NewGetItemQuantityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetItemQuantityLogic {
 	return &GetItemQuantityLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
 func (l *GetItemQuantityLogic) GetItemQuantity(in *inventory.GetItemQuantityRequest) (*inventory.GetItemQuantityResponse, error) {
-
 	res := &inventory.GetItemQuantityResponse{
-		Sku:     in.Sku,
-		Quanity: 100,
+		StockLevel: &inventory.StockLevel{
+			StoreId:     in.StoreId,
+			WarehouseId: 1,
+			Sku:         in.Sku,
+			Row:         "10",
+			Shelf:       "2",
+			Bin:         "12b",
+			Quantity:    100,
+		},
 	}
 
 	return res, nil
-
 }

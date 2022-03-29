@@ -9,7 +9,6 @@ info(
 import(
 	// import shared object
 	"shared/jwt.api"
-	"shared/response-status.api"
 	
 	// import all client endpoint descriptions
 	"client/api.api"

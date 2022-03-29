@@ -6,6 +6,7 @@ import (
 
 	"k8scommerce/internal/models"
 
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -21,11 +22,24 @@ type Cart interface {
 	SetCart(cart *models.Cart)
 	Exists() bool
 	Deleted() bool
-	Create(cart *models.Cart) (res *CartResponse, err error)
-	Update(cart *models.Cart) (res *CartResponse, err error)
-	Upsert(cart *models.Cart) (res *CartResponse, err error)
-	Delete(customerId int64) error
-	GetCartByCustomerId(customerId int64) (res *CartResponse, err error)
+	Create(cart *models.Cart) (err error)
+	Update(cart *models.Cart) (err error)
+	Delete(cartId string) error
+
+	GetByCartId(cartId uuid.UUID) (res *models.Cart, err error)
+	// AttachCustomer(AttachCustomerRequest) returns (AttachCustomerResponse);
+	// rpc UpdateCustomerDetail(UpdateCustomerDetailRequest)
+	// 	returns (UpdateCustomerDetailResponse);
+	// rpc UpdateStatus(UpdateStatusRequest) returns (UpdateStatusResponse);
+
+	// rpc GetById(GetByIdRequest) returns (GetByIdResponse);
+	// rpc GetBySession(GetBySessionRequest) returns (GetBySessionResponse);
+
+	// rpc AddItem(AddItemRequest) returns (AddItemResponse);
+	// rpc UpdateItemQuantity(UpdateItemQuantityRequest)
+	// 	returns (UpdateItemQuantityResponse);
+	// rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse);
+	// rpc ClearCart(ClearCartRequest) returns (ClearCartResponse);
 }
 
 type cartRepo struct {
@@ -40,78 +54,44 @@ func (m *cartRepo) SetCart(cart *models.Cart) {
 	m.Cart = cart
 }
 
-type CartResponse struct {
-	Cart  *models.Cart
-	Items []models.CartItem
-	// Prices []models.Price
-}
+func (m *cartRepo) Create(cart *models.Cart) (err error) {
+	// set uuid
+	cart.ID = uuid.New()
 
-// products
-func (m *cartRepo) GetCartByCustomerId(customerId int64) (res *CartResponse, err error) {
-	cart, _ := models.CartByCustomerID(m.ctx, m.db.DB, customerId)
-	if cart != nil {
-		// get the items if there are any
-		var items []models.CartItem
-		response, _ := m.repo.CartItem().GetCartItemsByCustomerId(cart.CustomerID)
-		if response != nil {
-			items = append(items, response.Items...)
-		}
+	// set the status to new
+	cart.Status = models.CartStatusNew
 
-		res = &CartResponse{
-			Cart:  cart,
-			Items: items,
-		}
-	}
-	return res, err
-}
+	// set the default billing and shipping addresses
+	cart.BillingAddress = []byte("{}")
+	cart.ShippingAddress = []byte("{}")
 
-func (m *cartRepo) Create(cart *models.Cart) (res *CartResponse, err error) {
-	out := &CartResponse{}
 	if err := cart.Insert(m.ctx, m.db); err != nil {
-		return out, err
-	}
-	out.Cart.CustomerID = cart.CustomerID
-	return out, nil
-}
-
-func (m *cartRepo) Update(cart *models.Cart) (res *CartResponse, err error) {
-	if cart.CustomerID == 0 {
-		return nil, fmt.Errorf("error: can't update cart, missing user ID")
-	}
-	return m.Upsert(cart)
-}
-
-func (m *cartRepo) Upsert(cart *models.Cart) (res *CartResponse, err error) {
-	_, err = m.db.NamedExec(`
-		INSERT INTO cart (
-			user_id
-		) 
-		VALUES (
-			:customerId
-		)
-		ON CONFLICT (user_id) DO NOTHING
-	`, map[string]interface{}{
-		"customerId": cart.CustomerID,
-	})
-
-	fmt.Println("ERROR!!!!!!!", err)
-
-	if err != nil {
-		return nil, fmt.Errorf("error::Upsert::%s", err.Error())
-	}
-
-	out := &CartResponse{
-		Cart: &models.Cart{
-			CustomerID: cart.CustomerID,
-		},
-	}
-	return out, nil
-}
-
-func (m *cartRepo) Delete(userID int64) error {
-	cart, err := models.CartByCustomerID(m.ctx, m.db, userID)
-	if err != nil {
 		return err
 	}
-	return cart.Delete(m.ctx, m.db)
+	return nil
+}
+
+func (m *cartRepo) GetByCartId(cartId uuid.UUID) (res *models.Cart, err error) {
+	cart, err := models.CartByID(m.ctx, m.db, cartId)
+	if err != nil {
+		return nil, err
+	}
+
+	return cart, nil
+}
+
+func (m *cartRepo) Update(cart *models.Cart) (err error) {
+	if cart.ID.String() == "" {
+		return fmt.Errorf("error: can't update cart, missing ID")
+	}
+	return cart.Update(m.ctx, m.db)
+}
+
+func (m *cartRepo) Delete(cartId string) error {
+	// cart, err := models.CartByCustomerID(m.ctx, m.db, userID)
+	// if err != nil {
+	// 	return err
+	// }
+	// return cart.Delete(m.ctx, m.db)
+	return nil
 }

@@ -9,24 +9,20 @@ import (
 	"k8scommerce/services/rpc/othersbought/internal/logic"
 	"k8scommerce/services/rpc/othersbought/internal/svc"
 	"k8scommerce/services/rpc/othersbought/pb/othersbought"
-
-	"github.com/localrivet/galaxycache"
 )
 
 type OthersBoughtClientServer struct {
-	svcCtx   *svc.ServiceContext
-	universe *galaxycache.Universe
+	svcCtx *svc.ServiceContext
 	othersbought.UnimplementedOthersBoughtClientServer
 }
 
-func NewOthersBoughtClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *OthersBoughtClientServer {
+func NewOthersBoughtClientServer(svcCtx *svc.ServiceContext) *OthersBoughtClientServer {
 	return &OthersBoughtClientServer{
-		svcCtx:   svcCtx,
-		universe: universe,
+		svcCtx: svcCtx,
 	}
 }
 
 func (s *OthersBoughtClientServer) GetOthersBoughtBySku(ctx context.Context, in *othersbought.GetOthersBoughtBySkuRequest) (*othersbought.GetOthersBoughtBySkuResponse, error) {
-	l := logic.NewGetOthersBoughtBySkuLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetOthersBoughtBySkuLogic(ctx, s.svcCtx)
 	return l.GetOthersBoughtBySku(in)
 }

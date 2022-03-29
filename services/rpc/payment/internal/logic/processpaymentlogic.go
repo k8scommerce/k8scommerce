@@ -6,7 +6,6 @@ import (
 	"k8scommerce/services/rpc/payment/internal/svc"
 	"k8scommerce/services/rpc/payment/pb/payment"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -16,7 +15,7 @@ type ProcessPaymentLogic struct {
 	logx.Logger
 }
 
-func NewProcessPaymentLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *ProcessPaymentLogic {
+func NewProcessPaymentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ProcessPaymentLogic {
 	return &ProcessPaymentLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

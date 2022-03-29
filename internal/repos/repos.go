@@ -14,7 +14,6 @@ import (
 )
 
 var (
-	once        sync.Once
 	ErrNotFound = sql.ErrNoRows
 )
 
@@ -68,6 +67,7 @@ type repo struct {
 	listener *pq.Listener
 	cfg      *PostgresConfig
 	mu       sync.Mutex
+	once     sync.Once
 }
 
 func (r *repo) GetRawDB() *sqlx.DB {
@@ -158,7 +158,7 @@ func (r *repo) User() User {
 // connection
 func (a *repo) mustConnect() (conn *sqlx.DB) {
 	// create the db client
-	once.Do(func() {
+	a.once.Do(func() {
 		go a.setDBListener(a.cfg.DataSourceName)
 		logx.Info("DB Connecting", "conn", a.cfg.DataSourceName)
 
@@ -170,8 +170,6 @@ func (a *repo) mustConnect() (conn *sqlx.DB) {
 				err := a.db.Ping()
 				if err != nil {
 					logx.Info("DB Ping failed: ", err)
-				} else {
-					// logx.Info("Pinged successfully")
 				}
 				a.mu.Unlock()
 				time.Sleep(10 * time.Second)

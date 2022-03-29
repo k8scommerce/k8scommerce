@@ -85,8 +85,8 @@ store\
 user\
 warehouse\
 catalog\
+customer\
 cart
-# customer\
 
 
 consumerServices=imageresizer
@@ -254,7 +254,7 @@ start:
 		(go run . -f etc/local-$$service.yaml -e ../../../.env &); \
 		cd ../../../; \
 		echo ""; \
-		port=$$((port+1)); \
+		port=$$((port+2)); \
 	done
 	@for service in $(consumerServices); do \
 		printf "$(BLUE)Starting Consumer Service: $(WHITE)$$service$(RESET)\n"; \

@@ -2,94 +2,71 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"sync"
+	"time"
 
+	"k8scommerce/internal/gcache"
 	"k8scommerce/services/rpc/store/internal/svc"
 	"k8scommerce/services/rpc/store/pb/store"
 
-	"github.com/localrivet/galaxycache"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type galaxyGetAllStoresLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
+const Group_GetAllStores = "GetAllStores"
 
-var entryGetAllStoresLogic *galaxyGetAllStoresLogicHelper
+var Group_GetAllStoresKey = func() string {
+	return gcache.ToKey(Group_GetAllStores)
+}
 
 type GetAllStoresLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewGetAllStoresLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetAllStoresLogic {
+func NewGetAllStoresLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAllStoresLogic {
 	return &GetAllStoresLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
 func (l *GetAllStoresLogic) GetAllStores(in *store.GetAllStoresRequest) (*store.GetAllStoresResponse, error) {
-
-	// caching goes logic here
-	if entryGetAllStoresLogic == nil {
-		l.mu.Lock()
-		entryGetAllStoresLogic = &galaxyGetAllStoresLogicHelper{
-			once: &sync.Once{},
-		}
-		l.mu.Unlock()
-	}
-
-	entryGetAllStoresLogic.once.Do(func() {
-		fmt.Println(`l.entryGetAllStoresLogic.Do`)
-
-		// register the galaxy one time
-		entryGetAllStoresLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllStores", l.universe, galaxycache.GetterFunc(
-			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// found, err := l.svcCtx.Repo.Store().GetStoreById(galaxyctx.GetStoreId(ctx))
-				// if err != nil {
-				// 	logx.Infof("error: %s", err)
-				// 	return err
-				// }
-
-				// s := &store.Store{}
-				// if found != nil {
-				//  convert.ModelStoreToProtoStore(found, s)
-				// }
-
-				// the response struct
-				item := &store.GetAllStoresResponse{}
-
-				out, err := json.Marshal(item)
-				if err != nil {
-					return err
-				}
-				return dest.UnmarshalBinary(out)
-			}))
-	})
-
+	// l.ctx = groupctx.SetCurrentPage(l.ctx, in.CurrentPage)
+	// l.ctx = groupctx.SetPageSize(l.ctx, in.PageSize)
+	// l.ctx = groupctx.SetSortOn(l.ctx, in.SortOn)
 	res := &store.GetAllStoresResponse{}
-
-	codec := &galaxycache.ByteCodec{}
-	if err := entryGetAllStoresLogic.galaxy.Get(l.ctx, "all-stores", codec); err != nil {
-		return res, nil
-	}
-
-	b, err := codec.MarshalBinary()
-	if err != nil {
-		return res, nil
-	}
-
-	err = json.Unmarshal(b, res)
+	err := l.cache().Get(l.ctx, Group_GetAllStoresKey(), groupcache.ProtoSink(res))
 	return res, err
 
+}
+
+func (l *GetAllStoresLogic) cache() *groupcache.Group {
+	return l.svcCtx.Cache.NewGroup(Group_GetAllStores, 128<<20, groupcache.GetterFunc(
+		func(ctx context.Context, id string, dest groupcache.Sink) error {
+			// found, err := l.svcCtx.Repo.Category().GetAllStores(
+			// 	groupctx.GetStoreId(ctx),
+			// )
+			// if err != nil {
+			// 	logx.Infof("error: %s", err)
+			// }
+
+			// cats := []*catalog.Category{}
+
+			// if found != nil {
+			// 	for _, f := range found.Categories {
+			// 		cat := catalog.Category{}
+			// 		convert.ModelCategoryToProtoCategory(&f, &cat)
+			// 		cats = append(cats, &cat)
+			// 	}
+			// }
+
+			// Set the groupcache to expire after 24 hours
+			if err := dest.SetProto(&store.GetAllStoresResponse{}, time.Now().Add(time.Hour*24)); err != nil {
+				return err
+			}
+			return nil
+		},
+	))
 }

@@ -124,40 +124,6 @@ func (ss *StoreSetting) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
-// StoreSettingByStoreID retrieves a row from 'public.store_setting' as a StoreSetting.
-//
-// Generated from index 'idx_store_settings_store_id'.
-func StoreSettingByStoreID(ctx context.Context, db DB, storeID int64) ([]*StoreSetting, error) {
-	// query
-	const sqlstr = `SELECT ` +
-		`id, store_id, config ` +
-		`FROM public.store_setting ` +
-		`WHERE store_id = $1`
-	// run
-	logf(sqlstr, storeID)
-	rows, err := db.QueryContext(ctx, sqlstr, storeID)
-	if err != nil {
-		return nil, logerror(err)
-	}
-	defer rows.Close()
-	// process
-	var res []*StoreSetting
-	for rows.Next() {
-		ss := StoreSetting{
-			_exists: true,
-		}
-		// scan
-		if err := rows.Scan(&ss.ID, &ss.StoreID, &ss.Config); err != nil {
-			return nil, logerror(err)
-		}
-		res = append(res, &ss)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, logerror(err)
-	}
-	return res, nil
-}
-
 // StoreSettingByID retrieves a row from 'public.store_setting' as a StoreSetting.
 //
 // Generated from index 'store_setting_pkey'.
@@ -173,6 +139,26 @@ func StoreSettingByID(ctx context.Context, db DB, id int64) (*StoreSetting, erro
 		_exists: true,
 	}
 	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&ss.ID, &ss.StoreID, &ss.Config); err != nil {
+		return nil, logerror(err)
+	}
+	return &ss, nil
+}
+
+// StoreSettingByStoreID retrieves a row from 'public.store_setting' as a StoreSetting.
+//
+// Generated from index 'store_setting_store_id_key'.
+func StoreSettingByStoreID(ctx context.Context, db DB, storeID int64) (*StoreSetting, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, config ` +
+		`FROM public.store_setting ` +
+		`WHERE store_id = $1`
+	// run
+	logf(sqlstr, storeID)
+	ss := StoreSetting{
+		_exists: true,
+	}
+	if err := db.QueryRowContext(ctx, sqlstr, storeID).Scan(&ss.ID, &ss.StoreID, &ss.Config); err != nil {
 		return nil, logerror(err)
 	}
 	return &ss, nil

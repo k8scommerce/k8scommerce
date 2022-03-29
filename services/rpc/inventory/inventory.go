@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -10,8 +11,10 @@ import (
 	"k8scommerce/services/rpc/inventory/internal/svc"
 	"k8scommerce/services/rpc/inventory/pb/inventory"
 
+	"k8scommerce/internal/gcache"
+
 	"github.com/joho/godotenv"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -33,8 +36,9 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 	ctx := svc.NewServiceContext(c)
-	universe := gcache.NewUniverse(c.ListenOn)
-	srv := server.NewInventoryClientServer(ctx, universe)
+	pool := groupcache.NewHTTPPoolOpts(c.ListenOn, &groupcache.HTTPPoolOptions{})
+	ctx.Cache = gcache.NewGCache()
+	srv := server.NewInventoryClientServer(ctx)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		inventory.RegisterInventoryClientServer(grpcServer, srv)
@@ -43,20 +47,15 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 
-		// sub, err := discov.NewSubscriber(c.Etcd.Hosts, c.Etcd.Key)
-		// if err != nil {
-		// 	fmt.Println("ERROR:", err)
-		// }
-
-		// update := func() {
-		// 	universe.Set(sub.Values()...)
-		// 	fmt.Printf("universe.Set: %#v\n", sub.Values())
-		// }
-		// sub.AddListener(update)
-		// update()
+		// gcache peer listener
+		gcache.PeerListener(pool, c.ListenOn, c.Etcd)
 	})
+
+	// gcache server
+	server := gcache.Serve(pool, c.ListenOn)
+	defer server.Shutdown(context.Background())
+
 	defer s.Stop()
-	defer universe.Shutdown()
 
 	fmt.Printf("Starting %s.rpc server at %s...\n", "inventory", c.ListenOn)
 	s.Start()

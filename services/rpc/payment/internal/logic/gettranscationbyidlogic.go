@@ -6,7 +6,6 @@ import (
 	"k8scommerce/services/rpc/payment/internal/svc"
 	"k8scommerce/services/rpc/payment/pb/payment"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -16,7 +15,7 @@ type GetTranscationByIdLogic struct {
 	logx.Logger
 }
 
-func NewGetTranscationByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetTranscationByIdLogic {
+func NewGetTranscationByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetTranscationByIdLogic {
 	return &GetTranscationByIdLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

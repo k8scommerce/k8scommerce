@@ -4,11 +4,28 @@ package models
 
 import (
 	"context"
+	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 // Cart represents a row from 'public.cart'.
 type Cart struct {
-	CustomerID int64 `json:"customer_id" db:"customer_id"` // customer_id
+	ID              uuid.UUID      `json:"id" db:"id"`                             // id
+	StoreID         int64          `json:"store_id" db:"store_id"`                 // store_id
+	CustomerID      sql.NullInt64  `json:"customer_id" db:"customer_id"`           // customer_id
+	FirstName       sql.NullString `json:"first_name" db:"first_name"`             // first_name
+	LastName        sql.NullString `json:"last_name" db:"last_name"`               // last_name
+	Company         sql.NullString `json:"company" db:"company"`                   // company
+	Phone           sql.NullString `json:"phone" db:"phone"`                       // phone
+	Email           sql.NullString `json:"email" db:"email"`                       // email
+	BillingAddress  []byte         `json:"billing_address" db:"billing_address"`   // billing_address
+	ShippingAddress []byte         `json:"shipping_address" db:"shipping_address"` // shipping_address
+	DiscountID      sql.NullInt64  `json:"discount_id" db:"discount_id"`           // discount_id
+	Status          CartStatus     `json:"status" db:"status"`                     // status
+	Currency        sql.NullString `json:"currency" db:"currency"`                 // currency
+	ExpiresAt       sql.NullTime   `json:"expires_at" db:"expires_at"`             // expires_at
+	AbandonedAt     sql.NullTime   `json:"abandoned_at" db:"abandoned_at"`         // abandoned_at
 	// xo fields
 	_exists, _deleted bool
 }
@@ -34,13 +51,13 @@ func (c *Cart) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (manual)
 	const sqlstr = `INSERT INTO public.cart (` +
-		`customer_id` +
+		`id, store_id, customer_id, first_name, last_name, company, phone, email, billing_address, shipping_address, discount_id, status, currency, expires_at, abandoned_at` +
 		`) VALUES (` +
-		`$1` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15` +
 		`)`
 	// run
-	logf(sqlstr, c.CustomerID)
-	if _, err := db.ExecContext(ctx, sqlstr, c.CustomerID); err != nil {
+	logf(sqlstr, c.ID, c.StoreID, c.CustomerID, c.FirstName, c.LastName, c.Company, c.Phone, c.Email, c.BillingAddress, c.ShippingAddress, c.DiscountID, c.Status, c.Currency, c.ExpiresAt, c.AbandonedAt)
+	if _, err := db.ExecContext(ctx, sqlstr, c.ID, c.StoreID, c.CustomerID, c.FirstName, c.LastName, c.Company, c.Phone, c.Email, c.BillingAddress, c.ShippingAddress, c.DiscountID, c.Status, c.Currency, c.ExpiresAt, c.AbandonedAt); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -48,7 +65,58 @@ func (c *Cart) Insert(ctx context.Context, db DB) error {
 	return nil
 }
 
-// ------ NOTE: Update statements omitted due to lack of fields other than primary key ------
+// Update updates a Cart in the database.
+func (c *Cart) Update(ctx context.Context, db DB) error {
+	switch {
+	case !c._exists: // doesn't exist
+		return logerror(&ErrUpdateFailed{ErrDoesNotExist})
+	case c._deleted: // deleted
+		return logerror(&ErrUpdateFailed{ErrMarkedForDeletion})
+	}
+	// update with composite primary key
+	const sqlstr = `UPDATE public.cart SET ` +
+		`store_id = $1, customer_id = $2, first_name = $3, last_name = $4, company = $5, phone = $6, email = $7, billing_address = $8, shipping_address = $9, discount_id = $10, status = $11, currency = $12, expires_at = $13, abandoned_at = $14 ` +
+		`WHERE id = $15`
+	// run
+	logf(sqlstr, c.StoreID, c.CustomerID, c.FirstName, c.LastName, c.Company, c.Phone, c.Email, c.BillingAddress, c.ShippingAddress, c.DiscountID, c.Status, c.Currency, c.ExpiresAt, c.AbandonedAt, c.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, c.StoreID, c.CustomerID, c.FirstName, c.LastName, c.Company, c.Phone, c.Email, c.BillingAddress, c.ShippingAddress, c.DiscountID, c.Status, c.Currency, c.ExpiresAt, c.AbandonedAt, c.ID); err != nil {
+		return logerror(err)
+	}
+	return nil
+}
+
+// Save saves the Cart to the database.
+func (c *Cart) Save(ctx context.Context, db DB) error {
+	if c.Exists() {
+		return c.Update(ctx, db)
+	}
+	return c.Insert(ctx, db)
+}
+
+// Upsert performs an upsert for Cart.
+func (c *Cart) Upsert(ctx context.Context, db DB) error {
+	switch {
+	case c._deleted: // deleted
+		return logerror(&ErrUpsertFailed{ErrMarkedForDeletion})
+	}
+	// upsert
+	const sqlstr = `INSERT INTO public.cart (` +
+		`id, store_id, customer_id, first_name, last_name, company, phone, email, billing_address, shipping_address, discount_id, status, currency, expires_at, abandoned_at` +
+		`) VALUES (` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15` +
+		`)` +
+		` ON CONFLICT (id) DO ` +
+		`UPDATE SET ` +
+		`store_id = EXCLUDED.store_id, customer_id = EXCLUDED.customer_id, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, company = EXCLUDED.company, phone = EXCLUDED.phone, email = EXCLUDED.email, billing_address = EXCLUDED.billing_address, shipping_address = EXCLUDED.shipping_address, discount_id = EXCLUDED.discount_id, status = EXCLUDED.status, currency = EXCLUDED.currency, expires_at = EXCLUDED.expires_at, abandoned_at = EXCLUDED.abandoned_at `
+	// run
+	logf(sqlstr, c.ID, c.StoreID, c.CustomerID, c.FirstName, c.LastName, c.Company, c.Phone, c.Email, c.BillingAddress, c.ShippingAddress, c.DiscountID, c.Status, c.Currency, c.ExpiresAt, c.AbandonedAt)
+	if _, err := db.ExecContext(ctx, sqlstr, c.ID, c.StoreID, c.CustomerID, c.FirstName, c.LastName, c.Company, c.Phone, c.Email, c.BillingAddress, c.ShippingAddress, c.DiscountID, c.Status, c.Currency, c.ExpiresAt, c.AbandonedAt); err != nil {
+		return logerror(err)
+	}
+	// set exists
+	c._exists = true
+	return nil
+}
 
 // Delete deletes the Cart from the database.
 func (c *Cart) Delete(ctx context.Context, db DB) error {
@@ -60,10 +128,10 @@ func (c *Cart) Delete(ctx context.Context, db DB) error {
 	}
 	// delete with single primary key
 	const sqlstr = `DELETE FROM public.cart ` +
-		`WHERE customer_id = $1`
+		`WHERE id = $1`
 	// run
-	logf(sqlstr, c.CustomerID)
-	if _, err := db.ExecContext(ctx, sqlstr, c.CustomerID); err != nil {
+	logf(sqlstr, c.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, c.ID); err != nil {
 		return logerror(err)
 	}
 	// set deleted
@@ -71,22 +139,104 @@ func (c *Cart) Delete(ctx context.Context, db DB) error {
 	return nil
 }
 
-// CartByCustomerID retrieves a row from 'public.cart' as a Cart.
+// CartByID retrieves a row from 'public.cart' as a Cart.
 //
 // Generated from index 'cart_pkey'.
-func CartByCustomerID(ctx context.Context, db DB, customerID int64) (*Cart, error) {
+func CartByID(ctx context.Context, db DB, id uuid.UUID) (*Cart, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`customer_id ` +
+		`id, store_id, customer_id, first_name, last_name, company, phone, email, billing_address, shipping_address, discount_id, status, currency, expires_at, abandoned_at ` +
+		`FROM public.cart ` +
+		`WHERE id = $1`
+	// run
+	logf(sqlstr, id)
+	c := Cart{
+		_exists: true,
+	}
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&c.ID, &c.StoreID, &c.CustomerID, &c.FirstName, &c.LastName, &c.Company, &c.Phone, &c.Email, &c.BillingAddress, &c.ShippingAddress, &c.DiscountID, &c.Status, &c.Currency, &c.ExpiresAt, &c.AbandonedAt); err != nil {
+		return nil, logerror(err)
+	}
+	return &c, nil
+}
+
+// CartByCustomerID retrieves a row from 'public.cart' as a Cart.
+//
+// Generated from index 'idx_cart_customer_id'.
+func CartByCustomerID(ctx context.Context, db DB, customerID sql.NullInt64) ([]*Cart, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, customer_id, first_name, last_name, company, phone, email, billing_address, shipping_address, discount_id, status, currency, expires_at, abandoned_at ` +
 		`FROM public.cart ` +
 		`WHERE customer_id = $1`
 	// run
 	logf(sqlstr, customerID)
-	c := Cart{
-		_exists: true,
-	}
-	if err := db.QueryRowContext(ctx, sqlstr, customerID).Scan(&c.CustomerID); err != nil {
+	rows, err := db.QueryContext(ctx, sqlstr, customerID)
+	if err != nil {
 		return nil, logerror(err)
 	}
-	return &c, nil
+	defer rows.Close()
+	// process
+	var res []*Cart
+	for rows.Next() {
+		c := Cart{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&c.ID, &c.StoreID, &c.CustomerID, &c.FirstName, &c.LastName, &c.Company, &c.Phone, &c.Email, &c.BillingAddress, &c.ShippingAddress, &c.DiscountID, &c.Status, &c.Currency, &c.ExpiresAt, &c.AbandonedAt); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &c)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// CartByStoreID retrieves a row from 'public.cart' as a Cart.
+//
+// Generated from index 'idx_cart_store_id'.
+func CartByStoreID(ctx context.Context, db DB, storeID int64) ([]*Cart, error) {
+	// query
+	const sqlstr = `SELECT ` +
+		`id, store_id, customer_id, first_name, last_name, company, phone, email, billing_address, shipping_address, discount_id, status, currency, expires_at, abandoned_at ` +
+		`FROM public.cart ` +
+		`WHERE store_id = $1`
+	// run
+	logf(sqlstr, storeID)
+	rows, err := db.QueryContext(ctx, sqlstr, storeID)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	defer rows.Close()
+	// process
+	var res []*Cart
+	for rows.Next() {
+		c := Cart{
+			_exists: true,
+		}
+		// scan
+		if err := rows.Scan(&c.ID, &c.StoreID, &c.CustomerID, &c.FirstName, &c.LastName, &c.Company, &c.Phone, &c.Email, &c.BillingAddress, &c.ShippingAddress, &c.DiscountID, &c.Status, &c.Currency, &c.ExpiresAt, &c.AbandonedAt); err != nil {
+			return nil, logerror(err)
+		}
+		res = append(res, &c)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, logerror(err)
+	}
+	return res, nil
+}
+
+// Customer returns the Customer associated with the Cart's (CustomerID).
+//
+// Generated from foreign key 'cart_customer_id_fkey'.
+func (c *Cart) Customer(ctx context.Context, db DB) (*Customer, error) {
+	return CustomerByID(ctx, db, c.CustomerID.Int64)
+}
+
+// Store returns the Store associated with the Cart's (StoreID).
+//
+// Generated from foreign key 'cart_store_id_fkey'.
+func (c *Cart) Store(ctx context.Context, db DB) (*Store, error) {
+	return StoreByID(ctx, db, c.StoreID)
 }

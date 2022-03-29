@@ -2,101 +2,67 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
+	"time"
+
 	"k8scommerce/internal/convert"
-	"k8scommerce/internal/galaxyctx"
+	"k8scommerce/internal/gcache"
+	"k8scommerce/internal/groupctx"
 	"k8scommerce/services/rpc/store/internal/svc"
 	"k8scommerce/services/rpc/store/pb/store"
-	"sync"
 
-	"github.com/localrivet/galaxycache"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type galaxyGetStoreSettingsLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
+const Group_GetStoreSettings = "GetStoreSettings"
 
-var entryGetStoreSettingsLogic *galaxyGetStoreSettingsLogicHelper
+var Group_GetStoreSettingsKey = func(storeId int64) string {
+	return gcache.ToKey(Group_GetStoreSettings, storeId)
+}
 
 type GetStoreSettingsLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewGetStoreSettingsLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetStoreSettingsLogic {
+func NewGetStoreSettingsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetStoreSettingsLogic {
 	return &GetStoreSettingsLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
 func (l *GetStoreSettingsLogic) GetStoreSettings(in *store.GetStoreSettingRequest) (*store.GetStoreSettingResponse, error) {
 
-	// caching goes logic here
-	if entryGetStoreSettingsLogic == nil {
-		l.mu.Lock()
-		entryGetStoreSettingsLogic = &galaxyGetStoreSettingsLogicHelper{
-			once: &sync.Once{},
-		}
-		l.mu.Unlock()
-	}
-
-	entryGetStoreSettingsLogic.once.Do(func() {
-		fmt.Println(`l.entryGetStoreSettingsLogic.Do`)
-
-		// register the galaxy one time
-		entryGetStoreSettingsLogic.galaxy = gcache.RegisterGalaxyFunc("GetStoreSettings", l.universe, galaxycache.GetterFunc(
-			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-
-				// uncomment below to get the item from the adapter
-				found, err := l.svcCtx.Repo.StoreSetting().GetStoreSettingById(galaxyctx.GetStoreId(ctx))
-				if err != nil {
-					logx.Infof("error: %s", err)
-					return err
-				}
-
-				setting := &store.StoreSetting{}
-				if found != nil {
-					convert.ModelStoreSettingToProtoStoreSetting(found, setting)
-				}
-
-				// the response struct
-				item := &store.GetStoreSettingResponse{
-					Setting: setting,
-				}
-
-				out, err := json.Marshal(item)
-				if err != nil {
-					return err
-				}
-				return dest.UnmarshalBinary(out)
-			}))
-	})
-
+	l.ctx = groupctx.SetStoreId(l.ctx, in.StoreId)
 	res := &store.GetStoreSettingResponse{}
-
-	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
-	key := fmt.Sprintf("StoreID:%d", in.StoreId)
-	codec := &galaxycache.ByteCodec{}
-	if err := entryGetStoreSettingsLogic.galaxy.Get(l.ctx, key, codec); err != nil {
-		return res, nil
-	}
-
-	b, err := codec.MarshalBinary()
-	if err != nil {
-		return res, nil
-	}
-
-	err = json.Unmarshal(b, res)
+	err := l.cache().Get(l.ctx, Group_GetStoreSettingsKey(in.StoreId), groupcache.ProtoSink(res))
 	return res, err
+}
 
+func (l *GetStoreSettingsLogic) cache() *groupcache.Group {
+	return l.svcCtx.Cache.NewGroup(Group_GetStoreSettings, 128<<20, groupcache.GetterFunc(
+		func(ctx context.Context, id string, dest groupcache.Sink) error {
+			found, err := l.svcCtx.Repo.StoreSetting().GetStoreSettingById(groupctx.GetStoreId(ctx))
+			if err != nil {
+				logx.Infof("error: %s", err)
+				return err
+			}
+
+			setting := &store.StoreSetting{}
+			if found != nil {
+				convert.ModelStoreSettingToProtoStoreSetting(found, setting)
+			}
+
+			// Set the groupcache to expire after 24 hours
+			if err := dest.SetProto(&store.GetStoreSettingResponse{
+				Setting: setting,
+			}, time.Now().Add(time.Hour*24)); err != nil {
+				return err
+			}
+			return nil
+		},
+	))
 }

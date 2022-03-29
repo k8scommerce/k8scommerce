@@ -102,7 +102,6 @@ type GenerateStoreKeyTokenResponse {
 //
 
 @server(
-	// jwt: Auth
 	middleware: Locale, StoreKey
 	group: store
 )

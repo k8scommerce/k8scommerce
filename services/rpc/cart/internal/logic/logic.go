@@ -1,88 +1,74 @@
 package logic
 
 import (
-	"k8scommerce/internal/repos"
+	"context"
+	"fmt"
+	"k8scommerce/internal/convert"
+	"k8scommerce/internal/gcache"
+	"k8scommerce/internal/groupctx"
+	"k8scommerce/internal/models"
+	"k8scommerce/internal/session"
 	"k8scommerce/services/rpc/cart/internal/svc"
 	"k8scommerce/services/rpc/cart/pb/cart"
+	"time"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"github.com/google/uuid"
+	"github.com/mailgun/groupcache/v2"
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/mr"
 )
 
-func getUpdatedCart(svcCtx *svc.ServiceContext, userId int64, res interface{}) (
-	cartResponse *repos.CartResponse,
-	cartItems []*cart.Item,
-	totalPrice int64,
-	err error,
-) {
-	// get the whole cart
-	cartResponse, err = svcCtx.Repo.Cart().GetCartByCustomerId(userId)
-	if err != nil {
-		return nil, nil, totalPrice, err
-	}
+const Group_Cart = "Cart"
 
-	for _, item := range cartResponse.Items {
-		cartItems = append(cartItems, &cart.Item{
-			CustomerId: item.CustomerID,
-			Sku:        item.Sku,
-			Quantity:   int32(item.Quantity),
-			ExpiresAt:  timestamppb.New(item.ExpiresAt),
-		})
-	}
+func cache(cache gcache.Cache) *groupcache.Group {
+	return cache.NewGroup(Group_Cart, 128<<20, groupcache.GetterFunc(
+		func(ctx context.Context, sessionId string, dest groupcache.Sink) error {
+			ct := groupctx.GetCart(ctx)
+			if ct == nil {
+				return fmt.Errorf("could not find cart in context")
+			}
 
-	return cartResponse, cartItems, totalPrice, nil
+			// Set the groupcache to expire after 24 hours
+			if err := dest.SetProto(&cart.CartResponse{
+				Cart:      ct,
+				SessionId: sessionId,
+			}, time.Now().Add(time.Hour*24)); err != nil {
+				return err
+			}
+			return nil
+		},
+	))
 }
 
-// func transformVariants(variants []*cart.Variant) {
-// 	for _, v := range variants {
-// 		sp.Variants = append(sp.Variants, &cart.Variant{
-// 			Id:                 v.Id,
-// 			ProductId:          v.ProductId,
-// 			IsDefault:          v.IsDefault,
-// 			Sku:                v.Sku,
-// 			SortOrder:          v.SortOrder,
-// 			CostAmount:         v.CostAmount,
-// 			CostCurrency:       v.CostCurrency,
-// 			TrackInventory:     v.TrackInventory,
-// 			TaxCategoryId:      v.TaxCategoryId,
-// 			ShippingCategoryId: v.ShippingCategoryId,
-// 			DiscontinueOn:      v.DiscontinueOn,
-// 			Weight:             v.Weight,
-// 			Height:             v.Height,
-// 			Width:              v.Width,
-// 			Depth:              v.Depth,
-// 			Price: &cart.Price{
-// 				Id:              v.Price.Id,
-// 				VariantId:       v.Id,
-// 				Amount:          v.Price.Amount,
-// 				CompareAtAmount: v.Price.CompareAtAmount,
-// 				Currency:        v.Price.Currency,
-// 			},
-// 		})
-// 	}
-// }
-// for _, v := range result.Variants {
-// 	sp.Variants = append(sp.Variants, &cart.Variant{
-// 		Id:                 v.Id,
-// 		ProductId:          v.ProductId,
-// 		IsDefault:          v.IsDefault,
-// 		Sku:                v.Sku,
-// 		SortOrder:          v.SortOrder,
-// 		CostAmount:         v.CostAmount,
-// 		CostCurrency:       v.CostCurrency,
-// 		TrackInventory:     v.TrackInventory,
-// 		TaxCategoryId:      v.TaxCategoryId,
-// 		ShippingCategoryId: v.ShippingCategoryId,
-// 		DiscontinueOn:      v.DiscontinueOn,
-// 		Weight:             v.Weight,
-// 		Height:             v.Height,
-// 		Width:              v.Width,
-// 		Depth:              v.Depth,
-// 		Price: &cart.Price{
-// 			Id:              v.Price.Id,
-// 			VariantId:       v.Id,
-// 			Amount:          v.Price.Amount,
-// 			CompareAtAmount: v.Price.CompareAtAmount,
-// 			Currency:        v.Price.Currency,
-// 		},
-// 	})
-// }
+func getNewSessionByCartId(ctx context.Context, svcCtx *svc.ServiceContext, cartId uuid.UUID) (*cart.CartResponse, error) {
+	var err error
+	foundCart := &models.Cart{}
+	foundCartItems := []*models.CartItem{}
+	err = mr.Finish(func() error {
+		foundCart, err = svcCtx.Repo.Cart().GetByCartId(cartId)
+		if err != nil {
+			logx.Infof("error: %s", err)
+			return err
+		}
+		return nil
+	}, func() error {
+		foundCartItems, err = svcCtx.Repo.CartItem().GetByCartId(cartId)
+		if err != nil {
+			logx.Infof("error: %s", err)
+		}
+		return nil
+	})
+	if err != nil {
+		// we either have a valid cart or we don't
+		return nil, err
+	}
+
+	ct := &cart.Cart{}
+	convert.ModelCartToProtoCart(foundCart, foundCartItems, ct)
+
+	// add the cart to cache
+	ctx = groupctx.SetCart(ctx, ct)
+	res := &cart.CartResponse{}
+	err = cache(svcCtx.Cache).Get(ctx, session.NewSessionId(), groupcache.ProtoSink(res))
+	return res, err
+}

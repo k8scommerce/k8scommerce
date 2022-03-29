@@ -18,7 +18,7 @@
     "/v1/store/generate-token/{store_id}": {
       "get": {
         "summary": "Geneate Store ID",
-        "description": "returns a valid store ID, long-term JWT token",
+        "description": "returns a store key token",
         "operationId": "generateStoreKeyToken",
         "responses": {
           "200": {
@@ -68,41 +68,6 @@
       "title": "GenerateStoreKeyTokenResponse",
       "required": [
         "token"
-      ]
-    },
-    "JwtToken": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "accessExpire": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "refreshAfter": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "JwtToken"
-    },
-    "ResponseStatus": {
-      "type": "object",
-      "properties": {
-        "statusCode": {
-          "type": "integer",
-          "format": "int64",
-          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
-        },
-        "statusMessage": {
-          "type": "string",
-          "description": " status message"
-        }
-      },
-      "title": "ResponseStatus",
-      "required": [
-        "statusCode"
       ]
     },
     "Store": {

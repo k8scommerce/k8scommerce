@@ -2,15 +2,12 @@ package logic
 
 import (
 	"context"
-	"strconv"
-	"sync"
 
 	"k8scommerce/internal/models"
 	"k8scommerce/internal/utils"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -18,16 +15,13 @@ type UpdateProductLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewUpdateProductLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *UpdateProductLogic {
+func NewUpdateProductLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateProductLogic {
 	return &UpdateProductLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
@@ -57,16 +51,12 @@ func (l *UpdateProductLogic) UpdateProduct(in *catalog.UpdateProductRequest) (*c
 
 	// invalidate the cache for this record
 	{
-		if entryGetProductByIdLogic != nil {
-			l.mu.Lock()
-			entryGetProductByIdLogic.galaxy.Remove(l.ctx, strconv.Itoa(int(in.Id)))
-			l.mu.Unlock()
-		}
-		if entryGetProductBySkuLogic != nil {
-			l.mu.Lock()
-			entryGetProductBySkuLogic.galaxy.Remove(l.ctx, sku)
-			l.mu.Unlock()
-		}
+		l.svcCtx.Cache.Delete(l.ctx, Group_GetProductById, Group_GetProductByIdKey(prod.ID))
+		l.svcCtx.Cache.Delete(l.ctx, Group_GetProductBySku, Group_GetProductBySkuKey(in.StoreId, sku))
+		l.svcCtx.Cache.Delete(l.ctx, Group_GetProductBySlug, Group_GetProductBySlugKey(in.StoreId, prod.Slug))
+
+		l.svcCtx.Cache.DestroyGroup(Group_GetAllProducts)
+		l.svcCtx.Cache.DestroyGroup(Group_GetProductsByCategoryId)
 	}
 
 	// the output object

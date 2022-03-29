@@ -33,33 +33,62 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
 			[]rest.Route{
 				{
-					Method:  http.MethodGet,
-					Path:    "/v1/cart/:customer_id",
-					Handler: cart.GetCartHandler(serverCtx),
+					Method:  http.MethodPost,
+					Path:    "/v1/cart",
+					Handler: cart.CreateCartHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/v1/cart/:customer_id",
-					Handler: cart.AddItemToCartHandler(serverCtx),
+					Path:    "/v1/cart/:cart_id/customer",
+					Handler: cart.AttachCustomerHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/v1/cart/:customer_id/:sku",
-					Handler: cart.UpdateCartItemQuantityHandler(serverCtx),
+					Path:    "/v1/cart/:cart_id/customer",
+					Handler: cart.UpdateCustomerDetailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/cart/:cart_id/status",
+					Handler: cart.UpdateStatusHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/cart/:cart_id",
+					Handler: cart.GetByCartIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/cart/:cart_id/:session_id",
+					Handler: cart.GetBySessionIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart/:cart_id",
+					Handler: cart.AddItemHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart/:cart_id/bulk",
+					Handler: cart.BulkAddItemsHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/cart/:cart_id/:sku",
+					Handler: cart.UpdateItemQuantityHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
-					Path:    "/v1/cart/:customer_id/:sku",
-					Handler: cart.RemoveCartItemHandler(serverCtx),
+					Path:    "/v1/cart/:cart_id/:sku",
+					Handler: cart.RemoveItemHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
-					Path:    "/v1/cart/:customer_id",
+					Path:    "/v1/cart/:cart_id",
 					Handler: cart.ClearCartHandler(serverCtx),
 				},
 			}...,
 		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
@@ -72,8 +101,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: categories.GetAllCategoriesHandler(serverCtx),
 				},
 				{
-					Method:  http.MethodGet,
-					Path:    "/v1/category/slug/:slug",
+					Method:  http.MethodPost,
+					Path:    "/v1/category/slug",
 					Handler: categories.GetCategoryBySlugHandler(serverCtx),
 				},
 				{
@@ -163,7 +192,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey, serverCtx.Session},
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,

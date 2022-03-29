@@ -1,25 +1,24 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 
+	"k8scommerce/internal/gcache"
 	"k8scommerce/services/rpc/catalog/internal/config"
 	"k8scommerce/services/rpc/catalog/internal/server"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
-	"github.com/localrivet/gcache"
+	"github.com/joho/godotenv"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-
-	"github.com/joho/godotenv"
-	_ "github.com/joho/godotenv/autoload"
 )
 
 var configFile = flag.String("f", "etc/catalog.yaml", "the config file")
@@ -36,8 +35,9 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 	ctx := svc.NewServiceContext(c)
-	universe := gcache.NewUniverse(c.ListenOn)
-	srv := server.NewCatalogClientServer(ctx, universe)
+	pool := groupcache.NewHTTPPoolOpts(c.ListenOn, &groupcache.HTTPPoolOptions{})
+	ctx.Cache = gcache.NewGCache()
+	srv := server.NewCatalogClientServer(ctx)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		catalog.RegisterCatalogClientServer(grpcServer, srv)
@@ -46,18 +46,13 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 
-		sub, err := discov.NewSubscriber(c.Etcd.Hosts, c.Etcd.Key)
-		if err != nil {
-			fmt.Println("ERROR:", err)
-		}
-
-		update := func() {
-			universe.Set(sub.Values()...)
-			fmt.Printf("universe.Set: %#v\n", sub.Values())
-		}
-		sub.AddListener(update)
-		update()
+		// gcache peer listener
+		gcache.PeerListener(pool, c.ListenOn, c.Etcd)
 	})
+
+	// gcache server
+	server := gcache.Serve(pool, c.ListenOn)
+	defer server.Shutdown(context.Background())
 
 	s.AddOptions(
 		grpc.MaxSendMsgSize(c.MaxBytes),
@@ -65,7 +60,6 @@ func main() {
 	)
 
 	defer s.Stop()
-	defer universe.Shutdown()
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 )
@@ -22,7 +21,7 @@ type SendConfirmEmailAddressEmailLogic struct {
 	logx.Logger
 }
 
-func NewSendConfirmEmailAddressEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *SendConfirmEmailAddressEmailLogic {
+func NewSendConfirmEmailAddressEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendConfirmEmailAddressEmailLogic {
 	return &SendConfirmEmailAddressEmailLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

@@ -3,6 +3,7 @@ package svc
 import (
 	"k8scommerce/internal/encryption"
 	"k8scommerce/internal/events"
+	"k8scommerce/internal/gcache"
 	"k8scommerce/internal/repos"
 	"k8scommerce/services/rpc/customer/internal/config"
 )
@@ -12,6 +13,7 @@ type ServiceContext struct {
 	Repo         repos.Repo
 	EventManager events.EventManager
 	Encrypter    encryption.Encrypter
+	Cache        gcache.Cache
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {

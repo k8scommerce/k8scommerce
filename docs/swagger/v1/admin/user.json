@@ -134,23 +134,6 @@
         "total_pages"
       ]
     },
-    "JwtToken": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "accessExpire": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "refreshAfter": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "JwtToken"
-    },
     "PermissionGroup": {
       "type": "object",
       "properties": {
@@ -168,24 +151,6 @@
       "required": [
         "id",
         "group_name"
-      ]
-    },
-    "ResponseStatus": {
-      "type": "object",
-      "properties": {
-        "statusCode": {
-          "type": "integer",
-          "format": "int64",
-          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
-        },
-        "statusMessage": {
-          "type": "string",
-          "description": " status message"
-        }
-      },
-      "title": "ResponseStatus",
-      "required": [
-        "statusCode"
       ]
     },
     "User": {
@@ -242,10 +207,6 @@
     "UserLoginResponse": {
       "type": "object",
       "properties": {
-        "jwt": {
-          "$ref": "#/definitions/JwtToken",
-          "description": " JwtToken object"
-        },
         "user": {
           "$ref": "#/definitions/User",
           "description": " User object"

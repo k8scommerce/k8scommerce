@@ -1,19 +1,20 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 
+	"k8scommerce/internal/gcache"
 	"k8scommerce/services/rpc/customer/internal/config"
 	"k8scommerce/services/rpc/customer/internal/server"
 	"k8scommerce/services/rpc/customer/internal/svc"
 	"k8scommerce/services/rpc/customer/pb/customer"
 
 	"github.com/joho/godotenv"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
@@ -34,8 +35,9 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 	ctx := svc.NewServiceContext(c)
-	universe := gcache.NewUniverse(c.ListenOn)
-	srv := server.NewCustomerClientServer(ctx, universe)
+	pool := groupcache.NewHTTPPoolOpts(c.ListenOn, &groupcache.HTTPPoolOptions{})
+	ctx.Cache = gcache.NewGCache()
+	srv := server.NewCustomerClientServer(ctx)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		customer.RegisterCustomerClientServer(grpcServer, srv)
@@ -44,20 +46,15 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 
-		sub, err := discov.NewSubscriber(c.Etcd.Hosts, c.Etcd.Key)
-		if err != nil {
-			fmt.Println("ERROR:", err)
-		}
-
-		update := func() {
-			universe.Set(sub.Values()...)
-			fmt.Printf("universe.Set: %#v\n", sub.Values())
-		}
-		sub.AddListener(update)
-		update()
+		// gcache peer listener
+		gcache.PeerListener(pool, c.ListenOn, c.Etcd)
 	})
+
+	// gcache server
+	server := gcache.Serve(pool, c.ListenOn)
+	defer server.Shutdown(context.Background())
+
 	defer s.Stop()
-	defer universe.Shutdown()
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

@@ -4,10 +4,7 @@ import (
 	"context"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"strconv"
-	"sync"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -15,16 +12,13 @@ type DeleteCategoryLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewDeleteCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *DeleteCategoryLogic {
+func NewDeleteCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteCategoryLogic {
 	return &DeleteCategoryLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
@@ -44,16 +38,8 @@ func (l *DeleteCategoryLogic) DeleteCategory(in *catalog.DeleteCategoryRequest) 
 
 	// invalidate the cache for this record
 	{
-		if entryGetCategoryByIdLogic != nil {
-			l.mu.Lock()
-			entryGetCategoryByIdLogic.galaxy.Remove(l.ctx, strconv.Itoa(int(in.Id)))
-			l.mu.Unlock()
-		}
-		if entryGetAllCategoriesLogic != nil {
-			l.mu.Lock()
-			entryGetAllCategoriesLogic.galaxy.Remove(l.ctx, AllCatgoriesKey)
-			l.mu.Unlock()
-		}
+		l.svcCtx.Cache.Delete(l.ctx, Group_GetCategoryById, Group_GetCategoryByIdKey(in.Id))
+		l.svcCtx.Cache.Delete(l.ctx, Group_GetAllCategories, Group_GetAllCategoriesKey(in.StoreId))
 	}
 
 	// the response struct

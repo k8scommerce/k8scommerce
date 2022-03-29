@@ -5,32 +5,44 @@ option go_package = "pb/cart";
 
 import "google/protobuf/timestamp.proto";
 import "catalog.proto";
+import "customer.proto";
 
 message Cart {
-  int64 store_id = 1;
-  int64 customer_id = 2;
-  repeated Item items = 3;
-  int64 total_price = 4;
+  string id = 1;
+  int64 store_id = 2;
+  string session = 3;
+  int64 cu_idstomer_id = 4;
+  string first_name = 5;
+  string last_name = 6;
+  string company = 7;
+  string phone = 8;
+  string email = 9;
+  customer.Address billing_address = 10;
+  customer.Address shipping_address = 11;
+  int64 discount_id = 12;
+  CartStatus status = 13;
+  repeated Item items = 14;
+  int64 total_price = 15;
+  string currency = 16;
+  google.protobuf.Timestamp expires_at = 17;
+  google.protobuf.Timestamp abandoned_at = 18;
 }
 
 message Item {
-  int64 store_id = 1;
-  int64 customer_id = 2;
-  string sku = 3;
-  int32 quantity = 4;
-  int64 price = 5;
-  google.protobuf.Timestamp expires_at = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  string sku = 1;
+  int32 quantity = 2;
+  int64 price = 3;
+  string note = 4;
+  google.protobuf.Timestamp expires_at = 5;
 }
 
-message Price {
-  int64 id = 1;
-  int64 variant_id = 2;
-  double amount = 3;
-  double compare_at_amount = 4;
-  string currency = 5;
-  int64 user_role_id = 6;
+enum CartStatus {
+  unknown = 0;
+  new = 1;
+  checkout = 2;
+  paid = 3;
+  complete = 4;
+  abandoned = 5;
 }
 
 message SimilarProducts {
@@ -47,78 +59,97 @@ message OthersBought {
 // Requests & Responses
 //
 
-// get cart
-message GetCartRequest {
-  int64 store_id = 1;
-  int64 customer_id = 2;
+// cart response
+message CartResponse {
+  Cart cart = 1;
+  string session_id = 2;
+  SimilarProducts similar_products = 3;
+  OthersBought others_bought = 4;
 }
 
-message GetCartResponse {
-  Cart cart = 1;
-  int64 status_code = 2;
-  string status_message = 3;
+// create cart session
+message CreateCartRequest {
+  int64 store_id = 1;
+}
+
+// attach customer
+message AttachCustomerRequest {
+  string cart_id = 1;
+  string customer_email = 2;
+}
+
+// update customer detail
+message UpdateCustomerDetailRequest {
+  string cart_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string company = 4;
+  string phone = 5;
+  string email = 6;
+  customer.Address billing_address = 7;
+  customer.Address shipping_address = 8;
+}
+
+// update status
+message UpdateStatusRequest {
+  string cart_id = 1;
+  CartStatus status = 2;
+}
+
+// get cart by id
+message GetByCartIdRequest {
+  string cart_id = 1;
+}
+
+// get cart by session
+message GetBySessionIdRequest {
+  string session_id = 1;
+  string cart_id = 2;
 }
 
 // clear cart
 message ClearCartRequest {
-  int64 store_id = 1;
-  int64 customer_id = 2;
-}
-
-message ClearCartResponse {
-  int64 status_code = 1;
-  string status_message = 2;
+  string cart_id = 1;
 }
 
 // add item to cart
-message AddItemToCartRequest {
-  int64 store_id = 1;
-  int64 customer_id = 2;
-  Item item = 3;
+message AddItemRequest {
+  string cart_id = 1;
+  Item item = 2;
 }
 
-message AddItemToCartResponse {
-  Cart cart = 1;
-  SimilarProducts similar_products = 2;
-  OthersBought others_bought = 3;
-  int64 status_code = 4;
-  string status_message = 5;
+// bulk add items to cart
+message BulkAddItemsRequest {
+  string cart_id = 1;
+  repeated Item items = 2;
 }
 
 // update item quantity in cart
-message UpdateItemQuantityInCartRequest {
-  int64 store_id = 1;
-  int64 customer_id = 2;
-  Item item = 3;
-}
-
-message UpdateItemQuantityInCartResponse {
-  Cart cart = 1;
-  int64 status_code = 2;
-  string status_message = 3;
+message UpdateItemQuantityRequest {
+  string cart_id = 1;
+  string sku = 2;
+  int32 quantity = 3;
 }
 
 // remove item in cart
-message RemoveItemInCartRequest {
-  int64 store_id = 1;
-  int64 customer_id = 2;
-  string sku = 3;
-}
-
-message RemoveItemInCartResponse {
-  Cart cart = 1;
-  int64 status_code = 2;
-  string status_message = 3;
+message RemoveItemRequest {
+  string cart_id = 1;
+  string sku = 2;
 }
 
 // cart client
 service CartClient {
-  rpc GetCart(GetCartRequest) returns (GetCartResponse);
-  rpc ClearCart(ClearCartRequest) returns (ClearCartResponse);
+  rpc CreateCart(CreateCartRequest) returns (CartResponse);
+  rpc AttachCustomer(AttachCustomerRequest) returns (CartResponse);
+  rpc UpdateCustomerDetail(UpdateCustomerDetailRequest) returns (CartResponse);
+  rpc UpdateStatus(UpdateStatusRequest) returns (CartResponse);
 
-  rpc AddItemToCart(AddItemToCartRequest) returns (AddItemToCartResponse);
-  rpc UpdateItemQuantityInCart(UpdateItemQuantityInCartRequest)
-      returns (UpdateItemQuantityInCartResponse);
-  rpc RemoveItemInCart(RemoveItemInCartRequest)
-      returns (RemoveItemInCartResponse);
+  rpc GetByCartId(GetByCartIdRequest) returns (CartResponse);
+  rpc GetBySessionId(GetBySessionIdRequest) returns (CartResponse);
+
+  rpc AddItem(AddItemRequest) returns (CartResponse);
+  rpc BulkAddItems(BulkAddItemsRequest) returns (CartResponse);
+  rpc UpdateItemQuantity(UpdateItemQuantityRequest) returns (CartResponse);
+  rpc RemoveItem(RemoveItemRequest) returns (CartResponse);
+  rpc ClearCart(ClearCartRequest) returns (CartResponse);
 }
