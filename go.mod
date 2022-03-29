@@ -34,7 +34,6 @@ require (
 	github.com/wagslane/go-rabbitmq v0.7.0
 	github.com/xhit/go-simple-mail/v2 v2.11.0
 	github.com/zeromicro/go-zero v1.3.1
-	go.mongodb.org/mongo-driver v1.8.4
 	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 	golang.org/x/text v0.3.7
@@ -58,6 +57,7 @@ require (
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
