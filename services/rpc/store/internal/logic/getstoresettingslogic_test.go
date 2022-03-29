@@ -7,10 +7,11 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"k8scommerce/internal/convert"
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/store/pb/store"
-	"k8scommerce/services/rpc/store/storeclient"
+	"github.com/k8scommerce/k8scommerce/services/rpc/store/pb/store"
+	"github.com/k8scommerce/k8scommerce/services/rpc/store/storeclient"
+
+	"github.com/k8scommerce/k8scommerce/internal/convert"
+	"github.com/k8scommerce/k8scommerce/internal/models"
 )
 
 var _ = Describe("GetStoreSettingsLogic", func() {

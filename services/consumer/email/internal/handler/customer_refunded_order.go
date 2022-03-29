@@ -2,10 +2,12 @@ package handler
 
 import (
 	"context"
-	"k8scommerce/internal/events"
-	"k8scommerce/internal/events/eventkey"
-	"k8scommerce/services/consumer/email/internal/logic"
-	"k8scommerce/services/consumer/email/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/internal/events"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
 
 	"github.com/wagslane/go-rabbitmq"
 	"github.com/zeromicro/go-zero/core/logx"

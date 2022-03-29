@@ -6,7 +6,7 @@ package shippingclient
 import (
 	"context"
 
-	"k8scommerce/services/rpc/shipping/pb/shipping"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping/pb/shipping"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

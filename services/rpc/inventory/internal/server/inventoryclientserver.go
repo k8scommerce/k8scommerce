@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"k8scommerce/services/rpc/inventory/internal/logic"
-	"k8scommerce/services/rpc/inventory/internal/svc"
-	"k8scommerce/services/rpc/inventory/pb/inventory"
+	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/pb/inventory"
 )
 
 type InventoryClientServer struct {

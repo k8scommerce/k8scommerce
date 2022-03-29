@@ -9,8 +9,8 @@ package shipping
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	cart "k8scommerce/services/rpc/cart/pb/cart"
-	customer "k8scommerce/services/rpc/customer/pb/customer"
+	cart "github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+	customer "github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
 	reflect "reflect"
 	sync "sync"
 )

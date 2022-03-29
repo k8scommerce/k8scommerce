@@ -2,7 +2,8 @@ package transport
 
 import (
 	"bytes"
-	"k8scommerce/internal/storage/config"
+
+	"github.com/k8scommerce/k8scommerce/internal/storage/config"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"

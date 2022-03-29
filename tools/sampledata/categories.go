@@ -4,9 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"k8scommerce/internal/models"
 	"log"
 	"strings"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/gosimple/slug"
 	"github.com/iancoleman/strcase"

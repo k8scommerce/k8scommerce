@@ -1,6 +1,6 @@
 package transport
 
-import "k8scommerce/internal/storage/config"
+import "github.com/k8scommerce/k8scommerce/internal/storage/config"
 
 func MustNewAzureTransport(cfg config.AzureConfig) (Transport, error) {
 	t := &azureTransport{}

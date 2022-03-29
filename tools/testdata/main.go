@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"k8scommerce/internal/repos"
 	"log"
 	"os"
+
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/jmoiron/sqlx"
 

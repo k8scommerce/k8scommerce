@@ -2,14 +2,16 @@ package logic
 
 import (
 	"context"
-	"k8scommerce/internal/convert"
-	"k8scommerce/internal/events/eventkey"
-	"k8scommerce/internal/events/eventkey/eventtype"
-	"k8scommerce/services/rpc/customer/internal/svc"
-	"k8scommerce/services/rpc/customer/pb/customer"
 	"net/mail"
 	"strconv"
 	"strings"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/internal/convert"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey/eventtype"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"

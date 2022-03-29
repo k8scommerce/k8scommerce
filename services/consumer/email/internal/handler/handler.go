@@ -1,9 +1,11 @@
 package handler
 
 import (
-	"k8scommerce/internal/events"
-	"k8scommerce/services/consumer/email/internal/svc"
 	"log"
+
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/internal/events"
 )
 
 func MustHandle(ev events.EventManager, svcCtx *svc.ServiceContext) {

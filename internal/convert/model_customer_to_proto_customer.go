@@ -1,8 +1,9 @@
 package convert
 
 import (
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/customer/pb/customer"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 )
 
 func ModelCustomerToProtoCustomer(fromModel *models.Customer, toProto *customer.Customer) {

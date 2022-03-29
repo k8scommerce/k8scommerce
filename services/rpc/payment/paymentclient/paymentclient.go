@@ -6,7 +6,7 @@ package paymentclient
 import (
 	"context"
 
-	"k8scommerce/services/rpc/payment/pb/payment"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/pb/payment"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

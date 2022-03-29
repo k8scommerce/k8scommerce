@@ -2,11 +2,12 @@ package buildsql_test
 
 import (
 	"fmt"
-	"k8scommerce/internal/buildsql"
-	"k8scommerce/internal/models"
 	"log"
 	"net/url"
 	"strings"
+
+	"github.com/k8scommerce/k8scommerce/internal/buildsql"
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

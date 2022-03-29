@@ -2,9 +2,10 @@ package events
 
 import (
 	"fmt"
-	"k8scommerce/internal/events/broker"
-	"k8scommerce/internal/events/config"
-	"k8scommerce/internal/events/eventkey"
+
+	"github.com/k8scommerce/k8scommerce/internal/events/broker"
+	"github.com/k8scommerce/k8scommerce/internal/events/config"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
 
 	"github.com/wagslane/go-rabbitmq"
 	"github.com/zeromicro/go-zero/core/logx"

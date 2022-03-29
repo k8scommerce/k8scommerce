@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"k8scommerce/services/rpc/user/internal/svc"
-	"k8scommerce/services/rpc/user/pb/user"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/pb/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

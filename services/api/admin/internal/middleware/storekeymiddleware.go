@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"k8scommerce/internal/encryption"
-	encryptionconfig "k8scommerce/internal/encryption/config"
-	"k8scommerce/services/api/admin/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
+
+	"github.com/k8scommerce/k8scommerce/internal/encryption"
+	encryptionconfig "github.com/k8scommerce/k8scommerce/internal/encryption/config"
 )
 
 type StoreKeyMiddleware struct {

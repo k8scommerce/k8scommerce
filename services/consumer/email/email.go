@@ -7,10 +7,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	"k8scommerce/internal/events"
-	"k8scommerce/services/consumer/email/internal/config"
-	"k8scommerce/services/consumer/email/internal/handler"
-	"k8scommerce/services/consumer/email/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/handler"
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/internal/events"
 
 	"github.com/joho/godotenv"
 	"github.com/zeromicro/go-zero/core/conf"

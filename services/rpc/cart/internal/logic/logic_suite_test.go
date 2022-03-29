@@ -5,11 +5,12 @@ import (
 	"os"
 	"testing"
 
-	"k8scommerce/internal/gcache"
-	"k8scommerce/internal/repos"
 	"k8scommerce/services/rpc/cart/internal/config"
 	"k8scommerce/services/rpc/cart/internal/server"
 	"k8scommerce/services/rpc/cart/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/internal/gcache"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo/v2"

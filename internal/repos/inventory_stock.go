@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/crypto/bcrypt"

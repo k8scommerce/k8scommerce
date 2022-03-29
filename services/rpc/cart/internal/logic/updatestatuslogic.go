@@ -5,9 +5,10 @@ import (
 	"database/sql"
 	"time"
 
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/cart/internal/svc"
-	"k8scommerce/services/rpc/cart/pb/cart"
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/google/uuid"
 	"github.com/zeromicro/go-zero/core/logx"

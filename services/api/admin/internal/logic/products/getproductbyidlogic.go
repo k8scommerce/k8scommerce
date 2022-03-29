@@ -3,11 +3,12 @@ package products
 import (
 	"context"
 
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/api/admin/internal/helpers"
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
-	"k8scommerce/services/rpc/catalog/catalogclient"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/helpers"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/catalogclient"
+
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

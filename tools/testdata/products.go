@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"strings"
 
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/utils"
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"github.com/iancoleman/strcase"
 	"github.com/icrowley/fake"

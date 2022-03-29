@@ -4,11 +4,12 @@ import (
 	"context"
 	"time"
 
-	"k8scommerce/internal/convert"
-	"k8scommerce/internal/gcache"
-	"k8scommerce/internal/groupctx"
-	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
+
+	"github.com/k8scommerce/k8scommerce/internal/convert"
+	"github.com/k8scommerce/k8scommerce/internal/gcache"
+	"github.com/k8scommerce/k8scommerce/internal/groupctx"
 
 	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"

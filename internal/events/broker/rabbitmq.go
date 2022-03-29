@@ -1,8 +1,8 @@
 package broker
 
 import (
-	"k8scommerce/internal/events/config"
-	"k8scommerce/internal/events/eventkey"
+	"github.com/k8scommerce/k8scommerce/internal/events/config"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/wagslane/go-rabbitmq"

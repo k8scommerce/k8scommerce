@@ -9,10 +9,11 @@ import (
 	"strconv"
 	"strings"
 
-	"k8scommerce/internal/storage/asset"
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
-	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
+
+	"github.com/k8scommerce/k8scommerce/internal/storage/asset"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc"

@@ -16,7 +16,7 @@ services='cart catalog customer inventory othersbought payment shipping similarp
 # define the proto import paths
 go_opts=''
 for service in $services; do
-  go_opts="${go_opts}--go_opt=M${service}.proto=k8scommerce/services/rpc/${service}/pb/${service} "
+  go_opts="${go_opts}--go_opt=M${service}.proto=github.com/k8scommerce/k8scommerce/services/rpc/${service}/pb/${service} "
 done
 
 for service in $services; do

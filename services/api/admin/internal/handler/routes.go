@@ -4,15 +4,15 @@ package handler
 import (
 	"net/http"
 
-	api "k8scommerce/services/api/admin/internal/handler/api"
-	assets "k8scommerce/services/api/admin/internal/handler/assets"
-	cart "k8scommerce/services/api/admin/internal/handler/cart"
-	categories "k8scommerce/services/api/admin/internal/handler/categories"
-	customers "k8scommerce/services/api/admin/internal/handler/customers"
-	products "k8scommerce/services/api/admin/internal/handler/products"
-	store "k8scommerce/services/api/admin/internal/handler/store"
-	users "k8scommerce/services/api/admin/internal/handler/users"
-	"k8scommerce/services/api/admin/internal/svc"
+	api "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/api"
+	assets "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/assets"
+	cart "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/cart"
+	categories "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/categories"
+	customers "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/customers"
+	products "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/products"
+	store "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/store"
+	users "github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler/users"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

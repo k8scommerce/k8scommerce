@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	"k8scommerce/services/api/admin/internal/logic/api"
-	"k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/logic/api"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )

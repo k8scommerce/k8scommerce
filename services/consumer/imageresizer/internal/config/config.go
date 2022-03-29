@@ -1,10 +1,10 @@
 package config
 
 import (
-	eventsconfig "k8scommerce/internal/events/config"
-	imagesconfig "k8scommerce/internal/images/config"
-	"k8scommerce/internal/repos"
-	storageconfig "k8scommerce/internal/storage/config"
+	eventsconfig "github.com/k8scommerce/k8scommerce/internal/events/config"
+	imagesconfig "github.com/k8scommerce/k8scommerce/internal/images/config"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
+	storageconfig "github.com/k8scommerce/k8scommerce/internal/storage/config"
 
 	"github.com/zeromicro/go-zero/zrpc"
 )

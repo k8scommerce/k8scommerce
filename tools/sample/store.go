@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"k8scommerce/internal/models"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 )
 
 func createStore() {

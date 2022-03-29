@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 
-	"k8scommerce/internal/encryption"
+	"github.com/k8scommerce/k8scommerce/internal/encryption"
 )
 
 func NewSession(encrypter encryption.Encrypter, sessionId string) Session {

@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"k8scommerce/services/api/admin/internal/svc"
 	"net/http"
+
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"

@@ -2,8 +2,10 @@ package convert
 
 import (
 	"database/sql"
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 )
 
 func ProtoAddressToProtoModelCustomerAddress(id *int64, storeId, customerId int64, kind models.AddressKind, fromProto *customer.Address, toModel *models.CustomerAddress) {

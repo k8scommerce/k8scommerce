@@ -3,10 +3,10 @@ package customers
 import (
 	"net/http"
 
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/logic/customers"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"k8scommerce/services/api/admin/internal/logic/customers"
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
 )
 
 func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

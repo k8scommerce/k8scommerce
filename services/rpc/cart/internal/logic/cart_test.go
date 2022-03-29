@@ -2,8 +2,10 @@ package logic_test
 
 import (
 	"context"
-	"k8scommerce/internal/session"
-	"k8scommerce/services/rpc/cart/pb/cart"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+
+	"github.com/k8scommerce/k8scommerce/internal/session"
 
 	"github.com/google/uuid"
 	. "github.com/onsi/ginkgo/v2"

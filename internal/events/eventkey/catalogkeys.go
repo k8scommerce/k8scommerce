@@ -2,8 +2,10 @@ package eventkey
 
 import (
 	"encoding/json"
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/catalog/pb/catalog"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 )
 
 // catalog

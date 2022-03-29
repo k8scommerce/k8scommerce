@@ -9,7 +9,7 @@ package similarproducts
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	catalog "k8scommerce/services/rpc/catalog/pb/catalog"
+	catalog "github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
 	reflect "reflect"
 	sync "sync"
 )

@@ -11,7 +11,7 @@ fi
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 dest="${ROOT}/mocks/repos.go" # destination path & filename
-src="k8scommerce/internal/repos" # package path
+src="github.com/k8scommerce/k8scommerce/internal/repos" # package path
 iface="Repo" # the interface name to be mocked
 
 echo "Generating mock for ${iface}"

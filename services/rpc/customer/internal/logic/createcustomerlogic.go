@@ -4,11 +4,12 @@ import (
 	"context"
 	"sync"
 
-	"k8scommerce/internal/convert"
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/rpc/customer/internal/svc"
-	"k8scommerce/services/rpc/customer/pb/customer"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/internal/convert"
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"

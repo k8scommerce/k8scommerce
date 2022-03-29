@@ -4,9 +4,9 @@ import (
 	"log"
 	"testing"
 
-	"k8scommerce/services/rpc/customer/internal/config"
-	"k8scommerce/services/rpc/customer/internal/server"
-	"k8scommerce/services/rpc/customer/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/server"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/svc"
 
 	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo/v2"

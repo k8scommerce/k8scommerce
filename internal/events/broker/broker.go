@@ -1,7 +1,7 @@
 package broker
 
 import (
-	"k8scommerce/internal/events/eventkey"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
 
 	"github.com/wagslane/go-rabbitmq"
 )

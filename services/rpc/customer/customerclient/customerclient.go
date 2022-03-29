@@ -6,7 +6,7 @@ package customerclient
 import (
 	"context"
 
-	"k8scommerce/services/rpc/customer/pb/customer"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

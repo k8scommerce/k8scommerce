@@ -1,12 +1,13 @@
 package asset
 
 import (
-	"k8scommerce/internal/storage/config"
-	"k8scommerce/internal/storage/transport"
-	"k8scommerce/internal/utils"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/k8scommerce/k8scommerce/internal/storage/config"
+	"github.com/k8scommerce/k8scommerce/internal/storage/transport"
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

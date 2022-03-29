@@ -6,7 +6,7 @@ package catalogclient
 import (
 	"context"
 
-	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

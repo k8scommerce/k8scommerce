@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"k8scommerce/internal/models"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/iancoleman/strcase"
 )

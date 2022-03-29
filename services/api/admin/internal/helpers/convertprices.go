@@ -2,8 +2,9 @@ package helpers
 
 import (
 	"context"
-	"k8scommerce/services/api/admin/internal/types"
 	"strconv"
+
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
 
 	"github.com/bojanz/currency"
 )

@@ -1,11 +1,12 @@
 package broker_test
 
 import (
-	"k8scommerce/internal/events/broker"
-	"k8scommerce/internal/events/config"
-	"k8scommerce/internal/events/eventkey"
 	"log"
 	"os"
+
+	"github.com/k8scommerce/k8scommerce/internal/events/broker"
+	"github.com/k8scommerce/k8scommerce/internal/events/config"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
 
 	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo/v2"

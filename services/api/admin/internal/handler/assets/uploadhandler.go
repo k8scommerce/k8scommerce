@@ -3,8 +3,8 @@ package assets
 import (
 	"net/http"
 
-	"k8scommerce/services/api/admin/internal/logic/assets"
-	"k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/logic/assets"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )

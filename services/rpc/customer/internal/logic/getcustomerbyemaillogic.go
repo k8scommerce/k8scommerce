@@ -2,13 +2,15 @@ package logic
 
 import (
 	"context"
-	"k8scommerce/internal/gcache"
-	"k8scommerce/internal/groupctx"
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/rpc/customer/internal/svc"
-	"k8scommerce/services/rpc/customer/pb/customer"
 	"time"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/internal/gcache"
+	"github.com/k8scommerce/k8scommerce/internal/groupctx"
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"

@@ -1,8 +1,9 @@
 package transport
 
 import (
-	"k8scommerce/internal/storage/config"
 	"os"
+
+	"github.com/k8scommerce/k8scommerce/internal/storage/config"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

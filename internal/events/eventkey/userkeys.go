@@ -2,7 +2,8 @@ package eventkey
 
 import (
 	"encoding/json"
-	"k8scommerce/services/rpc/user/pb/user"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/pb/user"
 )
 
 // user

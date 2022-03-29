@@ -4,11 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"k8scommerce/internal/storage/asset"
-	"k8scommerce/internal/storage/config"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/k8scommerce/k8scommerce/internal/storage/asset"
+	"github.com/k8scommerce/k8scommerce/internal/storage/config"
 
 	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo/v2"

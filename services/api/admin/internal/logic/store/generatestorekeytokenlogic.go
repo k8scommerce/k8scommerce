@@ -4,9 +4,9 @@ import (
 	"context"
 	"strconv"
 
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
-	"k8scommerce/services/rpc/store/storeclient"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/rpc/store/storeclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

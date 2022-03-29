@@ -1,7 +1,7 @@
 package config
 
 import (
-	"k8scommerce/internal/repos"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/zeromicro/go-zero/zrpc"
 )

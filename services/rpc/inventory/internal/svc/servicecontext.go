@@ -1,9 +1,10 @@
 package svc
 
 import (
-	"k8scommerce/internal/gcache"
-	"k8scommerce/internal/repos"
-	"k8scommerce/services/rpc/inventory/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/inventory/internal/config"
+
+	"github.com/k8scommerce/k8scommerce/internal/gcache"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 )
 
 type ServiceContext struct {

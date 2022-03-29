@@ -10,11 +10,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/storage/asset"
-	storagetypes "k8scommerce/internal/storage/types"
-	"k8scommerce/internal/workerpool"
-	"k8scommerce/services/consumer/imageresizer/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/consumer/imageresizer/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/storage/asset"
+	storagetypes "github.com/k8scommerce/k8scommerce/internal/storage/types"
+	"github.com/k8scommerce/k8scommerce/internal/workerpool"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"

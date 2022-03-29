@@ -1,4 +1,4 @@
-module k8scommerce
+module github.com/k8scommerce/k8scommerce
 
 go 1.17
 
@@ -31,6 +31,7 @@ require (
 	github.com/rabbitmq/amqp091-go v1.3.0
 	github.com/rs/xid v1.2.1
 	github.com/speps/go-hashids v2.0.0+incompatible
+	github.com/spf13/cobra v1.4.0
 	github.com/wagslane/go-rabbitmq v0.7.0
 	github.com/xhit/go-simple-mail/v2 v2.11.0
 	github.com/zeromicro/go-zero v1.3.1
@@ -39,6 +40,7 @@ require (
 	golang.org/x/text v0.3.7
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.28.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -64,6 +66,7 @@ require (
 	github.com/googleapis/gnostic v0.4.1 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.11.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -89,6 +92,7 @@ require (
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/toorop/go-dkim v0.0.0-20201103131630-e1cd1a0a5208 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.2 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.2 // indirect
@@ -110,7 +114,6 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220228195345-15d65a4533f7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/api v0.20.12 // indirect
 	k8s.io/apimachinery v0.20.12 // indirect
 	k8s.io/client-go v0.20.12 // indirect

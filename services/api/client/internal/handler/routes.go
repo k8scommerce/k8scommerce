@@ -4,12 +4,12 @@ package handler
 import (
 	"net/http"
 
-	api "k8scommerce/services/api/client/internal/handler/api"
-	cart "k8scommerce/services/api/client/internal/handler/cart"
-	categories "k8scommerce/services/api/client/internal/handler/categories"
-	customers "k8scommerce/services/api/client/internal/handler/customers"
-	products "k8scommerce/services/api/client/internal/handler/products"
-	"k8scommerce/services/api/client/internal/svc"
+	api "github.com/k8scommerce/k8scommerce/services/api/client/internal/handler/api"
+	cart "github.com/k8scommerce/k8scommerce/services/api/client/internal/handler/cart"
+	categories "github.com/k8scommerce/k8scommerce/services/api/client/internal/handler/categories"
+	customers "github.com/k8scommerce/k8scommerce/services/api/client/internal/handler/customers"
+	products "github.com/k8scommerce/k8scommerce/services/api/client/internal/handler/products"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

@@ -2,10 +2,12 @@ package users
 
 import (
 	"context"
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
-	"k8scommerce/services/rpc/user/userclient"
+
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/userclient"
+
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

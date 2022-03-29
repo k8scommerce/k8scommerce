@@ -10,8 +10,8 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
-	catalog "k8scommerce/services/rpc/catalog/pb/catalog"
-	customer "k8scommerce/services/rpc/customer/pb/customer"
+	catalog "github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
+	customer "github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
 	reflect "reflect"
 	sync "sync"
 )

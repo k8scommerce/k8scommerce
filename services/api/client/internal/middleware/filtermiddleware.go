@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"k8scommerce/services/api/client/internal/config"
-	"k8scommerce/services/api/client/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
 )
 
 type FilterMiddleware struct {

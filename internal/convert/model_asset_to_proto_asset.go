@@ -1,9 +1,10 @@
 package convert
 
 import (
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/storage/types"
-	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/storage/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

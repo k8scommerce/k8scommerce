@@ -1,9 +1,9 @@
 package config
 
 import (
-	encryptionconfig "k8scommerce/internal/encryption/config"
-	eventsconfig "k8scommerce/internal/events/config"
-	"k8scommerce/internal/repos"
+	encryptionconfig "github.com/k8scommerce/k8scommerce/internal/encryption/config"
+	eventsconfig "github.com/k8scommerce/k8scommerce/internal/events/config"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/zeromicro/go-zero/zrpc"
 )

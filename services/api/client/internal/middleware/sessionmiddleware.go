@@ -4,9 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"k8scommerce/internal/encryption"
-	"k8scommerce/internal/session"
-	"k8scommerce/services/api/client/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
+
+	"github.com/k8scommerce/k8scommerce/internal/encryption"
+	"github.com/k8scommerce/k8scommerce/internal/session"
 )
 
 type SessionMiddleware struct {

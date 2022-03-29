@@ -6,7 +6,7 @@ package warehouseclient
 import (
 	"context"
 
-	"k8scommerce/services/rpc/warehouse/pb/warehouse"
+	"github.com/k8scommerce/k8scommerce/services/rpc/warehouse/pb/warehouse"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

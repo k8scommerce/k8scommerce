@@ -3,9 +3,9 @@ package users
 import (
 	"net/http"
 
-	"k8scommerce/services/api/admin/internal/logic/users"
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/logic/users"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )

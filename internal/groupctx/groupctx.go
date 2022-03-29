@@ -2,7 +2,8 @@ package groupctx
 
 import (
 	"context"
-	"k8scommerce/services/rpc/cart/pb/cart"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
 )
 
 type ctxKey string

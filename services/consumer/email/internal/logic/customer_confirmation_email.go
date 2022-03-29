@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"net/url"
 
-	"k8scommerce/internal/events/eventkey/eventtype"
-	"k8scommerce/services/consumer/email/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey/eventtype"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	mail "github.com/xhit/go-simple-mail/v2"

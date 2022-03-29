@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"log"
 
-	"k8scommerce/internal/gcache"
-	"k8scommerce/services/rpc/user/internal/config"
-	"k8scommerce/services/rpc/user/internal/server"
-	"k8scommerce/services/rpc/user/internal/svc"
-	"k8scommerce/services/rpc/user/pb/user"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/server"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/pb/user"
+
+	"github.com/k8scommerce/k8scommerce/internal/gcache"
 
 	"github.com/joho/godotenv"
 	"github.com/mailgun/groupcache/v2"

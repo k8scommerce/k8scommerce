@@ -1,8 +1,9 @@
 package convert
 
 import (
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/cart/pb/cart"
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

@@ -5,13 +5,15 @@ import (
 	"database/sql"
 	"fmt"
 	"io"
-	"k8scommerce/internal/events/eventkey"
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/storage/asset"
-	"k8scommerce/internal/utils/humanizer"
-	"k8scommerce/services/rpc/catalog/internal/svc"
-	"k8scommerce/services/rpc/catalog/pb/catalog"
 	"net/http"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
+
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/storage/asset"
+	"github.com/k8scommerce/k8scommerce/internal/utils/humanizer"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"

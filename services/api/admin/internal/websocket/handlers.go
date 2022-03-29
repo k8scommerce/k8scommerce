@@ -1,10 +1,10 @@
 package websocket
 
 import (
-	"k8scommerce/services/api/admin/internal/logic/api"
-	"k8scommerce/services/api/admin/internal/logic/users"
-	"k8scommerce/services/api/admin/internal/svc"
-	"k8scommerce/services/api/admin/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/logic/api"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/logic/users"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/types"
 )
 
 func GetAllUsersHandler(svcCtx *svc.ServiceContext) WsHandleFunc {

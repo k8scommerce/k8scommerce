@@ -1,10 +1,11 @@
 package logic_test
 
 import (
-	"k8scommerce/internal/repos"
 	"log"
 	"os"
 	"testing"
+
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo/v2"

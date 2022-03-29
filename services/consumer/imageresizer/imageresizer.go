@@ -8,11 +8,12 @@ import (
 	"os/signal"
 	"syscall"
 
-	"k8scommerce/internal/events"
-	"k8scommerce/internal/events/eventkey"
-	"k8scommerce/services/consumer/imageresizer/internal/config"
-	"k8scommerce/services/consumer/imageresizer/internal/logic"
-	"k8scommerce/services/consumer/imageresizer/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/consumer/imageresizer/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/consumer/imageresizer/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/consumer/imageresizer/internal/svc"
+
+	"github.com/k8scommerce/k8scommerce/internal/events"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
 
 	"github.com/joho/godotenv"
 	rabbitmq "github.com/wagslane/go-rabbitmq"

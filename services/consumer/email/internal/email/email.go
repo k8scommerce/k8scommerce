@@ -2,8 +2,9 @@ package email
 
 import (
 	"crypto/tls"
-	"k8scommerce/services/consumer/email/internal/config"
 	"time"
+
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/config"
 
 	mail "github.com/xhit/go-simple-mail/v2"
 )

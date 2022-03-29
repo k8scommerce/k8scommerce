@@ -1,11 +1,12 @@
 package events_test
 
 import (
-	"k8scommerce/internal/events"
-	"k8scommerce/internal/events/config"
-	"k8scommerce/internal/events/eventkey"
 	"log"
 	"os"
+
+	"github.com/k8scommerce/k8scommerce/internal/events"
+	"github.com/k8scommerce/k8scommerce/internal/events/config"
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey"
 
 	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo/v2"

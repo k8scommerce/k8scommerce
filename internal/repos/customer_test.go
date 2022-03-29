@@ -3,8 +3,9 @@ package repos_test
 import (
 	"database/sql"
 	"fmt"
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/repos"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

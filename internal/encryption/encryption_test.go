@@ -1,8 +1,8 @@
 package encryption_test
 
 import (
-	"k8scommerce/internal/encryption"
-	"k8scommerce/internal/encryption/config"
+	"github.com/k8scommerce/k8scommerce/internal/encryption"
+	"github.com/k8scommerce/k8scommerce/internal/encryption/config"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

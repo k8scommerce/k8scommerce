@@ -4,9 +4,10 @@ import (
 	"context"
 	"time"
 
-	"k8scommerce/internal/gcache"
-	"k8scommerce/services/rpc/store/internal/svc"
-	"k8scommerce/services/rpc/store/pb/store"
+	"github.com/k8scommerce/k8scommerce/services/rpc/store/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/store/pb/store"
+
+	"github.com/k8scommerce/k8scommerce/internal/gcache"
 
 	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"

@@ -2,7 +2,8 @@ package eventkey
 
 import (
 	"encoding/json"
-	"k8scommerce/internal/events/eventkey/eventtype"
+
+	"github.com/k8scommerce/k8scommerce/internal/events/eventkey/eventtype"
 )
 
 // customer

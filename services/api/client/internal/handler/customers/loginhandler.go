@@ -3,9 +3,9 @@ package customers
 import (
 	"net/http"
 
-	"k8scommerce/services/api/client/internal/logic/customers"
-	"k8scommerce/services/api/client/internal/svc"
-	"k8scommerce/services/api/client/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/logic/customers"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )

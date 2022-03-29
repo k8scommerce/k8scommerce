@@ -1,11 +1,12 @@
 package logic
 
 import (
-	"k8scommerce/internal/convert"
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/repos"
-	"k8scommerce/services/rpc/customer/pb/customer"
-	"k8scommerce/services/rpc/store/pb/store"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+	"github.com/k8scommerce/k8scommerce/services/rpc/store/pb/store"
+
+	"github.com/k8scommerce/k8scommerce/internal/convert"
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"

@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"k8scommerce/internal/models"
-	"k8scommerce/internal/utils"
 	"math/rand"
 	"strings"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"github.com/Pallinder/go-randomdata"
 	"github.com/gosimple/slug"

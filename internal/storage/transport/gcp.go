@@ -1,6 +1,6 @@
 package transport
 
-import "k8scommerce/internal/storage/config"
+import "github.com/k8scommerce/k8scommerce/internal/storage/config"
 
 func MustNewGcpTransport(cfg config.GCPConfig) (Transport, error) {
 	t := &gcpTransport{}

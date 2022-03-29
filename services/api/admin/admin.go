@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"k8scommerce/services/api/admin/internal/config"
-	"k8scommerce/services/api/admin/internal/handler"
-	"k8scommerce/services/api/admin/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/handler"
+	"github.com/k8scommerce/k8scommerce/services/api/admin/internal/svc"
 
 	"github.com/joho/godotenv"
 	middleware "github.com/muhfajar/go-zero-cors-middleware"

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"k8scommerce/internal/repos"
 	"log"
 	"os"
+
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"

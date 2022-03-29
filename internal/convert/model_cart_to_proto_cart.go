@@ -2,9 +2,11 @@ package convert
 
 import (
 	"encoding/json"
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/cart/pb/cart"
-	"k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+	"github.com/k8scommerce/k8scommerce/services/rpc/customer/pb/customer"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/protobuf/types/known/timestamppb"

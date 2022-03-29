@@ -5,7 +5,7 @@ import (
 	"crypto/cipher"
 	"encoding/base64"
 
-	"k8scommerce/internal/encryption/config"
+	"github.com/k8scommerce/k8scommerce/internal/encryption/config"
 )
 
 // Encode and decode text

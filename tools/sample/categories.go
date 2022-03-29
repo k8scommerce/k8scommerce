@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"k8scommerce/internal/models"
 	"os"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/gocarina/gocsv"
 )

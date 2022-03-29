@@ -2,8 +2,10 @@ package convert
 
 import (
 	"encoding/json"
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/store/pb/store"
+
+	"github.com/k8scommerce/k8scommerce/services/rpc/store/pb/store"
+
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

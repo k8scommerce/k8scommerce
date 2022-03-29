@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"k8scommerce/services/rpc/user/internal/logic"
-	"k8scommerce/services/rpc/user/internal/svc"
-	"k8scommerce/services/rpc/user/pb/user"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/user/pb/user"
 )
 
 type UserClientServer struct {

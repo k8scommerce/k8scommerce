@@ -3,10 +3,11 @@ package cart
 import (
 	"context"
 
-	"k8scommerce/internal/utils"
-	"k8scommerce/services/api/client/internal/svc"
-	"k8scommerce/services/api/client/internal/types"
-	"k8scommerce/services/rpc/cart/pb/cart"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
+	"github.com/k8scommerce/k8scommerce/services/rpc/cart/pb/cart"
+
+	"github.com/k8scommerce/k8scommerce/internal/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"k8scommerce/internal/buildsql"
-	"k8scommerce/internal/models"
-	"k8scommerce/services/rpc/catalog/pb/catalog"
+	"github.com/k8scommerce/k8scommerce/services/rpc/catalog/pb/catalog"
+
+	"github.com/k8scommerce/k8scommerce/internal/buildsql"
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/jmoiron/sqlx"
 )

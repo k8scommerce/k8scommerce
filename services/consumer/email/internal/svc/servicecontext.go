@@ -1,10 +1,11 @@
 package svc
 
 import (
-	"k8scommerce/internal/events"
-	"k8scommerce/internal/repos"
-	"k8scommerce/services/consumer/email/internal/config"
-	"k8scommerce/services/consumer/email/internal/email"
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/config"
+	"github.com/k8scommerce/k8scommerce/services/consumer/email/internal/email"
+
+	"github.com/k8scommerce/k8scommerce/internal/events"
+	"github.com/k8scommerce/k8scommerce/internal/repos"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"

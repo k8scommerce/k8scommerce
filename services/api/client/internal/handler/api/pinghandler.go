@@ -3,9 +3,9 @@ package api
 import (
 	"net/http"
 
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/logic/api"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"k8scommerce/services/api/client/internal/logic/api"
-	"k8scommerce/services/api/client/internal/svc"
 )
 
 func PingHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

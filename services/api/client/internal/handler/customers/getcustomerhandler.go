@@ -3,9 +3,9 @@ package customers
 import (
 	"net/http"
 
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/logic/customers"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"k8scommerce/services/api/client/internal/logic/customers"
-	"k8scommerce/services/api/client/internal/svc"
 )
 
 func GetCustomerHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

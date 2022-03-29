@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"k8scommerce/services/rpc/similarproducts/internal/logic"
-	"k8scommerce/services/rpc/similarproducts/internal/svc"
-	"k8scommerce/services/rpc/similarproducts/pb/similarproducts"
+	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/similarproducts/pb/similarproducts"
 )
 
 type SimilarProductsClientServer struct {

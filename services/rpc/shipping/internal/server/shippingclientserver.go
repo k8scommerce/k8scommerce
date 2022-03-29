@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"k8scommerce/services/rpc/shipping/internal/logic"
-	"k8scommerce/services/rpc/shipping/internal/svc"
-	"k8scommerce/services/rpc/shipping/pb/shipping"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/shipping/pb/shipping"
 )
 
 type ShippingClientServer struct {

@@ -1,7 +1,7 @@
 package repos_test
 
 import (
-	"k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/google/uuid"
 	. "github.com/onsi/ginkgo/v2"

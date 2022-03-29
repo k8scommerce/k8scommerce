@@ -7,7 +7,7 @@ import (
 	"log"
 	"strings"
 
-	"k8scommerce/internal/models"
+	"github.com/k8scommerce/k8scommerce/internal/models"
 
 	"github.com/gosimple/slug"
 	"github.com/iancoleman/strcase"

@@ -1,9 +1,10 @@
 package customers
 
 import (
-	"k8scommerce/services/api/client/internal/svc"
-	"k8scommerce/services/api/client/internal/types"
 	"time"
+
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/types"
 
 	"github.com/dgrijalva/jwt-go"
 )

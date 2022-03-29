@@ -3,8 +3,8 @@ package categories
 import (
 	"net/http"
 
-	"k8scommerce/services/api/client/internal/logic/categories"
-	"k8scommerce/services/api/client/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/logic/categories"
+	"github.com/k8scommerce/k8scommerce/services/api/client/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )

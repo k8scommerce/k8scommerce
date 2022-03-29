@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"k8scommerce/services/rpc/payment/internal/logic"
-	"k8scommerce/services/rpc/payment/internal/svc"
-	"k8scommerce/services/rpc/payment/pb/payment"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/internal/logic"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/internal/svc"
+	"github.com/k8scommerce/k8scommerce/services/rpc/payment/pb/payment"
 )
 
 type PaymentClientServer struct {
