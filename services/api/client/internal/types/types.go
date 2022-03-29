@@ -7,77 +7,114 @@ type JwtToken struct {
 	RefreshAfter int64  `json:"refreshAfter,optional,omitempty"`
 }
 
-type ResponseStatus struct {
-	StatusCode    int64  `json:"statusCode"`              // RFC http status code, ie. 204, etc - https://go.dev/src/net/http/status.go
-	StatusMessage string `json:"statusMessage,omitempty"` // status message
-}
-
 type PingResponse struct {
 	Ping string `json:"ping"`
 }
 
 type Cart struct {
-	Item       []Item  `json:"items"`       // a collection of Item
-	TotalPrice float64 `json:"total_price"` // the sum total of the cart
+	Id              string  `json:"id,optional,omitempty"`
+	StoreId         int64   `json:"store_id,optional,omitempty"`
+	Session         string  `json:"session,optional,omitempty"`
+	CustomerId      int64   `json:"customer_id,optional,omitempty"`
+	FirstName       string  `json:"first_name,optional,omitempty"`
+	LastName        string  `json:"last_name,optional,omitempty"`
+	Company         string  `json:"company,optional,omitempty"`
+	Phone           string  `json:"phone,optional,omitempty"`
+	Email           string  `json:"email,optional,omitempty"`
+	BillingAddress  Address `json:"billing_address,optional,omitempty"`
+	ShippingAddress Address `json:"shipping_address,optional,omitempty"`
+	DiscountId      int64   `json:"discount_id,optional,omitempty"`
+	Status          int32   `json:"status,optional,omitempty,options=0|1|2|3|4|5"`
+	Currency        string  `json:"currency,optional,omitempty"`
+	ExpiresAt       string  `json:"expires_at,optional,omitempty"`
+	AbandonedAt     string  `json:"abandoned_at,optional,omitempty"`
+	Item            []Item  `json:"items,optional,omitempty"` // a collection of Item
+	TotalPrice      float64 `json:"total_price"`              // the sum total of the cart
 }
 
 type Item struct {
-	Sku       string  `json:"sku"`        // an item's variant sku number
-	Quantity  int32   `json:"quantity"`   // how many of identical items
-	Price     float64 `json:"price"`      // the item's price
-	ExpiresAt string  `json:"expires_at"` // when this item expires in the cart
+	Note      string  `json:"note,optional,omitempty"`       // an item's variant sku number
+	Sku       string  `json:"sku,optional,omitempty"`        // an item's variant sku number
+	Quantity  int32   `json:"quantity,optional,omitempty"`   // how many of identical items
+	Price     float64 `json:"price,optional,omitempty"`      // the item's price
+	ExpiresAt string  `json:"expires_at,optional,omitempty"` // when this item expires in the cart
 }
 
-type GetCartRequest struct {
-	CustomerId int64 `path:"customer_id"` // a customer's id
+type SimilarProducts struct {
+	Variants []Variant `json:"variants,optional,omitempty"`
 }
 
-type GetCartResponse struct {
-	Cart Cart `json:"cart"` // a Cart object
+type OthersBought struct {
+	Variants []Variant `json:"variants,optional,omitempty"`
 }
 
-type AddItemToCartRequest struct {
-	CustomerId int64 `path:"customer_id"` // a customer's id
-	Item       Item  `json:"item"`        // an Item object
+type CartResponse struct {
+	Cart            Cart            `json:"cart"`
+	SessionId       string          `json:"session_id"`
+	SimilarProducts SimilarProducts `json:"similar_products,optional,omitempty"`
+	OthersBought    OthersBought    `json:"others_bought,optional,omitempty"`
 }
 
-type AddItemToCartResponse struct {
-	Cart Cart `json:"cart"` // a Cart object
+type AttachCustomerRequest struct {
+	CartId        string `path:"cart_id,required"`
+	CustomerEmail string `json:"customer_email,required"`
 }
 
-type UpdateCartItemQuantityRequest struct {
-	CustomerId int64  `path:"customer_id"` // a customer's id
-	Sku        string `path:"sku"`         // an item's variant sku number
-	Quanity    int32  `json:"quanity"`     // a new quantity
+type UpdateCustomerDetailRequest struct {
+	CartId          string  `path:"cart_id,required"`
+	FirstName       string  `json:"first_nameoptional,omitempty"`
+	LastName        string  `json:"last_name,optional,omitempty"`
+	Company         string  `json:"company,optional,omitempty"`
+	Phone           string  `json:"phone,optional,omitempty"`
+	Email           string  `json:"email,optional,omitempty"`
+	BillingAddress  Address `json:"billing_address,optional,omitempty"`
+	ShippingAddress Address `json:"shipping_address,optional,omitempty"`
 }
 
-type UpdateCartItemQuantityResponse struct {
-	Cart Cart `json:"cart"` // a Cart object
+type UpdateStatusRequest struct {
+	CartId string `path:"cart_id,required"`
+	Status int32  `json:"status,required,options=0|1|2|3|4|5"`
 }
 
-type RemoveCartItemRequest struct {
-	CustomerId int64  `path:"customer_id"` // a customer's id
-	Sku        string `path:"sku"`         // an item's variant sku number
-	Quanity    int32  `json:"quanity"`     // a new quantity
+type GetByCartIdRequest struct {
+	CartId string `path:"cart_id,required"`
 }
 
-type RemoveCartItemResponse struct {
-	Cart Cart `json:"cart"` // a Cart object
+type GetBySessionIdRequest struct {
+	SessionId string `path:"session_id"`
+	CartId    string `path:"cart_id,required"`
 }
 
 type ClearCartRequest struct {
-	CustomerId int64 `path:"customer_id"` // a customer's id
+	CartId string `path:"cart_id,required"`
 }
 
-type ClearCartResponse struct {
-	Deleted bool `json:"deleted"` // a boolean true/false if successful
+type AddItemRequest struct {
+	CartId string `path:"cart_id,required"`
+	Item   Item   `json:"item,required"`
+}
+
+type BulkAddItemsRequest struct {
+	CartId string `path:"cart_id,required"`
+	Items  []Item `json:"items,required"`
+}
+
+type UpdateItemQuantityRequest struct {
+	CartId   string `path:"cart_id,required"`
+	Sku      string `json:"sku,required"`
+	Quantity int32  `json:"quantity,required"`
+}
+
+type RemoveItemRequest struct {
+	CartId string `path:"cart_id,required"`
+	Sku    string `json:"sku,required"`
 }
 
 type Category struct {
-	Id              int64  `json:"id"`                                  // category id
-	ParentId        int64  `json:"parent_id"`                           // parent category id. references Category.Id
-	Slug            string `json:"slug"`                                // slug name of the category
-	Name            string `json:"name"`                                // name of category
+	Id              int64  `json:"id,optional,omitempty"`               // category id
+	ParentId        int64  `json:"parent_id,optional,omitempty"`        // parent category id. references Category.Id
+	Slug            string `json:"slug,optional,omitempty"`             // slug name of the category
+	Name            string `json:"name,optional,omitempty"`             // name of category
 	Description     string `json:"description,optional,omitempty"`      // description of category
 	MetaTitle       string `json:"meta_title,optional,omitempty"`       // metatag title for SEO
 	MetaDescription string `json:"meta_description,optional,omitempty"` // metatag description for SEO
@@ -140,11 +177,11 @@ type Asset struct {
 }
 
 type GetAllCategoriesResponse struct {
-	Categories []Category `json:"categories"` // a collection of Category
+	Categories []Category `json:"categories,optional,omitempty"` // a collection of Category
 }
 
 type GetCategoryBySlugRequest struct {
-	Slug string `path:"slug"` // slug name of the category
+	Slug string `json:"slug"` // slug name of the category
 }
 
 type GetCategoryByIdRequest struct {
@@ -194,6 +231,8 @@ type Customer struct {
 	Id                int64     `json:"id,optional,omitempty"`                 // customer id
 	FirstName         string    `json:"first_name,optional,omitempty"`         // first name
 	LastName          string    `json:"last_name,optional,omitempty"`          // last or given name
+	Company           string    `json:"company,optional,omitempty"`            // company name
+	Phone             string    `json:"phone,optional,omitempty"`              // phone
 	Email             string    `json:"email,optional,omitempty"`              // email address
 	IsVerified        bool      `json:"is_verified,optional,omitempty"`        // is_verified
 	BillingAddresses  []Address `json:"billing_addresses,optional,omitempty"`  // Address object
@@ -203,6 +242,8 @@ type Customer struct {
 type NewCustomer struct {
 	FirstName       string  `json:"first_name,required"`                 // first name
 	LastName        string  `json:"last_name,required"`                  // last or given name
+	Company         string  `json:"company,optional,omitempty"`          // company name
+	Phone           string  `json:"phone,optional,omitempty"`            // phone
 	Email           string  `json:"email,required"`                      // email address, unique per store id
 	BillingAddress  Address `json:"billing_address,optional,omitempty"`  // Address object
 	ShippingAddress Address `json:"shipping_address,optional,omitempty"` // Address object

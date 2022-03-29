@@ -1,11 +1,13 @@
 package types
 
-type LocaleString string
-type FilterKeyString string
-type StoreKeyString string
+type LocaleKey string
+type FilterKey string
+type StoreKeyKey string
+type SessionKey string
 
 const (
-	Locale   LocaleString    = "locale"
-	Filter   FilterKeyString = "filter"
-	StoreKey StoreKeyString  = "store-key"
+	Locale   LocaleKey   = "locale"
+	Filter   FilterKey   = "filter"
+	StoreKey StoreKeyKey = "store-key"
+	Session  SessionKey  = "session"
 )

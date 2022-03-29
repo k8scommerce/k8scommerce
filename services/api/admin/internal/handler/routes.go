@@ -6,6 +6,7 @@ import (
 
 	api "k8scommerce/services/api/admin/internal/handler/api"
 	assets "k8scommerce/services/api/admin/internal/handler/assets"
+	cart "k8scommerce/services/api/admin/internal/handler/cart"
 	categories "k8scommerce/services/api/admin/internal/handler/categories"
 	customers "k8scommerce/services/api/admin/internal/handler/customers"
 	products "k8scommerce/services/api/admin/internal/handler/products"
@@ -25,6 +26,69 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/v1/api/ping",
 					Handler: api.PingHandler(serverCtx),
+				},
+			}...,
+		),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Locale, serverCtx.StoreKey},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart",
+					Handler: cart.CreateCartHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart/:cart_id/customer",
+					Handler: cart.AttachCustomerHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/cart/:cart_id/customer",
+					Handler: cart.UpdateCustomerDetailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/cart/:cart_id/status",
+					Handler: cart.UpdateStatusHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/cart/:cart_id",
+					Handler: cart.GetByCartIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/v1/cart/:cart_id/:session_id",
+					Handler: cart.GetBySessionIdHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart/:cart_id",
+					Handler: cart.AddItemHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/v1/cart/:cart_id/bulk",
+					Handler: cart.BulkAddItemsHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/v1/cart/:cart_id/:sku",
+					Handler: cart.UpdateItemQuantityHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/v1/cart/:cart_id/:sku",
+					Handler: cart.RemoveItemHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/v1/cart/:cart_id",
+					Handler: cart.ClearCartHandler(serverCtx),
 				},
 			}...,
 		),

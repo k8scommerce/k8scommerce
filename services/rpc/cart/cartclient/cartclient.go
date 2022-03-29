@@ -13,28 +13,35 @@ import (
 )
 
 type (
-	AddItemToCartRequest             = cart.AddItemToCartRequest
-	AddItemToCartResponse            = cart.AddItemToCartResponse
-	Cart                             = cart.Cart
-	ClearCartRequest                 = cart.ClearCartRequest
-	ClearCartResponse                = cart.ClearCartResponse
-	GetCartRequest                   = cart.GetCartRequest
-	GetCartResponse                  = cart.GetCartResponse
-	Item                             = cart.Item
-	OthersBought                     = cart.OthersBought
-	Price                            = cart.Price
-	RemoveItemInCartRequest          = cart.RemoveItemInCartRequest
-	RemoveItemInCartResponse         = cart.RemoveItemInCartResponse
-	SimilarProducts                  = cart.SimilarProducts
-	UpdateItemQuantityInCartRequest  = cart.UpdateItemQuantityInCartRequest
-	UpdateItemQuantityInCartResponse = cart.UpdateItemQuantityInCartResponse
+	AddItemRequest              = cart.AddItemRequest
+	AttachCustomerRequest       = cart.AttachCustomerRequest
+	BulkAddItemsRequest         = cart.BulkAddItemsRequest
+	Cart                        = cart.Cart
+	CartResponse                = cart.CartResponse
+	ClearCartRequest            = cart.ClearCartRequest
+	CreateCartRequest           = cart.CreateCartRequest
+	GetByCartIdRequest          = cart.GetByCartIdRequest
+	GetBySessionIdRequest       = cart.GetBySessionIdRequest
+	Item                        = cart.Item
+	OthersBought                = cart.OthersBought
+	RemoveItemRequest           = cart.RemoveItemRequest
+	SimilarProducts             = cart.SimilarProducts
+	UpdateCustomerDetailRequest = cart.UpdateCustomerDetailRequest
+	UpdateItemQuantityRequest   = cart.UpdateItemQuantityRequest
+	UpdateStatusRequest         = cart.UpdateStatusRequest
 
 	CartClient interface {
-		GetCart(ctx context.Context, in *GetCartRequest, opts ...grpc.CallOption) (*GetCartResponse, error)
-		ClearCart(ctx context.Context, in *ClearCartRequest, opts ...grpc.CallOption) (*ClearCartResponse, error)
-		AddItemToCart(ctx context.Context, in *AddItemToCartRequest, opts ...grpc.CallOption) (*AddItemToCartResponse, error)
-		UpdateItemQuantityInCart(ctx context.Context, in *UpdateItemQuantityInCartRequest, opts ...grpc.CallOption) (*UpdateItemQuantityInCartResponse, error)
-		RemoveItemInCart(ctx context.Context, in *RemoveItemInCartRequest, opts ...grpc.CallOption) (*RemoveItemInCartResponse, error)
+		CreateCart(ctx context.Context, in *CreateCartRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		AttachCustomer(ctx context.Context, in *AttachCustomerRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		UpdateCustomerDetail(ctx context.Context, in *UpdateCustomerDetailRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		UpdateStatus(ctx context.Context, in *UpdateStatusRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		GetByCartId(ctx context.Context, in *GetByCartIdRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		GetBySessionId(ctx context.Context, in *GetBySessionIdRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		BulkAddItems(ctx context.Context, in *BulkAddItemsRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		UpdateItemQuantity(ctx context.Context, in *UpdateItemQuantityRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		RemoveItem(ctx context.Context, in *RemoveItemRequest, opts ...grpc.CallOption) (*CartResponse, error)
+		ClearCart(ctx context.Context, in *ClearCartRequest, opts ...grpc.CallOption) (*CartResponse, error)
 	}
 
 	defaultCartClient struct {
@@ -48,27 +55,57 @@ func NewCartClient(cli zrpc.Client) CartClient {
 	}
 }
 
-func (m *defaultCartClient) GetCart(ctx context.Context, in *GetCartRequest, opts ...grpc.CallOption) (*GetCartResponse, error) {
+func (m *defaultCartClient) CreateCart(ctx context.Context, in *CreateCartRequest, opts ...grpc.CallOption) (*CartResponse, error) {
 	client := cart.NewCartClientClient(m.cli.Conn())
-	return client.GetCart(ctx, in, opts...)
+	return client.CreateCart(ctx, in, opts...)
 }
 
-func (m *defaultCartClient) ClearCart(ctx context.Context, in *ClearCartRequest, opts ...grpc.CallOption) (*ClearCartResponse, error) {
+func (m *defaultCartClient) AttachCustomer(ctx context.Context, in *AttachCustomerRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.AttachCustomer(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) UpdateCustomerDetail(ctx context.Context, in *UpdateCustomerDetailRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.UpdateCustomerDetail(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) UpdateStatus(ctx context.Context, in *UpdateStatusRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.UpdateStatus(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) GetByCartId(ctx context.Context, in *GetByCartIdRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.GetByCartId(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) GetBySessionId(ctx context.Context, in *GetBySessionIdRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.GetBySessionId(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.AddItem(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) BulkAddItems(ctx context.Context, in *BulkAddItemsRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.BulkAddItems(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) UpdateItemQuantity(ctx context.Context, in *UpdateItemQuantityRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.UpdateItemQuantity(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) RemoveItem(ctx context.Context, in *RemoveItemRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	client := cart.NewCartClientClient(m.cli.Conn())
+	return client.RemoveItem(ctx, in, opts...)
+}
+
+func (m *defaultCartClient) ClearCart(ctx context.Context, in *ClearCartRequest, opts ...grpc.CallOption) (*CartResponse, error) {
 	client := cart.NewCartClientClient(m.cli.Conn())
 	return client.ClearCart(ctx, in, opts...)
-}
-
-func (m *defaultCartClient) AddItemToCart(ctx context.Context, in *AddItemToCartRequest, opts ...grpc.CallOption) (*AddItemToCartResponse, error) {
-	client := cart.NewCartClientClient(m.cli.Conn())
-	return client.AddItemToCart(ctx, in, opts...)
-}
-
-func (m *defaultCartClient) UpdateItemQuantityInCart(ctx context.Context, in *UpdateItemQuantityInCartRequest, opts ...grpc.CallOption) (*UpdateItemQuantityInCartResponse, error) {
-	client := cart.NewCartClientClient(m.cli.Conn())
-	return client.UpdateItemQuantityInCart(ctx, in, opts...)
-}
-
-func (m *defaultCartClient) RemoveItemInCart(ctx context.Context, in *RemoveItemInCartRequest, opts ...grpc.CallOption) (*RemoveItemInCartResponse, error) {
-	client := cart.NewCartClientClient(m.cli.Conn())
-	return client.RemoveItemInCart(ctx, in, opts...)
 }

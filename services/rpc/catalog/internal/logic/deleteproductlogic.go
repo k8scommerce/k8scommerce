@@ -3,13 +3,9 @@ package logic
 import (
 	"context"
 
-	"strconv"
-	"sync"
-
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -17,16 +13,13 @@ type DeleteProductLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewDeleteProductLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *DeleteProductLogic {
+func NewDeleteProductLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteProductLogic {
 	return &DeleteProductLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
@@ -36,30 +29,28 @@ func (l *DeleteProductLogic) DeleteProduct(in *catalog.DeleteProductRequest) (*c
 		return &catalog.DeleteProductResponse{}, err
 	}
 
-	// get the sku from the primary variant
-	var sku string
-	for _, variant := range prod.Variants {
-		if variant.IsDefault {
-			sku = variant.Sku
+	if prod != nil {
+		// get the sku from the primary variant
+		var sku string
+		for _, variant := range prod.Variants {
+			if variant.IsDefault {
+				sku = variant.Sku
+			}
 		}
-	}
 
-	// delete the product
-	if err := l.svcCtx.Repo.Product().Delete(in.Id); err != nil {
-		return &catalog.DeleteProductResponse{}, err
-	}
-
-	// invalidate the cache for this record
-	{
-		if entryGetProductByIdLogic != nil {
-			l.mu.Lock()
-			entryGetProductByIdLogic.galaxy.Remove(l.ctx, strconv.Itoa(int(in.Id)))
-			l.mu.Unlock()
+		// delete the product
+		if err := l.svcCtx.Repo.Product().Delete(prod.Product.ID); err != nil {
+			return &catalog.DeleteProductResponse{}, err
 		}
-		if entryGetProductBySkuLogic != nil {
-			l.mu.Lock()
-			entryGetProductBySkuLogic.galaxy.Remove(l.ctx, sku)
-			l.mu.Unlock()
+
+		// invalidate the cache for this record
+		{
+			l.svcCtx.Cache.Delete(l.ctx, Group_GetProductById, Group_GetProductByIdKey(prod.Product.ID))
+			l.svcCtx.Cache.Delete(l.ctx, Group_GetProductBySku, Group_GetProductBySkuKey(in.StoreId, sku))
+			l.svcCtx.Cache.Delete(l.ctx, Group_GetProductBySlug, Group_GetProductBySlugKey(in.StoreId, prod.Product.Slug))
+
+			l.svcCtx.Cache.DestroyGroup(Group_GetAllProducts)
+			l.svcCtx.Cache.DestroyGroup(Group_GetProductsByCategoryId)
 		}
 	}
 

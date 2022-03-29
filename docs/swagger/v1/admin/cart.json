@@ -354,23 +354,6 @@
         "expires_at"
       ]
     },
-    "JwtToken": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "accessExpire": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "refreshAfter": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "JwtToken"
-    },
     "RemoveCartItemRequest": {
       "type": "object",
       "properties": {
@@ -383,7 +366,7 @@
           "type": "string",
           "description": " an item's variant sku number"
         },
-        "quanity": {
+        "quantity": {
           "type": "integer",
           "format": "int32",
           "description": " a new quantity"
@@ -393,7 +376,7 @@
       "required": [
         "customer_id",
         "sku",
-        "quanity"
+        "quantity"
       ]
     },
     "RemoveCartItemResponse": {
@@ -444,7 +427,7 @@
           "type": "string",
           "description": " an item's variant sku number"
         },
-        "quanity": {
+        "quantity": {
           "type": "integer",
           "format": "int32",
           "description": " a new quantity"
@@ -454,7 +437,7 @@
       "required": [
         "customer_id",
         "sku",
-        "quanity"
+        "quantity"
       ]
     },
     "UpdateCartItemQuantityResponse": {

@@ -2,9 +2,12 @@ package logic
 
 import (
 	"k8scommerce/internal/convert"
+	"k8scommerce/internal/models"
 	"k8scommerce/internal/repos"
+	"k8scommerce/services/rpc/customer/pb/customer"
 	"k8scommerce/services/rpc/store/pb/store"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -21,4 +24,18 @@ func getProtoStoreByStoreId(repo repos.Repo, storeId int64) (*store.Store, error
 	}
 
 	return protoStore, nil
+}
+
+func getAddressesByKind(repo repos.Repo, customerId int64, kind models.AddressKind) []*customer.Address {
+	addresses, err := repo.CustomerAddress().GetCustomerAddressesByCustomerIdKind(customerId, kind)
+	if err != nil {
+		logx.Error(status.Errorf(codes.Internal, "could not fetch address kind - %s: %s", kind, err.Error()))
+	}
+	var addrs []*customer.Address
+	for _, addr := range addresses {
+		a := &customer.Address{}
+		convert.ModelCustomerAddressToProtoAddress(addr, a)
+		addrs = append(addrs, a)
+	}
+	return addrs
 }

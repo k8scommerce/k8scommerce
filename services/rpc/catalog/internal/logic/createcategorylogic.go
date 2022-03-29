@@ -7,7 +7,6 @@ import (
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -15,15 +14,13 @@ type CreateCategoryLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
 }
 
-func NewCreateCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *CreateCategoryLogic {
+func NewCreateCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateCategoryLogic {
 	return &CreateCategoryLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
@@ -41,6 +38,9 @@ func (l *CreateCategoryLogic) CreateCategory(in *catalog.CreateCategoryRequest) 
 	out := &catalog.Category{}
 	utils.TransformObj(prod, &out)
 
+	{
+		l.svcCtx.Cache.DestroyGroup(Group_GetAllCategories)
+	}
 	// the response struct
 	return &catalog.CreateCategoryResponse{
 		Category: out,

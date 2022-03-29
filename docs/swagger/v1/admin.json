@@ -85,6 +85,390 @@
         ]
       }
     },
+    "/v1/cart": {
+      "post": {
+        "summary": "Create Cart",
+        "description": "creates a new shopping cart for the store declared in the request header",
+        "operationId": "createCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/v1/cart/{cart_id}": {
+      "get": {
+        "summary": "Get By Cart Id",
+        "description": "returns a cart from the database",
+        "operationId": "getByCartId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      },
+      "delete": {
+        "summary": "Clear Cart",
+        "description": "removes all cart items",
+        "operationId": "clearCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " clear cart",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ClearCartRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      },
+      "post": {
+        "summary": "Add Item",
+        "description": "adds an item to cart",
+        "operationId": "addItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " add item to cart",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddItemRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/v1/cart/{cart_id}/bulk": {
+      "post": {
+        "summary": "Bulk Add Item",
+        "description": "adds multiple items at once to a cart",
+        "operationId": "bulkAddItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " bulk add items to cart",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BulkAddItemsRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/v1/cart/{cart_id}/customer": {
+      "post": {
+        "summary": "Attach Customer",
+        "description": "attaches a customer to the cart by email",
+        "operationId": "attachCustomer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " attach customer",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AttachCustomerRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      },
+      "put": {
+        "summary": "Update Customer Detail",
+        "description": "updates a cart's personal details",
+        "operationId": "updateCustomerDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " update customer detail",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCustomerDetailRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/v1/cart/{cart_id}/status": {
+      "put": {
+        "summary": "Update Status",
+        "description": "updates a cart's status to: unknown = 0, new = 1, checkout = 2, paid = 3, complete = 4, abandoned = 5",
+        "operationId": "updateStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " update status",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateStatusRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/v1/cart/{cart_id}/{session_id}": {
+      "get": {
+        "summary": "Get By Session Id",
+        "description": "returns a cart from the session object",
+        "operationId": "getBySessionId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "session_id",
+            "description": "the cart session id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/v1/cart/{cart_id}/{sku}": {
+      "delete": {
+        "summary": "Remove Item",
+        "description": "removes a cart item",
+        "operationId": "removeItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sku",
+            "description": "the item's sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " remove item in cart",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RemoveItemRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      },
+      "put": {
+        "summary": "Update Item Quantity",
+        "description": "updates an item's quantity",
+        "operationId": "updateItemQuantity",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CartResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cart_id",
+            "description": "the cart UUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sku",
+            "description": "the item's sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " update item quantity in cart",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateItemQuantityRequest"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "cart"
+        ]
+      }
+    },
     "/v1/categories": {
       "get": {
         "summary": "Get All Categories",
@@ -664,7 +1048,7 @@
     "/v1/store/generate-token/{store_id}": {
       "get": {
         "summary": "Geneate Store ID",
-        "description": "returns a valid store ID, long-term JWT token",
+        "description": "returns a store key token",
         "operationId": "generateStoreKeyToken",
         "responses": {
           "200": {
@@ -762,12 +1146,32 @@
     }
   },
   "definitions": {
+    "AddItemRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        },
+        "item": {
+          "$ref": "#/definitions/Item"
+        }
+      },
+      "title": "AddItemRequest",
+      "required": [
+        "cart_id",
+        "item"
+      ]
+    },
     "Address": {
       "type": "object",
       "properties": {
         "street": {
           "type": "string",
           "description": " street name, ie: 1723 NW 23rd Ave."
+        },
+        "apt_suite": {
+          "type": "string",
+          "description": " apartment or suite"
         },
         "city": {
           "type": "string",
@@ -851,6 +1255,136 @@
         }
       },
       "title": "Asset"
+    },
+    "AttachCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        },
+        "customer_email": {
+          "type": "string"
+        }
+      },
+      "title": "AttachCustomerRequest",
+      "required": [
+        "cart_id",
+        "customer_email"
+      ]
+    },
+    "BulkAddItemsRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        }
+      },
+      "title": "BulkAddItemsRequest",
+      "required": [
+        "cart_id",
+        "items"
+      ]
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "store_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "session": {
+          "type": "string"
+        },
+        "customer_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "billing_address": {
+          "$ref": "#/definitions/Address"
+        },
+        "shipping_address": {
+          "$ref": "#/definitions/Address"
+        },
+        "discount_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "string"
+        },
+        "abandoned_at": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          },
+          "description": " a collection of Item"
+        },
+        "total_price": {
+          "type": "number",
+          "format": "double",
+          "description": " the sum total of the cart"
+        }
+      },
+      "title": "Cart",
+      "required": [
+        "total_price"
+      ]
+    },
+    "CartResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/Cart"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "similar_products": {
+          "$ref": "#/definitions/SimilarProducts"
+        },
+        "others_bought": {
+          "$ref": "#/definitions/OthersBought"
+        }
+      },
+      "title": "CartResponse",
+      "required": [
+        "cart",
+        "session_id"
+      ]
     },
     "Category": {
       "type": "object",
@@ -957,6 +1491,18 @@
       "required": [
         "exists",
         "is_verified"
+      ]
+    },
+    "ClearCartRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        }
+      },
+      "title": "ClearCartRequest",
+      "required": [
+        "cart_id"
       ]
     },
     "CreateCategoryRequest": {
@@ -1095,10 +1641,6 @@
     "CustomerLoginResponse": {
       "type": "object",
       "properties": {
-        "jwt": {
-          "$ref": "#/definitions/JwtToken",
-          "description": " jwt token"
-        },
         "customer": {
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
@@ -1111,7 +1653,6 @@
       },
       "title": "CustomerLoginResponse",
       "required": [
-        "jwt",
         "customer",
         "success"
       ]
@@ -1286,6 +1827,34 @@
         "total_pages"
       ]
     },
+    "GetByCartIdRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        }
+      },
+      "title": "GetByCartIdRequest",
+      "required": [
+        "cart_id"
+      ]
+    },
+    "GetBySessionIdRequest": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "cart_id": {
+          "type": "string"
+        }
+      },
+      "title": "GetBySessionIdRequest",
+      "required": [
+        "session_id",
+        "cart_id"
+      ]
+    },
     "GetCategoryByIdRequest": {
       "type": "object",
       "properties": {
@@ -1432,22 +2001,33 @@
         "total_pages"
       ]
     },
-    "JwtToken": {
+    "Item": {
       "type": "object",
       "properties": {
-        "accessToken": {
-          "type": "string"
+        "note": {
+          "type": "string",
+          "description": " an item's variant sku number"
         },
-        "accessExpire": {
-          "type": "integer",
-          "format": "int64"
+        "sku": {
+          "type": "string",
+          "description": " an item's variant sku number"
         },
-        "refreshAfter": {
+        "quantity": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32",
+          "description": " how many of identical items"
+        },
+        "price": {
+          "type": "number",
+          "format": "double",
+          "description": " the item's price"
+        },
+        "expires_at": {
+          "type": "string",
+          "description": " when this item expires in the cart"
         }
       },
-      "title": "JwtToken"
+      "title": "Item"
     },
     "NewCustomer": {
       "type": "object",
@@ -1484,6 +2064,18 @@
         "email",
         "password"
       ]
+    },
+    "OthersBought": {
+      "type": "object",
+      "properties": {
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Variant"
+          }
+        }
+      },
+      "title": "OthersBought"
     },
     "PermissionGroup": {
       "type": "object",
@@ -1622,23 +2214,33 @@
         "name"
       ]
     },
-    "ResponseStatus": {
+    "RemoveItemRequest": {
       "type": "object",
       "properties": {
-        "statusCode": {
-          "type": "integer",
-          "format": "int64",
-          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
+        "cart_id": {
+          "type": "string"
         },
-        "statusMessage": {
-          "type": "string",
-          "description": " status message"
+        "sku": {
+          "type": "string"
         }
       },
-      "title": "ResponseStatus",
+      "title": "RemoveItemRequest",
       "required": [
-        "statusCode"
+        "cart_id",
+        "sku"
       ]
+    },
+    "SimilarProducts": {
+      "type": "object",
+      "properties": {
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Variant"
+          }
+        }
+      },
+      "title": "SimilarProducts"
     },
     "Store": {
       "type": "object",
@@ -1688,6 +2290,60 @@
         "category"
       ]
     },
+    "UpdateCustomerDetailRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        },
+        "first_nameoptional": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "billing_address": {
+          "$ref": "#/definitions/Address"
+        },
+        "shipping_address": {
+          "$ref": "#/definitions/Address"
+        }
+      },
+      "title": "UpdateCustomerDetailRequest",
+      "required": [
+        "cart_id"
+      ]
+    },
+    "UpdateItemQuantityRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "UpdateItemQuantityRequest",
+      "required": [
+        "cart_id",
+        "sku",
+        "quantity"
+      ]
+    },
     "UpdateProductRequest": {
       "type": "object",
       "properties": {
@@ -1703,6 +2359,23 @@
       "required": [
         "path",
         "product"
+      ]
+    },
+    "UpdateStatusRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "UpdateStatusRequest",
+      "required": [
+        "cart_id",
+        "status"
       ]
     },
     "UploadAssetRequest": {
@@ -1781,10 +2454,6 @@
     "UserLoginResponse": {
       "type": "object",
       "properties": {
-        "jwt": {
-          "$ref": "#/definitions/JwtToken",
-          "description": " JwtToken object"
-        },
         "user": {
           "$ref": "#/definitions/User",
           "description": " User object"

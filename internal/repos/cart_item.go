@@ -8,6 +8,7 @@ import (
 
 	"k8scommerce/internal/models"
 
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -27,9 +28,12 @@ type CartItem interface {
 	Update(cartItem *models.CartItem) error
 	Save(cartItem *models.CartItem) error
 	Upsert(cartItem *models.CartItem) error
-	Delete(customerId int64, sku string, force bool) error
-	GetCartItemsByCustomerId(customerId int64) (res *cartItemResponse, err error)
-	AddItem(cartId int64, item *models.CartItem) (res *cartItemResponse, err error)
+	Delete(cartId uuid.UUID, sku string, force bool) error
+
+	GetByCartId(cartId uuid.UUID) ([]*models.CartItem, error)
+	ClearItems(cartId uuid.UUID, force bool) (err error)
+	AddItem(cartId uuid.UUID, item *models.CartItem) (res *models.CartItem, err error)
+	UpdateQuantity(cartId uuid.UUID, sku string, quantity int) (res *models.CartItem, err error)
 }
 
 type cartItemRepo struct {
@@ -44,61 +48,53 @@ func (m *cartItemRepo) SetCartItem(cartItem *models.CartItem) {
 	m.CartItem = cartItem
 }
 
-type cartItemResponse struct {
-	Items []models.CartItem
-	// Prices []models.Price
-}
-
 // cart items
-func (m *cartItemRepo) GetCartItemsByCustomerId(customerId int64) (res *cartItemResponse, err error) {
+func (m *cartItemRepo) GetByCartId(cartId uuid.UUID) ([]*models.CartItem, error) {
 	nstmt, err := m.db.PrepareNamed(`
 		SELECT 
-			user_id,
+			cart_id,
 			sku,
 			quantity,
 			price,
 			expires_at
 		FROM cart_item
-		WHERE user_id = :customerId
+		WHERE cart_id = :cartId
 		AND abandoned_at IS NULL
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("error::GetCartItemsByCustomerId::%s", err.Error())
 	}
 
-	var items []models.CartItem
+	var items []*models.CartItem
 
 	err = nstmt.Select(&items,
 		map[string]interface{}{
-			"customerId": customerId,
+			"cartId": cartId,
 		})
 
-	out := &cartItemResponse{
-		Items: items,
-	}
-	return out, err
+	return items, err
 }
 
-func (m *cartItemRepo) AddItem(customerId int64, item *models.CartItem) (res *cartItemResponse, err error) {
+func (m *cartItemRepo) AddItem(cartId uuid.UUID, item *models.CartItem) (res *models.CartItem, err error) {
 	nstmt, err := m.db.PrepareNamed(`
 		INSERT INTO cart_item (
-			user_id,
+			cart_id,
 			sku,
 			quantity,
 			price,
 			expires_at
 		) 
 		VALUES (
-			:user_id, 
+			:cart_id, 
 			:sku,
 			:quantity,
 			:price,
 			:expires_at
 		)
-		ON CONFLICT (user_id, sku) DO UPDATE 
-		SET quantity = cart_item.quantity + excluded.quantity
+		ON CONFLICT (cart_id, sku) DO UPDATE 
+		SET quantity = cart_item.quantity
 		RETURNING 
-		user_id,
+			cart_id,
 			sku,
 			quantity,
 			price,
@@ -108,21 +104,54 @@ func (m *cartItemRepo) AddItem(customerId int64, item *models.CartItem) (res *ca
 		return nil, fmt.Errorf("error::AddItem::%s", err.Error())
 	}
 
-	var items []models.CartItem
+	var response []*models.CartItem
 
-	err = nstmt.Select(&items,
+	err = nstmt.Select(&response,
 		map[string]interface{}{
-			"user_id":    customerId,
+			"cart_id":    cartId,
 			"sku":        item.Sku,
 			"quantity":   item.Quantity,
 			"price":      item.Price,
 			"expires_at": item.ExpiresAt,
 		})
 
-	out := &cartItemResponse{
-		Items: items,
+	if len(response) > 0 {
+		return response[0], nil
 	}
-	return out, err
+
+	return nil, err
+}
+
+func (m *cartItemRepo) UpdateQuantity(cartId uuid.UUID, sku string, quantity int) (res *models.CartItem, err error) {
+	nstmt, err := m.db.PrepareNamed(`
+		UPDATE cart_item SET quantity = :quantity
+			WHERE cart_id = :cart_id
+			AND sku = :sku
+		RETURNING 
+			cart_id,
+			sku,
+			quantity,
+			price,
+			expires_at
+	`)
+	if err != nil {
+		return nil, fmt.Errorf("error::UpdateQuantity::%s", err.Error())
+	}
+
+	var response []*models.CartItem
+
+	err = nstmt.Select(&response,
+		map[string]interface{}{
+			"cart_id":  cartId,
+			"sku":      sku,
+			"quantity": quantity,
+		})
+
+	if len(response) > 0 {
+		return response[0], nil
+	}
+
+	return nil, err
 }
 
 func (m *cartItemRepo) Create(cartItem *models.CartItem) error {
@@ -133,10 +162,6 @@ func (m *cartItemRepo) Create(cartItem *models.CartItem) error {
 }
 
 func (m *cartItemRepo) Update(cartItem *models.CartItem) error {
-	if cartItem.CustomerID == 0 {
-		return fmt.Errorf("error: can't update cart item, missing customerId")
-	}
-
 	if cartItem.Sku == "" {
 		return fmt.Errorf("error: can't update cart item, missing sku")
 	}
@@ -161,17 +186,46 @@ func (m *cartItemRepo) Upsert(cartItem *models.CartItem) error {
 	return nil
 }
 
-func (m *cartItemRepo) Delete(customerId int64, sku string, force bool) error {
-	cart, err := models.CartItemByCustomerIDSku(m.ctx, m.db, customerId, sku)
+func (m *cartItemRepo) Delete(cartId uuid.UUID, sku string, force bool) error {
+	cartItem, err := models.CartItemByCartIDSku(m.ctx, m.db, cartId, sku)
 	if err != nil {
 		return err
 	}
 
 	if force {
-		err = cart.Delete(m.ctx, m.db)
+		err = cartItem.Delete(m.ctx, m.db)
 	} else {
-		cart.AbandonedAt = sql.NullTime{Time: time.Now(), Valid: true}
-		err = cart.Upsert(m.ctx, m.db)
+		cartItem.AbandonedAt = sql.NullTime{Time: time.Now(), Valid: true}
+		err = cartItem.Upsert(m.ctx, m.db)
 	}
+	return err
+}
+
+func (m *cartItemRepo) ClearItems(cartId uuid.UUID, force bool) (err error) {
+	var nstmt *sqlx.NamedStmt
+	if force {
+		nstmt, err = m.db.PrepareNamed(`
+			DELETE FROM cart_item WHERE cart_id = :cartId
+		`)
+		if err != nil {
+			return fmt.Errorf("error::ClearItems with force::%s", err.Error())
+		}
+		_, err = nstmt.Exec(map[string]interface{}{
+			"cartId": cartId,
+		})
+	} else {
+		nstmt, err = m.db.PrepareNamed(`
+			UPDATE cart_item SET abandoned_at = :abandonedAt
+			WHERE cart_id = :cartId
+		`)
+		if err != nil {
+			return fmt.Errorf("error::ClearItems without force::%s", err.Error())
+		}
+		_, err = nstmt.Exec(map[string]interface{}{
+			"cartId":      cartId,
+			"abandonedAt": time.Now(),
+		})
+	}
+
 	return err
 }

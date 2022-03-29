@@ -9,44 +9,70 @@ import (
 	"k8scommerce/services/rpc/cart/internal/logic"
 	"k8scommerce/services/rpc/cart/internal/svc"
 	"k8scommerce/services/rpc/cart/pb/cart"
-
-	"github.com/localrivet/galaxycache"
 )
 
 type CartClientServer struct {
-	svcCtx   *svc.ServiceContext
-	universe *galaxycache.Universe
+	svcCtx *svc.ServiceContext
 	cart.UnimplementedCartClientServer
 }
 
-func NewCartClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *CartClientServer {
+func NewCartClientServer(svcCtx *svc.ServiceContext) *CartClientServer {
 	return &CartClientServer{
-		svcCtx:   svcCtx,
-		universe: universe,
+		svcCtx: svcCtx,
 	}
 }
 
-func (s *CartClientServer) GetCart(ctx context.Context, in *cart.GetCartRequest) (*cart.GetCartResponse, error) {
-	l := logic.NewGetCartLogic(ctx, s.svcCtx, s.universe)
-	return l.GetCart(in)
+func (s *CartClientServer) CreateCart(ctx context.Context, in *cart.CreateCartRequest) (*cart.CartResponse, error) {
+	l := logic.NewCreateCartLogic(ctx, s.svcCtx)
+	return l.CreateCart(in)
 }
 
-func (s *CartClientServer) ClearCart(ctx context.Context, in *cart.ClearCartRequest) (*cart.ClearCartResponse, error) {
-	l := logic.NewClearCartLogic(ctx, s.svcCtx, s.universe)
+func (s *CartClientServer) AttachCustomer(ctx context.Context, in *cart.AttachCustomerRequest) (*cart.CartResponse, error) {
+	l := logic.NewAttachCustomerLogic(ctx, s.svcCtx)
+	return l.AttachCustomer(in)
+}
+
+func (s *CartClientServer) UpdateCustomerDetail(ctx context.Context, in *cart.UpdateCustomerDetailRequest) (*cart.CartResponse, error) {
+	l := logic.NewUpdateCustomerDetailLogic(ctx, s.svcCtx)
+	return l.UpdateCustomerDetail(in)
+}
+
+func (s *CartClientServer) UpdateStatus(ctx context.Context, in *cart.UpdateStatusRequest) (*cart.CartResponse, error) {
+	l := logic.NewUpdateStatusLogic(ctx, s.svcCtx)
+	return l.UpdateStatus(in)
+}
+
+func (s *CartClientServer) GetByCartId(ctx context.Context, in *cart.GetByCartIdRequest) (*cart.CartResponse, error) {
+	l := logic.NewGetByCartIdLogic(ctx, s.svcCtx)
+	return l.GetByCartId(in)
+}
+
+func (s *CartClientServer) GetBySessionId(ctx context.Context, in *cart.GetBySessionIdRequest) (*cart.CartResponse, error) {
+	l := logic.NewGetBySessionIdLogic(ctx, s.svcCtx)
+	return l.GetBySessionId(in)
+}
+
+func (s *CartClientServer) AddItem(ctx context.Context, in *cart.AddItemRequest) (*cart.CartResponse, error) {
+	l := logic.NewAddItemLogic(ctx, s.svcCtx)
+	return l.AddItem(in)
+}
+
+func (s *CartClientServer) BulkAddItems(ctx context.Context, in *cart.BulkAddItemsRequest) (*cart.CartResponse, error) {
+	l := logic.NewBulkAddItemsLogic(ctx, s.svcCtx)
+	return l.BulkAddItems(in)
+}
+
+func (s *CartClientServer) UpdateItemQuantity(ctx context.Context, in *cart.UpdateItemQuantityRequest) (*cart.CartResponse, error) {
+	l := logic.NewUpdateItemQuantityLogic(ctx, s.svcCtx)
+	return l.UpdateItemQuantity(in)
+}
+
+func (s *CartClientServer) RemoveItem(ctx context.Context, in *cart.RemoveItemRequest) (*cart.CartResponse, error) {
+	l := logic.NewRemoveItemLogic(ctx, s.svcCtx)
+	return l.RemoveItem(in)
+}
+
+func (s *CartClientServer) ClearCart(ctx context.Context, in *cart.ClearCartRequest) (*cart.CartResponse, error) {
+	l := logic.NewClearCartLogic(ctx, s.svcCtx)
 	return l.ClearCart(in)
-}
-
-func (s *CartClientServer) AddItemToCart(ctx context.Context, in *cart.AddItemToCartRequest) (*cart.AddItemToCartResponse, error) {
-	l := logic.NewAddItemToCartLogic(ctx, s.svcCtx, s.universe)
-	return l.AddItemToCart(in)
-}
-
-func (s *CartClientServer) UpdateItemQuantityInCart(ctx context.Context, in *cart.UpdateItemQuantityInCartRequest) (*cart.UpdateItemQuantityInCartResponse, error) {
-	l := logic.NewUpdateItemQuantityInCartLogic(ctx, s.svcCtx, s.universe)
-	return l.UpdateItemQuantityInCart(in)
-}
-
-func (s *CartClientServer) RemoveItemInCart(ctx context.Context, in *cart.RemoveItemInCartRequest) (*cart.RemoveItemInCartResponse, error) {
-	l := logic.NewRemoveItemInCartLogic(ctx, s.svcCtx, s.universe)
-	return l.RemoveItemInCart(in)
 }

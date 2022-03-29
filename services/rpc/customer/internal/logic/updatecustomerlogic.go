@@ -7,7 +7,6 @@ import (
 	"k8scommerce/services/rpc/customer/internal/svc"
 	"k8scommerce/services/rpc/customer/pb/customer"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -15,15 +14,13 @@ type UpdateCustomerLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
 }
 
-func NewUpdateCustomerLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *UpdateCustomerLogic {
+func NewUpdateCustomerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateCustomerLogic {
 	return &UpdateCustomerLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 

@@ -2,98 +2,70 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"sync"
+	"time"
 
+	"k8scommerce/internal/gcache"
+	"k8scommerce/internal/groupctx"
 	"k8scommerce/services/rpc/similarproducts/internal/svc"
 	"k8scommerce/services/rpc/similarproducts/pb/similarproducts"
 
-	"github.com/localrivet/galaxycache"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type galaxyGetSimilarProductsBySkuLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
+const Group_GetSimilarProductsBySku = "GetSimilarProductsBySku"
 
-var entryGetSimilarProductsBySkuLogic *galaxyGetSimilarProductsBySkuLogicHelper
+var Group_GetSimilarProductsBySkuKey = func(storeId int64, sku string) string {
+	return gcache.ToKey(Group_GetSimilarProductsBySku, storeId, sku)
+}
 
 type GetSimilarProductsBySkuLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewGetSimilarProductsBySkuLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetSimilarProductsBySkuLogic {
+func NewGetSimilarProductsBySkuLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetSimilarProductsBySkuLogic {
 	return &GetSimilarProductsBySkuLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
 func (l *GetSimilarProductsBySkuLogic) GetSimilarProductsBySku(in *similarproducts.GetSimilarProductsBySkuRequest) (*similarproducts.GetSimilarProductsBySkuResponse, error) {
-
-	// caching goes logic here
-	if entryGetSimilarProductsBySkuLogic == nil {
-		l.mu.Lock()
-		entryGetSimilarProductsBySkuLogic = &galaxyGetSimilarProductsBySkuLogicHelper{
-			once: &sync.Once{},
-		}
-		l.mu.Unlock()
-	}
-
-	entryGetSimilarProductsBySkuLogic.once.Do(func() {
-		fmt.Println(`l.entryGetSimilarProductsBySkuLogic.Do`)
-
-		// register the galaxy one time
-		entryGetSimilarProductsBySkuLogic.galaxy = gcache.RegisterGalaxyFunc("GetSimilarProductsBySku", l.universe, galaxycache.GetterFunc(
-			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// todo: add your logic here and delete this line
-				fmt.Printf("Looking up GetSimilarProductsBySku record by key: %s", key)
-
-				// uncomment below to get the item from the adapter
-				// found, err := l.ca.GetProductBySku(key)
-				// if err != nil {
-				//	logx.Infof("error: %s", err)
-				//	return err
-				// }
-
-				// the response struct
-				item := &similarproducts.GetSimilarProductsBySkuResponse{}
-
-				out, err := json.Marshal(item)
-				if err != nil {
-					return err
-				}
-				return dest.UnmarshalBinary(out)
-			}))
-	})
-
+	l.ctx = groupctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = groupctx.SetProductSku(l.ctx, in.Sku)
 	res := &similarproducts.GetSimilarProductsBySkuResponse{}
-
-	codec := &galaxycache.ByteCodec{}
-	if err := entryGetSimilarProductsBySkuLogic.galaxy.Get(l.ctx, in.Sku, codec); err != nil {
-		res.StatusCode = http.StatusNoContent
-		res.StatusMessage = err.Error()
-		return res, nil
-	}
-
-	b, err := codec.MarshalBinary()
-	if err != nil {
-		res.StatusCode = http.StatusInternalServerError
-		res.StatusMessage = err.Error()
-		return res, nil
-	}
-
-	err = json.Unmarshal(b, res)
+	err := l.cache().Get(l.ctx, Group_GetSimilarProductsBySkuKey(in.StoreId, in.Sku), groupcache.ProtoSink(res))
 	return res, err
+}
 
+func (l *GetSimilarProductsBySkuLogic) cache() *groupcache.Group {
+	return l.svcCtx.Cache.NewGroup(Group_GetSimilarProductsBySku, 128<<20, groupcache.GetterFunc(
+		func(ctx context.Context, id string, dest groupcache.Sink) error {
+			// found, err := l.svcCtx.Repo.Category().GetSimilarProductsBySku(
+			// 	groupctx.GetStoreId(ctx),
+			// )
+			// if err != nil {
+			// 	logx.Infof("error: %s", err)
+			// }
+
+			// cats := []*catalog.Category{}
+
+			// if found != nil {
+			// 	for _, f := range found.Categories {
+			// 		cat := catalog.Category{}
+			// 		convert.ModelCategoryToProtoCategory(&f, &cat)
+			// 		cats = append(cats, &cat)
+			// 	}
+			// }
+
+			// Set the groupcache to expire after 24 hours
+			if err := dest.SetProto(&similarproducts.GetSimilarProductsBySkuResponse{}, time.Now().Add(time.Hour*24)); err != nil {
+				return err
+			}
+			return nil
+		},
+	))
 }

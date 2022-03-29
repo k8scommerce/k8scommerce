@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"k8scommerce/internal/gcache"
 	"k8scommerce/internal/repos"
 	"k8scommerce/services/rpc/cart/internal/config"
 	"k8scommerce/services/rpc/inventory/inventoryclient"
@@ -17,6 +18,7 @@ type ServiceContext struct {
 	Publisher      *rabbitmq.Publisher
 	InventoryRpc   inventoryclient.InventoryClient
 	OtherBoughtRpc othersboughtclient.OthersBoughtClient
+	Cache          gcache.Cache
 	// SimilarProductsRpc similarproductsclient.SimilarProductsClient
 }
 

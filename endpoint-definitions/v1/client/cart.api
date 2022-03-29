@@ -9,70 +9,119 @@ info(
 // objects
 
 type Cart {
-	Item       []Item  `json:"items"`       // a collection of Item
+	Id string `json:"id,optional,omitempty"`
+	StoreId int64 `json:"store_id,optional,omitempty"`
+	Session string `json:"session,optional,omitempty"`
+	CustomerId int64 `json:"customer_id,optional,omitempty"`
+	FirstName string `json:"first_name,optional,omitempty"`
+	LastName string `json:"last_name,optional,omitempty"`
+	Company string `json:"company,optional,omitempty"`
+	Phone string `json:"phone,optional,omitempty"`
+	Email string `json:"email,optional,omitempty"`
+	BillingAddress Address `json:"billing_address,optional,omitempty"`
+	ShippingAddress Address `json:"shipping_address,optional,omitempty"`
+	DiscountId int64 `json:"discount_id,optional,omitempty"`
+	Status int32 `json:"status,optional,omitempty,options=0|1|2|3|4|5"`
+	Currency string `json:"currency,optional,omitempty"`
+	ExpiresAt string `json:"expires_at,optional,omitempty"`
+	AbandonedAt string `json:"abandoned_at,optional,omitempty"`
+	Item       []Item  `json:"items,optional,omitempty"`       // a collection of Item
 	TotalPrice float64 `json:"total_price"` // the sum total of the cart
 }
 
 type Item {
-	Sku       string  `json:"sku"`        // an item's variant sku number
-	Quantity  int32   `json:"quantity"`   // how many of identical items
-	Price     float64 `json:"price"`      // the item's price
-	ExpiresAt string  `json:"expires_at"` // when this item expires in the cart
+	Note      string  `json:"note,optional,omitempty"`        // an item's variant sku number
+	Sku       string  `json:"sku,optional,omitempty"`        // an item's variant sku number
+	Quantity  int32   `json:"quantity,optional,omitempty"`   // how many of identical items
+	Price     float64 `json:"price,optional,omitempty"`      // the item's price
+	ExpiresAt string  `json:"expires_at,optional,omitempty"` // when this item expires in the cart
 }
 
 //
 // requests & responses
 //
-
-// get cart
-type GetCartRequest {
-	CustomerId int64 `path:"customer_id"` // a customer's id
+type SimilarProducts {
+ Variants []Variant `json:"variants,optional,omitempty"`
 }
 
-type GetCartResponse {
-	Cart Cart `json:"cart"` // a Cart object
+type OthersBought {
+  Variants []Variant `json:"variants,optional,omitempty"`
 }
 
-// add item to cart
-type AddItemToCartRequest {
-	CustomerId int64 `path:"customer_id"` // a customer's id
-	Item       Item  `json:"item"`        // an Item object
+
+// cart response
+type CartResponse {
+   Cart Cart `json:"cart"`
+   SessionId string `json:"session_id"`
+   SimilarProducts SimilarProducts `json:"similar_products,optional,omitempty"`
+   OthersBought OthersBought `json:"others_bought,optional,omitempty"`
 }
 
-type AddItemToCartResponse {
-	Cart Cart `json:"cart"` // a Cart object
+// attach customer
+type AttachCustomerRequest {
+   CartId string `path:"cart_id,required"`
+   CustomerEmail string `json:"customer_email,required"`
 }
 
-// update cart item quantity
-type UpdateCartItemQuantityRequest {
-	CustomerId int64  `path:"customer_id"` // a customer's id
-	Sku        string `path:"sku"`         // an item's variant sku number
-	Quanity    int32  `json:"quanity"`     // a new quantity
+// update customer detail
+type UpdateCustomerDetailRequest {
+   CartId string `path:"cart_id,required"`
+   FirstName string `json:"first_nameoptional,omitempty"`
+   LastName string `json:"last_name,optional,omitempty"`
+   Company string `json:"company,optional,omitempty"`
+   Phone string `json:"phone,optional,omitempty"`
+   Email string `json:"email,optional,omitempty"`
+   BillingAddress Address `json:"billing_address,optional,omitempty"`
+   ShippingAddress Address `json:"shipping_address,optional,omitempty"`
 }
 
-type UpdateCartItemQuantityResponse {
-	Cart Cart `json:"cart"` // a Cart object
+// update status
+type UpdateStatusRequest {
+   CartId string `path:"cart_id,required"`
+   Status int32 `json:"status,required,options=0|1|2|3|4|5"`
 }
 
-// remove item
-type RemoveCartItemRequest {
-	CustomerId int64  `path:"customer_id"` // a customer's id
-	Sku        string `path:"sku"`         // an item's variant sku number
-	Quanity    int32  `json:"quanity"`     // a new quantity
+// get cart by id
+type GetByCartIdRequest {
+   CartId string `path:"cart_id,required"`
 }
 
-type RemoveCartItemResponse {
-	Cart Cart `json:"cart"` // a Cart object
+// get cart by session
+type GetBySessionIdRequest {
+   SessionId string `path:"session_id"`
+   CartId string `path:"cart_id,required"`
 }
 
 // clear cart
 type ClearCartRequest {
-	CustomerId int64 `path:"customer_id"` // a customer's id
+   CartId string `path:"cart_id,required"`
 }
 
-type ClearCartResponse {
-	Deleted bool `json:"deleted"` // a boolean true/false if successful
+// add item to cart
+type AddItemRequest {
+   CartId string `path:"cart_id,required"`
+   Item Item `json:"item,required"`
 }
+
+// bulk add items to cart
+type BulkAddItemsRequest {
+   CartId string `path:"cart_id,required"`
+   Items []Item `json:"items,required"`
+}
+
+// update item quantity in cart
+type UpdateItemQuantityRequest {
+   CartId string `path:"cart_id,required"`
+   Sku string `json:"sku,required"`
+   Quantity int32 `json:"quantity,required"`
+}
+
+// remove item in cart
+type RemoveItemRequest {
+   CartId string `path:"cart_id,required"`
+   Sku string `json:"sku,required"`
+}
+
 
 //
 // endpoints
@@ -80,55 +129,98 @@ type ClearCartResponse {
 
 // with middleware
 @server(
-	jwt: Auth
 	middleware: Locale, StoreKey
 	group: cart
 )
 service client {
-	// get cart
 	@doc(
-		summary: "Get Cart"
-		description: "returns a shopping cart if one exists"
-		customer_id: "a customer's id"
+		summary: "Create Cart"
+		description: "creates a new shopping cart for the store declared in the request header"
 	)
-	@handler getCart
-	get /v1/cart/:customer_id(GetCartRequest) returns (GetCartResponse)
-	
-	// add item to cart
+	@handler createCart
+	post /v1/cart returns (CartResponse)
+
 	@doc(
-		summary: "Add Item to Cart"
-		description: "adds an item to an existing cart"
-		customer_id: "a customer's id"
+		summary: "Attach Customer"
+		description: "attaches a customer to the cart by email"
+		cart_id: "the cart UUID"
 	)
-	@handler addItemToCart
-	post /v1/cart/:customer_id(AddItemToCartRequest) returns (AddItemToCartResponse)
-	
-	// update cart item quantity
+	@handler attachCustomer
+	post /v1/cart/:cart_id/customer(AttachCustomerRequest) returns (CartResponse)
+
+	@doc(
+		summary: "Update Customer Detail"
+		description: "updates a cart's personal details"
+		cart_id: "the cart UUID"
+	)
+	@handler updateCustomerDetail
+	put /v1/cart/:cart_id/customer(UpdateCustomerDetailRequest) returns (CartResponse)
+
+	@doc(
+		summary: "Update Status"
+		description: "updates a cart's status to: unknown = 0, new = 1, checkout = 2, paid = 3, complete = 4, abandoned = 5"
+		cart_id: "the cart UUID"
+	)
+	@handler updateStatus
+	put /v1/cart/:cart_id/status(UpdateStatusRequest) returns (CartResponse)
+
+	@doc(
+		summary: "Get By Cart Id"
+		description: "returns a cart from the database"
+		cart_id: "the cart UUID"
+	)
+	@handler getByCartId
+	get /v1/cart/:cart_id(GetByCartIdRequest) returns (CartResponse)
+
+	@doc(
+		summary: "Get By Session Id"
+		description: "returns a cart from the session object"
+		cart_id: "the cart UUID"
+		session_id: "the cart session id"
+	)
+	@handler getBySessionId
+	get /v1/cart/:cart_id/:session_id(GetBySessionIdRequest) returns (CartResponse)
+
+	@doc(
+		summary: "Add Item"
+		description: "adds an item to cart"
+		cart_id: "the cart UUID"
+	)
+	@handler addItem
+	post /v1/cart/:cart_id(AddItemRequest) returns (CartResponse)
+
+	@doc(
+		summary: "Bulk Add Item"
+		description: "adds multiple items at once to a cart"
+		cart_id: "the cart UUID"
+	)
+	@handler bulkAddItems
+	post /v1/cart/:cart_id/bulk(BulkAddItemsRequest) returns (CartResponse)
+
 	@doc(
 		summary: "Update Item Quantity"
-		description: "updates a cart item's quantity"
-		customer_id: "a customer's id"
-		sku: "an item's sku"
+		description: "updates an item's quantity"
+		cart_id: "the cart UUID"
+		sku: "the item's sku"
 	)
-	@handler updateCartItemQuantity
-	put /v1/cart/:customer_id/:sku(UpdateCartItemQuantityRequest) returns (UpdateCartItemQuantityResponse)
-	
-	// remove item
+	@handler updateItemQuantity
+	put /v1/cart/:cart_id/:sku(UpdateItemQuantityRequest) returns (CartResponse)
+
 	@doc(
 		summary: "Remove Item"
-		description: "removes an item from a customer's cart"
-		customer_id: "a customer's id"
-		sku: "an Item's sku"
+		description: "removes a cart item"
+		cart_id: "the cart UUID"
+		sku: "the item's sku"
 	)
-	@handler removeCartItem
-	delete /v1/cart/:customer_id/:sku(RemoveCartItemRequest) returns (RemoveCartItemResponse)
-	
-	// clear cart
+	@handler removeItem
+	delete /v1/cart/:cart_id/:sku(RemoveItemRequest) returns (CartResponse)
+
 	@doc(
 		summary: "Clear Cart"
-		description: "clear a customer's cart"
-		customer_id: "a customer's id"
+		description: "removes all cart items"
+		cart_id: "the cart UUID"
 	)
 	@handler clearCart
-	delete /v1/cart/:customer_id(ClearCartRequest) returns (ClearCartResponse)
+	delete /v1/cart/:cart_id(ClearCartRequest) returns (CartResponse)
+
 }

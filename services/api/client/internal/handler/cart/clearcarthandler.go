@@ -3,11 +3,10 @@ package cart
 import (
 	"net/http"
 
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"k8scommerce/services/api/client/internal/logic/cart"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func ClearCartHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -19,7 +18,7 @@ func ClearCartHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := cart.NewClearCartLogic(r.Context(), svcCtx)
-		resp, err := l.ClearCart(req)
+		resp, err := l.ClearCart(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

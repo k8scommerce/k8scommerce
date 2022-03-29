@@ -13,7 +13,6 @@ import (
 	"k8scommerce/services/rpc/catalog/pb/catalog"
 	"net/http"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -23,16 +22,14 @@ type UploadAssetLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
 	// mu       sync.Mutex
 }
 
-func NewUploadAssetLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *UploadAssetLogic {
+func NewUploadAssetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UploadAssetLogic {
 	return &UploadAssetLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 

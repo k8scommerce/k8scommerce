@@ -2,125 +2,95 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
+	"time"
+
 	"k8scommerce/internal/convert"
-	"k8scommerce/internal/galaxyctx"
+	"k8scommerce/internal/gcache"
+	"k8scommerce/internal/groupctx"
 	"k8scommerce/internal/models"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"sync"
 
-	"github.com/localrivet/galaxycache"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type galaxyGetProductsByCategorySlugLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
+const Group_GetProductsByCategorySlug = " GetProductsByCategorySlug"
 
-var entryGetProductsByCategorySlugLogic *galaxyGetProductsByCategorySlugLogicHelper
+var Group_GetProductsByCategorySlugKey = func(storeId int64, categorySlug string, currentPage, pageSize int64, filter string) string {
+	return gcache.ToKey(Group_GetProductsByCategorySlug, storeId, categorySlug, currentPage, pageSize, filter)
+}
 
 type GetProductsByCategorySlugLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewGetProductsByCategorySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetProductsByCategorySlugLogic {
+func NewGetProductsByCategorySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetProductsByCategorySlugLogic {
 	return &GetProductsByCategorySlugLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
 func (l *GetProductsByCategorySlugLogic) GetProductsByCategorySlug(in *catalog.GetProductsByCategorySlugRequest) (*catalog.GetProductsByCategorySlugResponse, error) {
-
-	// caching goes logic here
-	if entryGetProductsByCategorySlugLogic == nil {
-		l.mu.Lock()
-		entryGetProductsByCategorySlugLogic = &galaxyGetProductsByCategorySlugLogicHelper{
-			once: &sync.Once{},
-		}
-		l.mu.Unlock()
-	}
-
-	entryGetProductsByCategorySlugLogic.once.Do(func() {
-
-		// register the galaxy one time
-		entryGetProductsByCategorySlugLogic.galaxy = gcache.RegisterGalaxyFunc("GetProductsByCategorySlug", l.universe, galaxycache.GetterFunc(
-			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-
-				found, err := l.svcCtx.Repo.Product().GetProductsByCategorySlug(
-					galaxyctx.GetStoreId(ctx),
-					galaxyctx.GetCategorySlug(ctx),
-					galaxyctx.GetCurrentPage(ctx),
-					galaxyctx.GetPageSize(ctx),
-					galaxyctx.GetFilter(ctx),
-				)
-				if err != nil {
-					logx.Infof("error: %s", err)
-					return err
-				}
-
-				prods := []*catalog.Product{}
-
-				var totalRecords int64 = 0
-				var totalPages int64 = 0
-
-				if found != nil {
-					totalRecords = found.PagingStats.TotalRecords
-					totalPages = found.PagingStats.TotalPages
-
-					for _, f := range found.Results {
-						prod := catalog.Product{}
-
-						convert.ModelProductToProtoProduct(&f.Product, &[]models.Variant{
-							f.Variant,
-						}, &[]models.Price{
-							f.Price,
-						}, &prod)
-						prods = append(prods, &prod)
-					}
-				}
-
-				// the response struct
-				item := &catalog.GetProductsByCategorySlugResponse{
-					Products:     prods,
-					TotalRecords: totalRecords,
-					TotalPages:   totalPages,
-				}
-
-				out, err := json.Marshal(item)
-				if err != nil {
-					return err
-				}
-				return dest.UnmarshalBinary(out)
-			}))
-	})
-
-	codec := &galaxycache.ByteCodec{}
-
-	l.ctx = galaxyctx.SetStoreId(l.ctx, in.StoreId)
-	l.ctx = galaxyctx.SetCategorySlug(l.ctx, in.CategorySlug)
-	l.ctx = galaxyctx.SetCurrentPage(l.ctx, in.CurrentPage)
-	l.ctx = galaxyctx.SetPageSize(l.ctx, in.PageSize)
-	l.ctx = galaxyctx.SetFilter(l.ctx, in.Filter)
-
-	key := fmt.Sprintf("%d|%s|%d|%d|%s", in.StoreId, in.CategorySlug, in.CurrentPage, in.PageSize, in.Filter)
-	entryGetProductsByCategorySlugLogic.galaxy.Get(l.ctx, key, codec)
-	b, err := codec.MarshalBinary()
-	if err != nil {
-		return nil, err
-	}
+	l.ctx = groupctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = groupctx.SetCategorySlug(l.ctx, in.CategorySlug)
+	l.ctx = groupctx.SetCurrentPage(l.ctx, in.CurrentPage)
+	l.ctx = groupctx.SetPageSize(l.ctx, in.PageSize)
+	l.ctx = groupctx.SetFilter(l.ctx, in.Filter)
 	res := &catalog.GetProductsByCategorySlugResponse{}
-	err = json.Unmarshal(b, res)
-
+	err := l.cache().Get(l.ctx, Group_GetProductsByCategorySlugKey(in.StoreId, in.CategorySlug, in.CurrentPage, in.PageSize, in.Filter), groupcache.ProtoSink(res))
 	return res, err
+}
+
+func (l *GetProductsByCategorySlugLogic) cache() *groupcache.Group {
+	return l.svcCtx.Cache.NewGroup(Group_GetAllCategories, 128<<20, groupcache.GetterFunc(
+		func(ctx context.Context, id string, dest groupcache.Sink) error {
+			found, err := l.svcCtx.Repo.Product().GetProductsByCategorySlug(
+				groupctx.GetStoreId(ctx),
+				groupctx.GetCategorySlug(ctx),
+				groupctx.GetCurrentPage(ctx),
+				groupctx.GetPageSize(ctx),
+				groupctx.GetFilter(ctx),
+			)
+			if err != nil {
+				logx.Infof("error: %s", err)
+				return err
+			}
+
+			prods := []*catalog.Product{}
+
+			var totalRecords int64 = 0
+			var totalPages int64 = 0
+
+			if found != nil {
+				totalRecords = found.PagingStats.TotalRecords
+				totalPages = found.PagingStats.TotalPages
+
+				for _, f := range found.Results {
+					prod := catalog.Product{}
+
+					convert.ModelProductToProtoProduct(&f.Product, &[]models.Variant{
+						f.Variant,
+					}, &[]models.Price{
+						f.Price,
+					}, &prod)
+					prods = append(prods, &prod)
+				}
+			}
+
+			// Set the groupcache to expire after 24 hours
+			if err := dest.SetProto(&catalog.GetProductsByCategorySlugResponse{
+				Products:     prods,
+				TotalRecords: totalRecords,
+				TotalPages:   totalPages,
+			}, time.Now().Add(time.Hour*24)); err != nil {
+				return err
+			}
+			return nil
+		},
+	))
 }

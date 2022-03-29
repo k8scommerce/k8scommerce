@@ -6,7 +6,6 @@ import (
 	"k8scommerce/services/rpc/store/internal/svc"
 	"k8scommerce/services/rpc/store/pb/store"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -16,7 +15,7 @@ type CreateStoreLogic struct {
 	logx.Logger
 }
 
-func NewCreateStoreLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *CreateStoreLogic {
+func NewCreateStoreLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateStoreLogic {
 	return &CreateStoreLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

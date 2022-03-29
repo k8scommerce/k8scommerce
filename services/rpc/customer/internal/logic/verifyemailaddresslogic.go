@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -23,7 +22,7 @@ type VerifyEmailAddressLogic struct {
 	logx.Logger
 }
 
-func NewVerifyEmailAddressLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *VerifyEmailAddressLogic {
+func NewVerifyEmailAddressLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VerifyEmailAddressLogic {
 	return &VerifyEmailAddressLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

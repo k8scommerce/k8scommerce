@@ -2,64 +2,45 @@ package logic
 
 import (
 	"context"
-	"fmt"
-	"log"
-	"net/http"
-	"strconv"
-	"sync"
 
 	"k8scommerce/services/rpc/cart/internal/svc"
 	"k8scommerce/services/rpc/cart/pb/cart"
 
-	"github.com/localrivet/galaxycache"
+	"github.com/google/uuid"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/core/mr"
 )
-
-type galaxyClearCartLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
-
-var entryClearCartLogic *galaxyClearCartLogicHelper
 
 type ClearCartLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewClearCartLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *ClearCartLogic {
+func NewClearCartLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ClearCartLogic {
 	return &ClearCartLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *ClearCartLogic) ClearCart(in *cart.ClearCartRequest) (*cart.ClearCartResponse, error) {
-	err := mr.Finish(func() error {
-		// clear the existing cart
-		if entryCartLogic != nil {
-			l.mu.Lock()
-			err := entryCartLogic.galaxy.Remove(l.ctx, strconv.FormatInt(in.CustomerId, 10))
-			l.mu.Unlock()
-			return fmt.Errorf("error: deleting cart cache: %s", err.Error())
-		}
-		return nil
-	})
+func (l *ClearCartLogic) ClearCart(in *cart.ClearCartRequest) (*cart.CartResponse, error) {
+	cartId, err := uuid.Parse(in.CartId)
 	if err != nil {
-		log.Printf("clear cart error: %v", err)
+		logx.Infof("error: %s", err)
 		return nil, err
 	}
 
-	res := &cart.ClearCartResponse{
-		StatusCode:    http.StatusOK,
-		StatusMessage: "",
+	foundCart, err := l.svcCtx.Repo.Cart().GetByCartId(cartId)
+	if err != nil {
+		logx.Infof("error: %s", err)
+		return nil, err
 	}
 
-	return res, nil
+	err = l.svcCtx.Repo.CartItem().ClearItems(foundCart.ID, false)
+	if err != nil {
+		logx.Infof("error: %s", err)
+	}
+
+	return getNewSessionByCartId(l.ctx, l.svcCtx, cartId)
 }

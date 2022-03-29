@@ -13,16 +13,19 @@ import (
 )
 
 type (
-	Brand                   = inventory.Brand
-	GetItemQuantityRequest  = inventory.GetItemQuantityRequest
-	GetItemQuantityResponse = inventory.GetItemQuantityResponse
-	InventoryItem           = inventory.InventoryItem
-	SockLevel               = inventory.SockLevel
-	Supplier                = inventory.Supplier
-	Warehouse               = inventory.Warehouse
+	Brand                    = inventory.Brand
+	GetItemQuantityRequest   = inventory.GetItemQuantityRequest
+	GetItemQuantityResponse  = inventory.GetItemQuantityResponse
+	GetItemsQuantityRequest  = inventory.GetItemsQuantityRequest
+	GetItemsQuantityResponse = inventory.GetItemsQuantityResponse
+	InventoryItem            = inventory.InventoryItem
+	StockLevel               = inventory.StockLevel
+	Supplier                 = inventory.Supplier
+	Warehouse                = inventory.Warehouse
 
 	InventoryClient interface {
 		GetItemQuantity(ctx context.Context, in *GetItemQuantityRequest, opts ...grpc.CallOption) (*GetItemQuantityResponse, error)
+		GetItemsQuantity(ctx context.Context, in *GetItemsQuantityRequest, opts ...grpc.CallOption) (*GetItemsQuantityResponse, error)
 	}
 
 	defaultInventoryClient struct {
@@ -39,4 +42,9 @@ func NewInventoryClient(cli zrpc.Client) InventoryClient {
 func (m *defaultInventoryClient) GetItemQuantity(ctx context.Context, in *GetItemQuantityRequest, opts ...grpc.CallOption) (*GetItemQuantityResponse, error) {
 	client := inventory.NewInventoryClientClient(m.cli.Conn())
 	return client.GetItemQuantity(ctx, in, opts...)
+}
+
+func (m *defaultInventoryClient) GetItemsQuantity(ctx context.Context, in *GetItemsQuantityRequest, opts ...grpc.CallOption) (*GetItemsQuantityResponse, error) {
+	client := inventory.NewInventoryClientClient(m.cli.Conn())
+	return client.GetItemsQuantity(ctx, in, opts...)
 }

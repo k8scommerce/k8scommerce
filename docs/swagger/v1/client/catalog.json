@@ -34,8 +34,8 @@
         ]
       }
     },
-    "/v1/category/slug/{slug}": {
-      "get": {
+    "/v1/category/slug": {
+      "post": {
         "summary": "Get Category By Slug",
         "description": "returns all categories by slug belonging to a store",
         "operationId": "getCategoryBySlug",
@@ -49,11 +49,13 @@
         },
         "parameters": [
           {
-            "name": "slug",
-            "description": "category slug",
-            "in": "path",
+            "name": "body",
+            "description": " get category by slug",
+            "in": "body",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/GetCategoryBySlugRequest"
+            }
           }
         ],
         "requestBody": {},
@@ -375,13 +377,7 @@
           "description": " sort order of menu items on the same level and same parent id"
         }
       },
-      "title": "Category",
-      "required": [
-        "id",
-        "parent_id",
-        "slug",
-        "name"
-      ]
+      "title": "Category"
     },
     "CategoryPair": {
       "type": "object",
@@ -412,10 +408,7 @@
           "description": " a collection of Category"
         }
       },
-      "title": "GetAllCategoriesResponse",
-      "required": [
-        "categories"
-      ]
+      "title": "GetAllCategoriesResponse"
     },
     "GetAllProductsRequest": {
       "type": "object",
@@ -706,24 +699,6 @@
         "id",
         "slug",
         "name"
-      ]
-    },
-    "ResponseStatus": {
-      "type": "object",
-      "properties": {
-        "statusCode": {
-          "type": "integer",
-          "format": "int64",
-          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
-        },
-        "statusMessage": {
-          "type": "string",
-          "description": " status message"
-        }
-      },
-      "title": "ResponseStatus",
-      "required": [
-        "statusCode"
       ]
     },
     "Variant": {

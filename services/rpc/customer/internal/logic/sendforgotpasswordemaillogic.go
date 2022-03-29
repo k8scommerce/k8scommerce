@@ -7,7 +7,6 @@ import (
 	"k8scommerce/services/rpc/customer/internal/svc"
 	"k8scommerce/services/rpc/customer/pb/customer"
 
-	"github.com/localrivet/galaxycache"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 )
@@ -18,7 +17,7 @@ type SendForgotPasswordEmailLogic struct {
 	logx.Logger
 }
 
-func NewSendForgotPasswordEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *SendForgotPasswordEmailLogic {
+func NewSendForgotPasswordEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendForgotPasswordEmailLogic {
 	return &SendForgotPasswordEmailLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,

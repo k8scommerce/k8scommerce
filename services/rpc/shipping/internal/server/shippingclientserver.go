@@ -9,24 +9,20 @@ import (
 	"k8scommerce/services/rpc/shipping/internal/logic"
 	"k8scommerce/services/rpc/shipping/internal/svc"
 	"k8scommerce/services/rpc/shipping/pb/shipping"
-
-	"github.com/localrivet/galaxycache"
 )
 
 type ShippingClientServer struct {
-	svcCtx   *svc.ServiceContext
-	universe *galaxycache.Universe
+	svcCtx *svc.ServiceContext
 	shipping.UnimplementedShippingClientServer
 }
 
-func NewShippingClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *ShippingClientServer {
+func NewShippingClientServer(svcCtx *svc.ServiceContext) *ShippingClientServer {
 	return &ShippingClientServer{
-		svcCtx:   svcCtx,
-		universe: universe,
+		svcCtx: svcCtx,
 	}
 }
 
 func (s *ShippingClientServer) GetQuote(ctx context.Context, in *shipping.GetQuoteRequest) (*shipping.GetQuoteResponse, error) {
-	l := logic.NewGetQuoteLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetQuoteLogic(ctx, s.svcCtx)
 	return l.GetQuote(in)
 }

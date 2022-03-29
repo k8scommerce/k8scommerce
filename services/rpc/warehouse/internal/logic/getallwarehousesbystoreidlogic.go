@@ -2,98 +2,69 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"sync"
+	"time"
 
+	"k8scommerce/internal/gcache"
+	"k8scommerce/internal/groupctx"
 	"k8scommerce/services/rpc/warehouse/internal/svc"
 	"k8scommerce/services/rpc/warehouse/pb/warehouse"
 
-	"github.com/localrivet/galaxycache"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type galaxyGetAllWarehousesByStoreIdLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
+const Group_GetAllWarehousesByStoreId = "GetAllWarehousesByStoreId"
 
-var entryGetAllWarehousesByStoreIdLogic *galaxyGetAllWarehousesByStoreIdLogicHelper
+var Group_GetAllWarehousesByStoreIdKey = func(storeId int64) string {
+	return gcache.ToKey(Group_GetAllWarehousesByStoreId, storeId)
+}
 
 type GetAllWarehousesByStoreIdLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewGetAllWarehousesByStoreIdLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetAllWarehousesByStoreIdLogic {
+func NewGetAllWarehousesByStoreIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAllWarehousesByStoreIdLogic {
 	return &GetAllWarehousesByStoreIdLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
 func (l *GetAllWarehousesByStoreIdLogic) GetAllWarehousesByStoreId(in *warehouse.GetAllWarehousesByStoreIdRequest) (*warehouse.GetAllWarehousesByStoreIdResponse, error) {
-
-	// caching goes logic here
-	if entryGetAllWarehousesByStoreIdLogic == nil {
-		l.mu.Lock()
-		entryGetAllWarehousesByStoreIdLogic = &galaxyGetAllWarehousesByStoreIdLogicHelper{
-			once: &sync.Once{},
-		}
-		l.mu.Unlock()
-	}
-
-	entryGetAllWarehousesByStoreIdLogic.once.Do(func() {
-		fmt.Println(`l.entryGetAllWarehousesByStoreIdLogic.Do`)
-
-		// register the galaxy one time
-		entryGetAllWarehousesByStoreIdLogic.galaxy = gcache.RegisterGalaxyFunc("GetAllWarehousesByStoreId", l.universe, galaxycache.GetterFunc(
-			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				// todo: add your logic here and delete this line
-				fmt.Printf("Looking up GetAllWarehousesByStoreId record by key: %s", key)
-
-				// uncomment below to get the item from the adapter
-				// found, err := l.ca.GetProductBySku(key)
-				// if err != nil {
-				//	logx.Infof("error: %s", err)
-				//	return err
-				// }
-
-				// the response struct
-				item := &warehouse.GetAllWarehousesByStoreIdResponse{}
-
-				out, err := json.Marshal(item)
-				if err != nil {
-					return err
-				}
-				return dest.UnmarshalBinary(out)
-			}))
-	})
-
+	l.ctx = groupctx.SetStoreId(l.ctx, in.StoreId)
 	res := &warehouse.GetAllWarehousesByStoreIdResponse{}
-
-	codec := &galaxycache.ByteCodec{}
-	if err := entryGetAllWarehousesByStoreIdLogic.galaxy.Get(l.ctx, "all-records", codec); err != nil {
-		res.StatusCode = http.StatusNoContent
-		res.StatusMessage = err.Error()
-		return res, nil
-	}
-
-	b, err := codec.MarshalBinary()
-	if err != nil {
-		res.StatusCode = http.StatusInternalServerError
-		res.StatusMessage = err.Error()
-		return res, nil
-	}
-
-	err = json.Unmarshal(b, res)
+	err := l.cache().Get(l.ctx, Group_GetAllWarehousesByStoreIdKey(in.StoreId), groupcache.ProtoSink(res))
 	return res, err
+}
 
+func (l *GetAllWarehousesByStoreIdLogic) cache() *groupcache.Group {
+	return l.svcCtx.Cache.NewGroup(Group_GetAllWarehousesByStoreId, 128<<20, groupcache.GetterFunc(
+		func(ctx context.Context, id string, dest groupcache.Sink) error {
+			// found, err := l.svcCtx.Repo.Category().GetAllWarehousesByStoreId(
+			// 	groupctx.GetStoreId(ctx),
+			// )
+			// if err != nil {
+			// 	logx.Infof("error: %s", err)
+			// }
+
+			// cats := []*catalog.Category{}
+
+			// if found != nil {
+			// 	for _, f := range found.Categories {
+			// 		cat := catalog.Category{}
+			// 		convert.ModelCategoryToProtoCategory(&f, &cat)
+			// 		cats = append(cats, &cat)
+			// 	}
+			// }
+
+			// Set the groupcache to expire after 24 hours
+			if err := dest.SetProto(&warehouse.GetAllWarehousesByStoreIdResponse{}, time.Now().Add(time.Hour*24)); err != nil {
+				return err
+			}
+			return nil
+		},
+	))
 }

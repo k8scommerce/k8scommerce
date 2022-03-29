@@ -7,6 +7,8 @@ CREATE TABLE customer (
     store_id bigint NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
+    company character varying NULL,
+    phone character varying NULL,
     email character varying NOT NULL UNIQUE,
     password character varying NULL,
     is_verified boolean NOT NULL default false,
@@ -37,7 +39,7 @@ CREATE TABLE customer_address (
 CREATE INDEX IF NOT EXISTS idx_customer_address_store_id ON customer_address USING btree (store_id);
 CREATE INDEX IF NOT EXISTS idx_customer_address_customer_id_kind ON customer_address USING btree (customer_id, kind);
 -- +goose StatementEnd
---
+--2
 --
 --
 --

@@ -141,6 +141,10 @@
           "type": "string",
           "description": " street name, ie: 1723 NW 23rd Ave."
         },
+        "apt_suite": {
+          "type": "string",
+          "description": " apartment or suite"
+        },
         "city": {
           "type": "string",
           "description": " city name"
@@ -318,10 +322,6 @@
     "CustomerLoginResponse": {
       "type": "object",
       "properties": {
-        "jwt": {
-          "$ref": "#/definitions/JwtToken",
-          "description": " jwt token"
-        },
         "customer": {
           "$ref": "#/definitions/Customer",
           "description": " Customer object"
@@ -334,7 +334,6 @@
       },
       "title": "CustomerLoginResponse",
       "required": [
-        "jwt",
         "customer",
         "success"
       ]
@@ -365,23 +364,6 @@
       "required": [
         "customer"
       ]
-    },
-    "JwtToken": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "accessExpire": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "refreshAfter": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "JwtToken"
     },
     "NewCustomer": {
       "type": "object",
@@ -417,24 +399,6 @@
         "last_name",
         "email",
         "password"
-      ]
-    },
-    "ResponseStatus": {
-      "type": "object",
-      "properties": {
-        "statusCode": {
-          "type": "integer",
-          "format": "int64",
-          "description": " RFC http status code, ie. 204, etc - https:go.dev/src/net/http/status.go"
-        },
-        "statusMessage": {
-          "type": "string",
-          "description": " status message"
-        }
-      },
-      "title": "ResponseStatus",
-      "required": [
-        "statusCode"
       ]
     }
   },

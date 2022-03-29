@@ -9,39 +9,35 @@ import (
 	"k8scommerce/services/rpc/user/internal/logic"
 	"k8scommerce/services/rpc/user/internal/svc"
 	"k8scommerce/services/rpc/user/pb/user"
-
-	"github.com/localrivet/galaxycache"
 )
 
 type UserClientServer struct {
-	svcCtx   *svc.ServiceContext
-	universe *galaxycache.Universe
+	svcCtx *svc.ServiceContext
 	user.UnimplementedUserClientServer
 }
 
-func NewUserClientServer(svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *UserClientServer {
+func NewUserClientServer(svcCtx *svc.ServiceContext) *UserClientServer {
 	return &UserClientServer{
-		svcCtx:   svcCtx,
-		universe: universe,
+		svcCtx: svcCtx,
 	}
 }
 
 func (s *UserClientServer) GetAllUsers(ctx context.Context, in *user.GetAllUsersRequest) (*user.GetAllUsersResponse, error) {
-	l := logic.NewGetAllUsersLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetAllUsersLogic(ctx, s.svcCtx)
 	return l.GetAllUsers(in)
 }
 
 func (s *UserClientServer) GetAllPermissionGroups(ctx context.Context, in *user.GetAllPermissionGroupsRequest) (*user.GetAllPermissionGroupsResponse, error) {
-	l := logic.NewGetAllPermissionGroupsLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewGetAllPermissionGroupsLogic(ctx, s.svcCtx)
 	return l.GetAllPermissionGroups(in)
 }
 
 func (s *UserClientServer) CreateUser(ctx context.Context, in *user.CreateUserRequest) (*user.CreateUserResponse, error) {
-	l := logic.NewCreateUserLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewCreateUserLogic(ctx, s.svcCtx)
 	return l.CreateUser(in)
 }
 
 func (s *UserClientServer) Login(ctx context.Context, in *user.LoginRequest) (*user.LoginResponse, error) {
-	l := logic.NewLoginLogic(ctx, s.svcCtx, s.universe)
+	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }

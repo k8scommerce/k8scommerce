@@ -8,10 +8,10 @@ info(
 
 // objects
 type Category {
-	Id              int64  `json:"id"`                                  // category id
-	ParentId        int64  `json:"parent_id"`                           // parent category id. references Category.Id
-	Slug            string `json:"slug"`                                // slug name of the category
-	Name            string `json:"name"`                                // name of category
+	Id              int64  `json:"id,optional,omitempty"`               // category id
+	ParentId        int64  `json:"parent_id,optional,omitempty"`        // parent category id. references Category.Id
+	Slug            string `json:"slug,optional,omitempty"`             // slug name of the category
+	Name            string `json:"name,optional,omitempty"`             // name of category
 	Description     string `json:"description,optional,omitempty"`      // description of category
 	MetaTitle       string `json:"meta_title,optional,omitempty"`       // metatag title for SEO
 	MetaDescription string `json:"meta_description,optional,omitempty"` // metatag description for SEO
@@ -78,12 +78,12 @@ type Asset {
 //
 // get all categories
 type GetAllCategoriesResponse {
-	Categories []Category `json:"categories"` // a collection of Category
+	Categories []Category `json:"categories,optional,omitempty"` // a collection of Category
 }
 
 // get category by slug
 type GetCategoryBySlugRequest {
-	Slug string `path:"slug"` // slug name of the category
+	Slug string `json:"slug"` // slug name of the category
 }
 
 // get category by id
@@ -139,7 +139,6 @@ type GetAllProductsResponse {
 	Products     []Product `json:"products"`
 	TotalRecords int64     `json:"total_records"`
 	TotalPages   int64     `json:"total_pages"`
-	// ResponseStatus ResponseStatus `json:"status"` // a ResponseStatus object
 }
 
 //
@@ -163,10 +162,9 @@ service client {
 	@doc(
 		summary: "Get Category By Slug"
 		description: "returns all categories by slug belonging to a store"
-		slug: "category slug"
 	)
 	@handler getCategoryBySlug
-	get /v1/category/slug/:slug(GetCategoryBySlugRequest) returns (Category)
+	post /v1/category/slug(GetCategoryBySlugRequest) returns (Category)
 	
 	@doc(
 		summary: "Get Category By Id"
@@ -177,7 +175,6 @@ service client {
 }
 
 @server(
-	// jwt: Auth
 	middleware: Locale, Filter, StoreKey
 	group: products
 )

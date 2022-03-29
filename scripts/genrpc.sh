@@ -5,9 +5,11 @@
 # https://gist.github.com/olegch/1730673
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
+base=$ROOT/../../
 out_dir=$ROOT/../services/rpc
 protos_dir=$ROOT/../protos
-
+# $ROOT/
+# $ROOT/
 # define the RPC services
 services='cart catalog customer inventory othersbought payment shipping similarproducts store user warehouse'
 
@@ -18,22 +20,12 @@ for service in $services; do
 done
 
 for service in $services; do
-  # adding the $go_ops created above enables the proto imports paths
-  # are properly rewritten to their correct destinations
-  goctl rpc proto \
-    -proto_path=$protos_dir \
-    -src "${protos_dir}/${service}.proto" \
-    -dir "${out_dir}/${service}" \
+  goctl rpc protoc \
+    "${protos_dir}/${service}.proto" \
     $go_opts \
-    "${service}.proto"
-
-
-
-  # $go_opts
-  # goctl rpc protoc \
-  #   "${protos_dir}/${service}.proto" \
-  #   $go_opts \
-  #   --proto_path=$protos_dir \
-  #   --go_out=plugins=grpc:"${out_dir}/${service}" \
-  #   --zrpc_out="${out_dir}/${service}"
+    --go_opt paths=source_relative \
+    --proto_path=$protos_dir \
+    --go_out=$out_dir/$service/pb/$service \
+    --go-grpc_out=$out_dir/$service \
+    --zrpc_out=$out_dir/$service
 done

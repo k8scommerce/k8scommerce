@@ -29,7 +29,6 @@ type GenerateStoreKeyTokenResponse {
 //
 
 @server(
-	// jwt: Auth
 	middleware: Locale
 	group: store
 )
@@ -37,7 +36,7 @@ service admin {
 	// generate store key token
 	@doc(
 		summary: "Geneate Store ID"
-		description: "returns a valid store ID, long-term JWT token"
+		description: "returns a store key token"
 		store_id: "numeric store ID"
 	)
 	@handler generateStoreKeyToken

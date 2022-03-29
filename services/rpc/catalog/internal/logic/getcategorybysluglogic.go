@@ -2,97 +2,70 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
+	"time"
+
 	"k8scommerce/internal/convert"
+	"k8scommerce/internal/gcache"
+	"k8scommerce/internal/groupctx"
 	"k8scommerce/services/rpc/catalog/internal/svc"
 	"k8scommerce/services/rpc/catalog/pb/catalog"
-	"strconv"
-	"strings"
-	"sync"
 
-	"github.com/localrivet/galaxycache"
-	"github.com/localrivet/gcache"
+	"github.com/mailgun/groupcache/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type galaxyGetCategoryBySlugLogicHelper struct {
-	once   *sync.Once
-	galaxy *galaxycache.Galaxy
-}
+const Group_GetCategoryBySlug = "GetCategoryBySlug"
 
-var entryGetCategoryBySlugLogic *galaxyGetCategoryBySlugLogicHelper
+var Group_GetCategoryBySlugKey = func(storeId int64, slug string) string {
+	return gcache.ToKey(Group_GetCategoryBySlug, storeId, slug)
+}
 
 type GetCategoryBySlugLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-	universe *galaxycache.Universe
-	mu       sync.Mutex
 }
 
-func NewGetCategoryBySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext, universe *galaxycache.Universe) *GetCategoryBySlugLogic {
+func NewGetCategoryBySlugLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCategoryBySlugLogic {
 	return &GetCategoryBySlugLogic{
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		Logger:   logx.WithContext(ctx),
-		universe: universe,
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
 func (l *GetCategoryBySlugLogic) GetCategoryBySlug(in *catalog.GetCategoryBySlugRequest) (*catalog.GetCategoryBySlugResponse, error) {
-
-	// caching goes logic here
-	if entryGetCategoryBySlugLogic == nil {
-		l.mu.Lock()
-		entryGetCategoryBySlugLogic = &galaxyGetCategoryBySlugLogicHelper{
-			once: &sync.Once{},
-		}
-		l.mu.Unlock()
-	}
-
-	entryGetCategoryBySlugLogic.once.Do(func() {
-		// register the galaxy one time
-		entryGetCategoryBySlugLogic.galaxy = gcache.RegisterGalaxyFunc("GetCategoryBySlug", l.universe, galaxycache.GetterFunc(
-			func(ctx context.Context, key string, dest galaxycache.Codec) error {
-				fmt.Printf("Looking up GetCategoryBySlug record by key: %s", key)
-
-				v := strings.Split(key, "|")
-				storeId, _ := strconv.ParseInt(v[1], 10, 64)
-				slug := v[1]
-
-				found, err := l.svcCtx.Repo.Category().GetCategoryBySlug(storeId, slug)
-				if err != nil {
-					logx.Infof("error: %s", err)
-					return err
-				}
-
-				cat := catalog.Category{}
-				if found != nil {
-					convert.ModelCategoryToProtoCategory(found, &cat)
-				}
-
-				// the response struct
-				item := &catalog.GetCategoryBySlugResponse{
-					Category: &cat,
-				}
-
-				out, err := json.Marshal(item)
-				if err != nil {
-					return err
-				}
-				return dest.UnmarshalBinary(out)
-			}))
-	})
-
-	codec := &galaxycache.ByteCodec{}
-	key := fmt.Sprintf("%d|%s", in.StoreId, in.Slug)
-	entryGetCategoryBySlugLogic.galaxy.Get(l.ctx, key, codec)
-	b, err := codec.MarshalBinary()
-	if err != nil {
-		return nil, err
-	}
+	l.ctx = groupctx.SetStoreId(l.ctx, in.StoreId)
+	l.ctx = groupctx.SetCategorySlug(l.ctx, in.Slug)
 	res := &catalog.GetCategoryBySlugResponse{}
-	err = json.Unmarshal(b, res)
+	err := l.cache().Get(l.ctx, Group_GetCategoryBySlugKey(in.StoreId, in.Slug), groupcache.ProtoSink(res))
 	return res, err
+}
+
+func (l *GetCategoryBySlugLogic) cache() *groupcache.Group {
+	return l.svcCtx.Cache.NewGroup(Group_GetAllCategories, 128<<20, groupcache.GetterFunc(
+		func(ctx context.Context, id string, dest groupcache.Sink) error {
+			found, err := l.svcCtx.Repo.Category().GetCategoryBySlug(
+				groupctx.GetStoreId(ctx),
+				groupctx.GetCategorySlug(ctx),
+			)
+			if err != nil {
+				logx.Infof("error: %s", err)
+				return err
+			}
+
+			cat := catalog.Category{}
+			if found != nil {
+				convert.ModelCategoryToProtoCategory(found, &cat)
+			}
+
+			// Set the groupcache to expire after 24 hours
+			if err := dest.SetProto(&catalog.GetCategoryBySlugResponse{
+				Category: &cat,
+			}, time.Now().Add(time.Hour*24)); err != nil {
+				return err
+			}
+			return nil
+		},
+	))
 }

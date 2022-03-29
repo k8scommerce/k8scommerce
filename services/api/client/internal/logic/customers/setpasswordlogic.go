@@ -3,6 +3,7 @@ package customers
 import (
 	"context"
 
+	"k8scommerce/internal/utils"
 	"k8scommerce/services/api/client/internal/svc"
 	"k8scommerce/services/api/client/internal/types"
 	"k8scommerce/services/rpc/customer/customerclient"
@@ -42,26 +43,30 @@ func (l *SetPasswordLogic) SetPassword(req types.SetPasswordRequest) (resp *type
 		return resp, nil
 	}
 
+	customer := &types.Customer{}
+	utils.TransformObj(found.Customer, customer)
+
 	// create the token
-	jwtToken, err := getJwt(
-		l.svcCtx.Config.Auth.AccessExpire,
-		l.svcCtx.Config.Auth.AccessSecret,
-		map[string]interface{}{
-			"customerId": found.Customer.Id,
-		},
-	)
-	if err != nil {
-		return nil, err
+	// jwtToken, err := getJwt(
+	// 	l.svcCtx.Config.Auth.AccessExpire,
+	// 	l.svcCtx.Config.Auth.AccessSecret,
+	// 	map[string]interface{}{
+	// 		"customerId": found.Customer.Id,
+	// 	},
+	// )
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	resp.Customer = types.Customer{
+		FirstName:         customer.FirstName,
+		LastName:          customer.LastName,
+		Email:             customer.Email,
+		BillingAddresses:  customer.BillingAddresses,
+		ShippingAddresses: customer.ShippingAddresses,
 	}
 
-	customer := types.Customer{
-		FirstName: found.Customer.FirstName,
-		LastName:  found.Customer.LastName,
-		Email:     found.Customer.Email,
-	}
-
-	resp.JwtToken = *jwtToken
-	resp.Customer = customer
+	// resp.JwtToken = *jwtToken
 	resp.Success = true
 
 	return resp, err

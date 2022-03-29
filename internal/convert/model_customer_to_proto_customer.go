@@ -11,6 +11,8 @@ func ModelCustomerToProtoCustomer(fromModel *models.Customer, toProto *customer.
 	toProto.StoreId = fromModel.StoreID
 	toProto.FirstName = fromModel.FirstName
 	toProto.LastName = fromModel.LastName
+	toProto.Company = fromModel.Company.String
+	toProto.Phone = fromModel.Phone.String
 	toProto.Email = fromModel.Email
 	toProto.IsVerified = fromModel.IsVerified
 }
